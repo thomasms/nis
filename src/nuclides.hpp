@@ -1,9 +1,14 @@
+#ifndef NUCLIDES_HPP
+#define NUCLIDES_HPP
+
 #include <array>
 
 namespace nis {
     namespace data {
 
-        constexpr std::array<int, 3352> ALL_ZAIS = {
+        constexpr const int MAX_SIZE = 3352;
+
+        constexpr std::array<int, MAX_SIZE> ALL_ZAIS = {
             10010, 10020, 10030, 10040, 10050, 10060, 10070, 20030, 20040, 20050, 20060, 20070, 20080, 20090, 20100, 30030,
             30040, 30050, 30060, 30070, 30080, 30090, 30100, 30110, 30120, 30130, 40050, 40060, 40070, 40080, 40090, 40100,
             40110, 40120, 40130, 40140, 40150, 40160, 50060, 50070, 50080, 50090, 50100, 50110, 50120, 50130, 50140, 50150,
@@ -132,3 +137,5 @@ namespace nis {
 
     }
 }
+
+#endif // NUCLIDES_HPP

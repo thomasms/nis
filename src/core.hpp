@@ -1,3 +1,6 @@
+#ifndef CORE_HPP
+#define CORE_HPP
+
 #include <memory>
 
 #include <ENDFtk.hpp>
@@ -65,26 +68,86 @@ namespace nis {
                 const int daughter_zai = zai::make(std::get<0>(parent_triple),
                                                    std::get<1>(parent_triple),
                                                    std::get<2>(parent_triple));
-                // we don't care about the electron or neutrino
                 std::vector<int> products = {daughter_zai};
                 return products;
             };
         };
 
+        struct AlphaDecayReactionProducts : public DecayProductComputer{
+
+            std::vector<int> get_products(int parent_zai) const override{
+                const zai::triple parent_triple = zai::decompose(parent_zai);
+                const int daughter_zai = zai::make(std::get<0>(parent_triple)-2,
+                                                   std::get<1>(parent_triple)-4,
+                                                   std::get<2>(parent_triple));
+                std::vector<int> products = {daughter_zai, zai::ALPHA};
+                return products;
+            };
+        };
+
+        struct NeutronEmissionDecayReactionProducts : public DecayProductComputer{
+
+            std::vector<int> get_products(int parent_zai) const override{
+                const zai::triple parent_triple = zai::decompose(parent_zai);
+                const int daughter_zai = zai::make(std::get<0>(parent_triple),
+                                                   std::get<1>(parent_triple)-1,
+                                                   std::get<2>(parent_triple));
+                std::vector<int> products = {daughter_zai};
+                return products;
+            };
+        };
+
+        // this one is tricky :) - we need more information/data
+        struct SFDecayReactionProducts : public DecayProductComputer{
+
+            std::vector<int> get_products(int parent_zai) const override{
+                const zai::triple parent_triple = zai::decompose(parent_zai);
+                // todo: ....
+                std::vector<int> products = {-1};
+                return products;
+            };
+        };
+
+        struct ProtonEmissionDecayReactionProducts : public DecayProductComputer{
+
+            std::vector<int> get_products(int parent_zai) const override{
+                const zai::triple parent_triple = zai::decompose(parent_zai);
+                const int daughter_zai = zai::make(std::get<0>(parent_triple)-1,
+                                                   std::get<1>(parent_triple),
+                                                   std::get<2>(parent_triple));
+                std::vector<int> products = {daughter_zai};
+                return products;
+            };
+        };
+
+        struct ToSinkDecayReactionProducts : public DecayProductComputer{
+
+            std::vector<int> get_products(int parent_zai) const override{
+                const zai::triple parent_triple = zai::decompose(parent_zai);
+                std::vector<int> products = {-1};
+                return products;
+            };
+        };
+
+
         std::map<int, std::function<std::unique_ptr<DecayProductComputer>()>> decay_map = {
             {0, []() { return std::make_unique<GammaRayReactionProducts>(); }},
             {1, []() { return std::make_unique<BetaMinusDecayReactionProducts>(); }},
             {2, []() { return std::make_unique<BetaPlusDecayReactionProducts>(); }},
-            {3, []() { return std::make_unique<ITDecayReactionProducts>(); }}
+            {3, []() { return std::make_unique<ITDecayReactionProducts>(); }},
+            {4, []() { return std::make_unique<AlphaDecayReactionProducts>(); }},
+            {5, []() { return std::make_unique<NeutronEmissionDecayReactionProducts>(); }},
+            {6, []() { return std::make_unique<SFDecayReactionProducts>(); }},
+            {7, []() { return std::make_unique<ProtonEmissionDecayReactionProducts>(); }}
         };
 
         std::vector<int> compute_products(int parent_zai, int rtyp){
+            std::unique_ptr<DecayProductComputer> dpc = std::make_unique<ToSinkDecayReactionProducts>();
             if (decay_map.count(rtyp) == 1){
                 auto create_computer = decay_map.at(rtyp);
-                std::unique_ptr<DecayProductComputer> dpc = create_computer();
-                return dpc->get_products(parent_zai);
+                dpc = create_computer();
             }
-            return std::vector<int>();
+            return dpc->get_products(parent_zai);
         }
 
 
@@ -159,3 +222,5 @@ namespace nis {
 
     }
 }
+
+#endif //CORE_HPP

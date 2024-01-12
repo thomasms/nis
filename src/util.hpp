@@ -1,3 +1,6 @@
+#ifndef UTIL_HPP
+#define UTIL_HPP
+
 #include <algorithm>
 #include <map>
 
@@ -13,3 +16,5 @@ namespace nis {
         }
     }
 }
+
+#endif // UTIL_HPP

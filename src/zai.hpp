@@ -1,3 +1,6 @@
+#ifndef ZAI_HPP
+#define ZAI_HPP
+
 #include <cmath>
 #include <tuple>
 
@@ -35,5 +38,9 @@ namespace nis {
             return triple(z, a, i);
         }
 
+        const int ALPHA = 20040;
+
     }
 }
+
+#endif // ZAI_HPP

@@ -1,3 +1,6 @@
+#ifndef PHYSICS_HPP
+#define PHYSICS_HPP
+
 #include <cmath>
 
 
@@ -12,3 +15,5 @@ namespace nis{
 
     }
 }
+
+#endif //PHYSICS_HPP
