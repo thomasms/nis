@@ -2,42 +2,75 @@
 #include <Eigen/Dense>
 
 #include "nuclides.hpp"
-#include "utils.hpp"
+#include "util.hpp"
 
 namespace nis {
     namespace core {
 
-
         const double LN_2 = std::log(2);
+
+        double compute_decay_const(double half_life){
+            return LN_2/half_life;
+        }
+
+        // class IProductComputer{
+        //         std::vector<int> compute() const = 0;
+        //     private:
+        //         int _rtyp;
+        //         int _parent_zai;
+        // };
+
+        // class GammaRayReactionProducts : public IProductComputer{
+        //     GammaRayReactionProducts(int parent_zai) : _rtyp(0), _parent_zai(parent_zai) {};
+            
+        //     std::vector<int> compute() const override{
+        //         std::vector<int> products = {_parent_zai};
+        //         return products;
+        //     };
+
+        // };
+
+        // class BetaDecayReactionProducts : public IProductComputer{
+        //     BetaDecayReactionProducts(int parent_zai) : _rtyp(1), _parent_zai(parent_zai) {};
+            
+        //     std::vector<int> compute() const override{
+        //         std::vector<int> products = {_parent_zai+10, };
+        //         return products;
+        //     };
+
+        // };
+
+        // std::vector<int> compute_products(int parent_zai, int rtyp){
+        // }
+
 
         /*
         Needs to be cleaned up and move somewhere else.
         */
         void _update_decay_matrix(const njoy::ENDFtk::tree::Material& material, const std::map<int, int>& zai_map, Eigen::MatrixXd& decay_mat){
+            constexpr int file_number = 8;
+            constexpr int mt_number = 457;
+            if(material.hasMF(file_number)){
+                njoy::ENDFtk::tree::File file = material.file(file_number);
+                if(file.hasMT(mt_number)){
+                    njoy::ENDFtk::tree::Section decay_data = file.MT(mt_number);
+                    auto parsed_section = decay_data.parse<file_number, mt_number>();
+                    const int ZA = parsed_section.ZA();
+                    const int ZAI = ZA*10;
+                    if (zai_map.count(ZAI) == 1){
+                        const int za_index = zai_map.at(ZAI);
+        
+                        if( !parsed_section.isStable() ){
+                            const double half_life = parsed_section.halfLife()[0];
+                            const double decay_const = compute_decay_const(half_life);
 
-            // loop over file numbers for the given material
-            auto file_numbers = material.fileNumbers();
-            for(auto file_number: file_numbers){
-                // we only want file MF=8 for decay data
-                // TODO: It would be better to use tape.MF(8) instead of this loop.
-                if(file_number == 8){
-                    njoy::ENDFtk::tree::File file = material.file(file_number);
-                    // we want MT=457 for decay data
-                    if(file.hasMT(457)){
-                        njoy::ENDFtk::tree::Section decay_data = file.MT(457);
-                        auto parsed_section = decay_data.parse<8, 457>();
-                        const int ZA = parsed_section.ZA();
-                        const int ZAI = ZA*10;
-                        if (zai_map.count(ZAI) == 1){
-                            const int za_index = zai_map.at(ZAI);
-            
-                            if( !parsed_section.isStable() ){
-                                const double half_life = parsed_section.halfLife()[0];
-                                const double decay_const = LN_2/half_life;
-                                decay_mat(za_index, za_index) = -decay_const;
-                                std::cout << ZA << " " << za_index << " " << decay_const << "\n";
-                                // todo: loop over decay states and compute the outgoing
-                            }
+                            // the diagonal is the rate lost from the parent
+                            decay_mat(za_index, za_index) -= decay_const;
+
+                            // todo: loop over decay states and compute the outgoing
+                            // for(auto decay_mode: parsed_section.decayModes()){
+                                
+                            // }
                         }
                     }
                 }

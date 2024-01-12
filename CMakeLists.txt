@@ -2,6 +2,10 @@ cmake_minimum_required (VERSION 3.20)
 
 project (NIS)
 
+# cmake options
+option(BUILD_TESTS "Build unit tests" ON)
+option(USE_SYSTEM_CATCH2 "Use a pre-installed version of Catch2" OFF)
+
 set (SOURCE_DIR_BASE ${CMAKE_CURRENT_LIST_DIR}/src)
 set (THIRD_PARTY_DIR ${CMAKE_CURRENT_LIST_DIR}/dependencies)
 set (NIS_BUILD_DIR ${CMAKE_BINARY_DIR})
@@ -37,6 +41,11 @@ set (RANGE_INCLUDES ${THIRD_PARTY_DIR}/range-v3/include)
 set (HU_INCLUDES ${THIRD_PARTY_DIR}/header-utilities/src)
 set (SPDLOG_INCLUDES ${THIRD_PARTY_DIR}/spdlog/include)
 set (EIGEN_INCLUDES ${THIRD_PARTY_DIR}/eigen/)
+
+if(BUILD_TESTS)
+    # find_package(Catch2 3 REQUIRED)
+    add_subdirectory(${THIRD_PARTY_DIR}/Catch2)
+endif(BUILD_TESTS)
 
 # set includes
 include_directories(${CLI_INCLUDES}
