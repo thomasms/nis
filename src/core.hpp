@@ -1,47 +1,91 @@
+#include <memory>
+
 #include <ENDFtk.hpp>
 #include <Eigen/Dense>
 
+#include "physics.hpp"
 #include "nuclides.hpp"
 #include "util.hpp"
+#include "zai.hpp"
+
 
 namespace nis {
     namespace core {
 
-        const double LN_2 = std::log(2);
+        struct DecayProductComputer{
+                virtual std::vector<int> get_products(int parent_zai) const = 0;
+                virtual ~DecayProductComputer() {};
+        };
 
-        double compute_decay_const(double half_life){
-            return LN_2/half_life;
+        struct GammaRayReactionProducts : public DecayProductComputer{
+
+            std::vector<int> get_products(int parent_zai) const override{
+                return std::vector<int>{parent_zai};
+            };
+
+        };
+
+        struct BetaMinusDecayReactionProducts : public DecayProductComputer{
+
+            std::vector<int> get_products(int parent_zai) const override{
+                const zai::triple parent_triple = zai::decompose(parent_zai);
+                // Z increases by one, as a neutron goes to a proton
+                // thus A remains the same.
+                // i.e. C14 (60140) -> N14 (70140) + e- + mu_e
+                const int daughter_zai = zai::make(std::get<0>(parent_triple)+1,
+                                                   std::get<1>(parent_triple),
+                                                   std::get<2>(parent_triple));
+                // we don't care about the electron or neutrino
+                std::vector<int> products = {daughter_zai};
+                return products;
+            };
+        };
+
+        struct BetaPlusDecayReactionProducts : public DecayProductComputer{
+
+            std::vector<int> get_products(int parent_zai) const override{
+                const zai::triple parent_triple = zai::decompose(parent_zai);
+                // Z decreases by one, as a proton goes to a neutron
+                // thus A remains the same.
+                // i.e. A26 (130260) + e- -> Mg26 (120260) + mu_e
+                const int daughter_zai = zai::make(std::get<0>(parent_triple)-1,
+                                                   std::get<1>(parent_triple),
+                                                   std::get<2>(parent_triple));
+                // we don't care about the electron or neutrino
+                std::vector<int> products = {daughter_zai};
+                return products;
+            };
+        };
+
+        struct ITDecayReactionProducts : public DecayProductComputer{
+
+            std::vector<int> get_products(int parent_zai) const override{
+                const zai::triple parent_triple = zai::decompose(parent_zai);
+                // TODO: need to deal with isometric state
+                const int daughter_zai = zai::make(std::get<0>(parent_triple),
+                                                   std::get<1>(parent_triple),
+                                                   std::get<2>(parent_triple));
+                // we don't care about the electron or neutrino
+                std::vector<int> products = {daughter_zai};
+                return products;
+            };
+        };
+
+        std::map<int, std::function<std::unique_ptr<DecayProductComputer>()>> decay_map = {
+            {0, []() { return std::make_unique<GammaRayReactionProducts>(); }},
+            {1, []() { return std::make_unique<BetaMinusDecayReactionProducts>(); }},
+            {2, []() { return std::make_unique<BetaPlusDecayReactionProducts>(); }},
+            {3, []() { return std::make_unique<ITDecayReactionProducts>(); }}
+        };
+
+        std::vector<int> compute_products(int parent_zai, int rtyp){
+            if (decay_map.count(rtyp) == 1){
+                auto create_computer = decay_map.at(rtyp);
+                std::unique_ptr<DecayProductComputer> dpc = create_computer();
+                return dpc->get_products(parent_zai);
+            }
+            return std::vector<int>();
         }
-
-        // class IProductComputer{
-        //         std::vector<int> compute() const = 0;
-        //     private:
-        //         int _rtyp;
-        //         int _parent_zai;
-        // };
-
-        // class GammaRayReactionProducts : public IProductComputer{
-        //     GammaRayReactionProducts(int parent_zai) : _rtyp(0), _parent_zai(parent_zai) {};
-            
-        //     std::vector<int> compute() const override{
-        //         std::vector<int> products = {_parent_zai};
-        //         return products;
-        //     };
-
-        // };
-
-        // class BetaDecayReactionProducts : public IProductComputer{
-        //     BetaDecayReactionProducts(int parent_zai) : _rtyp(1), _parent_zai(parent_zai) {};
-            
-        //     std::vector<int> compute() const override{
-        //         std::vector<int> products = {_parent_zai+10, };
-        //         return products;
-        //     };
-
-        // };
-
-        // std::vector<int> compute_products(int parent_zai, int rtyp){
-        // }
 
 
         /*
@@ -55,22 +99,32 @@ namespace nis {
                 if(file.hasMT(mt_number)){
                     njoy::ENDFtk::tree::Section decay_data = file.MT(mt_number);
                     auto parsed_section = decay_data.parse<file_number, mt_number>();
-                    const int ZA = parsed_section.ZA();
-                    const int ZAI = ZA*10;
-                    if (zai_map.count(ZAI) == 1){
-                        const int za_index = zai_map.at(ZAI);
+                    const int za = parsed_section.ZA();
+                    const int zai = za*10;
+                    if (zai_map.count(zai) == 1){
+                        const int za_index = zai_map.at(zai);
         
                         if( !parsed_section.isStable() ){
                             const double half_life = parsed_section.halfLife()[0];
-                            const double decay_const = compute_decay_const(half_life);
+                            const double decay_const = physics::compute_decay_const(half_life);
 
                             // the diagonal is the rate lost from the parent
                             decay_mat(za_index, za_index) -= decay_const;
 
-                            // todo: loop over decay states and compute the outgoing
-                            // for(auto decay_mode: parsed_section.decayModes()){
-                                
-                            // }
+                            // loop over decay states and compute the outgoing
+                            const auto decay_modes_collection = parsed_section.decayModes();
+                            for(auto decay_mode: decay_modes_collection.decayModes()){
+                                const auto products = compute_products(zai, decay_mode.RTYP());
+                                const double br = decay_mode.branchingRatio()[0];
+                                for(auto daughter_zai: products){
+                                    // the sink is the last row
+                                    int dza_index = decay_mat.cols() -1;
+                                    if(zai_map.count(daughter_zai) == 1){
+                                        dza_index = zai_map.at(daughter_zai);
+                                    }
+                                    decay_mat(za_index, dza_index) += br*decay_const;
+                                }
+                            }
                         }
                     }
                 }

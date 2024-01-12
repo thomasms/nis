@@ -1,20 +1,38 @@
 #include <cmath>
+#include <tuple>
 
 
 namespace nis {
     namespace zai {
 
-        int get_z_from_zai(int zai){
+        using triple = std::tuple<int, int, int>;
+
+        int get_z(int zai){
             return std::floor(zai / 10000);
         }
 
-        int get_a_from_zai(int zai){
+        int get_a(int zai){
             int za = std::floor(zai / 10);
             return za % 1000;
         }
 
-        int get_i_from_zai(int zai){
+        int get_i(int zai){
             return zai % 10;
+        }
+
+        int make(int z, int a, int i){
+            return z*10000 + a*10 + i;
+        }
+
+        int make(const triple& t){
+            return make(std::get<0>(t), std::get<1>(t),std::get<2>(t));
+        }
+
+        triple decompose(int zai){
+            const int z = get_z(zai);
+            const int a = get_a(zai);
+            const int i = get_i(zai);
+            return triple(z, a, i);
         }
 
     }
