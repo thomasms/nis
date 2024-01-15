@@ -40,8 +40,9 @@ int main(int argc, char **argv){
         Eigen::VectorXd result = decay_mat.transpose()*vec;
         for(int i=0;i<vec_size;++i){
           double val = result[i];
+          int zai = (i == vec_size-1) ? -1 : data::ALL_ZAIS[i];
           if(val != 0){
-            std::cout << nuclide_zai << " -> " << data::ALL_ZAIS[i] << " (" << val << ")\n";
+            std::cout << nuclide_zai << " -> " << zai << " " << i << " (" << val << ")\n";
           }
         }
     }

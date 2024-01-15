@@ -1,6 +1,7 @@
 #ifndef CORE_HPP
 #define CORE_HPP
 
+#include <cmath>
 #include <memory>
 
 #include <ENDFtk.hpp>
@@ -15,22 +16,25 @@
 namespace nis {
     namespace core {
 
+        // (primary, {secondaries})
+        using DecayProductT = std::tuple<int, std::vector<int>>;
+
         struct DecayProductComputer{
-                virtual std::vector<int> get_products(int parent_zai) const = 0;
-                virtual ~DecayProductComputer() {};
+            virtual DecayProductT get_products(int parent_zai) const = 0;
+            virtual ~DecayProductComputer() {};
         };
 
         struct GammaRayReactionProducts : public DecayProductComputer{
 
-            std::vector<int> get_products(int parent_zai) const override{
-                return std::vector<int>{parent_zai};
+            DecayProductT get_products(int parent_zai) const override{
+                return DecayProductT(parent_zai, {});
             };
 
         };
 
         struct BetaMinusDecayReactionProducts : public DecayProductComputer{
 
-            std::vector<int> get_products(int parent_zai) const override{
+            DecayProductT get_products(int parent_zai) const override{
                 const zai::triple parent_triple = zai::decompose(parent_zai);
                 // Z increases by one, as a neutron goes to a proton
                 // thus A remains the same.
@@ -39,14 +43,13 @@ namespace nis {
                                                    std::get<1>(parent_triple),
                                                    std::get<2>(parent_triple));
                 // we don't care about the electron or neutrino
-                std::vector<int> products = {daughter_zai};
-                return products;
+                return DecayProductT(daughter_zai, {});
             };
         };
 
         struct BetaPlusDecayReactionProducts : public DecayProductComputer{
 
-            std::vector<int> get_products(int parent_zai) const override{
+            DecayProductT get_products(int parent_zai) const override{
                 const zai::triple parent_triple = zai::decompose(parent_zai);
                 // Z decreases by one, as a proton goes to a neutron
                 // thus A remains the same.
@@ -55,82 +58,74 @@ namespace nis {
                                                    std::get<1>(parent_triple),
                                                    std::get<2>(parent_triple));
                 // we don't care about the electron or neutrino
-                std::vector<int> products = {daughter_zai};
-                return products;
+                return DecayProductT(daughter_zai, {});
             };
         };
 
         struct ITDecayReactionProducts : public DecayProductComputer{
 
-            std::vector<int> get_products(int parent_zai) const override{
+            DecayProductT get_products(int parent_zai) const override{
                 const zai::triple parent_triple = zai::decompose(parent_zai);
                 // TODO: need to deal with isometric state
                 const int daughter_zai = zai::make(std::get<0>(parent_triple),
                                                    std::get<1>(parent_triple),
                                                    std::get<2>(parent_triple));
-                std::vector<int> products = {daughter_zai};
-                return products;
+                return DecayProductT(daughter_zai, {});
             };
         };
 
         struct AlphaDecayReactionProducts : public DecayProductComputer{
 
-            std::vector<int> get_products(int parent_zai) const override{
+            DecayProductT get_products(int parent_zai) const override{
                 const zai::triple parent_triple = zai::decompose(parent_zai);
                 const int daughter_zai = zai::make(std::get<0>(parent_triple)-2,
                                                    std::get<1>(parent_triple)-4,
                                                    std::get<2>(parent_triple));
-                std::vector<int> products = {daughter_zai, zai::ALPHA};
-                return products;
+                return DecayProductT(daughter_zai, {zai::ALPHA});
             };
         };
 
         struct NeutronEmissionDecayReactionProducts : public DecayProductComputer{
 
-            std::vector<int> get_products(int parent_zai) const override{
+            DecayProductT get_products(int parent_zai) const override{
                 const zai::triple parent_triple = zai::decompose(parent_zai);
                 const int daughter_zai = zai::make(std::get<0>(parent_triple),
                                                    std::get<1>(parent_triple)-1,
                                                    std::get<2>(parent_triple));
-                std::vector<int> products = {daughter_zai};
-                return products;
+                return DecayProductT(daughter_zai, {});
             };
         };
 
-        // this one is tricky :) - we need more information/data
+        // this one is tricky :) - we need more information/data from MT=454,459
         struct SFDecayReactionProducts : public DecayProductComputer{
 
-            std::vector<int> get_products(int parent_zai) const override{
+            DecayProductT get_products(int parent_zai) const override{
                 const zai::triple parent_triple = zai::decompose(parent_zai);
                 // todo: ....
-                std::vector<int> products = {-1};
-                return products;
+                return DecayProductT(-1, {});
             };
         };
 
         struct ProtonEmissionDecayReactionProducts : public DecayProductComputer{
 
-            std::vector<int> get_products(int parent_zai) const override{
+            DecayProductT get_products(int parent_zai) const override{
                 const zai::triple parent_triple = zai::decompose(parent_zai);
                 const int daughter_zai = zai::make(std::get<0>(parent_triple)-1,
                                                    std::get<1>(parent_triple),
                                                    std::get<2>(parent_triple));
-                std::vector<int> products = {daughter_zai};
-                return products;
+                return DecayProductT(daughter_zai, {});
             };
         };
 
         struct ToSinkDecayReactionProducts : public DecayProductComputer{
 
-            std::vector<int> get_products(int parent_zai) const override{
+            DecayProductT get_products(int parent_zai) const override{
                 const zai::triple parent_triple = zai::decompose(parent_zai);
-                std::vector<int> products = {-1};
-                return products;
+                return DecayProductT(-1, {});
             };
         };
 
-
-        std::map<int, std::function<std::unique_ptr<DecayProductComputer>()>> decay_map = {
+        const std::map<int, std::function<std::unique_ptr<DecayProductComputer>()>> DECAY_MAP = {
             {0, []() { return std::make_unique<GammaRayReactionProducts>(); }},
             {1, []() { return std::make_unique<BetaMinusDecayReactionProducts>(); }},
             {2, []() { return std::make_unique<BetaPlusDecayReactionProducts>(); }},
@@ -138,23 +133,81 @@ namespace nis {
             {4, []() { return std::make_unique<AlphaDecayReactionProducts>(); }},
             {5, []() { return std::make_unique<NeutronEmissionDecayReactionProducts>(); }},
             {6, []() { return std::make_unique<SFDecayReactionProducts>(); }},
-            {7, []() { return std::make_unique<ProtonEmissionDecayReactionProducts>(); }}
+            {7, []() { return std::make_unique<ProtonEmissionDecayReactionProducts>(); }},
+            {8, []() { return std::make_unique<BetaMinusDecayReactionProducts>(); }},
+            {9, []() { return std::make_unique<GammaRayReactionProducts>(); }},
+            // unknown origin
+            {10, []() { return std::make_unique<ToSinkDecayReactionProducts>(); }}
         };
 
-        std::vector<int> compute_products(int parent_zai, int rtyp){
-            std::unique_ptr<DecayProductComputer> dpc = std::make_unique<ToSinkDecayReactionProducts>();
-            if (decay_map.count(rtyp) == 1){
-                auto create_computer = decay_map.at(rtyp);
-                dpc = create_computer();
+        std::vector<int> _expand_rtypes(double rtyp){
+            // rtype is actually a double which can contain multiple reaction modes
+            // i.e. 1.5 is beta minus followed by neutron emission
+            // We assume that at most we can have 7 subsequent reactions, hence the 1e6 factor.
+            // Since this is stored in the ENDF file, with limited precision, it should hold
+
+            // if we are zero first then we are gamma
+            const int initial_rtype = std::floor(rtyp);
+            if(initial_rtype == 0){
+                return std::vector<int>(0);
             }
-            return dpc->get_products(parent_zai);
+
+            const int expanded_rtype = static_cast<int>(rtyp*1'000'000);
+            std::list<int> rtypes = util::get_digits(expanded_rtype);
+            // this is to account for initial procedures bigger than 9
+            rtypes.pop_front();
+            rtypes.push_front(initial_rtype);
+            // we also need to remove trailing zeros, as this does not mean GammaRay emission
+            // it is the end
+            std::vector<int> reaction_types;
+            for(int v: rtypes){
+                if((v == 0) || (DECAY_MAP.count(v) == 0)){
+                    break;
+                }
+                reaction_types.push_back(v);
+            }
+            return reaction_types;
+        }
+
+        DecayProductT compute_products(int parent_zai, double rtyp, int final_isomeric_state){
+            using Comp_ptr_t = std::unique_ptr<DecayProductComputer>;
+            const std::vector<int> rtypes = _expand_rtypes(rtyp);
+
+            // we need to trim remaining zeros, as there is no way to tell between
+            // 1.0 (beta -> gamma) and 1.0 (beta)
+            Comp_ptr_t dpc = std::make_unique<ToSinkDecayReactionProducts>();
+            int primary_zai = parent_zai;
+            std::vector<int> secondaries;
+            for(auto reaction_type: rtypes){
+                if (DECAY_MAP.count(reaction_type) == 1){
+                    auto create_computer = DECAY_MAP.at(reaction_type);
+                    dpc = create_computer();
+                    // we assume - and because the data tells us this -
+                    // that SF (6) doesn't have any modes following it
+                    // to make this simpler with the primary
+                    // Perhaps a tree is a better data structure here....
+                    DecayProductT prods = dpc->get_products(primary_zai);
+                    primary_zai = std::get<0>(prods);
+                    for(auto secondary: std::get<1>(prods)){
+                        secondaries.push_back(secondary);
+                    }
+                }
+            }
+            // finally check the final isomeric state
+            const zai::triple primary_triple = zai::decompose(primary_zai);
+            primary_zai = zai::make(std::get<0>(primary_triple),
+                                    std::get<1>(primary_triple),
+                                    final_isomeric_state);
+
+            return DecayProductT(primary_zai, secondaries);
         }
 
 
         /*
         Needs to be cleaned up and move somewhere else.
         */
-        void _update_decay_matrix(const njoy::ENDFtk::tree::Material& material, const std::map<int, int>& zai_map, Eigen::MatrixXd& decay_mat){
+        void _update_decay_matrix(const njoy::ENDFtk::tree::Material& material,
+                                  const std::map<int, int>& zai_map, Eigen::MatrixXd& decay_mat){
             constexpr int file_number = 8;
             constexpr int mt_number = 457;
             if(material.hasMF(file_number)){
@@ -163,7 +216,9 @@ namespace nis {
                     njoy::ENDFtk::tree::Section decay_data = file.MT(mt_number);
                     auto parsed_section = decay_data.parse<file_number, mt_number>();
                     const int za = parsed_section.ZA();
-                    const int zai = za*10;
+                    // ENDFtk gives us the isomeric state as an unsigned int
+                    const int i = static_cast<int>(parsed_section.isomericState());
+                    const int zai = za*10 + i;
                     if (zai_map.count(zai) == 1){
                         const int za_index = zai_map.at(zai);
         
@@ -177,9 +232,14 @@ namespace nis {
                             // loop over decay states and compute the outgoing
                             const auto decay_modes_collection = parsed_section.decayModes();
                             for(auto decay_mode: decay_modes_collection.decayModes()){
-                                const auto products = compute_products(zai, decay_mode.RTYP());
+                                const double reaction_type = decay_mode.RTYP();
+                                const int final_isomeric_state = std::floor(decay_mode.finalIsomericState());
+                                const auto products = compute_products(zai, reaction_type, final_isomeric_state);
+                                const int primary = std::get<0>(products);
+                                std::vector<int> secondaries = std::get<1>(products);
+                                secondaries.push_back(primary);
                                 const double br = decay_mode.branchingRatio()[0];
-                                for(auto daughter_zai: products){
+                                for(auto daughter_zai: secondaries){
                                     // the sink is the last row
                                     int dza_index = decay_mat.cols() -1;
                                     if(zai_map.count(daughter_zai) == 1){
