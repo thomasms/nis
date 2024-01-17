@@ -1,3 +1,7 @@
+# main library
+add_subdirectory(nis)
+
+# executables
 add_subdirectory(tools)
 
 # unit tests

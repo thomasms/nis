@@ -6,8 +6,9 @@
 #include <ENDFtk.hpp>
 #include <Eigen/Dense>
 
-#include "core.hpp"
-#include "util.hpp"
+#include "nis/endf/core.hpp"
+#include "nis/nuclides.hpp"
+#include "nis/util.hpp"
 
 using namespace nis;
 
@@ -27,7 +28,7 @@ int main(int argc, char **argv){
     auto tape = njoy::ENDFtk::tree::fromFile(filename);
 
     // construct a decay matrix
-    Eigen::MatrixXd decay_mat = core::construct_decay_matrix_from_tape(tape);
+    Eigen::MatrixXd decay_mat = endf::construct_decay_matrix_from_tape(tape);
 
     // for testing....
     const auto zai_map = util::make_map_index_lookup(data::ALL_ZAIS);

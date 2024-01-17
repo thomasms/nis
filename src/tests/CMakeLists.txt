@@ -3,6 +3,7 @@ set(CPP_UNIT_TESTS_NAME nistests)
 set(CPP_UNIT_TESTS_SOURCES
   test_util.cpp
   test_zai.cpp
+  endf/test_decay.cpp
 )
 
 add_executable(${CPP_UNIT_TESTS_NAME} ${CPP_UNIT_TESTS_SOURCES})
@@ -10,6 +11,7 @@ add_executable(${CPP_UNIT_TESTS_NAME} ${CPP_UNIT_TESTS_SOURCES})
 target_link_libraries(${CPP_UNIT_TESTS_NAME}
   PRIVATE
     Catch2::Catch2WithMain
+    ${NIS_LIB_NAME}
 )
 
 # Set the exe properties

@@ -1,6 +1,6 @@
 #include <catch2/catch_test_macros.hpp>
 
-#include "zai.hpp"
+#include "nis/zai.hpp"
 
 using namespace nis::zai;
 

@@ -9,7 +9,7 @@ namespace nis {
     namespace util {
 
         template<std::size_t N>
-        std::map<int, int> make_map_index_lookup(const std::array<int, N>& arr){
+        inline std::map<int, int> make_map_index_lookup(const std::array<int, N>& arr){
             std::map<int, int> hash_map;
             std::transform(arr.begin(), arr.end(), std::inserter(hash_map, hash_map.begin()),
                                 [i = 0](int num) mutable { return std::make_pair(num, i++); });
@@ -20,7 +20,7 @@ namespace nis {
         Sign is removed/ignored.
         */
         template<typename T>
-        std::list<int> get_digits(T number){
+        inline std::list<int> get_digits(T number){
             std::list<int> digits;
             if(number == 0){
                 digits.push_back(0);

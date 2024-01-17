@@ -6,6 +6,8 @@ project (NIS)
 option(BUILD_TESTS "Build unit tests" ON)
 option(USE_SYSTEM_CATCH2 "Use a pre-installed version of Catch2" OFF)
 
+set (NIS_LIB_NAME nislib)
+
 set (SOURCE_DIR_BASE ${CMAKE_CURRENT_LIST_DIR}/src)
 set (THIRD_PARTY_DIR ${CMAKE_CURRENT_LIST_DIR}/dependencies)
 set (NIS_BUILD_DIR ${CMAKE_BINARY_DIR})
