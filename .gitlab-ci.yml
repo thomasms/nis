@@ -25,6 +25,8 @@ build_ubuntu:
     - build/bin
     expire_in: 1 day
     when: always
+  tags:
+    - docker
 
 test_ubuntu:
   stage: test
@@ -34,3 +36,5 @@ test_ubuntu:
     artifacts: true
   script:
     - ./build/bin/nistests
+  tags:
+    - docker
