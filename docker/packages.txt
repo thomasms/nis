@@ -1,0 +1,14 @@
+openssl
+gcc
+g++
+git
+gfortran
+build-essential
+make
+cmake
+tzdata
+software-properties-common
+apt-transport-https
+ca-certificates
+gnupg2
+gpg-agent

@@ -1,0 +1,32 @@
+FROM ubuntu:22.04
+
+ENV TZ=Europe/Paris
+
+COPY packages.txt /packages.txt
+COPY setup_local_deps.sh /setup_local_deps.sh
+
+RUN echo 'openssl_conf = openssl_init\n\n\
+[openssl_init]\n\
+ssl_conf = ssl_sect\n\n\
+[ssl_sect]\n\
+system_default = system_default_sect\n\n\
+[system_default_sect]\n\
+Options = UnsafeLegacyRenegotiation\n\n'\
+    >> /openssl.cnf && \
+    export OPENSSL_CONF=/openssl.cnf && \
+    AG="env DEBIAN_FRONTEND=noninteractive apt-get -yq" && \
+    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
+    $AG update && \
+    $AG upgrade --no-install-recommends && \
+    $AG install --no-install-recommends $(awk '{print $1}' packages.txt) && \
+    openssl s_client -showcerts -connect git.oecd-nea.org:443 < /dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > ca.crt && \
+    mkdir -p /usr/local/share/ca-certificates/ && \
+    cp ca.crt /usr/local/share/ca-certificates/ && \
+    update-ca-certificates && \
+    $AG autoremove && \
+    $AG autoclean && \
+    $AG clean && \
+    rm -rf /var/lib/apt/lists/* /var/lib/dpkg/*-old /var/cache/debconf/*-old && \
+    # install the depenencies i.e. ENDFtk, etc
+    chmod +x /setup_local_deps.sh && \
+    /setup_local_deps.sh

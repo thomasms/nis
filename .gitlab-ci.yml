@@ -1,0 +1,36 @@
+variables:
+  GIT_STRATEGY: clone
+  GIT_SUBMODULE_STRATEGY: none
+  GET_SOURCES_ATTEMPTS: 3
+  DOCKER_TLS_CERTDIR: ""
+  RUNNER_TAG: docker
+  DOCKER_BASE_REPO: docker.oecd-nea.org/stainer_t/nis
+
+stages:
+  - build
+  - test
+
+
+build_ubuntu:
+  stage: ubuntu
+  image: ${DOCKER_BASE_REPO}:dev
+  script:
+    - mv /dependencies ./dependencies
+    - mkdir build
+    - cd build
+    - cmake ..
+    - make -j2
+  artifacts:
+    paths:
+    - build/bin
+    expire_in: 1 day
+    when: always
+
+test_ubuntu:
+  stage: test
+  image: ${DOCKER_BASE_REPO}:dev
+  needs:
+  - job: build_ubuntu
+    artifacts: true
+  script:
+    - ./build/bin/nistests
