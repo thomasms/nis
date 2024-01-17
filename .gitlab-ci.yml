@@ -12,7 +12,7 @@ stages:
 
 
 build_ubuntu:
-  stage: ubuntu
+  stage: build
   image: ${DOCKER_BASE_REPO}:dev
   script:
     - mv /dependencies ./dependencies
