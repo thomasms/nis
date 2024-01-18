@@ -16,26 +16,34 @@ namespace nis {
             // i.e. 1.5 is beta minus followed by neutron emission
             // We assume that at most we can have 7 subsequent reactions, hence the 1e6 factor.
             // Since this is stored in the ENDF file, with limited precision, it should hold
+            constexpr int _rtyp_factor = 1'000'000;
+            const int initial_rtype = static_cast<int>(std::floor(rtyp));
 
             // if we are zero first then we are gamma
-            const int initial_rtype = static_cast<int>(std::floor(rtyp));
             if(initial_rtype == 0){
                 return std::vector<int>{0};
             }
 
-            const int expanded_rtype = static_cast<int>(rtyp*1'000'000);
+            // if we the initial rtype is not valid
+            // then return an empty vector
+            // regardless of what else comes next
+            if(DECAY_MAP.count(initial_rtype) == 0){
+                return std::vector<int>();
+            }
+
+            // all other cases we process the subsequent values
+            const int rtyp_as_int = static_cast<int>(rtyp*_rtyp_factor);
+            const int expanded_rtype = rtyp_as_int - (initial_rtype*_rtyp_factor);
             std::list<int> rtypes = util::get_digits(expanded_rtype);
-            // this is to account for initial procedures bigger than 9
-            rtypes.pop_front();
-            rtypes.push_front(initial_rtype);
-            // we also need to remove trailing zeros, as this does not mean GammaRay emission
+            // we also need to remove trailing zeros,
+            // as this does not mean GammaRay emission
             // it is the end
-            std::vector<int> reaction_types;
+            std::vector<int> reaction_types{initial_rtype};
             for(int v: rtypes){
                 if((v == 0) || (DECAY_MAP.count(v) == 0)){
                     break;
                 }
-                reaction_types.push_back(v);
+                reaction_types.emplace_back(v);
             }
             return reaction_types;
         }
@@ -60,7 +68,7 @@ namespace nis {
                     DecayProductT prods = dpc->get_products(primary_zai);
                     primary_zai = std::get<0>(prods);
                     for(auto secondary: std::get<1>(prods)){
-                        secondaries.push_back(secondary);
+                        secondaries.emplace_back(secondary);
                     }
                 }
             }
