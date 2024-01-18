@@ -11,19 +11,19 @@
 namespace nis {
     namespace endf {
 
-        const std::map<int, std::function<std::unique_ptr<DecayProductComputer>()>> DECAY_MAP = {
-            {0, []() { return std::make_unique<GammaRayReactionProducts>(); }},
-            {1, []() { return std::make_unique<BetaMinusDecayReactionProducts>(); }},
-            {2, []() { return std::make_unique<BetaPlusDecayReactionProducts>(); }},
-            {3, []() { return std::make_unique<ITDecayReactionProducts>(); }},
-            {4, []() { return std::make_unique<AlphaDecayReactionProducts>(); }},
-            {5, []() { return std::make_unique<NeutronEmissionDecayReactionProducts>(); }},
-            {6, []() { return std::make_unique<SFDecayReactionProducts>(); }},
-            {7, []() { return std::make_unique<ProtonEmissionDecayReactionProducts>(); }},
-            {8, []() { return std::make_unique<BetaMinusDecayReactionProducts>(); }},
-            {9, []() { return std::make_unique<GammaRayReactionProducts>(); }},
+        const std::map<int, DecayProductComputer> DECAY_MAP = {
+            {0, GammaRayReactionProducts() },
+            {1, BetaMinusDecayReactionProducts() },
+            {2, BetaPlusDecayReactionProducts() },
+            {3, ITDecayReactionProducts() },
+            {4, AlphaDecayReactionProducts() },
+            {5, NeutronEmissionDecayReactionProducts() },
+            {6, SFDecayReactionProducts() },
+            {7, ProtonEmissionDecayReactionProducts() },
+            {8, BetaMinusDecayReactionProducts() },
+            {9, GammaRayReactionProducts() },
             // unknown origin
-            {10, []() { return std::make_unique<ToSinkDecayReactionProducts>(); }}
+            {10, ToSinkDecayReactionProducts() }
         };
 
         std::vector<int> expand_rtypes(double rtyp);

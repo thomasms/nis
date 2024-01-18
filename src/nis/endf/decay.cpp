@@ -49,25 +49,25 @@ namespace nis {
         }
 
         DecayProductT compute_products(int parent_zai, double rtyp, int final_isomeric_state){
-            using Comp_ptr_t = std::unique_ptr<DecayProductComputer>;
             const std::vector<int> rtypes = expand_rtypes(rtyp);
 
             // we need to trim remaining zeros, as there is no way to tell between
             // 1.0 (beta -> gamma) and 1.0 (beta)
-            Comp_ptr_t dpc = std::make_unique<ToSinkDecayReactionProducts>();
+            DecayProductComputer dpc = ToSinkDecayReactionProducts();
             int primary_zai = parent_zai;
             std::vector<int> secondaries;
             for(auto reaction_type: rtypes){
                 if (DECAY_MAP.count(reaction_type) == 1){
-                    auto create_computer = DECAY_MAP.at(reaction_type);
-                    dpc = create_computer();
+                    dpc = DECAY_MAP.at(reaction_type);
                     // we assume - and because the data tells us this -
                     // that SF (6) doesn't have any modes following it
                     // to make this simpler with the primary
                     // Perhaps a tree is a better data structure here....
-                    DecayProductT prods = dpc->get_products(primary_zai);
+                    DecayProductT prods = std::visit([&primary_zai](auto const& obj) {
+                        return obj.get_products(primary_zai);
+                    }, dpc);
                     primary_zai = std::get<0>(prods);
-                    for(auto secondary: std::get<1>(prods)){
+                    for(auto& secondary: std::get<1>(prods)){
                         secondaries.emplace_back(secondary);
                     }
                 }
