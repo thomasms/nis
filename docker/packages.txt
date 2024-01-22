@@ -12,3 +12,4 @@ apt-transport-https
 ca-certificates
 gnupg2
 gpg-agent
+libmpc-dev

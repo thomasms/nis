@@ -5,6 +5,8 @@ ENV TZ=Europe/Paris
 COPY packages.txt /packages.txt
 COPY setup_local_deps.sh /setup_local_deps.sh
 
+WORKDIR /
+
 RUN echo 'openssl_conf = openssl_init\n\n\
 [openssl_init]\n\
 ssl_conf = ssl_sect\n\n\

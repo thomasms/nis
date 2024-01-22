@@ -8,7 +8,7 @@ set (NIS_EXE_SOURCES nis.cpp)
 link_directories (${NIS_BUILD_DIR}/lib)
 add_executable (${NIS_EXE_NAME} ${NIS_EXE_SOURCES})
 
-target_link_libraries(${NIS_EXE_NAME} ${NIS_LIB_NAME})
+target_link_libraries(${NIS_EXE_NAME} PRIVATE ${NIS_LIB_NAME})
 
 # Set the exe properties
 set_target_properties(${NIS_EXE_NAME}

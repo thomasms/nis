@@ -5,6 +5,8 @@ project (NIS)
 # cmake options
 option(BUILD_TESTS "Build unit tests" ON)
 option(USE_SYSTEM_CATCH2 "Use a pre-installed version of Catch2" OFF)
+# Set release build by default
+set (CMAKE_BUILD_TYPE Release CACHE STRING "Select which configuration to build.")
 
 set (NIS_LIB_NAME nislib)
 
@@ -24,10 +26,10 @@ message ( STATUS "CMake build configuration for NIS ${NIS_PROJECT_VERSION}" )
 # C++ flags
 set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED YES )
-set( common_flags "-Wall" "-Wextra" "-Wpedantic" )
-set( strict_flags "-Werror" )
-set( release_flags "-O3" )
-set( debug_flags "-O0" "-g" )
+set( CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic" )# -Werror" )
+set( CMAKE_CXX_FLAGS_DEBUG "-O0" "-g" )
+set( CMAKE_CXX_FLAGS_RELEASE "-O3" )
+
 
 # set the output directories
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY lib)

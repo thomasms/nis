@@ -1,7 +1,7 @@
 #!/bin/bash
 
-mkdir /dependencies
-cd /dependencies
+mkdir ./dependencies
+cd ./dependencies
 
 # NIS deps
 git clone https://github.com/CLIUtils/CLI11.git

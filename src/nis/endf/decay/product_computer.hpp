@@ -88,7 +88,7 @@ namespace nis {
         struct SFDecayReactionProducts{
 
             DecayProductT get_products(int parent_zai) const{
-                const zai::triple parent_triple = zai::decompose(parent_zai);
+                // const zai::triple parent_triple = zai::decompose(parent_zai);
                 // todo: ....
                 return DecayProductT(-1, {});
             };
@@ -108,7 +108,7 @@ namespace nis {
         struct ToSinkDecayReactionProducts{
 
             DecayProductT get_products(int parent_zai) const{
-                const zai::triple parent_triple = zai::decompose(parent_zai);
+                // const zai::triple parent_triple = zai::decompose(parent_zai);
                 return DecayProductT(-1, {});
             };
         };

@@ -49,10 +49,7 @@ namespace nis {
                                 const double br = decay_mode.branchingRatio()[0];
                                 for(auto daughter_zai: secondaries){
                                     // the sink is the last row
-                                    int dza_index = decay_mat.cols() -1;
-                                    if(zai_map.count(daughter_zai) == 1){
-                                        dza_index = zai_map.at(daughter_zai);
-                                    }
+                                    int dza_index = zai_map.count(daughter_zai) == 1 ? zai_map.at(daughter_zai) : decay_mat.cols() -1;
                                     decay_mat(za_index, dza_index) += br*decay_const;
                                 }
                             }
@@ -78,6 +75,9 @@ namespace nis {
                 // this can return multiple instances of the same MAT number
                 // due to different temperatures
                 // loop over temperatures for each MAT
+                //
+                // How do we account for multiple temperatures?
+                // We don't want to double count...
                 auto materials = tape.material(mat_number);
                 for(auto material: materials){
                     _update_decay_matrix(material, zai_map, decay_mat);
