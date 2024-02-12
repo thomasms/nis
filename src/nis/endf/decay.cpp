@@ -24,7 +24,7 @@ namespace nis {
                 return std::vector<int>{0};
             }
 
-            // if we the initial rtype is not valid
+            // if the initial rtype is not valid
             // then return an empty vector
             // regardless of what else comes next
             if(DECAY_MAP.count(initial_rtype) == 0){

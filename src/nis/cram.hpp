@@ -14,6 +14,8 @@ namespace nis{
             constexpr int N_COEFF = 24;
 
             // Coefficients for the 48th order
+            // Can be found here: https://www.tandfonline.com/doi/epdf/10.13182/NSE15-26?needAccess=true
+            // on page 317 - table A.XII
             constexpr std::array<Coeff_t, N_COEFF> THETA = {
                 Coeff_t(-4.465731934165702e+1, 6.233225190695437e+1),
                 Coeff_t(-5.284616241568964e+0, 4.057499381311059e+1),
