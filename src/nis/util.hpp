@@ -2,11 +2,34 @@
 #define UTIL_HPP
 
 #include <algorithm>
+#include <array>
+#include <cctype>
+#include <iostream>
 #include <list>
 #include <map>
+#include <string>
+
 
 namespace nis {
     namespace util {
+
+        template<typename Key, typename Value, std::size_t N>
+        struct CompileTimeMap {
+            std::array<std::pair<Key, Value>, N> pairs;
+
+            static constexpr Value defaultValue{};
+            constexpr const Value& operator[](const Key& key) const {
+                auto it = std::find_if(pairs.begin(), pairs.end(),
+                    [&key](const auto& pair) { return pair.first == key; });
+
+                if (it != pairs.end()) {
+                    return it->second;
+                }
+
+                // Return a default value if key is not found
+                return defaultValue;
+            }
+        };
 
         template<std::size_t N>
         inline std::map<int, int> make_map_index_lookup(const std::array<int, N>& arr){
@@ -36,6 +59,20 @@ namespace nis {
             std::reverse(digits.begin(), digits.end());
             return digits;
         }
+
+        inline std::string string_lower(const std::string& str) {
+            std::string result = str;
+            for(char& c : result) {
+                c = std::tolower(static_cast<unsigned char>(c));
+            }
+            return result;
+        }
+
+        inline std::string string_rtrim(std::string str){
+            size_t end = str.find_last_not_of(" \t\r\n");
+            return (end == std::string::npos) ? "" : str.substr(0, end + 1);
+        }
+
     }
 }
 

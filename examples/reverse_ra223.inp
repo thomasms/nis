@@ -1,4 +1,3 @@
-# we can go back in time
 dt -987897
 
 nuclides
@@ -6,7 +5,6 @@ nuclides
     Tl207 1.4484343696093254e+16
     Pb207 4.988443845934843e+19
     Pb211 1.0987999889515198e+17
-    # too low to have an impact really
     Bi211 3302718399506405.0
     Rn219 200448030955974.0
     Ra223 4.9987893962735215e+19

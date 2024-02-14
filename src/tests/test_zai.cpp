@@ -64,3 +64,24 @@ TEST_CASE( "Z, A, I from ZAI", "[decompose]" ) {
     REQUIRE( decompose(1182950) == triple(118, 295, 0) );
     REQUIRE( decompose(1182951) == triple(118, 295, 1) );
 }
+
+TEST_CASE( "ZAI from name", "[get_from_name]" ) {
+    REQUIRE( get_from_name("h1") == 10010 );
+    REQUIRE( get_from_name("H1") == 10010 );
+    REQUIRE( get_from_name("H1m") == 10011 );
+    REQUIRE( get_from_name("H1u") == 10019 );
+    REQUIRE( get_from_name("He4") == 20040 );
+    REQUIRE( get_from_name("u235s") == 922357 );
+    REQUIRE( get_from_name("ra223") == 882230 );
+    REQUIRE( get_from_name("Ra234o") == 882343 );
+}
+
+TEST_CASE( "name from ZAI", "[get_name_from]" ) {
+    REQUIRE( get_name_from(10010) == "H1" );
+    REQUIRE( get_name_from(10011) == "H1m" );
+    REQUIRE( get_name_from(10019) == "H1u" );
+    REQUIRE( get_name_from(20040) == "He4" );
+    REQUIRE( get_name_from(922357) == "U235s" );
+    REQUIRE( get_name_from(882230) == "Ra223" );
+    REQUIRE( get_name_from(882343) == "Ra234o" );
+}

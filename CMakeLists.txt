@@ -27,8 +27,12 @@ message ( STATUS "CMake build configuration for NIS ${NIS_PROJECT_VERSION}" )
 set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED YES )
 set( CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic" )# -Werror" )
-set( CMAKE_CXX_FLAGS_DEBUG "-O0" "-g" )
+set( CMAKE_CXX_FLAGS_DEBUG "-O0 -g" )
 set( CMAKE_CXX_FLAGS_RELEASE "-O3" )
+set( CMAKE_EXE_LINKER_FLAGS " ${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++ -static")
+
+set(LINK_SEARCH_START_STATIC TRUE)
+set(LINK_SEARCH_END_STATIC TRUE)
 
 
 # set the output directories

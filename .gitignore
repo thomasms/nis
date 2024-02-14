@@ -1,6 +1,8 @@
 dependencies/**
 
-build/**
+build*/**
 
 venv/**
 __pycache__/**
+
+.vscode

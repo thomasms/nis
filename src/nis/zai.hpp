@@ -2,6 +2,7 @@
 #define ZAI_HPP
 
 #include <cmath>
+#include <map>
 #include <tuple>
 
 
@@ -9,6 +10,21 @@ namespace nis {
     namespace zai {
 
         using triple = std::tuple<int, int, int>;
+
+        const int ALPHA = 20040;
+        // would be better to make at compile time
+        const std::map<int, unsigned char> META_STABLE_MAP = {
+            {0, ' '},
+            {1, 'm'},
+            {2, 'n'},
+            {3, 'o'},
+            {4, 'p'},
+            {5, 'q'},
+            {6, 'r'},
+            {7, 's'},
+            {8, 't'},
+            {9, 'u'},
+        };
 
         inline int get_z(int zai){
             return std::floor(zai / 10000);
@@ -28,7 +44,7 @@ namespace nis {
         }
 
         inline int make(const triple& t){
-            return make(std::get<0>(t), std::get<1>(t),std::get<2>(t));
+            return make(std::get<0>(t), std::get<1>(t), std::get<2>(t));
         }
 
         inline triple decompose(int zai){
@@ -38,7 +54,8 @@ namespace nis {
             return triple(z, a, i);
         }
 
-        const int ALPHA = 20040;
+        int get_from_name(std::string name);
+        std::string get_name_from(int zai);
 
     }
 }

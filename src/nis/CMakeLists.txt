@@ -3,6 +3,7 @@ project (${NIS_LIB_NAME})
 set(NIS_CPP_SOURCES
     endf/core.cpp
     endf/decay.cpp
+    zai.cpp
 )
 
 add_library(${NIS_LIB_NAME} ${NIS_CPP_SOURCES} )

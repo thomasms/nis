@@ -28,6 +28,23 @@ build_ubuntu:
   tags:
     - docker
 
+build_ubuntu_debug:
+  stage: build
+  image: ${DOCKER_BASE_REPO}:dev
+  script:
+    - mv /dependencies ./dependencies
+    - mkdir build_debug
+    - cd build_debug
+    - cmake -DCMAKE_BUILD_TYPE=Debug ..
+    - make -j2
+  artifacts:
+    paths:
+    - build_debug/bin
+    expire_in: 1 day
+    when: always
+  tags:
+    - docker
+
 test_ubuntu:
   stage: test
   image: ${DOCKER_BASE_REPO}:dev

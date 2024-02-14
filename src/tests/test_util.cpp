@@ -23,3 +23,21 @@ TEST_CASE( "Break up an integer into separate digits", "[get_digits]" ){
     REQUIRE( get_digits<long long>(12345678901239810) == std::list<int>{1,2,3,4,5,6,7,8,9,0,1,2,3,9,8,1,0} );
     REQUIRE( get_digits<unsigned int>(782111271) == std::list<int>{7,8,2,1,1,1,2,7,1} );
 }
+
+TEST_CASE( "Lower string", "[string_lower]" ){
+
+    REQUIRE( string_lower("") == "" );
+    REQUIRE( string_lower("sadas") == "sadas" );
+    REQUIRE( string_lower("Adsadasdsa") == "adsadasdsa" );
+    REQUIRE( string_lower("123JKSDhdkjsaASKDL23798dsa") == "123jksdhdkjsaaskdl23798dsa" );
+    REQUIRE( string_lower("ThIs i$ A T3$t ! ") == "this i$ a t3$t ! " );
+}
+
+TEST_CASE( "Rtrim string", "[string_rtrim]" ){
+
+    REQUIRE( string_rtrim("") == "" );
+    REQUIRE( string_rtrim("dhask    ") == "dhask" );
+    REQUIRE( string_rtrim("dhask    a") == "dhask    a" );
+    REQUIRE( string_rtrim("    dhask    a") == "    dhask    a" );
+    REQUIRE( string_rtrim("   A  space     ") == "   A  space" );
+}
