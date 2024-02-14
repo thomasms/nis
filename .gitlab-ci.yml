@@ -18,7 +18,7 @@ build_ubuntu:
     - mv /dependencies ./dependencies
     - mkdir build
     - cd build
-    - cmake ..
+    - cmake -DCMAKE_BUILD_TYPE=Release ..
     - make -j2
   artifacts:
     paths:

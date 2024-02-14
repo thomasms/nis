@@ -10,8 +10,7 @@ int main(int argc, char **argv){
 
     CLI::App app{"NIS"};
     app.add_option("-f,--file", filename, "The name of the output file")
-      ->required()
-      ->check(CLI::ExistingFile);
+      ->required();
     CLI11_PARSE(app, argc, argv);
 
     input::InputData<double> data;
