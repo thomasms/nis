@@ -28,3 +28,22 @@ cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
 make -j4
 ```
+
+
+## Example
+
+To test your build, after compiling as above, try the following:
+
+```bash
+./build/bin/nis --data ./data/jeff311.dec --input examples/h3_halflife.inp
+```
+
+If successful, you should see roughly half remains as H3 and the other half has beta decayed to He3.
+
+```bash
+H3 5.00518e+19
+He3 4.99482e+19
+```
+
+
+Note, you will need to have pulled the decay data via LFS in the [./data](./data) subdirectory.
