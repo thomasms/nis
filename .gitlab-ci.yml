@@ -45,6 +45,24 @@ build_ubuntu_debug:
   tags:
     - docker
 
+build_python311:
+  stage: build
+  image: ${DOCKER_BASE_REPO}:dev
+  script:
+    - mv /dependencies ./dependencies
+    - mkdir build
+    - cd build
+    - cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_PY_API=ON -Dpybind11_DIR=`pybind11-config --cmakedir` ..
+    - make -j2
+  artifacts:
+    paths:
+    - build/bin
+    expire_in: 1 day
+    when: always
+  tags:
+    - docker
+
+
 test_ubuntu:
   stage: test
   image: ${DOCKER_BASE_REPO}:dev

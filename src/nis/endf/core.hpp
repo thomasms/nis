@@ -2,7 +2,9 @@
 #define ENDF_CORE_HPP
 
 #include <ENDFtk.hpp>
-#include <Eigen/Dense>
+
+#include <Eigen/Core>
+
 
 namespace nis {
     namespace endf {
@@ -13,10 +15,7 @@ namespace nis {
         Eigen::MatrixXd construct_decay_matrix_from_tape(const njoy::ENDFtk::tree::Tape& tape);
 
         // convience function to avoid calling ENDFtk fromFile
-        inline Eigen::MatrixXd construct_decay_matrix_from_file(std::string filename){
-            auto tape = njoy::ENDFtk::tree::fromFile(filename);
-            return endf::construct_decay_matrix_from_tape(tape);
-        }
+        Eigen::MatrixXd construct_decay_matrix_from_file(std::string filename);
 
     }
 }

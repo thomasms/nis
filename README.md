@@ -48,7 +48,7 @@ Then build as before but with slightly different cmake args, as below.
 source venv/bin/activate
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_BUILD_PY_API=ON -Dpybind11_DIR=`pybind11-config --cmakedir` ..
+cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_PY_API=ON -Dpybind11_DIR=`pybind11-config --cmakedir` ..
 make -j4
 ```
 

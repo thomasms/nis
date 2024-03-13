@@ -14,6 +14,7 @@
 #include "nis/zai.hpp"
 #include "nis/io/input.hpp"
 #include "nis/endf/core.hpp"
+#include "nis/solver.hpp"
 
 using namespace nis;
 
@@ -39,22 +40,11 @@ int main(int argc, char **argv){
       // read input data
       const auto input_data = io::input::from_file<double>(input);
 
-      // set initial vector (inventory)
+      // do computation
+      const Eigen::VectorX<double> nt = solver::compute_inventory(input_data, dense_decay_mat);
+
+      // dump output to std::out
       const int vec_size = static_cast<int>(dense_decay_mat.cols());
-      Eigen::VectorX<double> n0 = Eigen::VectorX<double>::Zero(vec_size);
-      const auto zai_map = util::make_map_index_lookup(data::ALL_ZAIS);
-
-      for (auto it = input_data.nuclides.begin(); it != input_data.nuclides.end(); ++it) {
-        const int nuclide_zai = zai::get_from_name(it->first);
-        if(zai_map.count(nuclide_zai) == 1){
-            const auto zai_index = zai_map.at(nuclide_zai);
-            n0(zai_index) = it->second;
-        }
-      }
-
-      const Eigen::VectorX<double> nt = core::cram48::solve<double>(dense_decay_mat, n0, input_data.dt);
-
-      // output
       for(int i=0;i<vec_size;++i){
         double val = nt[i];
         int zai = (i == vec_size-1) ? -1 : data::ALL_ZAIS[i];

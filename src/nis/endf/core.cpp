@@ -4,9 +4,9 @@
 #include "nis/physics.hpp"
 #include "nis/nuclides.hpp"
 #include "nis/util.hpp"
+#include "nis/endf/decay.hpp"
 
 #include "nis/endf/core.hpp"
-#include "nis/endf/decay.hpp"
 
 namespace nis {
     namespace endf {
@@ -87,6 +87,10 @@ namespace nis {
             return decay_mat;
         }
 
+        Eigen::MatrixXd construct_decay_matrix_from_file(std::string filename){
+            auto tape = njoy::ENDFtk::tree::fromFile(filename);
+            return endf::construct_decay_matrix_from_tape(tape);
+        }
 
     }
 }

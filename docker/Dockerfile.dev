@@ -31,4 +31,16 @@ Options = UnsafeLegacyRenegotiation\n\n'\
     rm -rf /var/lib/apt/lists/* /var/lib/dpkg/*-old /var/cache/debconf/*-old && \
     # install the depenencies i.e. ENDFtk, etc
     chmod +x /setup_local_deps.sh && \
-    /setup_local_deps.sh
+    /setup_local_deps.sh && \
+    python3 -m venv venv && \
+    . /venv/bin/activate && \
+    # for python bindings
+    python3 -m pip install pybind11 numpy && \
+    # make an entrypoint file for the venv
+    echo '#!/bin/bash\n\
+source /venv/bin/activate\n\
+exec "$@"\n'\
+    >> /entrypoint && \
+    chmod +755 entrypoint
+
+ENTRYPOINT [ "/entrypoint" ]

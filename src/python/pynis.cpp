@@ -23,6 +23,7 @@ PYBIND11_MODULE(pynis, m) {
     py::module m_core = m.def_submodule("core");
 
     m_core.def("decay_mat_from_file", &endf::construct_decay_matrix_from_file);
+    m_core.def("compute_inventory", &solver::compute_inventory);
 
 }
 
