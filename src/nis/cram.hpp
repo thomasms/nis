@@ -1,6 +1,7 @@
 #ifndef CRAM_HPP
 #define CRAM_HPP
 
+#include <iostream>
 #include <complex>
 
 #include <Eigen/Core>

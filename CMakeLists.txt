@@ -4,6 +4,7 @@ project (NIS)
 
 # cmake options
 option(BUILD_TESTS "Build unit tests" ON)
+option(BUILD_PY_API "Build python bindings" OFF)
 option(USE_SYSTEM_CATCH2 "Use a pre-installed version of Catch2" OFF)
 # Set release build by default
 set (CMAKE_BUILD_TYPE Release CACHE STRING "Select which configuration to build.")
@@ -53,6 +54,32 @@ if(BUILD_TESTS)
     # find_package(Catch2 3 REQUIRED)
     add_subdirectory(${THIRD_PARTY_DIR}/Catch2)
 endif(BUILD_TESTS)
+
+# find python
+if(BUILD_PY_API)
+    set(Python_VIRTUALENV FIRST)
+
+    # Find default python libraries and interpreter
+    set(Python_ADDITIONAL_VERSIONS 3.10)
+
+    # set this to your python 3 lib absolute path, if you set the environment variable PYTHON_LIBRARY
+    if(DEFINED ENV{PYTHON_LIBRARY})
+        set(PYTHON_LIBRARY $ENV{PYTHON_LIBRARY})
+    else()
+        message(WARNING "PYTHON_LIBRARY is not set using default library path. It is advisable to set this.")
+    endif()
+
+    find_package(PythonInterp 3 REQUIRED)
+    find_package(PythonLibs 3 REQUIRED)
+    # find_package(pybind11 REQUIRED)
+    find_package(pybind11 CONFIG REQUIRED)
+
+    message(STATUS "Using PyBind")
+    set(PYBIND_INC_DIR ${PYBIND_INCLUDES})
+
+    # python output directory
+    set(PY_OUTPUT_DIR ${NIS_BUILD_DIR}/bin/python3)
+endif()
 
 # set includes
 include_directories(${CLI_INCLUDES}

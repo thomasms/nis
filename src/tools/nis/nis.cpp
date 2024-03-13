@@ -3,7 +3,6 @@
 #include <cmath>
 
 #include <CLI/CLI.hpp>
-#include <ENDFtk.hpp>
 
 #include <Eigen/Core>
 #include <Eigen/Dense>
@@ -35,8 +34,7 @@ int main(int argc, char **argv){
 
     try{
       // construct a decay matrix - straight from ENDF file(s)
-      auto tape = njoy::ENDFtk::tree::fromFile(data);
-      const Eigen::MatrixX<double> dense_decay_mat = endf::construct_decay_matrix_from_tape(tape);
+      const Eigen::MatrixX<double> dense_decay_mat = endf::construct_decay_matrix_from_file(data);
 
       // read input data
       const auto input_data = io::input::from_file<double>(input);

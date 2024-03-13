@@ -8,3 +8,8 @@ add_subdirectory(tools)
 if(BUILD_TESTS)
   add_subdirectory(tests)
 endif(BUILD_TESTS)
+
+# python API
+if(BUILD_PY_API)
+  add_subdirectory(python)
+endif(BUILD_PY_API)
