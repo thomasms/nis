@@ -26,8 +26,8 @@ TEST_CASE( "Reverse map from another (swap key-values)", "[invert_map]" ) {
     const auto m_rev = invert_map<int, std::string>(m);
 
     REQUIRE( m_rev.size() == 4 );
-    // takes the last if repeated
-    REQUIRE( m_rev.at("abc") == 10 );
+    // takes the first if repeated
+    REQUIRE( m_rev.at("abc") == 1 );
     REQUIRE( m_rev.at("Jub") == 4 );
     REQUIRE( m_rev.at("KL") == 3 );
     REQUIRE( m_rev.at("abcd") == 7 );

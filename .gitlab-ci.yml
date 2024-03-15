@@ -84,7 +84,7 @@ test_python:
     artifacts: true
   before_script:
     # get the data from the package repository
-    - "wget --header 'PRIVATE-TOKEN: $CI_JOB_TOKEN' https://git.oecd-nea.org/api/v4/projects/${CI_PROJECT_ID}/packages/generic/jeff/311/data.dec"
+    - "wget --ca-certificate=/ca.crt --header 'PRIVATE-TOKEN: $CI_JOB_TOKEN' https://git.oecd-nea.org/api/v4/projects/${CI_PROJECT_ID}/packages/generic/jeff/311/data.dec"
     - mkdir -p data
     - mv data.dec data.dec data/jeff311.dec
   script:
