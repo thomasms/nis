@@ -39,6 +39,16 @@ namespace nis {
             return hash_map;
         }
 
+        // if values are not unique, it will take the last
+        template<typename K, typename V>
+        inline std::map<V, K> invert_map(const std::map<K, V>& imap){
+            std::map<V, K> reversed;
+            for (const auto& pair : imap) {
+                reversed.emplace(pair.second, pair.first);
+            }
+            return reversed;
+        }
+
         /*
         Sign is removed/ignored.
         */

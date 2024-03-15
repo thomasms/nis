@@ -12,5 +12,6 @@
 #include "nis/endf/decay.hpp"
 
 #include "nis/io/input.hpp"
+#include "nis/io/output.hpp"
 
 #endif // NIS_HPP

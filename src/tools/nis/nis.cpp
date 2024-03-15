@@ -8,11 +8,8 @@
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 
-#include "nis/cram.hpp"
-#include "nis/nuclides.hpp"
-#include "nis/util.hpp"
-#include "nis/zai.hpp"
 #include "nis/io/input.hpp"
+#include "nis/io/output.hpp"
 #include "nis/endf/core.hpp"
 #include "nis/solver.hpp"
 
@@ -41,18 +38,14 @@ int main(int argc, char **argv){
       const auto input_data = io::input::from_file<double>(input);
 
       // do computation
-      const Eigen::VectorX<double> nt = solver::compute_inventory(input_data, dense_decay_mat);
+      const auto output_data = solver::compute_inventory<double>(input_data, dense_decay_mat);
 
       // dump output to std::out
-      const int vec_size = static_cast<int>(dense_decay_mat.cols());
-      for(int i=0;i<vec_size;++i){
-        double val = nt[i];
-        int zai = (i == vec_size-1) ? -1 : data::ALL_ZAIS[i];
-        std::string nuclide_name = zai::get_name_from(zai);
-        if(val > 1e4){
-          std::cout << nuclide_name << " " << val << "\n";
-        }
-      }
+      std::cout << output_data;
+    }
+    catch(const std::exception& ex){
+      std::cerr << ex.what();
+      return 1;
     }
     catch(...){
       std::cerr << "There was an error - check the logs.\n";

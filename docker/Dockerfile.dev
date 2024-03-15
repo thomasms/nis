@@ -35,7 +35,7 @@ Options = UnsafeLegacyRenegotiation\n\n'\
     python3 -m venv venv && \
     . /venv/bin/activate && \
     # for python bindings
-    python3 -m pip install pybind11 numpy && \
+    python3 -m pip install pybind11 numpy pytest && \
     # make an entrypoint file for the venv
     echo '#!/bin/bash\n\
 source /venv/bin/activate\n\

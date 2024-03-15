@@ -62,7 +62,7 @@ build_python311:
   tags:
     - docker
 
-
+# C++ tests
 test_ubuntu:
   stage: test
   image: ${DOCKER_BASE_REPO}:dev
@@ -71,5 +71,24 @@ test_ubuntu:
     artifacts: true
   script:
     - ./build/bin/nistests
+  tags:
+    - docker
+
+# python level tests
+# for integration testing
+test_python:
+  stage: test
+  image: ${DOCKER_BASE_REPO}:dev
+  needs:
+  - job: build_python311
+    artifacts: true
+  before_script:
+    # get the data from the package repository
+    - "wget --header 'PRIVATE-TOKEN: $CI_JOB_TOKEN' https://git.oecd-nea.org/api/v4/projects/${CI_PROJECT_ID}/packages/generic/jeff/311/data.dec"
+    - mkdir -p data
+    - mv data.dec data.dec data/jeff311.dec
+  script:
+    - export PYTHONPATH=./build/bin/python3:./src/tests/python
+    - pytest -v src/tests/python/testsuite.py
   tags:
     - docker
