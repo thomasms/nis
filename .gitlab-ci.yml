@@ -79,14 +79,11 @@ test_ubuntu:
 test_python:
   stage: test
   image: ${DOCKER_BASE_REPO}:dev
+  environment:
+    - GIT_LFS_SKIP_SMUDGE=0
   needs:
   - job: build_python311
     artifacts: true
-  before_script:
-    # get the data from the package repository
-    - "wget --ca-certificate=/ca.crt --header 'PRIVATE-TOKEN: $CI_JOB_TOKEN' https://git.oecd-nea.org/api/v4/projects/${CI_PROJECT_ID}/packages/generic/jeff/311/data.dec"
-    - mkdir -p data
-    - mv data.dec data.dec data/jeff311.dec
   script:
     - export PYTHONPATH=./build/bin/python3:./src/tests/python
     - pytest -v src/tests/python/testsuite.py
