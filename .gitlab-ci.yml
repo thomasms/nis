@@ -79,8 +79,8 @@ test_ubuntu:
 test_python:
   stage: test
   image: ${DOCKER_BASE_REPO}:dev
-  environment:
-    - GIT_LFS_SKIP_SMUDGE=0
+  variables:
+    GIT_LFS_SKIP_SMUDGE: 0
   needs:
   - job: build_python311
     artifacts: true
