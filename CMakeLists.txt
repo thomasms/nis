@@ -4,6 +4,7 @@ project (NIS)
 
 # cmake options
 option(BUILD_TESTS "Build unit tests" ON)
+option(BUILD_PY_API "Build python bindings" OFF)
 option(USE_SYSTEM_CATCH2 "Use a pre-installed version of Catch2" OFF)
 # Set release build by default
 set (CMAKE_BUILD_TYPE Release CACHE STRING "Select which configuration to build.")
@@ -42,10 +43,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
 # CLI is header only
 set (CLI_INCLUDES ${THIRD_PARTY_DIR}/CLI11/include)
 set (ENDFTK_INCLUDES ${THIRD_PARTY_DIR}/ENDFtk/src)
-set (LOG_INCLUDES ${THIRD_PARTY_DIR}/Log/src)
 set (DISCO_INCLUDES ${THIRD_PARTY_DIR}/disco/src)
 set (RANGE_INCLUDES ${THIRD_PARTY_DIR}/range-v3/include)
-set (HU_INCLUDES ${THIRD_PARTY_DIR}/header-utilities/src)
+set (TOOLS_INCLUDES ${THIRD_PARTY_DIR}/tools/src)
 set (SPDLOG_INCLUDES ${THIRD_PARTY_DIR}/spdlog/include)
 set (EIGEN_INCLUDES ${THIRD_PARTY_DIR}/eigen/)
 
@@ -54,11 +54,36 @@ if(BUILD_TESTS)
     add_subdirectory(${THIRD_PARTY_DIR}/Catch2)
 endif(BUILD_TESTS)
 
+# find python
+if(BUILD_PY_API)
+    set(Python_VIRTUALENV FIRST)
+
+    # Find default python libraries and interpreter
+    set(Python_ADDITIONAL_VERSIONS 3.10)
+
+    # set this to your python 3 lib absolute path, if you set the environment variable PYTHON_LIBRARY
+    if(DEFINED ENV{PYTHON_LIBRARY})
+        set(PYTHON_LIBRARY $ENV{PYTHON_LIBRARY})
+    else()
+        message(WARNING "PYTHON_LIBRARY is not set using default library path. It is advisable to set this.")
+    endif()
+
+    find_package(PythonInterp 3 REQUIRED)
+    find_package(PythonLibs 3 REQUIRED)
+    # find_package(pybind11 REQUIRED)
+    find_package(pybind11 CONFIG REQUIRED)
+
+    message(STATUS "Using PyBind")
+    set(PYBIND_INC_DIR ${PYBIND_INCLUDES})
+
+    # python output directory
+    set(PY_OUTPUT_DIR ${NIS_BUILD_DIR}/bin/python3)
+endif()
+
 # set includes
 include_directories(${CLI_INCLUDES}
-                    ${LOG_INCLUDES}
                     ${DISCO_INCLUDES}
-                    ${HU_INCLUDES}
+                    ${TOOLS_INCLUDES}
                     ${SPDLOG_INCLUDES}
                     ${RANGE_INCLUDES}
                     ${EIGEN_INCLUDES}

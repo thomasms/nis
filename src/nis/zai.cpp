@@ -17,6 +17,10 @@ namespace nis {
 
             // Remove numeric values from the string and lowercase it
             std::string trimmed_string = util::string_rtrim(name);
+            if(trimmed_string.empty()){
+                return -1;
+            }
+
             std::string name_lower = util::string_lower(trimmed_string);
             // if no metastable then this will be an integer
             unsigned char i_char = name_lower.back();

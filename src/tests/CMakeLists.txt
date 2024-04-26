@@ -4,6 +4,7 @@ set(CPP_UNIT_TESTS_SOURCES
   test_util.cpp
   test_zai.cpp
   endf/test_decay.cpp
+  io/test_helpers.cpp
 )
 
 add_executable(${CPP_UNIT_TESTS_NAME} ${CPP_UNIT_TESTS_SOURCES})

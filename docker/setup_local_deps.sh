@@ -7,12 +7,18 @@ cd ./dependencies
 git clone https://github.com/CLIUtils/CLI11.git
 git clone https://github.com/catchorg/Catch2.git
 git clone https://gitlab.com/libeigen/eigen.git
+
+# ENDFtk - v1.0.0
 git clone https://github.com/njoy/ENDFtk.git
+cd ENDFtk
+git checkout v1.0.0
+cd ..
 
 # ENDFtk deps
+# tag: v1.11.0
 git clone https://github.com/gabime/spdlog.git
 cd spdlog
-git checkout a51b4856377a71f81b6d74b9af459305c4c644f8
+git checkout ad0e89cbfb4d0c1ce4d097e134eb7be67baebb36
 cd ..
 
 git clone https://github.com/njoy/disco.git
@@ -20,16 +26,13 @@ cd disco
 git checkout 2606933a854bb0269c4ec37143e1236797e27838
 cd ..
 
-git clone https://github.com/njoy/header-utilities.git
-cd header-utilities
-git checkout cc2610fee15e255c151e8e22aca1e8b3d1a96b39
+# tag: v0.2.0
+git clone https://github.com/njoy/tools.git
+cd tools
+git checkout 25c9273d05601a9644feea6d7539250bf1d1c0dc
 cd ..
 
-git clone https://github.com/njoy/Log.git
-cd Log
-git checkout 52962b7796afe37ef1d8f7edb4bf9ecb1b868d15
-cd ..
-
+# tag: 0.11.0
 git clone https://github.com/ericniebler/range-v3.git
 cd range-v3
 # v0.11.0

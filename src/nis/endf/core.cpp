@@ -4,9 +4,9 @@
 #include "nis/physics.hpp"
 #include "nis/nuclides.hpp"
 #include "nis/util.hpp"
+#include "nis/endf/decay.hpp"
 
 #include "nis/endf/core.hpp"
-#include "nis/endf/decay.hpp"
 
 namespace nis {
     namespace endf {
@@ -49,7 +49,7 @@ namespace nis {
                                 const double br = decay_mode.branchingRatio()[0];
                                 for(auto daughter_zai: secondaries){
                                     // the sink is the last row
-                                    int dza_index = zai_map.count(daughter_zai) == 1 ? zai_map.at(daughter_zai) : decay_mat.cols() -1;
+                                    int dza_index = zai_map.count(daughter_zai) == 1 ? zai_map.at(daughter_zai) : data::SINK_INDEX;
                                     decay_mat(za_index, dza_index) += br*decay_const;
                                 }
                             }
@@ -61,11 +61,9 @@ namespace nis {
 
         Eigen::MatrixXd construct_decay_matrix_from_tape(const njoy::ENDFtk::tree::Tape& tape){
 
-            // this could be done at compile time using std::array
-            const auto zai_map = util::make_map_index_lookup(data::ALL_ZAIS);
             // add 1 for the sink
-            const int mat_nr_rows = zai_map.size() + 1;
-            const int mat_nr_cols = mat_nr_rows;
+            const int mat_nr_rows = data::ZAI_SIZE;
+            const int mat_nr_cols = data::ZAI_SIZE;
 
             Eigen::MatrixXd decay_mat = Eigen::MatrixXd::Zero(mat_nr_rows, mat_nr_cols);
 
@@ -80,13 +78,17 @@ namespace nis {
                 // We don't want to double count...
                 auto materials = tape.material(mat_number);
                 for(auto material: materials){
-                    _update_decay_matrix(material, zai_map, decay_mat);
+                    _update_decay_matrix(material, data::ZAI_MAP, decay_mat);
                 }
             }
 
             return decay_mat;
         }
 
+        Eigen::MatrixXd construct_decay_matrix_from_file(std::string filename){
+            auto tape = njoy::ENDFtk::tree::fromFile(filename);
+            return endf::construct_decay_matrix_from_tape(tape);
+        }
 
     }
 }

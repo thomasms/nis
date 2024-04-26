@@ -74,6 +74,7 @@ TEST_CASE( "ZAI from name", "[get_from_name]" ) {
     REQUIRE( get_from_name("u235s") == 922357 );
     REQUIRE( get_from_name("ra223") == 882230 );
     REQUIRE( get_from_name("Ra234o") == 882343 );
+    REQUIRE( get_from_name("") == -1 );
 }
 
 TEST_CASE( "name from ZAI", "[get_name_from]" ) {

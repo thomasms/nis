@@ -14,6 +14,25 @@ TEST_CASE( "Map from array", "[make_map_index_lookup]" ) {
     REQUIRE( res.at(7) == 2 );
 }
 
+TEST_CASE( "Reverse map from another (swap key-values)", "[invert_map]" ) {
+    const std::map<int, std::string> m = {
+        {1, "abc"},
+        {4, "Jub"},
+        {3, "KL"},
+        {7, "abcd"},
+        // repeated value
+        {10, "abc"},
+    };
+    const auto m_rev = invert_map<int, std::string>(m);
+
+    REQUIRE( m_rev.size() == 4 );
+    // takes the first if repeated
+    REQUIRE( m_rev.at("abc") == 1 );
+    REQUIRE( m_rev.at("Jub") == 4 );
+    REQUIRE( m_rev.at("KL") == 3 );
+    REQUIRE( m_rev.at("abcd") == 7 );
+}
+
 TEST_CASE( "Break up an integer into separate digits", "[get_digits]" ){
 
     REQUIRE( get_digits<int>(0) == std::list<int>{0} );

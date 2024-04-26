@@ -1,3 +1,6 @@
+#ifndef IO_INPUT_HPP
+#define IO_INPUT_HPP
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -95,3 +98,5 @@ namespace nis{
         }
     }
 }
+
+#endif

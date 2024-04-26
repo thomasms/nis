@@ -3,18 +3,15 @@
 #include <cmath>
 
 #include <CLI/CLI.hpp>
-#include <ENDFtk.hpp>
 
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 
-#include "nis/cram.hpp"
-#include "nis/nuclides.hpp"
-#include "nis/util.hpp"
-#include "nis/zai.hpp"
 #include "nis/io/input.hpp"
+#include "nis/io/output.hpp"
 #include "nis/endf/core.hpp"
+#include "nis/solver.hpp"
 
 using namespace nis;
 
@@ -35,36 +32,20 @@ int main(int argc, char **argv){
 
     try{
       // construct a decay matrix - straight from ENDF file(s)
-      auto tape = njoy::ENDFtk::tree::fromFile(data);
-      const Eigen::MatrixX<double> dense_decay_mat = endf::construct_decay_matrix_from_tape(tape);
+      const Eigen::MatrixX<double> dense_decay_mat = endf::construct_decay_matrix_from_file(data);
 
       // read input data
       const auto input_data = io::input::from_file<double>(input);
 
-      // set initial vector (inventory)
-      const int vec_size = static_cast<int>(dense_decay_mat.cols());
-      Eigen::VectorX<double> n0 = Eigen::VectorX<double>::Zero(vec_size);
-      const auto zai_map = util::make_map_index_lookup(data::ALL_ZAIS);
+      // do computation
+      const auto output_data = solver::compute_inventory<double>(input_data, dense_decay_mat);
 
-      for (auto it = input_data.nuclides.begin(); it != input_data.nuclides.end(); ++it) {
-        const int nuclide_zai = zai::get_from_name(it->first);
-        if(zai_map.count(nuclide_zai) == 1){
-            const auto zai_index = zai_map.at(nuclide_zai);
-            n0(zai_index) = it->second;
-        }
-      }
-
-      const Eigen::VectorX<double> nt = core::cram48::solve<double>(dense_decay_mat, n0, input_data.dt);
-
-      // output
-      for(int i=0;i<vec_size;++i){
-        double val = nt[i];
-        int zai = (i == vec_size-1) ? -1 : data::ALL_ZAIS[i];
-        std::string nuclide_name = zai::get_name_from(zai);
-        if(val > 1e4){
-          std::cout << nuclide_name << " " << val << "\n";
-        }
-      }
+      // dump output to std::out
+      std::cout << output_data;
+    }
+    catch(const std::exception& ex){
+      std::cerr << ex.what();
+      return 1;
     }
     catch(...){
       std::cerr << "There was an error - check the logs.\n";

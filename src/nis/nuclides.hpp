@@ -10,6 +10,9 @@ namespace nis {
     namespace data {
 
         constexpr const int MAX_SIZE = 3352;
+        // add one for sink
+        constexpr const int ZAI_SIZE = MAX_SIZE + 1;
+        constexpr const int SINK_INDEX = 3352;
 
         constexpr std::array<int, MAX_SIZE> ALL_ZAIS = {
             10010, 10020, 10030, 10040, 10050, 10060, 10070, 20030, 20040, 20050, 20060, 20070, 20080, 20090, 20100, 30030,
@@ -376,6 +379,8 @@ namespace nis {
             {117,"Ts"},
             {118,"Og"},
         };
+
+        const std::map<int, int> ZAI_MAP = util::make_map_index_lookup(ALL_ZAIS);
     }
 }
 

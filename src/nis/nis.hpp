@@ -2,8 +2,9 @@
 #define NIS_HPP
 
 #include "nis/cram.hpp"
-#include "nis/physics.hpp"
 #include "nis/nuclides.hpp"
+#include "nis/physics.hpp"
+#include "nis/solver.hpp"
 #include "nis/util.hpp"
 #include "nis/zai.hpp"
 
@@ -11,5 +12,6 @@
 #include "nis/endf/decay.hpp"
 
 #include "nis/io/input.hpp"
+#include "nis/io/output.hpp"
 
 #endif // NIS_HPP

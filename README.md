@@ -20,12 +20,35 @@ If you follow the script in `docker/setup_local_deps.sh`, running it in the root
 
 ## Build
 
-Once you have all the dependencies locally and have compiled SparseSuite, you can then compile via:
+Once you have all the dependencies locally, you can then compile via:
 
 ```bash
 mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
+make -j4
+```
+
+
+### python bindings
+
+If you want the python bindings (default=OFF), then follow the below steps.
+
+
+First make a virtual env and install pybind via:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+python3 -m install pybind11
+```
+
+Then build as before but with slightly different cmake args, as below.
+```bash
+source venv/bin/activate
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_PY_API=ON -Dpybind11_DIR=`pybind11-config --cmakedir` ..
 make -j4
 ```
 
