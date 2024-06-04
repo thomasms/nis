@@ -1,6 +1,9 @@
 FROM ubuntu:22.04
 
 ENV TZ=Europe/Paris
+ENV REQUESTS_CA_BUNDLE=/ca.crt
+ENV NODE_EXTRA_CA_CERTS=/ca.crt
+ENV OPENSSL_CONF=/openssl.cnf
 
 COPY packages.txt /packages.txt
 COPY setup_local_deps.sh /setup_local_deps.sh
@@ -15,7 +18,6 @@ system_default = system_default_sect\n\n\
 [system_default_sect]\n\
 Options = UnsafeLegacyRenegotiation\n\n'\
     >> /openssl.cnf && \
-    export OPENSSL_CONF=/openssl.cnf && \
     AG="env DEBIAN_FRONTEND=noninteractive apt-get -yq" && \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
     $AG update && \

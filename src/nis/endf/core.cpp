@@ -29,9 +29,9 @@ namespace nis {
                     const int zai = za*10 + i;
                     if (zai_map.count(zai) == 1){
                         const int za_index = zai_map.at(zai);
-        
-                        if( !parsed_section.isStable() ){
-                            const double half_life = parsed_section.halfLife()[0];
+
+                        const double half_life = parsed_section.halfLife()[0];
+                        if( (!parsed_section.isStable()) && (half_life > 0.) ){
                             const double decay_const = physics::compute_decay_const(half_life);
 
                             // the diagonal is the rate lost from the parent
