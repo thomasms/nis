@@ -4,7 +4,7 @@ variables:
   GET_SOURCES_ATTEMPTS: 3
   DOCKER_TLS_CERTDIR: ""
   RUNNER_TAG: docker
-  DOCKER_BASE_REPO: docker.oecd-nea.org/stainer_t/nis
+  DOCKER_BASE_REPO: docker.oecd-nea.org/databank/nis
 
 stages:
   - build
@@ -25,8 +25,6 @@ build_ubuntu:
     - build/bin
     expire_in: 1 day
     when: always
-  tags:
-    - docker
 
 build_ubuntu_debug:
   stage: build
@@ -42,8 +40,6 @@ build_ubuntu_debug:
     - build_debug/bin
     expire_in: 1 day
     when: always
-  tags:
-    - docker
 
 build_python311:
   stage: build
@@ -59,8 +55,6 @@ build_python311:
     - build/bin
     expire_in: 1 day
     when: always
-  tags:
-    - docker
 
 # C++ tests
 test_ubuntu:
@@ -71,8 +65,6 @@ test_ubuntu:
     artifacts: true
   script:
     - ./build/bin/nistests
-  tags:
-    - docker
 
 # python level tests
 # for integration testing
@@ -87,5 +79,3 @@ test_python:
   script:
     - export PYTHONPATH=./build/bin/python3:./src/tests/python
     - pytest -v src/tests/python/testsuite.py
-  tags:
-    - docker
