@@ -6,7 +6,8 @@ import unittest
 import pynis as nis
 
 
-_data_file = Path(__file__).parent.parent.parent.parent / "data" / "jeff311.dec"
+_jeff311_data_file = Path(__file__).parent.parent.parent.parent / "data" / "jeff311.dec"
+_endfbvii_data_file = Path(__file__).parent.parent.parent.parent / "data" / "endfbvii1.dec"
 
 
 def generate_random_nuclide() -> str:
@@ -22,9 +23,9 @@ def generate_random_inv() -> dict[str, float]:
     return inv
 
 
-class IntegrationTests(unittest.TestCase):
+class IntegrationBaseTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.mat = nis.core.decay_mat_from_file(str(_data_file))
+        self.mat = nis.core.decay_mat_from_file(str(_jeff311_data_file))
         self.inp = nis.core.InputData()
 
     def test_h3_halflife(self) -> None:
@@ -49,4 +50,16 @@ class IntegrationTests(unittest.TestCase):
             self.assertTrue(len(y.nuclides) > 0)
 
 
-__all__ = ["IntegrationTests"]
+class IntegrationJeff311Tests(IntegrationBaseTests):
+    def setUp(self) -> None:
+        self.mat = nis.core.decay_mat_from_file(str(_jeff311_data_file))
+        self.inp = nis.core.InputData()
+
+
+class IntegrationEndfbVIITests(IntegrationBaseTests):
+    def setUp(self) -> None:
+        self.mat = nis.core.decay_mat_from_file(str(_endfbvii_data_file))
+        self.inp = nis.core.InputData()
+
+
+__all__ = ["IntegrationJeff311Tests", "IntegrationEndfbVIITests"]
