@@ -8,6 +8,7 @@
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 
+#include "nis/io/helpers.hpp"
 #include "nis/io/input.hpp"
 #include "nis/io/output.hpp"
 #include "nis/endf/core.hpp"
@@ -35,7 +36,7 @@ int main(int argc, char **argv){
       const Eigen::MatrixX<double> dense_decay_mat = endf::construct_decay_matrix_from_file(data);
 
       // read input data
-      const auto input_data = io::input::from_file<double>(input);
+      const auto input_data = io::helpers::from_file<double, io::input::InputData>(input);
 
       // do computation
       const auto output_data = solver::compute_inventory<double>(input_data, dense_decay_mat);

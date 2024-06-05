@@ -63,32 +63,6 @@ namespace nis{
                 }
             };
 
-            template<typename T=double>
-            OutputData<T> from_file(std::string filename){
-                OutputData<T> data;
-
-                std::ifstream file(filename);
-                if (!file) {
-                    std::cerr << "Error opening file: " << filename << std::endl;
-                    return data;
-                }
-
-                file >> data;
-
-                return data;
-            }
-
-            template<typename T=double>
-            void to_file(const OutputData<T>& data, std::string filename){
-                std::ofstream file(filename);
-
-                if (!file) {
-                    std::cerr << "Error opening file: " << filename << std::endl;
-                    return;
-                }
-
-                file << data;
-            }
         }
     }
 }

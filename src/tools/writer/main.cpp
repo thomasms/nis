@@ -1,8 +1,12 @@
 #include <CLI/CLI.hpp>
 
+#include "nis/io/helpers.hpp"
 #include "nis/io/input.hpp"
 
 using namespace nis::io;
+
+using InP = input::InputData<double>;
+
 
 int main(int argc, char **argv){
 
@@ -13,7 +17,7 @@ int main(int argc, char **argv){
       ->required();
     CLI11_PARSE(app, argc, argv);
 
-    input::InputData<double> data;
+    InP data;
     data.dt = 30000.0;
     data.nuclides = {
         {"u234", 1e+20},
@@ -24,6 +28,6 @@ int main(int argc, char **argv){
         {"u239", 1e+20}
     };
 
-    input::to_file(data, filename);
+    helpers::to_file(data, filename);
     return 0;
 }

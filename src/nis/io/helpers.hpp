@@ -54,6 +54,32 @@ namespace nis{
                 return inv;
             }
 
+            template<typename T, template <typename> class Container>
+            Container<T> from_file(std::string filename){
+                Container<T> data;
+
+                std::ifstream file(filename);
+                if (!file) {
+                    std::cerr << "Error opening file: " << filename << std::endl;
+                    return data;
+                }
+
+                file >> data;
+
+                return data;
+            }
+
+            template<typename T, template <typename> class Container>
+            void to_file(const Container<T>& data, std::string filename){
+                std::ofstream file(filename);
+
+                if (!file) {
+                    std::cerr << "Error opening file: " << filename << std::endl;
+                    return;
+                }
+
+                file << data;
+            }
         }
     }
 }
