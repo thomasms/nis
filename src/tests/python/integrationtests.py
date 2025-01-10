@@ -53,13 +53,13 @@ class IntegrationBaseTests(unittest.TestCase):
 class IntegrationJeff311Tests(IntegrationBaseTests):
     def setUp(self) -> None:
         self.mat = nis.core.decay_mat_from_file(str(_jeff311_data_file))
-        self.inp = nis.core.BasicModel()
+        self.model = nis.core.BasicModel()
 
 
 class IntegrationEndfbVIITests(IntegrationBaseTests):
     def setUp(self) -> None:
         self.mat = nis.core.decay_mat_from_file(str(_endfbvii_data_file))
-        self.inp = nis.core.BasicModel()
+        self.model = nis.core.BasicModel()
 
 
 __all__ = ["IntegrationJeff311Tests", "IntegrationEndfbVIITests"]
