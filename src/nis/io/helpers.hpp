@@ -8,10 +8,14 @@
 #include <map>
 
 #include <Eigen/Core>
-
+#include "nis/io/input.hpp"
+#include "nis/io/output.hpp"
 #include "nis/nuclides.hpp"
 #include "nis/util.hpp"
 #include "nis/zai.hpp"
+
+using namespace nis::io::input;
+using namespace nis::io::output;
 
 namespace nis{
     namespace io {

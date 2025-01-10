@@ -1,5 +1,6 @@
 import argparse
 import numpy as np
+import random
 import scipy.sparse as sp
 import scipy.sparse.linalg as sla
 import math
@@ -139,6 +140,54 @@ alpha_i = np.array(
 c48_alpha = np.array(alpha_r + alpha_i * 1j, dtype=np.complex128)
 
 c48_alpha0 = 2.258038182743983e-47
+
+
+def generate_invertible_matrix(n):
+    rng = np.random.default_rng()
+    while True:
+        # a random matrix will not work most of the time, as CRAM is only stable in certain regimes
+        B = np.random.rand(n, n)  # Generate a random n x n matrix
+        # instead we create a diagonal with random numbers
+        # vec = np.random.rand(n)
+        # B = np.diag(vec)
+        # B = sp.random(n, n, density=0.01, random_state=rng)
+        # B = B.toarray()
+        if np.linalg.det(B) != 0:  # Check if it's invertible
+            return B
+
+def generate_rotation_matrix(n, theta=None, index1=None, index2=None):
+    """
+    Create an N-dimensional rotation matrix for a rotation in 2D.
+
+    Parameters:
+    n (int): The dimension of the space (N).
+    theta (float): The rotation angle in radians.
+    index1 (int): The first index for the rotation.
+    index2 (int): The second index for the rotation.
+
+    Returns:
+    np.ndarray: The N x N rotation matrix.
+    """
+    theta = theta if theta is not None else random.random()
+    index1 = index1 if index1 is not None else random.randint(0, n-1)
+    index2 = index2 if index2 is not None else random.randint(0, n-1)
+    if index1 >= n or index2 >= n:
+        raise ValueError("Index out of bounds for the specified dimension.")
+
+    # Initialize an N x N identity matrix
+    rot_matrix = np.eye(n)
+
+    # Create the 2D rotation matrix
+    rotation_2d = np.array([[np.cos(theta), -np.sin(theta)],
+                                [np.sin(theta),  np.cos(theta)]])
+
+    # Place the 2D rotation matrix in the correct indices of the N x N matrix
+    rot_matrix[index1, index1] = rotation_2d[0, 0]
+    rot_matrix[index1, index2] = rotation_2d[0, 1]
+    rot_matrix[index2, index1] = rotation_2d[1, 0]
+    rot_matrix[index2, index2] = rotation_2d[1, 1]
+
+    return rot_matrix
 
 
 def compute_zai(z: int, a: int, i: int) -> int:
@@ -402,6 +451,11 @@ def main():
     input_data = parse_input_file(args.input_file)
     dt = input_data.get("dt")
 
+    print("Generating a scrambler...")
+    scrambler_mat = generate_invertible_matrix(matrix.shape[0])
+    # scrambler_mat = generate_rotation_matrix(matrix.shape[0])
+    print("Scrambler mat generated")
+
     min_natoms = 1e12
     n0 = np.zeros((matrix.shape[0]))
     for nname, natoms in input_data.get("nuclides", {}).items():
@@ -417,7 +471,29 @@ def main():
     if abs(dt) > 5e9:
         raise Exception("Cannot go that far ahead! Limit to 5e9 seconds (158 years)")
 
-    nt = cram_solve(n0, matrix, dt)
+    print("=====================")
+    print("       initial       ")
+    print("=====================")
+    for i, nx in enumerate(n0):
+        if nx > min_natoms:
+            zai = zai_lookup_r.get(i)
+            print(f"{get_name(zai):<10}", f"{nx:>10.4g}")
+
+    # nt = cram_solve(n0, matrix, dt)
+
+    scrambled_n0 = scrambler_mat.dot(n0)
+    scrambler_mat_inv = np.linalg.inv(scrambler_mat)
+    scrambled_mat = scrambler_mat.dot(matrix.dot(scrambler_mat_inv))
+    scrambled_nt = cram_solve(scrambled_n0, scrambled_mat, dt)
+    nt = scrambler_mat_inv.dot(scrambled_nt)
+
+    print("=====================")
+    print("      scrambled      ")
+    print("=====================")
+    for i, nx in enumerate(scrambled_n0):
+        if nx > min_natoms:
+            zai = zai_lookup_r.get(i)
+            print(f"{get_name(zai):<10}", f"{nx:>10.4g}")
 
     print("=====================")
     print("       forward       ")

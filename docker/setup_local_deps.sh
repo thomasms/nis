@@ -8,10 +8,10 @@ git clone https://github.com/CLIUtils/CLI11.git
 git clone https://github.com/catchorg/Catch2.git
 git clone https://gitlab.com/libeigen/eigen.git
 
-# ENDFtk - v1.0.0
+# ENDFtk - v1.1.0
 git clone https://github.com/njoy/ENDFtk.git
 cd ENDFtk
-git checkout v1.0.0
+git checkout v1.1.0
 cd ..
 
 # ENDFtk deps
@@ -21,15 +21,15 @@ cd spdlog
 git checkout ad0e89cbfb4d0c1ce4d097e134eb7be67baebb36
 cd ..
 
-git clone https://github.com/njoy/disco.git
-cd disco
-git checkout 2606933a854bb0269c4ec37143e1236797e27838
+git clone https://github.com/fastfloat/fast_float
+cd fast_float
+git checkout f476bc713fda06fbd34dc621b466745a574b3d4c
 cd ..
 
-# tag: v0.2.0
+# tag: v0.3.0
 git clone https://github.com/njoy/tools.git
 cd tools
-git checkout 25c9273d05601a9644feea6d7539250bf1d1c0dc
+git checkout 368dbd9bd44754de616c46ffed0f80d2d16d8360
 cd ..
 
 # tag: 0.11.0

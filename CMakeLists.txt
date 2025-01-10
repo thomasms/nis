@@ -43,7 +43,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
 # CLI is header only
 set (CLI_INCLUDES ${THIRD_PARTY_DIR}/CLI11/include)
 set (ENDFTK_INCLUDES ${THIRD_PARTY_DIR}/ENDFtk/src)
-set (DISCO_INCLUDES ${THIRD_PARTY_DIR}/disco/src)
+set (FASTFLOAT_INCLUDES ${THIRD_PARTY_DIR}/fast_float/include)
 set (RANGE_INCLUDES ${THIRD_PARTY_DIR}/range-v3/include)
 set (TOOLS_INCLUDES ${THIRD_PARTY_DIR}/tools/src)
 set (SPDLOG_INCLUDES ${THIRD_PARTY_DIR}/spdlog/include)
@@ -82,7 +82,7 @@ endif()
 
 # set includes
 include_directories(${CLI_INCLUDES}
-                    ${DISCO_INCLUDES}
+                    ${FASTFLOAT_INCLUDES}
                     ${TOOLS_INCLUDES}
                     ${SPDLOG_INCLUDES}
                     ${RANGE_INCLUDES}

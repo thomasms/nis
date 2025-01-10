@@ -36,19 +36,19 @@ PYBIND11_MODULE(pynis, m) {
 
     py::module m_core = m.def_submodule("core");
 
-    using InputDataPyType = io::input::InputData<double>;
-    py::class_<InputDataPyType>(m_core, "InputData")
+    using BasicModelPyType = core::BasicModel<double>;
+    py::class_<BasicModelPyType>(m_core, "BasicModel")
         .def(py::init<>())
-        .def_readwrite("nuclides", &InputDataPyType::nuclides)
-        .def_readwrite("dt", &InputDataPyType::dt);
+        .def_readwrite("nuclides", &BasicModelPyType::nuclides)
+        .def_readwrite("dt", &BasicModelPyType::dt);
 
-    using OutputDataPyType = io::output::OutputData<double>;
-    py::class_<OutputDataPyType>(m_core, "OutputData")
+    using ModelResultPyType = core::ModelResult<double>;
+    py::class_<ModelResultPyType>(m_core, "ModelResult")
         .def(py::init<>())
-        .def_readwrite("nuclides", &OutputDataPyType::nuclides);
+        .def_readwrite("nuclides", &ModelResultPyType::nuclides);
 
     m_core.def("decay_mat_from_file", &endf::construct_decay_matrix_from_file);
-    m_core.def("compute_inventory", py::overload_cast<const InputDataPyType&, const Eigen::MatrixX<double>&>(&solver::compute_inventory<double>));
+    m_core.def("compute_inventory", py::overload_cast<const BasicModelPyType&, const Eigen::MatrixX<double>&>(&solver::compute_inventory<double>));
 
     py::module m_data = m.def_submodule("data");
     // would be nice to make these all read only attributes, if possible

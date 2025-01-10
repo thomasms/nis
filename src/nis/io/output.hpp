@@ -6,15 +6,14 @@
 #include <sstream>
 #include <map>
 
+#include "nis/model.hpp"
+
 namespace nis{
     namespace io {
-        namespace output{
-
-            template<typename T>
-            class OutputData;
+        namespace output {
 
             template<typename T=double>
-            void serialize(std::ostream& os, const OutputData<T>& data) {
+            static void Serialize(std::ostream& os, const core::ModelResult<T>& data) {
                 os << "\nnuclides\n";
                 for (const auto& nuclide : data.nuclides) {
                     os << "    " << nuclide.first << " " << nuclide.second << "\n";
@@ -22,8 +21,8 @@ namespace nis{
             }
 
             template<typename T=double>
-            OutputData<T> deserialize(std::istream& is) {
-                OutputData<T> data;
+            static core::ModelResult<T> Deserialize(std::istream& is) {
+                core::ModelResult<T> data;
 
                 std::string line;
                 std::string key, value;
@@ -49,20 +48,20 @@ namespace nis{
             }
 
             template<typename T=double>
-            struct OutputData {
-                std::map<std::string, T> nuclides;
-                
-                inline friend std::ostream& operator<<(std::ostream& os, const OutputData<T>& data) {
-                    serialize<T>(os, data);
-                    return os;
-                }
+            inline std::ostream& operator<<(std::ostream& os, const core::ModelResult<T>& data) {
+                Serialize<T>(os, data);
+                return os;
+            }
 
-                inline friend std::istream& operator>>(std::istream& is, OutputData<T>& data) {
-                    data = deserialize<T>(is);
-                    return is;
-                }
-            };
+            template<typename T=double>
+            inline std::istream& operator>>(std::istream& is, core::ModelResult<T>& data) {
+                data = Deserialize<T>(is);
+                return is;
+            }
 
+            // Explicit instantiation for common types
+            template std::ostream& operator<<<double>(std::ostream& os, const core::ModelResult<double>& data);
+            template std::istream& operator>><double>(std::istream& is, core::ModelResult<double>& data);
         }
     }
 }

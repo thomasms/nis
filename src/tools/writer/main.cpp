@@ -3,9 +3,10 @@
 #include "nis/io/helpers.hpp"
 #include "nis/io/input.hpp"
 
+using namespace nis::core;
 using namespace nis::io;
 
-using InP = input::InputData<double>;
+using Model = BasicModel<double>;
 
 
 int main(int argc, char **argv){
@@ -17,7 +18,7 @@ int main(int argc, char **argv){
       ->required();
     CLI11_PARSE(app, argc, argv);
 
-    InP data;
+    Model data;
     data.dt = 30000.0;
     data.nuclides = {
         {"u234", 1e+20},
@@ -28,6 +29,6 @@ int main(int argc, char **argv){
         {"u239", 1e+20}
     };
 
-    helpers::to_file(data, filename);
+    helpers::to_file<double, BasicModel>(data, filename);
     return 0;
 }
