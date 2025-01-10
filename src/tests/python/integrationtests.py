@@ -26,13 +26,13 @@ def generate_random_inv() -> dict[str, float]:
 class IntegrationBaseTests(unittest.TestCase):
     def setUp(self) -> None:
         self.mat = nis.core.decay_mat_from_file(str(_jeff311_data_file))
-        self.inp = nis.core.InputData()
+        self.model = nis.core.BasicModel()
 
     def test_h3_halflife(self) -> None:
-        self.inp.nuclides = {"h3": 1e20}
-        self.inp.dt = 388523520
+        self.model.nuclides = {"h3": 1e20}
+        self.model.dt = 388523520
 
-        y = nis.core.compute_inventory(self.inp, self.mat)
+        y = nis.core.compute_inventory(self.model, self.mat)
         nuclides = y.nuclides
 
         # roughly half
@@ -44,22 +44,22 @@ class IntegrationBaseTests(unittest.TestCase):
             inv = generate_random_inv()
             # 22 keeps this to a max of ~41.8 years
             dt = math.exp(rd.random() * 22)
-            self.inp.nuclides = inv
-            self.inp.dt = dt
-            y = nis.core.compute_inventory(self.inp, self.mat)
+            self.model.nuclides = inv
+            self.model.dt = dt
+            y = nis.core.compute_inventory(self.model, self.mat)
             self.assertTrue(len(y.nuclides) > 0)
 
 
 class IntegrationJeff311Tests(IntegrationBaseTests):
     def setUp(self) -> None:
         self.mat = nis.core.decay_mat_from_file(str(_jeff311_data_file))
-        self.inp = nis.core.InputData()
+        self.inp = nis.core.BasicModel()
 
 
 class IntegrationEndfbVIITests(IntegrationBaseTests):
     def setUp(self) -> None:
         self.mat = nis.core.decay_mat_from_file(str(_endfbvii_data_file))
-        self.inp = nis.core.InputData()
+        self.inp = nis.core.BasicModel()
 
 
 __all__ = ["IntegrationJeff311Tests", "IntegrationEndfbVIITests"]
