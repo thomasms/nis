@@ -11,6 +11,15 @@
 namespace nis {
     namespace endf {
 
+        template <int file_number, int mt_number>
+        int _get_zai_from_section(const njoy::ENDFtk::section::Type<file_number, mt_number> & section){
+            const int za = section.ZA();
+            // ENDFtk gives us the isomeric state as an unsigned int
+            const int i = static_cast<int>(section.LISO());
+            const int zai = za*10 + i;
+            return zai;
+        }
+
         /*
         Needs to be cleaned up and move somewhere else.
         */
@@ -18,15 +27,13 @@ namespace nis {
                                   const std::map<int, int>& zai_map, Eigen::MatrixXd& decay_mat){
             constexpr int file_number = 8;
             constexpr int mt_number = 457;
+
             if(material.hasMF(file_number)){
                 njoy::ENDFtk::tree::File file = material.file(file_number);
                 if(file.hasMT(mt_number)){
                     njoy::ENDFtk::tree::Section decay_data = file.MT(mt_number);
                     auto parsed_section = decay_data.parse<file_number, mt_number>();
-                    const int za = parsed_section.ZA();
-                    // ENDFtk gives us the isomeric state as an unsigned int
-                    const int i = static_cast<int>(parsed_section.isomericState());
-                    const int zai = za*10 + i;
+                    const int zai = _get_zai_from_section<file_number, mt_number>(parsed_section);
                     if (zai_map.count(zai) == 1){
                         const int za_index = zai_map.at(zai);
 
@@ -67,9 +74,8 @@ namespace nis {
 
             Eigen::MatrixXd decay_mat = Eigen::MatrixXd::Zero(mat_nr_rows, mat_nr_cols);
 
-            const std::vector<int> mat_numbers = tape.materialNumbers();
             // loop over all materials in the file, most likely just one
-            for(auto mat_number: mat_numbers){
+            for(auto mat_number: tape.materialNumbers()){
                 // this can return multiple instances of the same MAT number
                 // due to different temperatures
                 // loop over temperatures for each MAT
