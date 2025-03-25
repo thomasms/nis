@@ -5,6 +5,10 @@
 #include <map>
 #include <memory>
 
+#include <ENDFtk.hpp>
+
+#include <Eigen/Core>
+
 #include "nis/endf/decay/product_computer.hpp"
 
 
@@ -29,6 +33,12 @@ namespace nis {
         std::vector<int> expand_rtypes(double rtyp);
 
         DecayProductT compute_products(int parent_zai, double rtyp, int final_isomeric_state);
+
+        Eigen::MatrixXd construct_decay_matrix_from_tape(const njoy::ENDFtk::tree::Tape& tape);
+        // convience function to avoid calling ENDFtk fromFile
+        Eigen::MatrixXd construct_decay_matrix_from_file(std::string filename);
+
+
     }
 }
 

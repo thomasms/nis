@@ -2,6 +2,7 @@
 #include <memory>
 
 #include "nis/physics.hpp"
+#include "nis/nuclides.hpp"
 #include "nis/util.hpp"
 #include "nis/zai.hpp"
 
@@ -80,6 +81,98 @@ namespace nis {
 
             return DecayProductT(primary_zai, secondaries);
         }
+
+        constexpr int file_number = 8;
+        constexpr int mt_number = 457;
+
+        int _get_zai_from_section(const njoy::ENDFtk::section::Type<file_number, mt_number>& section){
+            const int za = section.ZA();
+            // ENDFtk gives us the isomeric state as an unsigned int
+            const int i = static_cast<int>(section.LISO());
+            const int zai = za*10 + i;
+            return zai;
+        }
+
+        std::vector<int> _get_secondaries(int zai, const njoy::ENDFtk::section::Type<file_number, mt_number>::DecayMode& decay_mode){
+            const double reaction_type = decay_mode.RTYP();
+            const int final_isomeric_state = std::floor(decay_mode.finalIsomericState());
+            const auto products = compute_products(zai, reaction_type, final_isomeric_state);
+            const int primary = std::get<0>(products);
+
+            std::vector<int> secondaries = std::get<1>(products);
+            // add the primary as the last element
+            secondaries.emplace_back(primary);
+            return secondaries;
+        }
+
+        void _update_decay_matrix(const njoy::ENDFtk::tree::Material& material,
+                                  const std::map<int, int>& zai_map, Eigen::MatrixXd& decay_mat){
+
+            if(material.hasMF(file_number)){
+                njoy::ENDFtk::tree::File file = material.file(file_number);
+                if(file.hasMT(mt_number)){
+
+                    njoy::ENDFtk::tree::Section decay_data = file.MT(mt_number);
+                    auto parsed_section = decay_data.parse<file_number, mt_number>();
+                    const int zai = _get_zai_from_section(parsed_section);
+
+                    if (zai_map.count(zai) == 1){
+                        const int za_index = zai_map.at(zai);
+                        const double half_life = parsed_section.halfLife()[0];
+
+                        if( (!parsed_section.isStable()) && (half_life > 0.) ){
+                            const double decay_const = physics::compute_decay_const(half_life);
+
+                            // the diagonal is the rate lost from the parent
+                            decay_mat(za_index, za_index) -= decay_const;
+
+                            // loop over decay states and compute the outgoing
+                            const auto decay_modes_collection = parsed_section.decayModes();
+                            for(auto decay_mode: decay_modes_collection.decayModes()){
+                                const double br = decay_mode.branchingRatio()[0];
+                                const auto secondaries = _get_secondaries(zai, decay_mode);
+                                for(auto daughter_zai: secondaries){
+                                    // the sink is the last row
+                                    int dza_index = zai_map.count(daughter_zai) == 1 ? zai_map.at(daughter_zai) : data::SINK_INDEX;
+                                    decay_mat(za_index, dza_index) += br*decay_const;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Eigen::MatrixXd construct_decay_matrix_from_tape(const njoy::ENDFtk::tree::Tape& tape){
+
+            // add 1 for the sink
+            const int mat_nr_rows = data::ZAI_SIZE;
+            const int mat_nr_cols = data::ZAI_SIZE;
+
+            Eigen::MatrixXd decay_mat = Eigen::MatrixXd::Zero(mat_nr_rows, mat_nr_cols);
+
+            // loop over all materials in the file, most likely just one
+            for(auto mat_number: tape.materialNumbers()){
+                // this can return multiple instances of the same MAT number
+                // due to different temperatures
+                // loop over temperatures for each MAT
+                //
+                // How do we account for multiple temperatures?
+                // We don't want to double count...
+                auto materials = tape.material(mat_number);
+                for(auto material: materials){
+                    _update_decay_matrix(material, data::ZAI_MAP, decay_mat);
+                }
+            }
+
+            return decay_mat;
+        }
+
+        Eigen::MatrixXd construct_decay_matrix_from_file(std::string filename){
+            auto tape = njoy::ENDFtk::tree::fromFile(filename);
+            return endf::construct_decay_matrix_from_tape(tape);
+        }
+
 
     }
 }

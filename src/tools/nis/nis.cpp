@@ -11,6 +11,7 @@
 #include "nis/model.hpp"
 #include "nis/solver.hpp"
 #include "nis/endf/core.hpp"
+#include "nis/endf/decay.hpp"
 #include "nis/io/helpers.hpp"
 
 using namespace nis;
@@ -20,6 +21,7 @@ int main(int argc, char **argv){
     // cli args
     std::string data = "data.dec";
     std::string input = "run.inp";
+    double threshold = 1e10;
 
     CLI::App app{"NIS"};
     app.add_option("-d,--data", data, "An single ENDF file containing all decay data")
@@ -28,6 +30,8 @@ int main(int argc, char **argv){
     app.add_option("-i,--input", input, "Input file for inventory simulation")
       ->required()
       ->check(CLI::ExistingFile);
+    app.add_option("-t,--threshold", threshold, "Threshold number of atoms for inventory simulation")
+      ->check(CLI::PositiveNumber);
     CLI11_PARSE(app, argc, argv);
 
     try{
@@ -40,8 +44,11 @@ int main(int argc, char **argv){
       // do computation
       const auto result = solver::compute_inventory<double>(model, dense_decay_mat);
 
+      // filter out nuclides below a certain threshold
+      const auto filtered_result = core::filter_nuclides<double>(result, threshold);
+
       // dump output to std::out
-      std::cout << result;
+      std::cout << filtered_result;
     }
     catch(const std::exception& ex){
       std::cerr << ex.what();

@@ -19,6 +19,20 @@ namespace nis{
         struct ModelResult {
             std::map<std::string, T> nuclides;
         };
+
+        template<typename T=double>
+        ModelResult<T> filter_nuclides(const ModelResult<T>& unfiltered, T threshold){
+            std::map<std::string, T> filtered_nuclides;
+            std::copy_if(unfiltered.nuclides.begin(),
+                         unfiltered.nuclides.end(),
+                         std::inserter(filtered_nuclides, filtered_nuclides.begin()),
+                         [threshold](const auto& nuclide){
+                            return nuclide.second >= threshold;
+                        }
+            );
+            return core::ModelResult<double>{filtered_nuclides};
+        }
+
     }
 }
 
