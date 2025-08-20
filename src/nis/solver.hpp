@@ -1,6 +1,8 @@
 #ifndef NIS_SOLVER_HPP
 #define NIS_SOLVER_HPP
 
+#include <functional>
+
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
@@ -14,9 +16,14 @@ namespace nis {
     namespace solver {
 
         template<typename T>
-        inline core::ModelResult<T> compute_inventory(const core::BasicModel<T>& model, const Eigen::MatrixX<T>& mat){
+        using solver_func = std::function<Eigen::VectorX<T>(const Eigen::MatrixX<T>&, const Eigen::VectorX<T>&, double)>;
+
+        template<typename T>
+        inline core::ModelResult<T> compute_inventory(const core::BasicModel<T>& model,
+                                                      const Eigen::MatrixX<T>& mat,
+                                                      solver_func<T>& solver){
             const Eigen::VectorX<T> n0 = io::helpers::vector_from_inventory<T>(model.nuclides);
-            const Eigen::VectorX<T> nt = core::cram48::solve<T>(mat, n0, model.dt);
+            const Eigen::VectorX<T> nt = solver(mat, n0, model.dt);
             const auto final_inv = io::helpers::inventory_from_vector<T>(nt);
             core::ModelResult<T> result;
             result.nuclides = final_inv;

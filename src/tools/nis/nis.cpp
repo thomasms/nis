@@ -41,8 +41,10 @@ int main(int argc, char **argv){
       // read input data
       const auto model = io::helpers::from_file<double, core::BasicModel>(input);
 
-      // do computation
-      const auto result = solver::compute_inventory<double>(model, dense_decay_mat);
+      // do computation using CRAM48 as default
+      // permit other solvers in the future
+      solver::solver_func<double> solver_function = &core::cram48::solve<double>;
+      const auto result = solver::compute_inventory<double>(model, dense_decay_mat, solver_function);
 
       // filter out nuclides below a certain threshold
       const auto filtered_result = core::filter_nuclides<double>(result, threshold);

@@ -48,7 +48,10 @@ PYBIND11_MODULE(pynis, m) {
         .def_readwrite("nuclides", &ModelResultPyType::nuclides);
 
     m_core.def("decay_mat_from_file", &endf::construct_decay_matrix_from_file);
-    m_core.def("compute_inventory", py::overload_cast<const BasicModelPyType&, const Eigen::MatrixX<double>&>(&solver::compute_inventory<double>));
+
+    // solvers
+    m_core.def("solver_cram48", &core::cram48::solve<double>);
+    m_core.def("compute_inventory", py::overload_cast<const BasicModelPyType&, const Eigen::MatrixX<double>&, solver::solver_func<double>&>(&solver::compute_inventory<double>));
 
     py::module m_data = m.def_submodule("data");
     // would be nice to make these all read only attributes, if possible

@@ -27,12 +27,13 @@ class IntegrationBaseTests(unittest.TestCase):
     def setUp(self) -> None:
         self.mat = nis.core.decay_mat_from_file(str(_jeff311_data_file))
         self.model = nis.core.BasicModel()
+        self.solver = nis.core.solver_cram48
 
     def test_h3_halflife(self) -> None:
         self.model.nuclides = {"h3": 1e20}
         self.model.dt = 388523520
 
-        y = nis.core.compute_inventory(self.model, self.mat)
+        y = nis.core.compute_inventory(self.model, self.mat, self.solver)
         nuclides = y.nuclides
 
         # roughly half
@@ -46,7 +47,7 @@ class IntegrationBaseTests(unittest.TestCase):
             dt = math.exp(rd.random() * 22)
             self.model.nuclides = inv
             self.model.dt = dt
-            y = nis.core.compute_inventory(self.model, self.mat)
+            y = nis.core.compute_inventory(self.model, self.mat, self.solver)
             self.assertTrue(len(y.nuclides) > 0)
 
 
@@ -54,12 +55,14 @@ class IntegrationJeff311Tests(IntegrationBaseTests):
     def setUp(self) -> None:
         self.mat = nis.core.decay_mat_from_file(str(_jeff311_data_file))
         self.model = nis.core.BasicModel()
+        self.solver = nis.core.solver_cram48
 
 
 class IntegrationEndfbVIITests(IntegrationBaseTests):
     def setUp(self) -> None:
         self.mat = nis.core.decay_mat_from_file(str(_endfbvii_data_file))
         self.model = nis.core.BasicModel()
+        self.solver = nis.core.solver_cram48
 
 
 __all__ = ["IntegrationJeff311Tests", "IntegrationEndfbVIITests"]
