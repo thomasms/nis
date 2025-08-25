@@ -1,7 +1,9 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include "nis/endf/decay.hpp"
+#include "nis/zai.hpp"
 
+using namespace nis;
 using namespace nis::endf;
 
 TEST_CASE( "Expand the rtype from endf", "[expand_rtypes]" ) {
@@ -19,4 +21,56 @@ TEST_CASE( "Expand the rtype from endf", "[expand_rtypes]" ) {
     REQUIRE( expand_rtypes(11.2) == std::vector<int>{} );
     // 30 is not mapped
     REQUIRE( expand_rtypes(30) == std::vector<int>{} );
+}
+
+
+TEST_CASE( "compute_products Li7 beta" ) {
+    // Li7 beta decay
+    DecayProductT p = compute_products(30080, 1.0, 0);
+    const int primary = std::get<0>(p);
+    const std::vector<int> secondaries = std::get<1>(p);
+    // primary -> Z+1 = 40080
+    REQUIRE ( primary == 40080);
+    // secondaries - no secondaries for beta minus
+    REQUIRE ( secondaries == std::vector<int>{} );
+}
+
+TEST_CASE( "compute_products Li7 beta then alpha" ) {
+    // Li7 beta decay
+    DecayProductT p = compute_products(30080, 1.4, 0);
+    const int primary = std::get<0>(p);
+    const std::vector<int> secondaries = std::get<1>(p);
+    // primary -> Z+1 = 40080,
+    // then Z-2, N-4 = 20040,
+    REQUIRE ( primary == 20040);
+    // secondaries
+    REQUIRE ( secondaries == std::vector<int>{zai::ALPHA} );
+}
+
+TEST_CASE( "compute_products Li7 beta then 2 alphas" ) {
+    // Li7 beta decay
+    DecayProductT p = compute_products(30080, 1.44, 0);
+    const int primary = std::get<0>(p);
+    const std::vector<int> secondaries = std::get<1>(p);
+    // primary -> Z+1 = 40080,
+    // then Z-2, N-4 = 20040,
+    // then another Z-2, N-4 = 0
+    REQUIRE ( primary == 0);
+    // secondaries
+    REQUIRE ( secondaries == std::vector<int>{zai::ALPHA, zai::ALPHA} );
+}
+
+// TODO: how to best handle these unphysical processes?
+TEST_CASE( "compute_products Li7 beta then 3 alphas - not physically possible" ) {
+    // Li7 beta decay
+    DecayProductT p = compute_products(30080, 1.444, 0);
+    const int primary = std::get<0>(p);
+    const std::vector<int> secondaries = std::get<1>(p);
+    // primary -> Z+1 = 40080,
+    // then Z-2, N-4 = 20040,
+    // then another Z-2, N-4 = 0
+    // then another Z-2, N-4 = -20040
+    REQUIRE ( primary == -20040);
+    // secondaries
+    REQUIRE ( secondaries == std::vector<int>{zai::ALPHA, zai::ALPHA, zai::ALPHA} );
 }
