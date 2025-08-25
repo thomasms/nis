@@ -10,9 +10,6 @@ namespace nis {
     namespace core {
 
         template<typename T=double>
-        using SpectrumT = std::vector<std::tuple<T, T>>;
-
-        template<typename T=double>
         struct Edge{
             explicit Edge(T lower, T upper) : _lower(lower), _upper(upper) {
                 assert(lower <= upper);
@@ -39,6 +36,23 @@ namespace nis {
             private:
                 T _lower;
                 T _upper;
+        };
+
+        // TODO: associate a unit with the energies and values
+        template<typename T=double>
+        struct Spectrum{
+            explicit Spectrum(const std::vector<T>& energies, const std::vector<T>& values) : _energies(energies), _values(values) {
+                assert(_energies.size() > 1);
+                assert(_values.size() + 1 <= _energies.size());
+            }
+
+            const std::vector<T>& energies() const { return _energies;};
+            const std::vector<T>& values() const { return _values;};
+
+            private:
+                std::vector<T> _energies;
+                std::vector<T> _values;
+
         };
 
         template <typename T>
@@ -81,10 +95,10 @@ namespace nis {
 
         template<typename T=double>
         std::tuple<T, unsigned int> _compute_overlap(const std::vector<Edge<T>>& input_edges,
-                                            const std::vector<T>& input_values,
-                                            const Edge<T>& oedge,
-                                            ConvertFuncT<T>& cfunc,
-                                            unsigned int last_overlap_index=0){
+                                                     const std::vector<T>& input_values,
+                                                     const Edge<T>& oedge,
+                                                     ConvertFuncT<T>& cfunc,
+                                                     unsigned int last_overlap_index=0){
             T output_value = 0;
             bool prev_has_overlap = false;
             int new_last_index = last_overlap_index;
@@ -110,11 +124,10 @@ namespace nis {
         }
 
         template<typename T=double>
-        std::vector<T> _convert_imp(const std::vector<T>& input_bounds,
-                                    const std::vector<T>& input_values,
-                                    const std::vector<T>& output_bounds,
-                                    ConvertFuncT<T>& cfunc){
-        /*
+        Spectrum<T> _convert_imp(const Spectrum<T>& in_spectrum,
+                                 const std::vector<T>& output_bounds,
+                                 ConvertFuncT<T>& cfunc){
+            /*
             Returns the output_values depending on the cfunc.
 
             output_bounds is a list of energies, units are irrelevant,
@@ -124,44 +137,40 @@ namespace nis {
 
             Assumes that input and output bounds are in ascending energy. If not
             then it will go unchecked and will produce odd results
-        */
+            */
             assert(output_bounds.size() > 1);
-            assert(input_bounds.size() > 1);
-            assert(input_bounds.size() == input_values.size() + 1);
 
-            const auto input_edges = _get_edges_from_bounds<T>(input_bounds);
+            const auto input_edges = _get_edges_from_bounds<T>(in_spectrum.energies());
             const auto output_edges = _get_edges_from_bounds<T>(output_bounds);
 
             unsigned int last_index = 0;
             std::vector<T> output_values;
             output_values.reserve(output_edges.size());
             for(auto& edge: output_edges){
-                std::tuple<T, unsigned int> x = _compute_overlap(input_edges, input_values, edge, cfunc, last_index);
+                std::tuple<T, unsigned int> x = _compute_overlap(input_edges, in_spectrum.values(), edge, cfunc, last_index);
                 last_index = std::get<1>(x);
                 output_values.emplace_back(std::get<0>(x));
             }
 
-            return output_values;
+            return Spectrum(output_bounds, std::move(output_values));
         }
 
         template<typename T=double>
-        std::vector<T> convert_by_energy(const std::vector<T>& input_bounds,
-                                         const std::vector<T>& input_values,
+        Spectrum<T> convert_by_energy(const Spectrum<T>& in_spectrum,
                                          const std::vector<T>& output_bounds){
             ConvertFuncT<T> cfunc = [](const Edge<T>& input_edge, T input_value, const Edge<T>& overlapping_edge){
                 return overlapping_edge.width()*input_value/input_edge.width();
             };
-            return _convert_imp(input_bounds, input_values, output_bounds, cfunc);
+            return _convert_imp(in_spectrum, output_bounds, cfunc);
         }
 
         template<typename T=double>
-        std::vector<T> convert_by_lethargy(const std::vector<T>& input_bounds,
-                                           const std::vector<T>& input_values,
+        Spectrum<T> convert_by_lethargy(const Spectrum<T>& in_spectrum,
                                            const std::vector<T>& output_bounds){
             ConvertFuncT<T> cfunc = [](const Edge<T>& input_edge, T input_value, const Edge<T>& overlapping_edge){
                 return overlapping_edge.log_ratio()*input_value/input_edge.log_ratio();
             };
-            return _convert_imp(input_bounds, input_values, output_bounds, cfunc);
+            return _convert_imp(in_spectrum, output_bounds, cfunc);
         }
 
     }

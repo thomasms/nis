@@ -5,6 +5,7 @@
 #include "nis/model.hpp"
 #include "nis/nuclides.hpp"
 #include "nis/physics.hpp"
+#include "nis/spectrum.hpp"
 #include "nis/solver.hpp"
 #include "nis/util.hpp"
 #include "nis/zai.hpp"

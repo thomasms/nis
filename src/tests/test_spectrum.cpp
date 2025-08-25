@@ -55,48 +55,56 @@ TEST_CASE( "get_overlap for with overlap 3" ) {
     REQUIRE ( overlap_edge.upper() == 1.4);
 }
 
+using SpectrumD = Spectrum<double>;
+
 TEST_CASE( "convert_by_energy" ) {
-    std::vector<double> new_values = convert_by_energy<double>(std::vector<double>{0.0, 1.0}, std::vector<double>{1.0}, std::vector<double>{0.5, 1.0});
-    REQUIRE ( std::vector<double>{0.5} == new_values);
+    SpectrumD spectrum(std::vector<double>{0.0, 1.0}, std::vector<double>{1.0});
+    SpectrumD new_spec = convert_by_energy<double>(spectrum, std::vector<double>{0.5, 1.0});
+    REQUIRE ( std::vector<double>{0.5} == new_spec.values());
 
-    new_values = convert_by_energy<double>(std::vector<double>{0.0, 1.0}, std::vector<double>{1.0}, std::vector<double>{0.0, 0.5});
-    REQUIRE ( std::vector<double>{0.5} == new_values);
+    new_spec = convert_by_energy<double>(spectrum, std::vector<double>{0.0, 0.5});
+    REQUIRE ( std::vector<double>{0.5} == new_spec.values());
 
-    new_values = convert_by_energy<double>(std::vector<double>{0.0, 1.0}, std::vector<double>{1.0}, std::vector<double>{1.0, 1.5});
-    REQUIRE ( std::vector<double>{0.0} == new_values);
+    new_spec = convert_by_energy<double>(spectrum, std::vector<double>{1.0, 1.5});
+    REQUIRE ( std::vector<double>{0.0} == new_spec.values());
 
-    new_values = convert_by_energy<double>(std::vector<double>{0.0, 1.0}, std::vector<double>{1.0}, std::vector<double>{-1.0, 0.0});
-    REQUIRE ( std::vector<double>{0.0} == new_values);
+    new_spec = convert_by_energy<double>(spectrum, std::vector<double>{-1.0, 0.0});
+    REQUIRE ( std::vector<double>{0.0} == new_spec.values());
 
-    new_values = convert_by_energy<double>(std::vector<double>{0.0, 1.0, 2.0}, std::vector<double>{1.0, 0.7}, std::vector<double>{0.0, 1.0, 2.0});
-    REQUIRE ( std::vector<double>{1.0, 0.7} == new_values);
+    SpectrumD spectrum2(std::vector<double>{0.0, 1.0, 2.0}, std::vector<double>{1.0, 0.7});
+    new_spec = convert_by_energy<double>(spectrum2, std::vector<double>{0.0, 1.0, 2.0});
+    REQUIRE ( std::vector<double>{1.0, 0.7} == new_spec.values());
 
-    new_values = convert_by_energy<double>(std::vector<double>{-1.0, 0.0, 1.0}, std::vector<double>{5.0, 8.0}, std::vector<double>{0.0, 0.5, 0.75, 1.0});
-    REQUIRE ( std::vector<double>{4.0, 2.0, 2.0} == new_values);
+    SpectrumD spectrum3(std::vector<double>{-1.0, 0.0, 1.0}, std::vector<double>{5.0, 8.0});
+    new_spec = convert_by_energy<double>(spectrum3, std::vector<double>{0.0, 0.5, 0.75, 1.0});
+    REQUIRE ( std::vector<double>{4.0, 2.0, 2.0} == new_spec.values());
 
-    new_values = convert_by_energy<double>(std::vector<double>{-1.0, 0.0, 1.0}, std::vector<double>{5.0, 8.0}, std::vector<double>{-10.0, 0.5, 0.75, 1.0});
-    REQUIRE ( std::vector<double>{9.0, 2.0, 2.0} == new_values);
+    new_spec = convert_by_energy<double>(spectrum3, std::vector<double>{-10.0, 0.5, 0.75, 1.0});
+    REQUIRE ( std::vector<double>{9.0, 2.0, 2.0} == new_spec.values());
 }
 
 TEST_CASE( "convert_by_lethargy" ) {
-    std::vector<double> new_values = convert_by_lethargy<double>(std::vector<double>{0.0, 1.0}, std::vector<double>{1.0}, std::vector<double>{0.5, 1.0});
-    REQUIRE ( std::vector<double>{0.69314718055994529} == new_values);
+    SpectrumD spectrum(std::vector<double>{0.0, 1.0}, std::vector<double>{1.0});
+    SpectrumD new_spec = convert_by_lethargy<double>(spectrum, std::vector<double>{0.5, 1.0});
+    REQUIRE ( std::vector<double>{0.69314718055994529} == new_spec.values());
 
-    new_values = convert_by_lethargy<double>(std::vector<double>{0.0, 1.0}, std::vector<double>{1.0}, std::vector<double>{0.0, 0.5});
-    REQUIRE ( std::vector<double>{1.0} == new_values);
+    new_spec = convert_by_lethargy<double>(spectrum, std::vector<double>{0.0, 0.5});
+    REQUIRE ( std::vector<double>{1.0} == new_spec.values());
 
-    new_values = convert_by_lethargy<double>(std::vector<double>{0.0, 1.0}, std::vector<double>{1.0}, std::vector<double>{1.0, 1.5});
-    REQUIRE ( std::vector<double>{0.0} == new_values);
+    new_spec = convert_by_lethargy<double>(spectrum, std::vector<double>{1.0, 1.5});
+    REQUIRE ( std::vector<double>{0.0} == new_spec.values());
 
-    new_values = convert_by_lethargy<double>(std::vector<double>{0.0, 1.0}, std::vector<double>{1.0}, std::vector<double>{-1.0, 0.0});
-    REQUIRE ( std::vector<double>{1.0} == new_values);
+    new_spec = convert_by_lethargy<double>(spectrum, std::vector<double>{-1.0, 0.0});
+    REQUIRE ( std::vector<double>{1.0} == new_spec.values());
 
-    new_values = convert_by_lethargy<double>(std::vector<double>{0.0, 1.0, 2.0}, std::vector<double>{1.0, 0.7}, std::vector<double>{0.0, 1.0, 2.0});
-    REQUIRE ( std::vector<double>{1.0, 0.7} == new_values);
+    SpectrumD spectrum2(std::vector<double>{0.0, 1.0, 2.0}, std::vector<double>{1.0, 0.7});
+    new_spec = convert_by_lethargy<double>(spectrum2, std::vector<double>{0.0, 1.0, 2.0});
+    REQUIRE ( std::vector<double>{1.0, 0.7} == new_spec.values());
 
-    new_values = convert_by_lethargy<double>(std::vector<double>{-1.0, 0.0, 1.0}, std::vector<double>{5.0, 8.0}, std::vector<double>{0.0, 0.5, 0.75, 1.0});
-    REQUIRE ( std::vector<double>{8.0, 3.24372086486531508, 2.30145657961424677} == new_values);
+    SpectrumD spectrum3(std::vector<double>{-1.0, 0.0, 1.0}, std::vector<double>{5.0, 8.0});
+    new_spec = convert_by_lethargy<double>(spectrum3, std::vector<double>{0.0, 0.5, 0.75, 1.0});
+    REQUIRE ( std::vector<double>{8.0, 3.24372086486531508, 2.30145657961424677} == new_spec.values());
 
-    new_values = convert_by_lethargy<double>(std::vector<double>{-1.0, 0.0, 1.0}, std::vector<double>{5.0, 8.0}, std::vector<double>{-10.0, 0.5, 0.75, 1.0});
-    REQUIRE ( std::vector<double>{13.0, 3.24372086486531508, 2.30145657961424677} == new_values);
+    new_spec = convert_by_lethargy<double>(spectrum3, std::vector<double>{-10.0, 0.5, 0.75, 1.0});
+    REQUIRE ( std::vector<double>{13.0, 3.24372086486531508, 2.30145657961424677} == new_spec.values());
 }
