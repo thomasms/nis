@@ -5,6 +5,8 @@
 #include <cmath>
 #include <functional>
 
+#include "nis/histogram.hpp"
+
 
 namespace nis {
     namespace core {
@@ -36,23 +38,6 @@ namespace nis {
             private:
                 T _lower;
                 T _upper;
-        };
-
-        // TODO: associate a unit with the energies and values
-        template<typename T=double>
-        struct Spectrum{
-            explicit Spectrum(const std::vector<T>& energies, const std::vector<T>& values) : _energies(energies), _values(values) {
-                assert(_energies.size() > 1);
-                assert(_values.size() + 1 <= _energies.size());
-            }
-
-            const std::vector<T>& energies() const { return _energies;};
-            const std::vector<T>& values() const { return _values;};
-
-            private:
-                std::vector<T> _energies;
-                std::vector<T> _values;
-
         };
 
         template <typename T>
@@ -124,6 +109,9 @@ namespace nis {
         }
 
         template<typename T=double>
+        using Spectrum = Histogram<std::vector, T, T>;
+
+        template<typename T=double>
         Spectrum<T> _convert_imp(const Spectrum<T>& in_spectrum,
                                  const std::vector<T>& output_bounds,
                                  ConvertFuncT<T>& cfunc){
@@ -140,19 +128,19 @@ namespace nis {
             */
             assert(output_bounds.size() > 1);
 
-            const auto input_edges = _get_edges_from_bounds<T>(in_spectrum.energies());
+            const auto input_edges = _get_edges_from_bounds<T>(in_spectrum.x());
             const auto output_edges = _get_edges_from_bounds<T>(output_bounds);
 
             unsigned int last_index = 0;
             std::vector<T> output_values;
             output_values.reserve(output_edges.size());
             for(auto& edge: output_edges){
-                std::tuple<T, unsigned int> x = _compute_overlap(input_edges, in_spectrum.values(), edge, cfunc, last_index);
+                std::tuple<T, unsigned int> x = _compute_overlap(input_edges, in_spectrum.y(), edge, cfunc, last_index);
                 last_index = std::get<1>(x);
                 output_values.emplace_back(std::get<0>(x));
             }
 
-            return Spectrum(output_bounds, std::move(output_values));
+            return Spectrum<T>(output_bounds, std::move(output_values));
         }
 
         template<typename T=double>
