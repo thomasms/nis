@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <functional>
 
 
 namespace nis {
@@ -10,7 +11,7 @@ namespace nis {
 
         template<typename T=double>
         using SpectrumT = std::vector<std::tuple<T, T>>;
-        
+
         template<typename T=double>
         struct Edge{
             explicit Edge(T lower, T upper) : _lower(lower), _upper(upper) {
@@ -22,7 +23,7 @@ namespace nis {
             };
 
             T width() const {
-                return this->upper - this->_lower;
+                return _upper - _lower;
             };
 
             T log_ratio() const {
@@ -65,6 +66,103 @@ namespace nis {
             return std::make_pair(overlap, overlap_edge);
         }
 
+        template<typename T=double>
+        std::vector<Edge<T>> _get_edges_from_bounds(const std::vector<T>& bounds){
+            std::vector<Edge<T>> edges;
+            edges.reserve(bounds.size()-1);
+            for(unsigned int i=0;i<bounds.size()-1;++i){
+                edges.emplace_back(Edge(bounds[i], bounds[i+1]));
+            }
+            return edges;
+        }
+
+        template<typename T=double>
+        using ConvertFuncT = std::function<T(const Edge<T>& input_edge, T input_value, const Edge<T>& overlapping_edge)>;
+
+        template<typename T=double>
+        std::tuple<T, unsigned int> _compute_overlap(const std::vector<Edge<T>>& input_edges,
+                                            const std::vector<T>& input_values,
+                                            const Edge<T>& oedge,
+                                            ConvertFuncT<T>& cfunc,
+                                            unsigned int last_overlap_index=0){
+            T output_value = 0;
+            bool prev_has_overlap = false;
+            int new_last_index = last_overlap_index;
+            for(unsigned int i=last_overlap_index; i<input_edges.size();++i){
+                std::tuple<bool, Edge<T>> overlap = get_overlap(input_edges[i], oedge);
+                bool has_overlap = std::get<0>(overlap);
+                const auto overlap_edge = std::get<1>(overlap);
+                if(has_overlap){
+                    new_last_index = i;
+                    output_value += cfunc(input_edges[i],
+                                          input_values[i],
+                                          overlap_edge);
+                }
+
+                if(!has_overlap && prev_has_overlap){
+                    break;
+                }
+
+                prev_has_overlap = has_overlap;
+            }
+
+            return std::make_pair(output_value, new_last_index);
+        }
+
+        template<typename T=double>
+        std::vector<T> _convert_imp(const std::vector<T>& input_bounds,
+                                    const std::vector<T>& input_values,
+                                    const std::vector<T>& output_bounds,
+                                    ConvertFuncT<T>& cfunc){
+        /*
+            Returns the output_values depending on the cfunc.
+
+            output_bounds is a list of energies, units are irrelevant,
+            as long as it matches the units of the input_bounds.
+
+            Asserts both input and output bounds are of length greater than 1
+
+            Assumes that input and output bounds are in ascending energy. If not
+            then it will go unchecked and will produce odd results
+        */
+            assert(output_bounds.size() > 1);
+            assert(input_bounds.size() > 1);
+            assert(input_bounds.size() == input_values.size() + 1);
+
+            const auto input_edges = _get_edges_from_bounds<T>(input_bounds);
+            const auto output_edges = _get_edges_from_bounds<T>(output_bounds);
+
+            unsigned int last_index = 0;
+            std::vector<T> output_values;
+            output_values.reserve(output_edges.size());
+            for(auto& edge: output_edges){
+                std::tuple<T, unsigned int> x = _compute_overlap(input_edges, input_values, edge, cfunc, last_index);
+                last_index = std::get<1>(x);
+                output_values.emplace_back(std::get<0>(x));
+            }
+
+            return output_values;
+        }
+
+        template<typename T=double>
+        std::vector<T> convert_by_energy(const std::vector<T>& input_bounds,
+                                         const std::vector<T>& input_values,
+                                         const std::vector<T>& output_bounds){
+            ConvertFuncT<T> cfunc = [](const Edge<T>& input_edge, T input_value, const Edge<T>& overlapping_edge){
+                return overlapping_edge.width()*input_value/input_edge.width();
+            };
+            return _convert_imp(input_bounds, input_values, output_bounds, cfunc);
+        }
+
+        template<typename T=double>
+        std::vector<T> convert_by_lethargy(const std::vector<T>& input_bounds,
+                                           const std::vector<T>& input_values,
+                                           const std::vector<T>& output_bounds){
+            ConvertFuncT<T> cfunc = [](const Edge<T>& input_edge, T input_value, const Edge<T>& overlapping_edge){
+                return overlapping_edge.log_ratio()*input_value/input_edge.log_ratio();
+            };
+            return _convert_imp(input_bounds, input_values, output_bounds, cfunc);
+        }
 
     }
 }
