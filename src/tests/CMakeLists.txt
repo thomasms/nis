@@ -1,6 +1,7 @@
 set(CPP_UNIT_TESTS_NAME nistests)
 
 set(CPP_UNIT_TESTS_SOURCES
+  test_spectrum.cpp
   test_util.cpp
   test_zai.cpp
   endf/test_decay.cpp
