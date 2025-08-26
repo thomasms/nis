@@ -107,7 +107,7 @@ namespace nis {
 
         struct ToSinkDecayReactionProducts{
 
-            DecayProductT get_products(int parent_zai) const{
+            DecayProductT get_products([[maybe_unused]] int parent_zai) const{
                 // const zai::triple parent_triple = zai::decompose(parent_zai);
                 return DecayProductT(-1, {});
             };

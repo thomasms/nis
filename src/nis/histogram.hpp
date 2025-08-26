@@ -22,6 +22,9 @@ namespace nis {
                 assert(_y.size() + 1 <= _x.size());
             }
 
+            Container<xT> xcopy() const { return _x;};
+            Container<yT> ycopy() const { return _y;};
+
             const Container<xT>& x() const { return _x;};
             const Container<yT>& y() const { return _y;};
 

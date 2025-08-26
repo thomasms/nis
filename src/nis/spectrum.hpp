@@ -40,6 +40,8 @@ namespace nis {
                 T _upper;
         };
 
+        // this needs to be benchmarked, but the implementation looks heavy for what it's doing.
+        // TODO: remove construction of Edges and try and optimize this function, if time permits
         template <typename T>
         std::tuple<bool, Edge<T>> get_overlap(const Edge<T>& edge1, const Edge<T>& edge2){
             const bool IS_LOWER = true;
@@ -59,8 +61,10 @@ namespace nis {
 
             // the second item must be a lower point and the third item must be an upper point
             // for overlap
-            const bool overlap = (std::get<1>(points[1]) == IS_LOWER) && (std::get<1>(points[2]) == IS_UPPER);
-            const Edge overlap_edge = Edge(std::get<0>(points[1]), std::get<0>(points[2]));
+            const T lowerp = std::get<0>(points[1]);
+            const T upperp = std::get<0>(points[2]);
+            const bool overlap = (std::get<1>(points[1]) == IS_LOWER) && (std::get<1>(points[2]) == IS_UPPER) && (lowerp != upperp);
+            const Edge overlap_edge = Edge(lowerp, upperp);
 
             return std::make_pair(overlap, overlap_edge);
         }
