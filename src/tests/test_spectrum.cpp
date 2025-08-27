@@ -38,33 +38,24 @@ TEST_CASE( "get_overlap for no overlap2" ) {
 }
 
 TEST_CASE( "get_overlap for with overlap" ) {
-    const Edge<double> edge1(0.0, 1.0);
-    const Edge<double> edge2(0.9, 2.0);
-    std::tuple<bool, Edge<double>> overlap = get_overlap(edge1, edge2);
-    const Edge<double> overlap_edge = std::get<1>(overlap);
-    REQUIRE ( std::get<0>(overlap) == true);
-    REQUIRE ( overlap_edge.lower() == 0.9);
-    REQUIRE ( overlap_edge.upper() == 1.0);
+    const Edge<double> e1(0.0, 1.0);
+    const Edge<double> e2(0.9, 2.0);
+    const Edge<double> expected(0.9, 1.0);
+    check_overlap(e1, e2, expected, true);
 }
 
 TEST_CASE( "get_overlap for with overlap 2" ) {
-    const Edge<double> edge1(1.0, 2.0);
-    const Edge<double> edge2(0.2, 1.1);
-    std::tuple<bool, Edge<double>> overlap = get_overlap(edge1, edge2);
-    const Edge<double> overlap_edge = std::get<1>(overlap);
-    REQUIRE ( std::get<0>(overlap) == true);
-    REQUIRE ( overlap_edge.lower() == 1.0);
-    REQUIRE ( overlap_edge.upper() == 1.1);
+    const Edge<double> e1(1.0, 2.0);
+    const Edge<double> e2(0.2, 1.1);
+    const Edge<double> expected(1.0, 1.1);
+    check_overlap(e1, e2, expected, true);
 }
 
 TEST_CASE( "get_overlap for with overlap 3" ) {
-    const Edge<double> edge1(1.0, 2.0);
-    const Edge<double> edge2(1.2, 1.4);
-    std::tuple<bool, Edge<double>> overlap = get_overlap(edge1, edge2);
-    const Edge<double> overlap_edge = std::get<1>(overlap);
-    REQUIRE ( std::get<0>(overlap) == true);
-    REQUIRE ( overlap_edge.lower() == 1.2);
-    REQUIRE ( overlap_edge.upper() == 1.4);
+    const Edge<double> e1(1.0, 2.0);
+    const Edge<double> e2(1.2, 1.4);
+    const Edge<double> expected(1.2, 1.4);
+    check_overlap(e1, e2, expected, true);
 }
 
 using SpectrumD = Spectrum<double>;
