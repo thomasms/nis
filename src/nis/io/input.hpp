@@ -5,8 +5,11 @@
 #include <fstream>
 #include <sstream>
 #include <map>
+#include <memory>
 
+#include "nis/spectrum.hpp"
 #include "nis/model.hpp"
+#include "nis/util.hpp"
 
 namespace nis{
     namespace io {
@@ -17,6 +20,18 @@ namespace nis{
                 os << "dt " << data.dt << "\n\nnuclides\n";
                 for (const auto& nuclide : data.nuclides) {
                     os << "    " << nuclide.first << " " << nuclide.second << "\n";
+                }
+                if(data.spectrum != nullptr){
+                    os << "\nspectrum\n";
+                    os << "    ";
+                    for(auto v: data.spectrum->x()){
+                        os << v << " ";
+                    }
+                    os << "\n" << "    ";
+                    for(auto v: data.spectrum->y()){
+                        os << v << " ";
+                    }
+                    os << "\n";
                 }
             }
 
@@ -46,6 +61,32 @@ namespace nis{
                             data.nuclides[key] = std::stod(value);
                             iss.clear();
                         }
+                    } else if (line == "spectrum") {
+                        std::vector<double> energies;
+                        std::vector<double> values;
+                        int line_count = 0;
+                        while (std::getline(is, line)) {
+                            if (line.empty() || line[0] == '#') {
+                                break;
+                            }
+                            line_count++;
+                            iss.str(line.substr(4));
+                            std::vector<std::string> contents;
+                            util::string_split<' '>(iss, contents);
+                            if(line_count == 1){
+                                for(auto s: contents){
+                                    energies.emplace_back(std::stod(s));
+                                }
+                            }
+                            if(line_count == 2){
+                                for(auto s: contents){
+                                    values.emplace_back(std::stod(s));
+                                }
+                                break;
+                            }
+                            iss.clear();
+                        }
+                        data.spectrum = std::make_shared<core::Spectrum<double>>(energies, values);
                     }
                 }
 

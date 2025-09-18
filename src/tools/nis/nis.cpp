@@ -12,6 +12,7 @@
 #include "nis/solver.hpp"
 #include "nis/endf/core.hpp"
 #include "nis/endf/decay.hpp"
+#include "nis/endf/reaction.hpp"
 #include "nis/io/helpers.hpp"
 
 using namespace nis;
@@ -19,12 +20,16 @@ using namespace nis;
 int main(int argc, char **argv){
 
     // cli args
-    std::string data = "data.dec";
+    std::string decay_data = "data.dec";
+    std::string reaction_data = "data.dec";
     std::string input = "run.inp";
     double threshold = 1e10;
 
     CLI::App app{"NIS"};
-    app.add_option("-d,--data", data, "An single ENDF file containing all decay data")
+    app.add_option("-d,--decay-data", decay_data, "An single ENDF file containing all decay data")
+      ->required()
+      ->check(CLI::ExistingFile);
+    app.add_option("-r,--reaction-data", reaction_data, "An single ENDF file containing all reaction data")
       ->required()
       ->check(CLI::ExistingFile);
     app.add_option("-i,--input", input, "Input file for inventory simulation")
@@ -35,16 +40,24 @@ int main(int argc, char **argv){
     CLI11_PARSE(app, argc, argv);
 
     try{
-      // construct a decay matrix - straight from ENDF file(s)
-      const Eigen::MatrixX<double> dense_decay_mat = endf::construct_decay_matrix_from_file(data);
-
       // read input data
       const auto model = io::helpers::from_file<double, core::BasicModel>(input);
+      // dump input to std::out
+      std::cout << model;
+
+      const Eigen::MatrixX<double> dense_decay_mat = endf::construct_decay_matrix_from_file(decay_data);
+
+      Eigen::MatrixX<double> dense_reaction_mat = Eigen::MatrixXd::Zero(dense_decay_mat.rows(), dense_decay_mat.cols());
+      if(model.spectrum != nullptr){
+        dense_reaction_mat = endf::construct_reaction_matrix_from_file(reaction_data, *model.spectrum.get());
+      }
+
+      Eigen::MatrixX<double> dense_mat = dense_decay_mat + dense_reaction_mat;
 
       // do computation using CRAM48 as default
       // permit other solvers in the future
       solver::solver_func<double> solver_function = &core::cram48::solve<double>;
-      const auto result = solver::compute_inventory<double>(model, dense_decay_mat, solver_function);
+      const auto result = solver::compute_inventory<double>(model, dense_mat, solver_function);
 
       // filter out nuclides below a certain threshold
       const auto filtered_result = core::filter_nuclides<double>(result, threshold);

@@ -5,6 +5,9 @@
 #include <fstream>
 #include <sstream>
 #include <map>
+#include <memory>
+
+#include "nis/spectrum.hpp"
 
 namespace nis{
     namespace core{
@@ -13,6 +16,10 @@ namespace nis{
         struct BasicModel {
             T dt;
             std::map<std::string, T> nuclides;
+            // we use a pointer here so we can
+            // leave it null for decay only
+            // otherwise we do a collapse for no reason
+            std::shared_ptr<Spectrum<T>> spectrum = nullptr;
         };
 
         template<typename T=double>

@@ -5,6 +5,7 @@
 #include <array>
 #include <cctype>
 #include <iostream>
+#include <sstream>
 #include <list>
 #include <map>
 #include <string>
@@ -81,6 +82,23 @@ namespace nis {
         inline std::string string_rtrim(std::string str){
             size_t end = str.find_last_not_of(" \t\r\n");
             return (end == std::string::npos) ? "" : str.substr(0, end + 1);
+        }
+
+        template <char delimiter, class Container>
+        static void string_split(std::istream& stream, Container& cont)
+        {
+            // get the line from the stream
+            std::string line, token;
+            std::getline(stream, line);
+
+            // now split the line with the delimiter
+            std::stringstream ss(line);
+            while (std::getline(ss, token, delimiter)) {
+                // ignore all whitespace lines
+                if(token.find_first_not_of(' ') != std::string::npos){
+                    cont.push_back(token);
+                }
+            }
         }
 
     }

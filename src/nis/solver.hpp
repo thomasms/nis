@@ -1,6 +1,7 @@
 #ifndef NIS_SOLVER_HPP
 #define NIS_SOLVER_HPP
 
+#include <cassert>
 #include <functional>
 
 #include <Eigen/Core>
@@ -24,6 +25,8 @@ namespace nis {
                                                       solver_func<T>& solver){
             const Eigen::VectorX<T> n0 = io::helpers::vector_from_inventory<T>(model.nuclides);
             const Eigen::VectorX<T> nt = solver(mat, n0, model.dt);
+            // we should make sure that atoms are conserved
+            // assert(n0.sum() == nt.sum());
             const auto final_inv = io::helpers::inventory_from_vector<T>(nt);
             core::ModelResult<T> result;
             result.nuclides = final_inv;

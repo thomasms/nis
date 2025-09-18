@@ -149,7 +149,7 @@ namespace nis {
 
         template<typename T=double>
         Spectrum<T> convert_by_energy(const Spectrum<T>& in_spectrum,
-                                         const std::vector<T>& output_bounds){
+                                      const std::vector<T>& output_bounds){
             ConvertFuncT<T> cfunc = [](const Edge<T>& input_edge, T input_value, const Edge<T>& overlapping_edge){
                 return overlapping_edge.width()*input_value/input_edge.width();
             };
@@ -158,7 +158,7 @@ namespace nis {
 
         template<typename T=double>
         Spectrum<T> convert_by_lethargy(const Spectrum<T>& in_spectrum,
-                                           const std::vector<T>& output_bounds){
+                                        const std::vector<T>& output_bounds){
             ConvertFuncT<T> cfunc = [](const Edge<T>& input_edge, T input_value, const Edge<T>& overlapping_edge){
                 return overlapping_edge.log_ratio()*input_value/input_edge.log_ratio();
             };

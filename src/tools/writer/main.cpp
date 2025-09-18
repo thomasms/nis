@@ -1,3 +1,6 @@
+#include <memory>
+#include <vector>
+
 #include <CLI/CLI.hpp>
 
 #include "nis/io/helpers.hpp"
@@ -28,6 +31,8 @@ int main(int argc, char **argv){
         {"u238", 1e+20},
         {"u239", 1e+20}
     };
+    data.spectrum = std::make_shared<Spectrum<double>>(std::move(std::vector<double>{0.0, 10, 20}),
+                                                       std::move(std::vector<double>{0.5e16, 0.1e16}));
 
     helpers::to_file<double, BasicModel>(data, filename);
     return 0;
