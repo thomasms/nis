@@ -9,6 +9,7 @@
 namespace nis {
     namespace endf {
 
+        int get_parent_zai(const njoy::ENDFtk::tree::Material& material);
 
     }
 }

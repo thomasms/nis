@@ -43,7 +43,7 @@ int main(int argc, char **argv){
       // read input data
       const auto model = io::helpers::from_file<double, core::BasicModel>(input);
       // dump input to std::out
-      std::cout << model;
+      // std::cout << model;
 
       const Eigen::MatrixX<double> dense_decay_mat = endf::construct_decay_matrix_from_file(decay_data);
 

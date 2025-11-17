@@ -7,6 +7,7 @@
 #include "nis/util.hpp"
 #include "nis/zai.hpp"
 
+#include "nis/endf/core.hpp"
 #include "nis/endf/reaction.hpp"
 #include "nis/maths.hpp"
 #include "nis/spectrum.hpp"
@@ -26,6 +27,7 @@ namespace nis {
                                      const std::map<int, int>& zai_map, Eigen::MatrixXd& reaction_mat,
                                      const core::Spectrum<double>& in_spectrum){
 
+            const int parent_zai = get_parent_zai(material);
             // how do we deal with file 10?
             // do we need to look in file 10 if not in file 3?
             if(material.hasMF(file_number)){
@@ -40,24 +42,39 @@ namespace nis {
                 for(auto mt_number: file.sectionNumbers()){
                     njoy::ENDFtk::tree::Section section = file.MT(mt_number);
                     auto parsed_section = section.parse<file_number>();
-                    // we don't care about anything higher than 199 for neutrons
-                    // actually 152-200 is unassigned so we can skip below 152
-                    if(mt_number < 152){
-                        // map MTs to ReactionProduct like what we do for the DecayProduct
+                    if (zai_map.count(parent_zai) == 1){
+                        const int za_index = zai_map.at(parent_zai);
+                        // we don't care about anything higher than 199 for neutrons
+                        // actually 152-200 is unassigned so we can skip below 152
+                        if(mt_number < 152){
+                            // map MTs to ReactionProduct like what we do for the DecayProduct
 
-                        // TODO: should we check if the total MT=1 is actually the sum of the others?
-                        // It's commonly not the case for many nuclear data libraries
+                            // TODO: should we check if the total MT=1 is actually the sum of the others?
+                            // It's commonly not the case for many nuclear data libraries
 
-                        // we need to use the spectrum convert function to match the nuclear data
-                        // TODO: we need to groupify this and check the interpolation rule
-                         
-                        std::vector<double> xs_energies{parsed_section.energies().begin(), parsed_section.energies().end()};
-                        std::vector<double> xs_values{parsed_section.crossSections().begin(), parsed_section.crossSections().end()};
-                        core::Spectrum<double> data_spectrum = core::convert_by_lethargy<double>(in_spectrum, xs_energies);
-                        // TODO: check units
-                        std::cout << xs_energies.size()<< " "<< data_spectrum.y().size() << " " << xs_values.size() << "\n";
-                        double collapsed_xs = maths::dot_product<double>(data_spectrum.y(), xs_values);
-                        std::cout << mt_number << " " << collapsed_xs << "\n";
+                            std::vector<int> interpolation_types{parsed_section.interpolants().begin(), parsed_section.interpolants().end()};
+                            // NOTE: we assume 1 interpolation type - is this valid?
+                            assert(interpolation_types.size() == 1);
+                            const int interpolation_scheme = interpolation_types[0];
+                            // NOTE: 1= y is constant in x (constant, histogram)
+                            // we assume everything is already preprocessed into INT=1
+                            assert(interpolation_scheme == 1);
+
+                            std::vector<double> xs_energies{parsed_section.energies().begin(), parsed_section.energies().end()};
+                            std::vector<double> xs_values{parsed_section.crossSections().begin(), parsed_section.crossSections().end()};
+                            // HACK: because it is INT=1 (constant) we can just pop off the last entry
+                            xs_values.pop_back();
+
+                            core::Spectrum<double> data_spectrum = core::convert_by_lethargy<double>(in_spectrum, xs_energies);
+                            // TODO: check units
+                            double collapsed_xs = maths::dot_product<double>(data_spectrum.y(), xs_values);
+
+                            // TODO: finish
+                            // the diagonal is the production rate
+                            // if(mt_number == 1){
+                            //     reaction_mat(za_index, za_index) += collapsed_xs;
+                            // }
+                        }
                     }
                 }
             }
