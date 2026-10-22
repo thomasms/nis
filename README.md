@@ -40,7 +40,7 @@ First make a virtual env and install pybind via:
 ```bash
 python3 -m venv venv
 source venv/bin/activate
-python3 -m install pybind11
+python3 -m pip install pybind11
 ```
 
 Then build as before but with slightly different cmake args, as below.
@@ -58,7 +58,7 @@ make -j4
 To test your build, after compiling as above, try the following:
 
 ```bash
-./build/bin/nis --data ./data/jeff311.dec --input examples/h3_halflife.inp
+./build/bin/nis --decay-data ./data/jeff311.dec --input examples/h3_halflife.inp
 ```
 
 If successful, you should see roughly half remains as H3 and the other half has beta decayed to He3.
@@ -68,5 +68,14 @@ H3 5.00518e+19
 He3 4.99482e+19
 ```
 
+
+For neutron activation, add a `spectrum` to the input (see [examples/activate.inp](examples/activate.inp)) and give the reaction data too:
+
+```bash
+./build/bin/nis --decay-data ./data/jeff311.dec --reaction-data ./data/jeff4.reac --input examples/activate.inp
+```
+
+The spectrum is the neutron flux in n/cm^2/s per group. The first line gives the group bounds in eV (ascending), the second line gives one value per group.
+The reaction data must be group-wise (INT=1), for example as processed by NJOY GROUPR.
 
 Note, you will need to have pulled the decay data via LFS in the [./data](./data) subdirectory.

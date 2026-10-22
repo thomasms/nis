@@ -1,5 +1,6 @@
 #include <cmath>
 #include <memory>
+#include <stdexcept>
 
 #include "nis/physics.hpp"
 #include "nis/nuclides.hpp"
@@ -26,6 +27,7 @@ namespace nis {
                     return zai;
                 }
             }
+            throw std::runtime_error("Material has no MF=1 MT=451 section, cannot get the parent ZAI");
         }
 
     }

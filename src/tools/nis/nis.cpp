@@ -21,7 +21,7 @@ int main(int argc, char **argv){
 
     // cli args
     std::string decay_data = "data.dec";
-    std::string reaction_data = "data.dec";
+    std::string reaction_data = "";
     std::string input = "run.inp";
     double threshold = 1e10;
 
@@ -29,8 +29,7 @@ int main(int argc, char **argv){
     app.add_option("-d,--decay-data", decay_data, "An single ENDF file containing all decay data")
       ->required()
       ->check(CLI::ExistingFile);
-    app.add_option("-r,--reaction-data", reaction_data, "An single ENDF file containing all reaction data")
-      ->required()
+    app.add_option("-r,--reaction-data", reaction_data, "An single ENDF file containing all reaction data, needed if the input has a spectrum")
       ->check(CLI::ExistingFile);
     app.add_option("-i,--input", input, "Input file for inventory simulation")
       ->required()
@@ -49,6 +48,9 @@ int main(int argc, char **argv){
 
       Eigen::MatrixX<double> dense_reaction_mat = Eigen::MatrixXd::Zero(dense_decay_mat.rows(), dense_decay_mat.cols());
       if(model.spectrum != nullptr){
+        if(reaction_data.empty()){
+          throw std::invalid_argument("The input has a spectrum, so reaction data (--reaction-data) is required.\n");
+        }
         dense_reaction_mat = endf::construct_reaction_matrix_from_file(reaction_data, *model.spectrum.get());
       }
 
