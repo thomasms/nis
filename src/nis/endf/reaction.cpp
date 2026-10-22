@@ -83,13 +83,8 @@ namespace nis {
             }
         }
 
-        void _update_reaction_matrix(const njoy::ENDFtk::tree::Material& material,
-                                     const std::map<int, int>& zai_map, Eigen::MatrixXd& reaction_mat,
-                                     const core::Spectrum<double>& in_spectrum){
-
-            if(!material.hasMF(file_number)){
-                return;
-            }
+        void _read_reaction_data(const njoy::ENDFtk::tree::Material& material,
+                                 const std::map<int, int>& zai_map, ReactionData& reaction_data){
 
             const int parent_zai = get_parent_zai(material);
             if(zai_map.count(parent_zai) == 0){
@@ -117,21 +112,17 @@ namespace nis {
                     }
                 }
 
-                const std::vector<double> xs_energies{parsed_section.energies().begin(), parsed_section.energies().end()};
-                const std::vector<double> xs_values{parsed_section.crossSections().begin(), parsed_section.crossSections().end()};
-
-                const double rate = collapse_cross_section(in_spectrum, xs_energies, xs_values);
-                add_reaction_rate(reaction_mat, zai_map, parent_zai, mt_number, rate);
+                reaction_data.push_back(CrossSection{
+                    parent_zai,
+                    mt_number,
+                    {parsed_section.energies().begin(), parsed_section.energies().end()},
+                    {parsed_section.crossSections().begin(), parsed_section.crossSections().end()}
+                });
             }
         }
 
-        Eigen::MatrixXd construct_reaction_matrix_from_tape(const njoy::ENDFtk::tree::Tape& tape,
-                                                            const core::Spectrum<double>& in_spectrum){
-
-            const int mat_nr_rows = data::ZAI_SIZE;
-            const int mat_nr_cols = data::ZAI_SIZE;
-
-            Eigen::MatrixXd reaction_mat = Eigen::MatrixXd::Zero(mat_nr_rows, mat_nr_cols);
+        ReactionData read_reaction_data_from_tape(const njoy::ENDFtk::tree::Tape& tape){
+            ReactionData reaction_data;
 
             // the same nuclide can appear in more than one MAT, we only want it once
             std::set<int> done_zais;
@@ -149,20 +140,43 @@ namespace nis {
                     }
                     const int parent_zai = get_parent_zai(material);
                     if(done_zais.count(parent_zai) == 0){
-                        _update_reaction_matrix(material, data::ZAI_MAP, reaction_mat, in_spectrum);
+                        _read_reaction_data(material, data::ZAI_MAP, reaction_data);
                         done_zais.insert(parent_zai);
                     }
                     break;
                 }
             }
 
+            return reaction_data;
+        }
+
+        ReactionData read_reaction_data_from_file(std::string filename){
+            auto tape = njoy::ENDFtk::tree::fromFile(filename);
+            return endf::read_reaction_data_from_tape(tape);
+        }
+
+        Eigen::MatrixXd construct_reaction_matrix(const ReactionData& reaction_data,
+                                                  const core::Spectrum<double>& in_spectrum){
+            Eigen::MatrixXd reaction_mat = Eigen::MatrixXd::Zero(data::ZAI_SIZE, data::ZAI_SIZE);
+            for(const auto& xs: reaction_data){
+                // the data can be made by hand, so check again
+                if(!is_reaction_mt(xs.mt_number)){
+                    continue;
+                }
+                const double rate = collapse_cross_section(in_spectrum, xs.energies, xs.values);
+                add_reaction_rate(reaction_mat, data::ZAI_MAP, xs.parent_zai, xs.mt_number, rate);
+            }
             return reaction_mat;
+        }
+
+        Eigen::MatrixXd construct_reaction_matrix_from_tape(const njoy::ENDFtk::tree::Tape& tape,
+                                                            const core::Spectrum<double>& in_spectrum){
+            return construct_reaction_matrix(read_reaction_data_from_tape(tape), in_spectrum);
         }
 
         Eigen::MatrixXd construct_reaction_matrix_from_file(std::string filename,
                                                             const core::Spectrum<double>& in_spectrum){
-            auto tape = njoy::ENDFtk::tree::fromFile(filename);
-            return endf::construct_reaction_matrix_from_tape(tape, in_spectrum);
+            return construct_reaction_matrix(read_reaction_data_from_file(filename), in_spectrum);
         }
 
     }

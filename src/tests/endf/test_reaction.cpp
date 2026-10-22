@@ -125,3 +125,23 @@ TEST_CASE( "reaction matrix with cram48 - single (n,g)" ) {
     REQUIRE_THAT( nt(fe56), WithinRel(expected_fe56, 1e-10) );
     REQUIRE_THAT( nt(fe57), WithinRel(1e20 - expected_fe56, 1e-10) );
 }
+
+TEST_CASE( "construct_reaction_matrix from reaction data" ) {
+    const ReactionData reaction_data = {
+        {260560, 102, {1.0, 10.0, 100.0}, {2.0, 3.0, 3.0}},
+        {260560, 103, {10.0, 100.0}, {0.5, 0.5}},
+        // elastic is not used
+        {260560, 2, {1.0, 100.0}, {10.0, 10.0}},
+    };
+    const core::Spectrum<double> flux({1.0, 10.0, 100.0}, {1e12, 4e12});
+    const Eigen::MatrixXd mat = construct_reaction_matrix(reaction_data, flux);
+
+    const int fe56 = data::ZAI_MAP.at(260560);
+    const int fe57 = data::ZAI_MAP.at(260570);
+    const int mn56 = data::ZAI_MAP.at(250560);
+    const double ng = (2.0*1e12 + 3.0*4e12)*BARN_TO_CM2;
+    const double np = 0.5*4e12*BARN_TO_CM2;
+    REQUIRE_THAT( mat(fe56, fe57), WithinRel(ng, 1e-12) );
+    REQUIRE_THAT( mat(fe56, mn56), WithinRel(np, 1e-12) );
+    REQUIRE_THAT( mat(fe56, fe56), WithinRel(-(ng + np), 1e-12) );
+}

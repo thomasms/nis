@@ -79,3 +79,25 @@ The spectrum is the neutron flux in n/cm^2/s per group. The first line gives the
 The reaction data must be group-wise (INT=1), for example as processed by NJOY GROUPR.
 
 Note, you will need to have pulled the decay data via LFS in the [./data](./data) subdirectory.
+
+
+## Tests
+
+C++ unit tests:
+
+```bash
+./build/bin/nistests
+```
+
+Python integration tests and benchmarks (needs the python bindings and the data from LFS):
+
+```bash
+export PYTHONPATH=./build/bin/python3:./src/tests/python
+pytest -v src/tests/python/testsuite.py
+```
+
+The reaction benchmarks in [src/tests/python/reactiontests.py](src/tests/python/reactiontests.py) use JEFF-4.0 and check:
+- thermal (0.0253 eV) and 14.1 MeV cross sections against reference values,
+- spectrum handling (linear in flux, bin splitting),
+- the structure of the full reaction matrix,
+- burn-up and Co60 activation against the analytic Bateman solution.

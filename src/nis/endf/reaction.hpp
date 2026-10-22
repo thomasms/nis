@@ -94,6 +94,25 @@ namespace nis {
         void add_reaction_rate(Eigen::MatrixXd& reaction_mat, const std::map<int, int>& zai_map,
                                int parent_zai, int mt_number, double rate);
 
+        // one group-wise (INT=1) cross section in barns, for one parent and one MT
+        struct CrossSection {
+            int parent_zai;
+            int mt_number;
+            std::vector<double> energies;
+            std::vector<double> values;
+        };
+
+        // all the cross sections we can use from a tape
+        // read this once, then collapse it with as many spectra as needed
+        using ReactionData = std::vector<CrossSection>;
+
+        ReactionData read_reaction_data_from_tape(const njoy::ENDFtk::tree::Tape& tape);
+        // convience function to avoid calling ENDFtk fromFile
+        ReactionData read_reaction_data_from_file(std::string filename);
+
+        Eigen::MatrixXd construct_reaction_matrix(const ReactionData& reaction_data,
+                                                  const core::Spectrum<double>& in_spectrum);
+
         Eigen::MatrixXd construct_reaction_matrix_from_tape(const njoy::ENDFtk::tree::Tape& tape,
                                                             const core::Spectrum<double>& in_spectrum);
         // convience function to avoid calling ENDFtk fromFile

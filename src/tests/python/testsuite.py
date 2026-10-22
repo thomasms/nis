@@ -2,6 +2,7 @@ import os
 import unittest
 
 from .integrationtests import *
+from .reactiontests import *
 
 
 def main():
