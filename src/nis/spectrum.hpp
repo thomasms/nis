@@ -160,6 +160,11 @@ namespace nis {
         Spectrum<T> convert_by_lethargy(const Spectrum<T>& in_spectrum,
                                         const std::vector<T>& output_bounds){
             ConvertFuncT<T> cfunc = [](const Edge<T>& input_edge, T input_value, const Edge<T>& overlapping_edge){
+                // a bin starting at 0 (or below) has no lethargy width,
+                // so we split it by energy instead, to keep the total flux
+                if(input_edge.lower() <= 0){
+                    return overlapping_edge.width()*input_value/input_edge.width();
+                }
                 return overlapping_edge.log_ratio()*input_value/input_edge.log_ratio();
             };
             return _convert_imp(in_spectrum, output_bounds, cfunc);

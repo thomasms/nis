@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_template_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
@@ -98,12 +100,13 @@ TEST_CASE( "convert_by_energy" ) {
 }
 
 TEST_CASE( "convert_by_lethargy" ) {
+    // a bin starting at 0 has no lethargy width, so it is split by energy
     SpectrumD spectrum(VecD{0.0, 1.0}, VecD{1.0});
     SpectrumD new_spec = convert_by_lethargy<double>(spectrum, VecD{0.5, 1.0});
-    REQUIRE ( VecD{0.69314718055994529} == new_spec.y());
+    REQUIRE ( VecD{0.5} == new_spec.y());
 
     new_spec = convert_by_lethargy<double>(spectrum, VecD{0.0, 0.5});
-    REQUIRE ( VecD{1.0} == new_spec.y());
+    REQUIRE ( VecD{0.5} == new_spec.y());
 
     new_spec = convert_by_lethargy<double>(spectrum, VecD{1.0, 1.5});
     REQUIRE ( VecD{0.0} == new_spec.y());
@@ -124,8 +127,26 @@ TEST_CASE( "convert_by_lethargy" ) {
 
     SpectrumD spectrum3(VecD{-1.0, 0.0, 1.0}, VecD{5.0, 8.0});
     new_spec = convert_by_lethargy<double>(spectrum3, VecD{0.0, 0.5, 0.75, 1.0});
-    REQUIRE ( VecD{8.0, 3.24372086486531508, 2.30145657961424677} == new_spec.y());
+    REQUIRE ( VecD{4.0, 2.0, 2.0} == new_spec.y());
 
     new_spec = convert_by_lethargy<double>(spectrum3, VecD{-10.0, 0.5, 0.75, 1.0});
-    REQUIRE ( VecD{13.0, 3.24372086486531508, 2.30145657961424677} == new_spec.y());
+    REQUIRE ( VecD{9.0, 2.0, 2.0} == new_spec.y());
+}
+
+TEST_CASE( "convert_by_lethargy keeps the total flux" ) {
+    // the JEFF-4 data starts at 1e-5 eV, a bin from 0 must not make extra flux
+    VecD grid;
+    for(int i=0;i<=60;++i){
+        grid.push_back(std::pow(10.0, -5.0 + 0.1*i));
+    }
+    for(double lower: {0.0, 1e-5, 1e-3}){
+        SpectrumD spectrum(VecD{lower, 10.0}, VecD{1.0});
+        const VecD y = convert_by_lethargy<double>(spectrum, grid).y();
+        double total = 0.0;
+        for(double v: y){
+            total += v;
+        }
+        // with a 0 bound the part below 1e-5 eV is lost, it is tiny
+        REQUIRE_THAT( total, Catch::Matchers::WithinRel(1.0, 1e-5) );
+    }
 }
