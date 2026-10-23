@@ -1,7 +1,11 @@
+#include <filesystem>
+#include <fstream>
 #include <stdexcept>
 
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
+
+#include <ENDFtk.hpp>
 
 #include "nis/cram.hpp"
 #include "nis/nuclides.hpp"
@@ -78,39 +82,39 @@ TEST_CASE( "collapse_cross_section bad input" ) {
 }
 
 TEST_CASE( "add_reaction_rate Fe56 (n,p)" ) {
-    Eigen::MatrixXd mat = Eigen::MatrixXd::Zero(data::ZAI_SIZE, data::ZAI_SIZE);
+    Eigen::SparseMatrix<double> mat(data::ZAI_SIZE, data::ZAI_SIZE);
     const double rate = 2.5e-6;
     add_reaction_rate(mat, data::ZAI_MAP, 260560, 103, rate);
 
     const int fe56 = data::ZAI_MAP.at(260560);
     const int mn56 = data::ZAI_MAP.at(250560);
     const int h1 = data::ZAI_MAP.at(PROTON);
-    REQUIRE ( mat(fe56, fe56) == -rate );
-    REQUIRE ( mat(fe56, mn56) == rate );
-    REQUIRE ( mat(fe56, h1) == rate );
+    REQUIRE ( mat.coeff(fe56, fe56) == -rate );
+    REQUIRE ( mat.coeff(fe56, mn56) == rate );
+    REQUIRE ( mat.coeff(fe56, h1) == rate );
     REQUIRE ( mat.sum() == rate );
 }
 
 TEST_CASE( "add_reaction_rate fission to sink" ) {
-    Eigen::MatrixXd mat = Eigen::MatrixXd::Zero(data::ZAI_SIZE, data::ZAI_SIZE);
+    Eigen::SparseMatrix<double> mat(data::ZAI_SIZE, data::ZAI_SIZE);
     const double rate = 1e-4;
     add_reaction_rate(mat, data::ZAI_MAP, 922350, FISSION_MT, rate);
 
     const int u235 = data::ZAI_MAP.at(922350);
-    REQUIRE ( mat(u235, u235) == -rate );
-    REQUIRE ( mat(u235, data::SINK_INDEX) == rate );
+    REQUIRE ( mat.coeff(u235, u235) == -rate );
+    REQUIRE ( mat.coeff(u235, data::SINK_INDEX) == rate );
     REQUIRE ( mat.sum() == 0.0 );
 }
 
 TEST_CASE( "add_reaction_rate ignores unknown parent and zero rate" ) {
-    Eigen::MatrixXd mat = Eigen::MatrixXd::Zero(data::ZAI_SIZE, data::ZAI_SIZE);
+    Eigen::SparseMatrix<double> mat(data::ZAI_SIZE, data::ZAI_SIZE);
     add_reaction_rate(mat, data::ZAI_MAP, -1, 102, 1.0);
     add_reaction_rate(mat, data::ZAI_MAP, 260560, 102, 0.0);
-    REQUIRE ( mat.isZero() );
+    REQUIRE ( mat.nonZeros() == 0 );
 }
 
 TEST_CASE( "reaction matrix with cram48 - single (n,g)" ) {
-    Eigen::MatrixXd mat = Eigen::MatrixXd::Zero(data::ZAI_SIZE, data::ZAI_SIZE);
+    Eigen::SparseMatrix<double> mat(data::ZAI_SIZE, data::ZAI_SIZE);
     const double rate = 1e-5;
     add_reaction_rate(mat, data::ZAI_MAP, 260560, 102, rate);
 
@@ -134,16 +138,16 @@ TEST_CASE( "construct_reaction_matrix from reaction data" ) {
         {260560, 2, {1.0, 100.0}, {10.0, 10.0}},
     };
     const core::Spectrum<double> flux({1.0, 10.0, 100.0}, {1e12, 4e12});
-    const Eigen::MatrixXd mat = construct_reaction_matrix(reaction_data, flux);
+    const Eigen::SparseMatrix<double> mat = construct_reaction_matrix(reaction_data, flux);
 
     const int fe56 = data::ZAI_MAP.at(260560);
     const int fe57 = data::ZAI_MAP.at(260570);
     const int mn56 = data::ZAI_MAP.at(250560);
     const double ng = (2.0*1e12 + 3.0*4e12)*BARN_TO_CM2;
     const double np = 0.5*4e12*BARN_TO_CM2;
-    REQUIRE_THAT( mat(fe56, fe57), WithinRel(ng, 1e-12) );
-    REQUIRE_THAT( mat(fe56, mn56), WithinRel(np, 1e-12) );
-    REQUIRE_THAT( mat(fe56, fe56), WithinRel(-(ng + np), 1e-12) );
+    REQUIRE_THAT( mat.coeff(fe56, fe57), WithinRel(ng, 1e-12) );
+    REQUIRE_THAT( mat.coeff(fe56, mn56), WithinRel(np, 1e-12) );
+    REQUIRE_THAT( mat.coeff(fe56, fe56), WithinRel(-(ng + np), 1e-12) );
 }
 
 TEST_CASE( "split_rate_by_state" ) {
@@ -173,14 +177,14 @@ TEST_CASE( "construct_reaction_matrix with isomer production" ) {
         {280620, 103, {1e6, 2e7}, {0.07, 0.07}, 1},
     };
     const core::Spectrum<double> flux({1e6, 2e7}, {1e10});
-    const Eigen::MatrixXd mat = construct_reaction_matrix(reaction_data, flux);
+    const Eigen::SparseMatrix<double> mat = construct_reaction_matrix(reaction_data, flux);
 
     const double rate = 0.1*1e10*BARN_TO_CM2;
     const int ni62 = data::ZAI_MAP.at(280620);
-    REQUIRE_THAT( mat(ni62, ni62), WithinRel(-rate, 1e-12) );
-    REQUIRE_THAT( mat(ni62, data::ZAI_MAP.at(270620)), WithinRel(0.3*rate, 1e-12) );
-    REQUIRE_THAT( mat(ni62, data::ZAI_MAP.at(270621)), WithinRel(0.7*rate, 1e-12) );
-    REQUIRE_THAT( mat(ni62, data::ZAI_MAP.at(PROTON)), WithinRel(rate, 1e-12) );
+    REQUIRE_THAT( mat.coeff(ni62, ni62), WithinRel(-rate, 1e-12) );
+    REQUIRE_THAT( mat.coeff(ni62, data::ZAI_MAP.at(270620)), WithinRel(0.3*rate, 1e-12) );
+    REQUIRE_THAT( mat.coeff(ni62, data::ZAI_MAP.at(270621)), WithinRel(0.7*rate, 1e-12) );
+    REQUIRE_THAT( mat.coeff(ni62, data::ZAI_MAP.at(PROTON)), WithinRel(rate, 1e-12) );
 }
 
 TEST_CASE( "construct_reaction_matrix isomer not in the nuclide list goes to the ground state" ) {
@@ -191,16 +195,106 @@ TEST_CASE( "construct_reaction_matrix isomer not in the nuclide list goes to the
         {280620, 103, {1e6, 2e7}, {0.04, 0.04}, 5},
     };
     const core::Spectrum<double> flux({1e6, 2e7}, {1e10});
-    const Eigen::MatrixXd mat = construct_reaction_matrix(reaction_data, flux);
+    const Eigen::SparseMatrix<double> mat = construct_reaction_matrix(reaction_data, flux);
 
     const double rate = 0.1*1e10*BARN_TO_CM2;
     const int ni62 = data::ZAI_MAP.at(280620);
-    REQUIRE_THAT( mat(ni62, data::ZAI_MAP.at(270620)), WithinRel(rate, 1e-12) );
-    REQUIRE( mat(ni62, data::SINK_INDEX) == 0.0 );
+    REQUIRE_THAT( mat.coeff(ni62, data::ZAI_MAP.at(270620)), WithinRel(rate, 1e-12) );
+    REQUIRE( mat.coeff(ni62, data::SINK_INDEX) == 0.0 );
 }
 
 TEST_CASE( "compute_reaction_products with a final state" ) {
     check_products(270590, 102, 270600, {});
     const ReactionProductT p = compute_reaction_products(270590, 102, 1);
     REQUIRE( std::get<0>(p) == 270601 );
+}
+
+namespace {
+
+    // A small reaction tape: Fe56 at two temperatures and Ni62.
+    // The second Fe56 temperature must not be used.
+    const std::string test_reaction_tape_string =
+        "nis test reaction tape                                               1 0  0     \n"
+        " 2.605600+4 5.545400+1          0          0          0          02631 1451     \n"
+        " 0.000000+0 0.000000+0          0          0          0          62631 1451     \n"
+        " 1.000000+0 2.000000+7          0          0         10          82631 1451     \n"
+        " 2.936000+2 0.000000+0          0          0          0          22631 1451     \n"
+        "                                3        102          5          02631 1451     \n"
+        "                                3        103          5          02631 1451     \n"
+        "                                                                  2631 1  0     \n"
+        "                                                                  2631 0  0     \n"
+        " 2.605600+4 5.545400+1          0          0          0          02631 3102     \n"
+        " 0.000000+0 0.000000+0          0          0          1          32631 3102     \n"
+        "          3          1                                            2631 3102     \n"
+        " 1.000000+0 2.000000+0 1.000000+1 3.000000+0 1.000000+2 3.000000+02631 3102     \n"
+        "                                                                  2631 3  0     \n"
+        " 2.605600+4 5.545400+1          0          0          0          02631 3103     \n"
+        " 0.000000+0 0.000000+0          0          0          1          22631 3103     \n"
+        "          2          1                                            2631 3103     \n"
+        " 1.000000+1 5.000000-1 1.000000+2 5.000000-1                      2631 3103     \n"
+        "                                                                  2631 3  0     \n"
+        "                                                                  2631 0  0     \n"
+        "                                                                     0 0  0     \n"
+        " 2.605600+4 5.545400+1          0          0          0          02631 1451     \n"
+        " 0.000000+0 0.000000+0          0          0          0          62631 1451     \n"
+        " 1.000000+0 2.000000+7          0          0         10          82631 1451     \n"
+        " 6.000000+2 0.000000+0          0          0          0          12631 1451     \n"
+        "                                3        102          5          02631 1451     \n"
+        "                                                                  2631 1  0     \n"
+        "                                                                  2631 0  0     \n"
+        " 2.605600+4 5.545400+1          0          0          0          02631 3102     \n"
+        " 0.000000+0 0.000000+0          0          0          1          22631 3102     \n"
+        "          2          1                                            2631 3102     \n"
+        " 1.000000+0 1.000000+2 1.000000+2 1.000000+2                      2631 3102     \n"
+        "                                                                  2631 3  0     \n"
+        "                                                                  2631 0  0     \n"
+        "                                                                     0 0  0     \n"
+        " 2.806200+4 6.139600+1          0          0          0          02837 1451     \n"
+        " 0.000000+0 0.000000+0          0          0          0          62837 1451     \n"
+        " 1.000000+0 2.000000+7          0          0         10          82837 1451     \n"
+        " 2.936000+2 0.000000+0          0          0          0          12837 1451     \n"
+        "                                3        103          5          02837 1451     \n"
+        "                                                                  2837 1  0     \n"
+        "                                                                  2837 0  0     \n"
+        " 2.806200+4 6.139600+1          0          0          0          02837 3103     \n"
+        " 0.000000+0 0.000000+0          0          0          1          22837 3103     \n"
+        "          2          1                                            2837 3103     \n"
+        " 1.000000+6 1.000000-1 2.000000+7 1.000000-1                      2837 3103     \n"
+        "                                                                  2837 3  0     \n"
+        "                                                                  2837 0  0     \n"
+        "                                                                     0 0  0     \n"
+        "                                                                    -1 0  0     \n";
+
+    void check_test_reaction_data(const ReactionData& data){
+        REQUIRE( data.size() == 3 );
+        REQUIRE( data[0].parent_zai == 260560 );
+        REQUIRE( data[0].mt_number == 102 );
+        REQUIRE( data[0].energies == std::vector<double>{1.0, 10.0, 100.0} );
+        REQUIRE( data[0].values == std::vector<double>{2.0, 3.0, 3.0} );
+        REQUIRE( data[1].parent_zai == 260560 );
+        REQUIRE( data[1].mt_number == 103 );
+        REQUIRE( data[2].parent_zai == 280620 );
+        REQUIRE( data[2].mt_number == 103 );
+        REQUIRE( data[2].values == std::vector<double>{0.1, 0.1} );
+    }
+}
+
+TEST_CASE( "read_reaction_data_from_tape" ) {
+    const njoy::ENDFtk::tree::Tape tape(test_reaction_tape_string);
+    check_test_reaction_data(read_reaction_data_from_tape(tape));
+}
+
+TEST_CASE( "read_reaction_data_from_file reads one material at a time" ) {
+    const auto filename = std::filesystem::temp_directory_path() / "nis_test_reaction_tape.endf";
+    {
+        std::ofstream out(filename);
+        out << test_reaction_tape_string;
+    }
+    const ReactionData data = read_reaction_data_from_file(filename.string());
+    std::filesystem::remove(filename);
+    check_test_reaction_data(data);
+}
+
+TEST_CASE( "read_reaction_data_from_file with a missing file" ) {
+    REQUIRE_THROWS_AS( read_reaction_data_from_file("no_such_file.endf"), std::runtime_error );
 }

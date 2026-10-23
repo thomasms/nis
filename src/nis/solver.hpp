@@ -17,11 +17,11 @@ namespace nis {
     namespace solver {
 
         template<typename T>
-        using solver_func = std::function<Eigen::VectorX<T>(const Eigen::MatrixX<T>&, const Eigen::VectorX<T>&, double)>;
+        using solver_func = std::function<Eigen::VectorX<T>(const Eigen::SparseMatrix<T>&, const Eigen::VectorX<T>&, double)>;
 
         template<typename T>
         inline core::ModelResult<T> compute_inventory(const core::BasicModel<T>& model,
-                                                      const Eigen::MatrixX<T>& mat,
+                                                      const Eigen::SparseMatrix<T>& mat,
                                                       solver_func<T>& solver){
             const Eigen::VectorX<T> n0 = io::helpers::vector_from_inventory<T>(model.nuclides);
             const Eigen::VectorX<T> nt = solver(mat, n0, model.dt);

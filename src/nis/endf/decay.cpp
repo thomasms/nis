@@ -106,7 +106,7 @@ namespace nis {
         }
 
         void _update_decay_matrix(const njoy::ENDFtk::tree::Material& material,
-                                  const std::map<int, int>& zai_map, Eigen::MatrixXd& decay_mat){
+                                  const std::map<int, int>& zai_map, Eigen::SparseMatrix<double>& decay_mat){
 
             if(material.hasMF(file_number)){
                 njoy::ENDFtk::tree::File file = material.file(file_number);
@@ -124,7 +124,7 @@ namespace nis {
                             const double decay_const = physics::compute_decay_const(half_life);
 
                             // the diagonal is the rate lost from the parent
-                            decay_mat(za_index, za_index) -= decay_const;
+                            decay_mat.coeffRef(za_index, za_index) -= decay_const;
 
                             // loop over decay states and compute the outgoing
                             const auto decay_modes_collection = parsed_section.decayModes();
@@ -134,7 +134,7 @@ namespace nis {
                                 for(auto daughter_zai: secondaries){
                                     // the sink is the last row
                                     int dza_index = zai_map.count(daughter_zai) == 1 ? zai_map.at(daughter_zai) : data::SINK_INDEX;
-                                    decay_mat(za_index, dza_index) += br*decay_const;
+                                    decay_mat.coeffRef(za_index, dza_index) += br*decay_const;
                                 }
                             }
                         }
@@ -143,13 +143,13 @@ namespace nis {
             }
         }
 
-        Eigen::MatrixXd construct_decay_matrix_from_tape(const njoy::ENDFtk::tree::Tape& tape){
+        Eigen::SparseMatrix<double> construct_decay_matrix_from_tape(const njoy::ENDFtk::tree::Tape& tape){
 
             // add 1 for the sink
             const int mat_nr_rows = data::ZAI_SIZE;
             const int mat_nr_cols = data::ZAI_SIZE;
 
-            Eigen::MatrixXd decay_mat = Eigen::MatrixXd::Zero(mat_nr_rows, mat_nr_cols);
+            Eigen::SparseMatrix<double> decay_mat(mat_nr_rows, mat_nr_cols);
 
             // loop over all materials in the file, most likely just one
             for(auto mat_number: tape.materialNumbers()){
@@ -165,10 +165,11 @@ namespace nis {
                 }
             }
 
+            decay_mat.makeCompressed();
             return decay_mat;
         }
 
-        Eigen::MatrixXd construct_decay_matrix_from_file(std::string filename){
+        Eigen::SparseMatrix<double> construct_decay_matrix_from_file(std::string filename){
             auto tape = njoy::ENDFtk::tree::fromFile(filename);
             return endf::construct_decay_matrix_from_tape(tape);
         }

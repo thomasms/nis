@@ -8,6 +8,7 @@
 #include <ENDFtk.hpp>
 
 #include <Eigen/Core>
+#include <Eigen/Sparse>
 
 #include "nis/decayheat.hpp"
 #include "nis/endf/decay/product_computer.hpp"
@@ -35,9 +36,10 @@ namespace nis {
 
         DecayProductT compute_products(int parent_zai, double rtyp, int final_isomeric_state);
 
-        Eigen::MatrixXd construct_decay_matrix_from_tape(const njoy::ENDFtk::tree::Tape& tape);
+        // the matrix is sparse, (parent, daughter), with the sink as the last index
+        Eigen::SparseMatrix<double> construct_decay_matrix_from_tape(const njoy::ENDFtk::tree::Tape& tape);
         // convience function to avoid calling ENDFtk fromFile
-        Eigen::MatrixXd construct_decay_matrix_from_file(std::string filename);
+        Eigen::SparseMatrix<double> construct_decay_matrix_from_file(std::string filename);
 
         // decay constants and average decay energies for decay heat
         core::DecayEnergyData<double> read_decay_energy_data_from_tape(const njoy::ENDFtk::tree::Tape& tape);

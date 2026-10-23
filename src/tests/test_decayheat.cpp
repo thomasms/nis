@@ -92,15 +92,15 @@ TEST_CASE( "read_decay_energy_data_from_tape" ) {
 }
 
 TEST_CASE( "decay matrix from the test tape" ) {
-    const Eigen::MatrixXd mat = endf::construct_decay_matrix_from_tape(test_tape());
+    const Eigen::SparseMatrix<double> mat = endf::construct_decay_matrix_from_tape(test_tape());
 
     const double co60_lambda = physics::LN_2/CO60_HALF_LIFE;
-    REQUIRE_THAT( mat(index(270600), index(270600)), WithinRel(-co60_lambda, 1e-12) );
-    REQUIRE_THAT( mat(index(270600), index(280600)), WithinRel(co60_lambda, 1e-12) );
+    REQUIRE_THAT( mat.coeff(index(270600), index(270600)), WithinRel(-co60_lambda, 1e-12) );
+    REQUIRE_THAT( mat.coeff(index(270600), index(280600)), WithinRel(co60_lambda, 1e-12) );
 
     const double po210_lambda = physics::LN_2/PO210_HALF_LIFE;
-    REQUIRE_THAT( mat(index(842100), index(822060)), WithinRel(po210_lambda, 1e-12) );
-    REQUIRE_THAT( mat(index(842100), index(zai::ALPHA)), WithinRel(po210_lambda, 1e-12) );
+    REQUIRE_THAT( mat.coeff(index(842100), index(822060)), WithinRel(po210_lambda, 1e-12) );
+    REQUIRE_THAT( mat.coeff(index(842100), index(zai::ALPHA)), WithinRel(po210_lambda, 1e-12) );
 }
 
 TEST_CASE( "decay heat of 1 g of Co60" ) {
@@ -148,7 +148,7 @@ TEST_CASE( "decay heat by component for a mix" ) {
 
 TEST_CASE( "decay heat halves after one half life" ) {
     const auto tape = test_tape();
-    const Eigen::MatrixXd mat = endf::construct_decay_matrix_from_tape(tape);
+    const Eigen::SparseMatrix<double> mat = endf::construct_decay_matrix_from_tape(tape);
     const auto energy_data = endf::read_decay_energy_data_from_tape(tape);
 
     Eigen::VectorXd n0 = Eigen::VectorXd::Zero(data::ZAI_SIZE);

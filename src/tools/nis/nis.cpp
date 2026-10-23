@@ -47,23 +47,21 @@ int main(int argc, char **argv){
 
       // read the decay tape once, for the matrix and the decay energies
       const auto decay_tape = njoy::ENDFtk::tree::fromFile(decay_data);
-      const Eigen::MatrixX<double> dense_decay_mat = endf::construct_decay_matrix_from_tape(decay_tape);
+      const Eigen::SparseMatrix<double> decay_mat = endf::construct_decay_matrix_from_tape(decay_tape);
       const auto decay_energy_data = endf::read_decay_energy_data_from_tape(decay_tape);
 
-      Eigen::MatrixX<double> dense_reaction_mat = Eigen::MatrixXd::Zero(dense_decay_mat.rows(), dense_decay_mat.cols());
+      Eigen::SparseMatrix<double> mat = decay_mat;
       if(model.spectrum != nullptr){
         if(reaction_data.empty()){
           throw std::invalid_argument("The input has a spectrum, so reaction data (--reaction-data) is required.\n");
         }
-        dense_reaction_mat = endf::construct_reaction_matrix_from_file(reaction_data, *model.spectrum.get());
+        mat += endf::construct_reaction_matrix_from_file(reaction_data, *model.spectrum.get());
       }
-
-      Eigen::MatrixX<double> dense_mat = dense_decay_mat + dense_reaction_mat;
 
       // do computation using CRAM48 as default
       // permit other solvers in the future
       solver::solver_func<double> solver_function = &core::cram48::solve<double>;
-      const auto result = solver::compute_inventory<double>(model, dense_mat, solver_function);
+      const auto result = solver::compute_inventory<double>(model, mat, solver_function);
 
       // filter out nuclides below a certain threshold
       const auto filtered_result = core::filter_nuclides<double>(result, threshold);

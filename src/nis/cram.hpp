@@ -77,18 +77,16 @@ namespace nis{
             constexpr Prec_t ALPHA_0 = 2.258038182743983e-47;
 
             template<typename T=double>
-            Eigen::VectorX<T> solve(const Eigen::MatrixX<T>& dense_decay_mat, const Eigen::VectorX<T>& n0, double dt){
-                // we should actually use a sparse matrix here really
-                // but for testing we make a dense mat first and convert to sparse
-                const Eigen::MatrixX<T> dense_decay_mat_ld = dense_decay_mat.template cast<T>();
-                const Eigen::SparseMatrix<T> A = dense_decay_mat_ld.sparseView();
-                const Eigen::SparseMatrix<core::cram48::Coeff_t> A_complex = A.transpose()*dt*core::cram48::Coeff_t(1,0);
-                const Eigen::SparseMatrix<T> I = Eigen::MatrixX<T>::Identity(dense_decay_mat.cols(), dense_decay_mat.rows()).sparseView();
+            Eigen::VectorX<T> solve(const Eigen::SparseMatrix<T>& mat, const Eigen::VectorX<T>& n0, double dt){
+                // the matrix is (parent, daughter), the solver needs (daughter, parent)
+                const Eigen::SparseMatrix<core::cram48::Coeff_t> A_complex = (mat.transpose()*dt).template cast<core::cram48::Coeff_t>();
+                Eigen::SparseMatrix<core::cram48::Coeff_t> I(mat.rows(), mat.cols());
+                I.setIdentity();
 
                 // solver
                 Eigen::SparseLU<Eigen::SparseMatrix<core::cram48::Coeff_t>, Eigen::COLAMDOrdering<int> > lu_solver;
                 Eigen::SparseMatrix<core::cram48::Coeff_t> A_prime;
-                Eigen::VectorX<core::cram48::Coeff_t> x(dense_decay_mat.cols());
+                Eigen::VectorX<core::cram48::Coeff_t> x(mat.cols());
                 core::cram48::Coeff_t alpha, theta;
 
                 Eigen::VectorX<T> nt = n0*core::cram48::ALPHA_0;
@@ -99,7 +97,7 @@ namespace nis{
                 for(int i=0;i<core::cram48::N_COEFF;++i){
                     alpha = core::cram48::ALPHA[i];
                     theta = core::cram48::THETA[i];
-                    A_prime = A_complex - theta*I;
+                    A_prime = A_complex - I*theta;
                     A_prime.makeCompressed();
                     lu_solver.compute(A_prime);
                     if(lu_solver.info() != Eigen::ComputationInfo::Success) {

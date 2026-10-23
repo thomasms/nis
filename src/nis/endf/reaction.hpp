@@ -10,6 +10,7 @@
 #include <ENDFtk.hpp>
 
 #include <Eigen/Core>
+#include <Eigen/Sparse>
 
 #include "nis/spectrum.hpp"
 #include "nis/zai.hpp"
@@ -92,7 +93,7 @@ namespace nis {
 
         // adds the rate for the parent going to the products
         // uses the same layout as the decay matrix: (parent, daughter)
-        void add_reaction_rate(Eigen::MatrixXd& reaction_mat, const std::map<int, int>& zai_map,
+        void add_reaction_rate(Eigen::SparseMatrix<double>& reaction_mat, const std::map<int, int>& zai_map,
                                int parent_zai, int mt_number, double rate, int final_state=0);
 
         // one group-wise (INT=1) cross section in barns, for one parent and one MT
@@ -119,16 +120,17 @@ namespace nis {
         using ReactionData = std::vector<CrossSection>;
 
         ReactionData read_reaction_data_from_tape(const njoy::ENDFtk::tree::Tape& tape);
-        // convience function to avoid calling ENDFtk fromFile
+        // reads the file one material at a time, so the whole tape is never in memory
         ReactionData read_reaction_data_from_file(std::string filename);
 
-        Eigen::MatrixXd construct_reaction_matrix(const ReactionData& reaction_data,
+        // the matrix is sparse, (parent, daughter), with the sink as the last index
+        Eigen::SparseMatrix<double> construct_reaction_matrix(const ReactionData& reaction_data,
                                                   const core::Spectrum<double>& in_spectrum);
 
-        Eigen::MatrixXd construct_reaction_matrix_from_tape(const njoy::ENDFtk::tree::Tape& tape,
+        Eigen::SparseMatrix<double> construct_reaction_matrix_from_tape(const njoy::ENDFtk::tree::Tape& tape,
                                                             const core::Spectrum<double>& in_spectrum);
-        // convience function to avoid calling ENDFtk fromFile
-        Eigen::MatrixXd construct_reaction_matrix_from_file(std::string filename,
+        // convience function, reads the file with read_reaction_data_from_file
+        Eigen::SparseMatrix<double> construct_reaction_matrix_from_file(std::string filename,
                                                             const core::Spectrum<double>& in_spectrum);
     }
 }

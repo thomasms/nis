@@ -62,6 +62,7 @@ PYBIND11_MODULE(pynis, m) {
 
     m_core.def("filter_nuclides", &core::filter_nuclides<double>);
 
+    // matrices are sparse, so they are scipy.sparse.csc_matrix in python
     m_core.def("decay_mat_from_file", &endf::construct_decay_matrix_from_file);
 
     using DecayEnergyDataPyType = core::DecayEnergyData<double>;
@@ -110,7 +111,7 @@ PYBIND11_MODULE(pynis, m) {
 
     // solvers
     m_core.def("solver_cram48", &core::cram48::solve<double>);
-    m_core.def("compute_inventory", py::overload_cast<const BasicModelPyType&, const Eigen::MatrixX<double>&, solver::solver_func<double>&>(&solver::compute_inventory<double>));
+    m_core.def("compute_inventory", py::overload_cast<const BasicModelPyType&, const Eigen::SparseMatrix<double>&, solver::solver_func<double>&>(&solver::compute_inventory<double>));
 
     py::module m_data = m.def_submodule("data");
     // would be nice to make these all read only attributes, if possible

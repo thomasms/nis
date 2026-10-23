@@ -1,4 +1,5 @@
 #include <cmath>
+#include <fstream>
 #include <memory>
 #include <set>
 #include <stdexcept>
@@ -92,7 +93,7 @@ namespace nis {
             return maths::dot_product<double>(data_spectrum.y(), group_values)*BARN_TO_CM2;
         }
 
-        void add_reaction_rate(Eigen::MatrixXd& reaction_mat, const std::map<int, int>& zai_map,
+        void add_reaction_rate(Eigen::SparseMatrix<double>& reaction_mat, const std::map<int, int>& zai_map,
                                int parent_zai, int mt_number, double rate, int final_state){
             if((zai_map.count(parent_zai) == 0) || (rate <= 0.)){
                 return;
@@ -100,7 +101,7 @@ namespace nis {
             const int za_index = zai_map.at(parent_zai);
 
             // the diagonal is the rate lost from the parent
-            reaction_mat(za_index, za_index) -= rate;
+            reaction_mat.coeffRef(za_index, za_index) -= rate;
 
             const ReactionProductT products = compute_reaction_products(parent_zai, mt_number, final_state);
             std::vector<int> daughters = std::get<1>(products);
@@ -108,7 +109,7 @@ namespace nis {
             for(auto daughter_zai: daughters){
                 // the sink is the last row
                 const int dza_index = zai_map.count(daughter_zai) == 1 ? zai_map.at(daughter_zai) : data::SINK_INDEX;
-                reaction_mat(za_index, dza_index) += rate;
+                reaction_mat.coeffRef(za_index, dza_index) += rate;
             }
         }
 
@@ -194,6 +195,19 @@ namespace nis {
             }
         }
 
+        // adds the data of one material, if we have not seen its nuclide before
+        void _read_material(const njoy::ENDFtk::tree::Material& material,
+                            std::set<int>& done_zais, ReactionData& reaction_data){
+            if(!material.hasMF(file_number)){
+                return;
+            }
+            const int parent_zai = get_parent_zai(material);
+            if(done_zais.count(parent_zai) == 0){
+                _read_reaction_data(material, data::ZAI_MAP, reaction_data);
+                done_zais.insert(parent_zai);
+            }
+        }
+
         ReactionData read_reaction_data_from_tape(const njoy::ENDFtk::tree::Tape& tape){
             ReactionData reaction_data;
 
@@ -208,27 +222,74 @@ namespace nis {
                 // TODO: let the user select the temperature
                 auto materials = tape.material(mat_number);
                 for(auto material: materials){
-                    if(!material.hasMF(file_number)){
-                        continue;
+                    if(material.hasMF(file_number)){
+                        _read_material(material, done_zais, reaction_data);
+                        break;
                     }
-                    const int parent_zai = get_parent_zai(material);
-                    if(done_zais.count(parent_zai) == 0){
-                        _read_reaction_data(material, data::ZAI_MAP, reaction_data);
-                        done_zais.insert(parent_zai);
-                    }
-                    break;
                 }
             }
 
             return reaction_data;
         }
 
-        ReactionData read_reaction_data_from_file(std::string filename){
-            auto tape = njoy::ENDFtk::tree::fromFile(filename);
-            return endf::read_reaction_data_from_tape(tape);
+        // the MAT number is in columns 67-70 of each ENDF line
+        int _mat_number(const std::string& line){
+            if(line.size() < 70){
+                throw std::runtime_error("ENDF line is too short: '" + line + "'");
+            }
+            return std::stoi(line.substr(66, 4));
         }
 
-        Eigen::MatrixXd construct_reaction_matrix(const ReactionData& reaction_data,
+        ReactionData read_reaction_data_from_file(std::string filename){
+            // A reaction tape can be ~1 GB, and parsing it all at once needs ~2x that.
+            // So we read one material at a time and parse it as a small tape of its own.
+            std::ifstream in(filename);
+            if(!in){
+                throw std::runtime_error("Could not open file '" + filename + "'");
+            }
+
+            // the TEND record that ends a tape
+            const std::string tend = std::string(66, ' ') + "  -1 0  0    0\n";
+
+            ReactionData reaction_data;
+            std::set<int> done_zais;
+
+            std::string line;
+            // the first line is the tape id (TPID)
+            std::getline(in, line);
+            const std::string tpid = line + "\n";
+
+            std::string material_lines;
+            while(std::getline(in, line)){
+                if(!line.empty() && line.back() == '\r'){
+                    line.pop_back();
+                }
+                if(line.empty()){
+                    continue;
+                }
+                const int mat_number = _mat_number(line);
+                if(mat_number == -1){
+                    break;
+                }
+                material_lines += line;
+                material_lines += '\n';
+                // the MEND record (MAT=0) ends a material
+                if(mat_number == 0){
+                    const njoy::ENDFtk::tree::Tape tape(tpid + material_lines + tend);
+                    // with more than one temperature, the same MAT comes again; we keep the first
+                    for(auto mat: tape.materialNumbers()){
+                        for(auto material: tape.material(mat)){
+                            _read_material(material, done_zais, reaction_data);
+                        }
+                    }
+                    material_lines.clear();
+                }
+            }
+
+            return reaction_data;
+        }
+
+        Eigen::SparseMatrix<double> construct_reaction_matrix(const ReactionData& reaction_data,
                                                   const core::Spectrum<double>& in_spectrum){
             // collapse all first, then split each reaction by residual state
             struct Rates {
@@ -251,7 +312,7 @@ namespace nis {
                 }
             }
 
-            Eigen::MatrixXd reaction_mat = Eigen::MatrixXd::Zero(data::ZAI_SIZE, data::ZAI_SIZE);
+            Eigen::SparseMatrix<double> reaction_mat(data::ZAI_SIZE, data::ZAI_SIZE);
             for(const auto& [key, r]: rates){
                 const int parent_zai = key.first;
                 const int mt_number = key.second;
@@ -262,15 +323,16 @@ namespace nis {
                     add_reaction_rate(reaction_mat, data::ZAI_MAP, parent_zai, mt_number, rate, final_state);
                 }
             }
+            reaction_mat.makeCompressed();
             return reaction_mat;
         }
 
-        Eigen::MatrixXd construct_reaction_matrix_from_tape(const njoy::ENDFtk::tree::Tape& tape,
+        Eigen::SparseMatrix<double> construct_reaction_matrix_from_tape(const njoy::ENDFtk::tree::Tape& tape,
                                                             const core::Spectrum<double>& in_spectrum){
             return construct_reaction_matrix(read_reaction_data_from_tape(tape), in_spectrum);
         }
 
-        Eigen::MatrixXd construct_reaction_matrix_from_file(std::string filename,
+        Eigen::SparseMatrix<double> construct_reaction_matrix_from_file(std::string filename,
                                                             const core::Spectrum<double>& in_spectrum){
             return construct_reaction_matrix(read_reaction_data_from_file(filename), in_spectrum);
         }

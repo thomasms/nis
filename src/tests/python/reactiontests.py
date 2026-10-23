@@ -18,6 +18,7 @@ import math
 import unittest
 
 import numpy as np
+import scipy.sparse
 
 import pynis as nis
 
@@ -63,12 +64,13 @@ class ReactionBenchmarkBase(unittest.TestCase):
                 str(_jeff4_reaction_file)
             )
 
-    def matrix(self, spectrum: nis.core.Spectrum) -> np.ndarray:
+    def matrix(self, spectrum: nis.core.Spectrum) -> scipy.sparse.csc_matrix:
+        # the matrix is sparse, a dense one is ~130 MB
         return nis.core.reaction_mat(self.reaction_data, spectrum)
 
     def check_xs(
         self,
-        mat: np.ndarray,
+        mat: scipy.sparse.csc_matrix,
         parent: str,
         daughter: str,
         expected_barns: float,
@@ -155,27 +157,33 @@ class FusionCrossSectionTests(ReactionBenchmarkBase):
         self.assertEqual(mat[index("Nb93"), index("Nb92")], 0.0)
 
 
+def assert_sparse_allclose(a: scipy.sparse.csc_matrix, b: scipy.sparse.csc_matrix, rtol: float) -> None:
+    # same non-zero entries, and the same values within rtol
+    a, b = a.tocsc(), b.tocsc()
+    a.sort_indices()
+    b.sort_indices()
+    np.testing.assert_array_equal(a.indptr, b.indptr)
+    np.testing.assert_array_equal(a.indices, b.indices)
+    np.testing.assert_allclose(a.data, b.data, rtol=rtol, atol=0)
+
+
 class SpectrumTests(ReactionBenchmarkBase):
     def test_linear_in_flux(self) -> None:
         spectrum = nis.core.Spectrum([1.0, 1e3, 1e6, 2e7], [1e12, 2e12, 3e12])
         double = nis.core.Spectrum(spectrum.x, [2 * v for v in spectrum.y])
-        np.testing.assert_allclose(
-            2 * self.matrix(spectrum), self.matrix(double), rtol=1e-12, atol=0
-        )
+        assert_sparse_allclose(2 * self.matrix(spectrum), self.matrix(double), rtol=1e-12)
 
     def test_split_bins(self) -> None:
         # the flux is flat in lethargy within a bin, so splitting a bin
         # into two with equal lethargy widths gives the same rates
         one_bin = nis.core.Spectrum([1e3, 1e5], [2e12])
         two_bins = nis.core.Spectrum([1e3, 1e4, 1e5], [1e12, 1e12])
-        np.testing.assert_allclose(
-            self.matrix(one_bin), self.matrix(two_bins), rtol=1e-10, atol=0
-        )
+        assert_sparse_allclose(self.matrix(one_bin), self.matrix(two_bins), rtol=1e-10)
 
     def test_no_flux_gives_zero_matrix(self) -> None:
         # flux outside the data range (above 1 GeV)
         mat = self.matrix(nis.core.Spectrum([2e9, 3e9], [1e14]))
-        self.assertFalse(np.any(mat))
+        self.assertEqual(mat.count_nonzero(), 0)
 
 
 class MatrixStructureTests(ReactionBenchmarkBase):
@@ -185,7 +193,7 @@ class MatrixStructureTests(ReactionBenchmarkBase):
             [1e-5, 1.0, 1e3, 1e5, 1e6, 1e7, 1.3e7, 1.5e7, 2e7],
             [1e12, 2e12, 3e12, 3e12, 4e12, 1e12, 5e13, 1e10],
         )
-        mat = self.matrix(spectrum)
+        mat = self.matrix(spectrum).toarray()
         self.assertTrue(np.all(np.isfinite(mat)))
 
         diag = np.diag(mat).copy()
@@ -203,7 +211,7 @@ class MatrixStructureTests(ReactionBenchmarkBase):
 
 
 class BurnupTests(ReactionBenchmarkBase):
-    def inventory(self, mat: np.ndarray, nuclides: dict, dt: float) -> dict:
+    def inventory(self, mat: scipy.sparse.csc_matrix, nuclides: dict, dt: float) -> dict:
         model = nis.core.BasicModel()
         model.nuclides = nuclides
         model.dt = dt
@@ -243,7 +251,8 @@ class BurnupTests(ReactionBenchmarkBase):
         # decay added by hand (half life 5.2711 y) as no decay data is used here.
         # Low burn-up (~6e-4) so the activity is A = N0 sigma phi (1 - exp(-lambda t))
         flux = 1e11
-        mat = self.matrix(one_group_spectrum(THERMAL_ENERGY, flux))
+        # LIL format, so we can add the decay entries
+        mat = self.matrix(one_group_spectrum(THERMAL_ENERGY, flux)).tolil()
         co59, co60, ni60 = index("Co59"), index("Co60"), index("Ni60")
         lam = math.log(2) / (5.2711 * 365.25 * 24 * 3600)
         mat[co60, co60] -= lam

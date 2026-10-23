@@ -40,7 +40,7 @@ First make a virtual env and install pybind via:
 ```bash
 python3 -m venv venv
 source venv/bin/activate
-python3 -m pip install pybind11
+python3 -m pip install pybind11 numpy scipy
 ```
 
 Then build as before but with slightly different cmake args, as below.
