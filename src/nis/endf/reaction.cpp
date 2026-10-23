@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cmath>
 #include <fstream>
 #include <memory>
@@ -27,6 +28,22 @@ namespace nis {
 
         bool is_reaction_mt(int mt_number){
             return (mt_number == FISSION_MT) || (REACTION_MAP.count(mt_number) == 1);
+        }
+
+        bool is_light_particle(int za){
+            return (za == 1) || (za == 1001) || (za == 1002) || (za == 1003) || (za == 2003) || (za == 2004);
+        }
+
+        std::map<std::pair<int, int>, int> isomer_states_from_levels(const std::map<int, std::set<int>>& levels){
+            std::map<std::pair<int, int>, int> states;
+            for(const auto& [za, level_numbers]: levels){
+                // the set is sorted, so the levels come in order of energy
+                int isomer = 0;
+                for(auto lfs: level_numbers){
+                    states[{za, lfs}] = (lfs == 0) ? 0 : ++isomer;
+                }
+            }
+            return states;
         }
 
         ReactionProductT compute_reaction_products(int parent_zai, int mt_number, int final_state){
@@ -127,8 +144,31 @@ namespace nis {
             }
         }
 
-        void _read_isomer_data(const njoy::ENDFtk::tree::Material& material, int parent_zai,
-                               int mt_number, ReactionData& reaction_data){
+        using IsomerStates = std::map<std::pair<int, int>, int>;
+
+        // all the levels of each product in MF=10, to give the isomeric states
+        IsomerStates _isomer_states(const njoy::ENDFtk::tree::Material& material){
+            std::map<int, std::set<int>> levels;
+            if(material.hasMF(isomer_file_number)){
+                njoy::ENDFtk::tree::File file = material.file(isomer_file_number);
+                for(auto mt_number: file.sectionNumbers()){
+                    // in MT=5 the LFS is already the isomer number (as in JEFF-4 and TENDL), so we leave it out
+                    if(mt_number == ANYTHING_MT){
+                        continue;
+                    }
+                    njoy::ENDFtk::tree::Section section = file.MT(mt_number);
+                    auto parsed_section = section.parse<isomer_file_number>();
+                    for(const auto& product: parsed_section.reactionProducts()){
+                        levels[product.IZAP()].insert(product.LFS());
+                    }
+                }
+            }
+            return isomer_states_from_levels(levels);
+        }
+
+        // calls func(product) for each product of the MF=10 section, if there is one
+        template<typename Func>
+        void _for_each_mf10_product(const njoy::ENDFtk::tree::Material& material, int mt_number, Func func){
             if(!material.hasMF(isomer_file_number)){
                 return;
             }
@@ -136,7 +176,15 @@ namespace nis {
             if(!file.hasMT(mt_number)){
                 return;
             }
+            njoy::ENDFtk::tree::Section section = file.MT(mt_number);
+            auto parsed_section = section.parse<isomer_file_number>();
+            for(const auto& product: parsed_section.reactionProducts()){
+                func(product);
+            }
+        }
 
+        void _read_isomer_data(const njoy::ENDFtk::tree::Material& material, int parent_zai,
+                               int mt_number, const IsomerStates& states, ReactionData& reaction_data){
             // the residual we expect for this MT, MF=10 can also list other products
             const int residual_zai = std::get<0>(compute_reaction_products(parent_zai, mt_number));
             if(residual_zai < 0){
@@ -144,22 +192,61 @@ namespace nis {
             }
             const int residual_za = residual_zai/10;
 
-            njoy::ENDFtk::tree::Section section = file.MT(mt_number);
-            auto parsed_section = section.parse<isomer_file_number>();
-            for(const auto& product: parsed_section.reactionProducts()){
+            _for_each_mf10_product(material, mt_number, [&](const auto& product){
                 if(product.IZAP() != residual_za){
-                    continue;
+                    return;
                 }
                 _check_histogram(product, parent_zai, isomer_file_number, mt_number);
-                // NOTE: we use the level number (LFS) as the isomeric state, as TENDL and JEFF-4 do
                 reaction_data.push_back(CrossSection{
                     parent_zai,
                     mt_number,
                     {product.energies().begin(), product.energies().end()},
                     {product.crossSections().begin(), product.crossSections().end()},
-                    product.LFS()
+                    states.at({residual_za, product.LFS()})
+                });
+            });
+        }
+
+        // MT=4 and MT=5 only have data we can use in MF=10
+        void _read_mf10_only_data(const njoy::ENDFtk::tree::Material& material, int parent_zai,
+                                  const IsomerStates& states, ReactionData& reaction_data){
+            const int parent_za = parent_zai/10;
+
+            // (n,n') to the isomers of the target, the ground state does not change the nuclide
+            // TODO: (n,n') on a target isomer can also go down to the ground state
+            if(zai::get_i(parent_zai) == 0){
+                _for_each_mf10_product(material, INELASTIC_MT, [&](const auto& product){
+                    const int state = states.at({product.IZAP(), product.LFS()});
+                    if((product.IZAP() != parent_za) || (state == 0)){
+                        return;
+                    }
+                    _check_histogram(product, parent_zai, isomer_file_number, INELASTIC_MT);
+                    reaction_data.push_back(CrossSection{
+                        parent_zai,
+                        INELASTIC_MT,
+                        {product.energies().begin(), product.energies().end()},
+                        {product.crossSections().begin(), product.crossSections().end()},
+                        state
+                    });
                 });
             }
+
+            // (n,anything), each product with its own cross section
+            _for_each_mf10_product(material, ANYTHING_MT, [&](const auto& product){
+                // IZAP=0 is photons, they are not tracked
+                if(product.IZAP() <= 0){
+                    return;
+                }
+                _check_histogram(product, parent_zai, isomer_file_number, ANYTHING_MT);
+                reaction_data.push_back(CrossSection{
+                    parent_zai,
+                    ANYTHING_MT,
+                    {product.energies().begin(), product.energies().end()},
+                    {product.crossSections().begin(), product.crossSections().end()},
+                    static_cast<int>(product.LFS()),
+                    product.IZAP()
+                });
+            });
         }
 
         void _read_reaction_data(const njoy::ENDFtk::tree::Material& material,
@@ -172,6 +259,7 @@ namespace nis {
 
             // TODO: MF=10 can give isomer production when MF=3 has no data for it
             // TODO: MF=9 (multiplicities) is not used, JEFF-4 only has MF=10
+            const IsomerStates states = _isomer_states(material);
             njoy::ENDFtk::tree::File file = material.file(file_number);
             for(auto mt_number: file.sectionNumbers()){
                 // we skip sums, elastic, inelastic levels and anything we can't map
@@ -191,8 +279,10 @@ namespace nis {
                     {parsed_section.crossSections().begin(), parsed_section.crossSections().end()}
                 });
 
-                _read_isomer_data(material, parent_zai, mt_number, reaction_data);
+                _read_isomer_data(material, parent_zai, mt_number, states, reaction_data);
             }
+
+            _read_mf10_only_data(material, parent_zai, states, reaction_data);
         }
 
         // adds the data of one material, if we have not seen its nuclide before
@@ -289,6 +379,20 @@ namespace nis {
             return reaction_data;
         }
 
+        // adds the rate from the parent to the product (or the sink), and the loss of the parent if asked
+        void _add_transfer(Eigen::SparseMatrix<double>& reaction_mat, int parent_zai, int product_zai,
+                           double rate, bool parent_loss){
+            if((data::ZAI_MAP.count(parent_zai) == 0) || (rate <= 0.)){
+                return;
+            }
+            const int za_index = data::ZAI_MAP.at(parent_zai);
+            if(parent_loss){
+                reaction_mat.coeffRef(za_index, za_index) -= rate;
+            }
+            const int dza_index = data::ZAI_MAP.count(product_zai) == 1 ? data::ZAI_MAP.at(product_zai) : data::SINK_INDEX;
+            reaction_mat.coeffRef(za_index, dza_index) += rate;
+        }
+
         Eigen::SparseMatrix<double> construct_reaction_matrix(const ReactionData& reaction_data,
                                                   const core::Spectrum<double>& in_spectrum){
             // collapse all first, then split each reaction by residual state
@@ -297,7 +401,24 @@ namespace nis {
                 std::map<int, double> states;
             };
             std::map<std::pair<int, int>, Rates> rates;
+            // (parent, product ZAI) for MT=4 and MT=5, these come from MF=10 only
+            std::map<std::pair<int, int>, double> inelastic_rates;
+            std::map<std::pair<int, int>, double> anything_rates;
             for(const auto& xs: reaction_data){
+                if(xs.mt_number == INELASTIC_MT){
+                    if(xs.final_state > 0){
+                        const int product = zai::make(zai::get_z(xs.parent_zai), zai::get_a(xs.parent_zai), xs.final_state);
+                        inelastic_rates[{xs.parent_zai, product}] += collapse_cross_section(in_spectrum, xs.energies, xs.values);
+                    }
+                    continue;
+                }
+                if(xs.mt_number == ANYTHING_MT){
+                    if(xs.product_za > 0){
+                        const int product = xs.product_za*10 + std::max(xs.final_state, 0);
+                        anything_rates[{xs.parent_zai, product}] += collapse_cross_section(in_spectrum, xs.energies, xs.values);
+                    }
+                    continue;
+                }
                 // the data can be made by hand, so check again
                 if(!is_reaction_mt(xs.mt_number)){
                     continue;
@@ -322,6 +443,28 @@ namespace nis {
                     const int final_state = (residual >= 0) && (data::ZAI_MAP.count(residual) == 0) ? 0 : state;
                     add_reaction_rate(reaction_mat, data::ZAI_MAP, parent_zai, mt_number, rate, final_state);
                 }
+            }
+
+            // (n,n') to an isomer we don't track gives the target again, so there is no change
+            for(const auto& [key, rate]: inelastic_rates){
+                if(data::ZAI_MAP.count(key.second) == 1){
+                    _add_transfer(reaction_mat, key.first, key.second, rate, true);
+                }
+            }
+
+            // MT=5: each residual is one reaction, so the loss of the parent is the sum of the residuals.
+            // MF=3 MT=5 is not used, as it does not always agree with the sum in MF=10.
+            // The emitted light particles are added, but are not a loss.
+            for(const auto& [key, rate]: anything_rates){
+                const int product = key.second;
+                const bool residual = !is_light_particle(product/10);
+                // the free neutron is not tracked
+                if(product/10 == 1){
+                    continue;
+                }
+                // if we don't track this isomer, the atoms go to the ground state
+                const int tracked = data::ZAI_MAP.count(product) == 1 ? product : (product/10)*10;
+                _add_transfer(reaction_mat, key.first, tracked, rate, residual);
             }
             reaction_mat.makeCompressed();
             return reaction_mat;

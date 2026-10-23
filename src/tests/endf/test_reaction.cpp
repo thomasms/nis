@@ -211,7 +211,7 @@ TEST_CASE( "compute_reaction_products with a final state" ) {
 
 namespace {
 
-    // A small reaction tape: Fe56 at two temperatures and Ni62.
+    // A small reaction tape: Fe56 at two temperatures and Ni62 with MF=10.
     // The second Fe56 temperature must not be used.
     const std::string test_reaction_tape_string =
         "nis test reaction tape                                               1 0  0     \n"
@@ -262,11 +262,42 @@ namespace {
         " 1.000000+6 1.000000-1 2.000000+7 1.000000-1                      2837 3103     \n"
         "                                                                  2837 3  0     \n"
         "                                                                  2837 0  0     \n"
+        " 2.806200+4 6.139600+1          0          0          2          0283710  4     \n"
+        " 0.000000+0 0.000000+0      28062          0          1          2283710  4     \n"
+        "          2          1                                            283710  4     \n"
+        " 1.000000+6 5.000000-1 2.000000+7 5.000000-1                      283710  4     \n"
+        " 0.000000+0 0.000000+0      28062          7          1          2283710  4     \n"
+        "          2          1                                            283710  4     \n"
+        " 1.000000+6 2.000000-2 2.000000+7 2.000000-2                      283710  4     \n"
+        "                                                                  283710  0     \n"
+        " 2.806200+4 6.139600+1          0          0          4          0283710  5     \n"
+        " 0.000000+0 0.000000+0      27061          0          1          2283710  5     \n"
+        "          2          1                                            283710  5     \n"
+        " 1.000000+6 1.000000-2 2.000000+7 1.000000-2                      283710  5     \n"
+        " 0.000000+0 0.000000+0      27062          1          1          2283710  5     \n"
+        "          2          1                                            283710  5     \n"
+        " 1.000000+6 5.000000-3 2.000000+7 5.000000-3                      283710  5     \n"
+        " 0.000000+0 0.000000+0       1001          0          1          2283710  5     \n"
+        "          2          1                                            283710  5     \n"
+        " 1.000000+6 1.000000-2 2.000000+7 1.000000-2                      283710  5     \n"
+        " 0.000000+0 0.000000+0          0          0          1          2283710  5     \n"
+        "          2          1                                            283710  5     \n"
+        " 1.000000+6 3.000000-1 2.000000+7 3.000000-1                      283710  5     \n"
+        "                                                                  283710  0     \n"
+        " 2.806200+4 6.139600+1          0          0          2          0283710103     \n"
+        " 0.000000+0 0.000000+0      27062          0          1          2283710103     \n"
+        "          2          1                                            283710103     \n"
+        " 1.000000+6 3.000000-2 2.000000+7 3.000000-2                      283710103     \n"
+        " 0.000000+0 0.000000+0      27062          3          1          2283710103     \n"
+        "          2          1                                            283710103     \n"
+        " 1.000000+6 7.000000-2 2.000000+7 7.000000-2                      283710103     \n"
+        "                                                                  283710  0     \n"
+        "                                                                  2837 0  0     \n"
         "                                                                     0 0  0     \n"
         "                                                                    -1 0  0     \n";
 
     void check_test_reaction_data(const ReactionData& data){
-        REQUIRE( data.size() == 3 );
+        REQUIRE( data.size() == 9 );
         REQUIRE( data[0].parent_zai == 260560 );
         REQUIRE( data[0].mt_number == 102 );
         REQUIRE( data[0].energies == std::vector<double>{1.0, 10.0, 100.0} );
@@ -275,7 +306,30 @@ namespace {
         REQUIRE( data[1].mt_number == 103 );
         REQUIRE( data[2].parent_zai == 280620 );
         REQUIRE( data[2].mt_number == 103 );
+        REQUIRE( data[2].final_state == ALL_STATES );
         REQUIRE( data[2].values == std::vector<double>{0.1, 0.1} );
+
+        // MF=10 for MT=103, level 3 of Co62 is the 1st isomer
+        REQUIRE( data[3].mt_number == 103 );
+        REQUIRE( data[3].final_state == 0 );
+        REQUIRE( data[4].mt_number == 103 );
+        REQUIRE( data[4].final_state == 1 );
+        REQUIRE( data[4].values == std::vector<double>{0.07, 0.07} );
+
+        // MT=4, only the isomer of the target
+        REQUIRE( data[5].mt_number == INELASTIC_MT );
+        REQUIRE( data[5].final_state == 1 );
+        REQUIRE( data[5].values == std::vector<double>{0.02, 0.02} );
+
+        // MT=5, each product but not the photons
+        REQUIRE( data[6].mt_number == ANYTHING_MT );
+        REQUIRE( data[6].product_za == 27061 );
+        REQUIRE( data[6].final_state == 0 );
+        // in MT=5 the LFS is the isomer number
+        REQUIRE( data[7].product_za == 27062 );
+        REQUIRE( data[7].final_state == 1 );
+        REQUIRE( data[8].mt_number == ANYTHING_MT );
+        REQUIRE( data[8].product_za == 1001 );
     }
 }
 
@@ -297,4 +351,61 @@ TEST_CASE( "read_reaction_data_from_file reads one material at a time" ) {
 
 TEST_CASE( "read_reaction_data_from_file with a missing file" ) {
     REQUIRE_THROWS_AS( read_reaction_data_from_file("no_such_file.endf"), std::runtime_error );
+}
+
+TEST_CASE( "isomer_states_from_levels" ) {
+    // Ce139m is level 2, In116m and In116n are levels 1 and 4, Tl206m is level 45
+    const auto states = isomer_states_from_levels({
+        {58139, {0, 2}},
+        {49116, {0, 1, 4}},
+        {81206, {45}},
+    });
+    REQUIRE( states.at({58139, 0}) == 0 );
+    REQUIRE( states.at({58139, 2}) == 1 );
+    REQUIRE( states.at({49116, 1}) == 1 );
+    REQUIRE( states.at({49116, 4}) == 2 );
+    REQUIRE( states.at({81206, 45}) == 1 );
+}
+
+TEST_CASE( "construct_reaction_matrix with (n,n') to an isomer" ) {
+    // Y89 (n,n') Y89m, the ground state part does not change the nuclide
+    const ReactionData reaction_data = {
+        {390890, INELASTIC_MT, {1e6, 2e7}, {0.5, 0.5}, 1},
+        // no Y89 2nd isomer, so nothing happens
+        {390890, INELASTIC_MT, {1e6, 2e7}, {0.1, 0.1}, 2},
+    };
+    const core::Spectrum<double> flux({1e6, 2e7}, {1e10});
+    const Eigen::SparseMatrix<double> mat = construct_reaction_matrix(reaction_data, flux);
+
+    const double rate = 0.5*1e10*BARN_TO_CM2;
+    const int y89 = data::ZAI_MAP.at(390890);
+    REQUIRE_THAT( mat.coeff(y89, y89), WithinRel(-rate, 1e-12) );
+    REQUIRE_THAT( mat.coeff(y89, data::ZAI_MAP.at(390891)), WithinRel(rate, 1e-12) );
+    REQUIRE( mat.nonZeros() == 2 );
+}
+
+TEST_CASE( "construct_reaction_matrix with (n,anything)" ) {
+    // Mn55 MT=5 like JEFF-4: V52 and Cr54 are residuals, p and alpha are emitted
+    const ReactionData reaction_data = {
+        {250550, ANYTHING_MT, {1e6, 2e7}, {0.02, 0.02}, 0, 23052},
+        {250550, ANYTHING_MT, {1e6, 2e7}, {0.04, 0.04}, 0, 24054},
+        {250550, ANYTHING_MT, {1e6, 2e7}, {0.04, 0.04}, 0, 1001},
+        {250550, ANYTHING_MT, {1e6, 2e7}, {0.02, 0.02}, 0, 2004},
+        // neutrons are not tracked
+        {250550, ANYTHING_MT, {1e6, 2e7}, {0.05, 0.05}, 0, 1},
+        // no product given, so it is not used
+        {250550, ANYTHING_MT, {1e6, 2e7}, {1.0, 1.0}},
+    };
+    const core::Spectrum<double> flux({1e6, 2e7}, {1e10});
+    const Eigen::SparseMatrix<double> mat = construct_reaction_matrix(reaction_data, flux);
+
+    const double phi = 1e10*BARN_TO_CM2;
+    const int mn55 = data::ZAI_MAP.at(250550);
+    REQUIRE_THAT( mat.coeff(mn55, mn55), WithinRel(-0.06*phi, 1e-12) );
+    REQUIRE_THAT( mat.coeff(mn55, data::ZAI_MAP.at(230520)), WithinRel(0.02*phi, 1e-12) );
+    REQUIRE_THAT( mat.coeff(mn55, data::ZAI_MAP.at(240540)), WithinRel(0.04*phi, 1e-12) );
+    REQUIRE_THAT( mat.coeff(mn55, data::ZAI_MAP.at(PROTON)), WithinRel(0.04*phi, 1e-12) );
+    REQUIRE_THAT( mat.coeff(mn55, data::ZAI_MAP.at(zai::ALPHA)), WithinRel(0.02*phi, 1e-12) );
+    REQUIRE( mat.coeff(mn55, data::SINK_INDEX) == 0.0 );
+    REQUIRE( mat.nonZeros() == 5 );
 }

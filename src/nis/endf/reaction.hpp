@@ -4,6 +4,7 @@
 #include <functional>
 #include <map>
 #include <memory>
+#include <set>
 #include <tuple>
 #include <vector>
 
@@ -32,6 +33,17 @@ namespace nis {
 
         // MT=18 (total fission) has no yields yet, so we send it to the sink
         constexpr int FISSION_MT = 18;
+
+        // (n,n') does not change the nuclide, so we only use its MF=10 data
+        // for the production of the isomers of the target
+        constexpr int INELASTIC_MT = 4;
+
+        // (n,anything), TENDL based libraries (as JEFF-4) put many reactions here.
+        // MF=10 gives the production of each product, so we only use MF=10.
+        constexpr int ANYTHING_MT = 5;
+
+        // n, p, d, t, He3 and alpha; for MT=5 these are emitted particles, not the residual
+        bool is_light_particle(int za);
 
         // Change in Z and A from the target to the residual nucleus,
         // for an incident neutron, plus the light charged particles emitted.
@@ -107,7 +119,16 @@ namespace nis {
             std::vector<double> values;
             // ALL_STATES for MF=3, else the isomeric state of the residual from MF=10
             int final_state = ALL_STATES;
+            // only for MT=5, the ZA of the product from MF=10
+            int product_za = 0;
         };
+
+        // The level number (LFS) in MF=10 is the excited level of the product, not the isomer number.
+        // So for each product ZA we sort the levels in MF=10 of the material (but not MT=5,
+        // where JEFF-4 and TENDL give the isomer number as the LFS):
+        // LFS=0 is the ground state, the next level is the 1st isomer, and so on.
+        // key is (product ZA, LFS), value is the isomeric state.
+        std::map<std::pair<int, int>, int> isomer_states_from_levels(const std::map<int, std::set<int>>& levels);
 
         // Split the total rate of one reaction into the rates to each residual state.
         // The total (MF=3) is kept, MF=10 only gives the split, so atoms are conserved
