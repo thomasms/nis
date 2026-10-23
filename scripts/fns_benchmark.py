@@ -19,12 +19,14 @@ Usage:
     export PYTHONPATH=./build/bin/python3
     python scripts/fns_benchmark.py --fns-dir path/to/fns \\
         --decay-data data/jeff311.dec --reaction-data data/jeff4.reac \\
-        --output fns_results.csv [--materials Co Fe ...]
+        --output fns_results.csv [--materials Co Fe ...] [--jobs 4]
 """
 
 import argparse
 import csv
 import math
+import multiprocessing
+import os
 import re
 import sys
 import time
@@ -225,7 +227,9 @@ def load_cases(fns_dir: Path, materials: list) -> list:
     return cases
 
 
-def run_case(case: Case, bounds: list, reaction_data, decay_mat, energy_data) -> list:
+def run_case(case: Case, bounds: list, reaction_data, decay_mat, energy_data, times: list = None) -> list:
+    """Decay heat (uW/g) at each cooling time (s, ascending), by default the measured times."""
+    times = case.exp_time if times is None else times
     # scale the shape to the total flux in the input, as FISPACT-II does
     shape_total = sum(case.flux_shape)
     flux = [v * case.flux_amplitude / shape_total for v in case.flux_shape]
@@ -240,7 +244,7 @@ def run_case(case: Case, bounds: list, reaction_data, decay_mat, energy_data) ->
 
     heats = []
     nuclides = shutdown_atoms
-    steps = [t1 - t0 for t0, t1 in zip([0.0] + case.exp_time[:-1], case.exp_time)]
+    steps = [t1 - t0 for t0, t1 in zip([0.0] + times[:-1], times)]
     for step in steps:
         model = nis.core.BasicModel()
         model.nuclides = nuclides
@@ -252,6 +256,31 @@ def run_case(case: Case, bounds: list, reaction_data, decay_mat, energy_data) ->
     return heats, shutdown_atoms
 
 
+# set before the worker processes are forked, so they share the data and do not read it again
+_SHARED = {}
+
+
+def _run_shared(index: int):
+    d = _SHARED
+    case = d["cases"][index]
+    times = d["times"](case) if d["times"] else None
+    return run_case(case, d["bounds"], d["reaction_data"], d["decay_mat"], d["energy_data"], times)
+
+
+def run_cases(cases: list, bounds: list, reaction_data, decay_mat, energy_data,
+              jobs: int = 1, times=None):
+    """run_case for each case, with jobs processes. times(case) gives the cooling times, if set.
+    Yields the results in the same order as the cases."""
+    _SHARED.update(cases=cases, bounds=bounds, reaction_data=reaction_data,
+                   decay_mat=decay_mat, energy_data=energy_data, times=times)
+    if jobs <= 1:
+        yield from (_run_shared(i) for i in range(len(cases)))
+        return
+    # fork, so the workers get the data that is already read (Linux and macOS only)
+    with multiprocessing.get_context("fork").Pool(jobs) as pool:
+        yield from pool.imap(_run_shared, range(len(cases)))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--fns-dir", type=Path, required=True)
@@ -261,6 +290,7 @@ def main() -> int:
     parser.add_argument("--nuclides-output", type=Path, default=None,
                         help="CSV of atoms after irradiation, NIS against FISPACT-II")
     parser.add_argument("--materials", nargs="*", default=[])
+    parser.add_argument("--jobs", type=int, default=os.cpu_count(), help="number of cases to run at the same time")
     args = parser.parse_args()
 
     cases = load_cases(args.fns_dir, args.materials)
@@ -278,8 +308,8 @@ def main() -> int:
         writer.writerow(["material", "case", "cooling_time_s",
                          "exp_uW_per_g", "exp_unc_uW_per_g", "fispact_uW_per_g", "nis_uW_per_g"])
         nuclide_rows = []
-        for case in cases:
-            heats, shutdown_atoms = run_case(case, bounds, reaction_data, decay_mat, energy_data)
+        results = run_cases(cases, bounds, reaction_data, decay_mat, energy_data, args.jobs)
+        for case, (heats, shutdown_atoms) in zip(cases, results):
             step_times = cumulative(case.cooling_steps)
             fispact = [interpolate_log(step_times, case.fispact_heat, t) for t in case.exp_time]
             for t, e, u, fh, nh in zip(case.exp_time, case.exp_heat, case.exp_uncertainty, fispact, heats):

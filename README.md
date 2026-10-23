@@ -122,4 +122,9 @@ python scripts/fns_benchmark.py --fns-dir path/to/fns \
 python scripts/fns_stats.py fns.csv
 # the nuclides that cause a difference between NIS and FISPACT-II
 python scripts/fns_heat_by_nuclide.py fns_nuclides.csv --decay-data data/jeff311.dec
+# plots of NIS (smooth curve) and FISPACT-II against the experiment, one per case
+python scripts/fns_plot.py --fns-dir path/to/fns \
+    --decay-data data/jeff311.dec --reaction-data data/jeff4.reac --output-dir fns_plots
 ```
+
+The cases run in parallel, one process per core by default (`--jobs`). The plots need `matplotlib`.
