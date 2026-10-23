@@ -105,3 +105,21 @@ The reaction benchmarks in [src/tests/python/reactiontests.py](src/tests/python/
 - spectrum handling (linear in flux, bin splitting),
 - the structure of the full reaction matrix,
 - burn-up and Co60 activation against the analytic Bateman solution.
+
+### FNS decay heat benchmark
+
+The FNS (JAEA) experiments irradiate foils with 14 MeV neutrons and measure the decay heat.
+[scripts/fns_benchmark.py](scripts/fns_benchmark.py) runs NIS for each case of the
+FISPACT-II validation inputs, and compares it with the measured heat and with the FISPACT-II
+(TENDL-2017) results in those files. FISPACT-II is not run.
+
+```bash
+export PYTHONPATH=./build/bin/python3
+python scripts/fns_benchmark.py --fns-dir path/to/fns \
+    --decay-data data/jeff311.dec --reaction-data data/jeff4.reac \
+    --output fns.csv --nuclides-output fns_nuclides.csv
+# C/E statistics for NIS and FISPACT-II
+python scripts/fns_stats.py fns.csv
+# the nuclides that cause a difference between NIS and FISPACT-II
+python scripts/fns_heat_by_nuclide.py fns_nuclides.csv --decay-data data/jeff311.dec
+```
