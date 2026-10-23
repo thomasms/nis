@@ -112,6 +112,8 @@ PYBIND11_MODULE(pynis, m) {
 
     // solvers
     m_core.def("solver_cram48", &core::cram48::solve<double>);
+    m_core.def("reachable_indices", &solver::reachable_indices<double>);
+    m_core.def("solve_reachable", &solver::solve_reachable<double>);
     m_core.def("compute_inventory", py::overload_cast<const BasicModelPyType&, const Eigen::SparseMatrix<double>&, solver::solver_func<double>&>(&solver::compute_inventory<double>));
 
     py::module m_data = m.def_submodule("data");

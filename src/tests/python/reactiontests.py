@@ -25,6 +25,7 @@ import pynis as nis
 
 _data_dir = Path(__file__).parent.parent.parent.parent / "data"
 _jeff4_reaction_file = _data_dir / "jeff4.reac"
+_jeff311_decay_file = _data_dir / "jeff311.dec"
 
 # LFS pointer files are small text files, the real file is ~1 GB
 _has_reaction_data = (
@@ -276,10 +277,53 @@ class BurnupTests(ReactionBenchmarkBase):
         self.assertTrue(math.isclose(activity / (n0 * sigma_phi), 0.5, rel_tol=1e-2))
 
 
+class ReachableTests(ReactionBenchmarkBase):
+    """Solving only the reachable nuclides must give the same as the full matrix."""
+
+    def check(self, mat, inventory: dict, dt: float) -> None:
+        n0 = nis.core.vector_from_inventory(inventory)
+        full = np.asarray(nis.core.solver_cram48(mat, n0, dt))
+        reduced = np.asarray(nis.core.solve_reachable(mat, n0, dt, nis.core.solver_cram48))
+        total = n0.sum()
+
+        reachable = np.zeros(len(n0), dtype=bool)
+        reachable[nis.core.reachable_indices(mat, n0)] = True
+        # fewer nuclides, else this does not help
+        self.assertLess(reachable.sum(), len(n0))
+        # the full solve only has rounding noise where it can't reach
+        self.assertTrue(np.all(reduced[~reachable] == 0.0))
+        self.assertLess(np.abs(full[~reachable]).max(), 1e-12 * total)
+        # the same everywhere, to rounding
+        self.assertLess(np.abs(reduced - full).max(), 1e-12 * total)
+        big = np.abs(full) > 1e-9 * total
+        np.testing.assert_allclose(reduced[big], full[big], rtol=1e-8)
+
+    def test_irradiation_and_decay(self) -> None:
+        decay = nis.core.decay_mat_from_file(str(_jeff311_decay_file))
+        spectrum = nis.core.Spectrum(
+            [1e-5, 1.0, 1e3, 1e5, 1e6, 1e7, 1.3e7, 1.5e7, 2e7],
+            [1e12, 2e12, 3e12, 3e12, 4e12, 1e12, 5e13, 1e10],
+        )
+        irradiation = decay + self.matrix(spectrum)
+        inventory = {"Fe56": 1e24, "Cr52": 2e23, "Ni58": 1e23, "Co59": 1e20, "U235": 1e18}
+        for dt in (60.0, 3600.0 * 24, 3600.0 * 24 * 365):
+            with self.subTest(dt=dt):
+                self.check(irradiation, inventory, dt)
+                self.check(decay, inventory, dt)
+
+        # the inventory after irradiation, then decay, as the FNS benchmark does
+        model = nis.core.BasicModel()
+        model.nuclides = inventory
+        model.dt = 3600.0
+        shutdown = nis.core.compute_inventory(model, irradiation, nis.core.solver_cram48).nuclides
+        self.check(decay, shutdown, 3600.0)
+
+
 __all__ = [
     "ThermalCrossSectionTests",
     "FusionCrossSectionTests",
     "SpectrumTests",
     "MatrixStructureTests",
     "BurnupTests",
+    "ReachableTests",
 ]
