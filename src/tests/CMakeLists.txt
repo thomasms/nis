@@ -1,6 +1,7 @@
 set(CPP_UNIT_TESTS_NAME nistests)
 
 set(CPP_UNIT_TESTS_SOURCES
+  test_decayheat.cpp
   test_maths.cpp
   test_spectrum.cpp
   test_util.cpp

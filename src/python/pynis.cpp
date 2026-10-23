@@ -64,6 +64,28 @@ PYBIND11_MODULE(pynis, m) {
 
     m_core.def("decay_mat_from_file", &endf::construct_decay_matrix_from_file);
 
+    using DecayEnergyDataPyType = core::DecayEnergyData<double>;
+    py::class_<DecayEnergyDataPyType>(m_core, "DecayEnergyData")
+        .def(py::init<>())
+        .def_readwrite("decay_constants", &DecayEnergyDataPyType::decay_constants)
+        .def_readwrite("light_particle", &DecayEnergyDataPyType::light_particle)
+        .def_readwrite("electromagnetic", &DecayEnergyDataPyType::electromagnetic)
+        .def_readwrite("heavy_particle", &DecayEnergyDataPyType::heavy_particle);
+
+    using DecayHeatPyType = core::DecayHeat<double>;
+    py::class_<DecayHeatPyType>(m_core, "DecayHeat")
+        .def(py::init<>())
+        .def_readwrite("light_particle", &DecayHeatPyType::light_particle)
+        .def_readwrite("electromagnetic", &DecayHeatPyType::electromagnetic)
+        .def_readwrite("heavy_particle", &DecayHeatPyType::heavy_particle)
+        .def_property_readonly("total", &DecayHeatPyType::total);
+
+    m_core.def("decay_energy_data_from_file", &endf::read_decay_energy_data_from_file);
+    m_core.def("compute_activities", &core::compute_activities<double>);
+    m_core.def("compute_activity", &core::compute_activity<double>);
+    m_core.def("compute_decay_heat", &core::compute_decay_heat<double>);
+    m_core.def("vector_from_inventory", &io::helpers::vector_from_inventory<double>);
+
     py::class_<endf::CrossSection>(m_core, "CrossSection")
         .def_readonly("parent_zai", &endf::CrossSection::parent_zai)
         .def_readonly("mt_number", &endf::CrossSection::mt_number)

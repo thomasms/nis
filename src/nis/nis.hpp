@@ -2,6 +2,7 @@
 #define NIS_HPP
 
 #include "nis/cram.hpp"
+#include "nis/decayheat.hpp"
 #include "nis/histogram.hpp"
 #include "nis/model.hpp"
 #include "nis/nuclides.hpp"

@@ -69,6 +69,10 @@ He3 4.99482e+19
 ```
 
 
+After the nuclides, the output gives the total activity (Bq) and the decay heat (W).
+The decay heat comes from the average decay energies in the decay data (MF=8, MT=457), split into
+light particles (beta, electrons), electromagnetic (gamma, x-rays) and heavy particles (alpha, recoil).
+
 For neutron activation, add a `spectrum` to the input (see [examples/activate.inp](examples/activate.inp)) and give the reaction data too:
 
 ```bash

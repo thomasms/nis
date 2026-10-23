@@ -8,6 +8,7 @@
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 
+#include "nis/decayheat.hpp"
 #include "nis/model.hpp"
 #include "nis/solver.hpp"
 #include "nis/endf/core.hpp"
@@ -44,7 +45,10 @@ int main(int argc, char **argv){
       // dump input to std::out
       // std::cout << model;
 
-      const Eigen::MatrixX<double> dense_decay_mat = endf::construct_decay_matrix_from_file(decay_data);
+      // read the decay tape once, for the matrix and the decay energies
+      const auto decay_tape = njoy::ENDFtk::tree::fromFile(decay_data);
+      const Eigen::MatrixX<double> dense_decay_mat = endf::construct_decay_matrix_from_tape(decay_tape);
+      const auto decay_energy_data = endf::read_decay_energy_data_from_tape(decay_tape);
 
       Eigen::MatrixX<double> dense_reaction_mat = Eigen::MatrixXd::Zero(dense_decay_mat.rows(), dense_decay_mat.cols());
       if(model.spectrum != nullptr){
@@ -66,6 +70,11 @@ int main(int argc, char **argv){
 
       // dump output to std::out
       std::cout << filtered_result;
+
+      // activity and decay heat use the full inventory, not the filtered one
+      const Eigen::VectorX<double> final_inventory = io::helpers::vector_from_inventory<double>(result.nuclides);
+      std::cout << "\nactivity\n    total " << core::compute_activity<double>(decay_energy_data, final_inventory) << "\n";
+      std::cout << core::compute_decay_heat<double>(decay_energy_data, final_inventory);
     }
     catch(const std::exception& ex){
       std::cerr << ex.what();

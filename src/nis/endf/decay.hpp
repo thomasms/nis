@@ -9,6 +9,7 @@
 
 #include <Eigen/Core>
 
+#include "nis/decayheat.hpp"
 #include "nis/endf/decay/product_computer.hpp"
 
 
@@ -37,6 +38,11 @@ namespace nis {
         Eigen::MatrixXd construct_decay_matrix_from_tape(const njoy::ENDFtk::tree::Tape& tape);
         // convience function to avoid calling ENDFtk fromFile
         Eigen::MatrixXd construct_decay_matrix_from_file(std::string filename);
+
+        // decay constants and average decay energies for decay heat
+        core::DecayEnergyData<double> read_decay_energy_data_from_tape(const njoy::ENDFtk::tree::Tape& tape);
+        // convience function to avoid calling ENDFtk fromFile
+        core::DecayEnergyData<double> read_decay_energy_data_from_file(std::string filename);
 
 
     }

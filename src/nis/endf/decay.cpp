@@ -173,6 +173,54 @@ namespace nis {
             return endf::construct_decay_matrix_from_tape(tape);
         }
 
+        void _update_decay_energy_data(const njoy::ENDFtk::tree::Material& material,
+                                       const std::map<int, int>& zai_map,
+                                       core::DecayEnergyData<double>& energy_data){
+
+            if(!material.hasMF(file_number)){
+                return;
+            }
+            njoy::ENDFtk::tree::File file = material.file(file_number);
+            if(!file.hasMT(mt_number)){
+                return;
+            }
+
+            njoy::ENDFtk::tree::Section decay_data = file.MT(mt_number);
+            auto parsed_section = decay_data.parse<file_number, mt_number>();
+            const int zai = _get_zai_from_section(parsed_section);
+            if(zai_map.count(zai) == 0){
+                return;
+            }
+
+            const double half_life = parsed_section.halfLife()[0];
+            // same rule as the decay matrix, so both use the same nuclides
+            if(parsed_section.isStable() || (half_life <= 0.)){
+                return;
+            }
+
+            const int za_index = zai_map.at(zai);
+            const auto& energies = parsed_section.averageDecayEnergies();
+            energy_data.decay_constants(za_index) = physics::compute_decay_const(half_life);
+            energy_data.light_particle(za_index) = energies.ELP()[0];
+            energy_data.electromagnetic(za_index) = energies.EEM()[0];
+            energy_data.heavy_particle(za_index) = energies.EHP()[0];
+        }
+
+        core::DecayEnergyData<double> read_decay_energy_data_from_tape(const njoy::ENDFtk::tree::Tape& tape){
+            core::DecayEnergyData<double> energy_data;
+            for(auto mat_number: tape.materialNumbers()){
+                for(auto material: tape.material(mat_number)){
+                    _update_decay_energy_data(material, data::ZAI_MAP, energy_data);
+                }
+            }
+            return energy_data;
+        }
+
+        core::DecayEnergyData<double> read_decay_energy_data_from_file(std::string filename){
+            auto tape = njoy::ENDFtk::tree::fromFile(filename);
+            return endf::read_decay_energy_data_from_tape(tape);
+        }
+
 
     }
 }
