@@ -145,3 +145,62 @@ TEST_CASE( "construct_reaction_matrix from reaction data" ) {
     REQUIRE_THAT( mat(fe56, mn56), WithinRel(np, 1e-12) );
     REQUIRE_THAT( mat(fe56, fe56), WithinRel(-(ng + np), 1e-12) );
 }
+
+TEST_CASE( "split_rate_by_state" ) {
+    // no MF=10, all to the ground state
+    auto split = split_rate_by_state(10.0, {});
+    REQUIRE( split == std::map<int, double>{{0, 10.0}} );
+
+    // isomer only, the rest goes to the ground state
+    split = split_rate_by_state(10.0, {{1, 4.0}});
+    REQUIRE( split == std::map<int, double>{{0, 6.0}, {1, 4.0}} );
+
+    // all states given, MF=3 total is kept, MF=10 gives the fractions
+    split = split_rate_by_state(10.0, {{0, 2.0}, {1, 3.0}});
+    REQUIRE_THAT( split.at(0), WithinRel(4.0, 1e-12) );
+    REQUIRE_THAT( split.at(1), WithinRel(6.0, 1e-12) );
+
+    // isomer more than the total, scale it to the total
+    split = split_rate_by_state(10.0, {{1, 20.0}});
+    REQUIRE( split == std::map<int, double>{{1, 10.0}} );
+}
+
+TEST_CASE( "construct_reaction_matrix with isomer production" ) {
+    // Ni62 (n,p) -> Co62 and Co62m, values like JEFF-4
+    const ReactionData reaction_data = {
+        {280620, 103, {1e6, 2e7}, {0.1, 0.1}},
+        {280620, 103, {1e6, 2e7}, {0.03, 0.03}, 0},
+        {280620, 103, {1e6, 2e7}, {0.07, 0.07}, 1},
+    };
+    const core::Spectrum<double> flux({1e6, 2e7}, {1e10});
+    const Eigen::MatrixXd mat = construct_reaction_matrix(reaction_data, flux);
+
+    const double rate = 0.1*1e10*BARN_TO_CM2;
+    const int ni62 = data::ZAI_MAP.at(280620);
+    REQUIRE_THAT( mat(ni62, ni62), WithinRel(-rate, 1e-12) );
+    REQUIRE_THAT( mat(ni62, data::ZAI_MAP.at(270620)), WithinRel(0.3*rate, 1e-12) );
+    REQUIRE_THAT( mat(ni62, data::ZAI_MAP.at(270621)), WithinRel(0.7*rate, 1e-12) );
+    REQUIRE_THAT( mat(ni62, data::ZAI_MAP.at(PROTON)), WithinRel(rate, 1e-12) );
+}
+
+TEST_CASE( "construct_reaction_matrix isomer not in the nuclide list goes to the ground state" ) {
+    // Co62 has no 5th isomer
+    REQUIRE( data::ZAI_MAP.count(270625) == 0 );
+    const ReactionData reaction_data = {
+        {280620, 103, {1e6, 2e7}, {0.1, 0.1}},
+        {280620, 103, {1e6, 2e7}, {0.04, 0.04}, 5},
+    };
+    const core::Spectrum<double> flux({1e6, 2e7}, {1e10});
+    const Eigen::MatrixXd mat = construct_reaction_matrix(reaction_data, flux);
+
+    const double rate = 0.1*1e10*BARN_TO_CM2;
+    const int ni62 = data::ZAI_MAP.at(280620);
+    REQUIRE_THAT( mat(ni62, data::ZAI_MAP.at(270620)), WithinRel(rate, 1e-12) );
+    REQUIRE( mat(ni62, data::SINK_INDEX) == 0.0 );
+}
+
+TEST_CASE( "compute_reaction_products with a final state" ) {
+    check_products(270590, 102, 270600, {});
+    const ReactionProductT p = compute_reaction_products(270590, 102, 1);
+    REQUIRE( std::get<0>(p) == 270601 );
+}

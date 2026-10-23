@@ -90,7 +90,8 @@ PYBIND11_MODULE(pynis, m) {
         .def_readonly("parent_zai", &endf::CrossSection::parent_zai)
         .def_readonly("mt_number", &endf::CrossSection::mt_number)
         .def_readonly("energies", &endf::CrossSection::energies)
-        .def_readonly("values", &endf::CrossSection::values);
+        .def_readonly("values", &endf::CrossSection::values)
+        .def_readonly("final_state", &endf::CrossSection::final_state);
 
     // ReactionData is opaque so it stays in C++ memory and is not copied to a python list
     py::class_<endf::ReactionData>(m_core, "ReactionData")

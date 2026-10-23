@@ -45,7 +45,7 @@ namespace nis {
         // Sums (MT=1,3,4,5,27,101), elastic (MT=2), inelastic levels (MT=51-91)
         // and fission chances (MT=19-21,38) are left out on purpose,
         // otherwise we would double count or the nuclide does not change.
-        // NOTE: all residuals are in the ground state, isomer production needs MF=9/10
+        // The residual state comes from MF=10 when the data has it, else it is the ground state.
         const std::map<int, ReactionChange> REACTION_MAP = {
             {16,  {0,  -1, {}}},                                  // (n,2n)
             {17,  {0,  -2, {}}},                                  // (n,3n)
@@ -81,7 +81,8 @@ namespace nis {
 
         bool is_reaction_mt(int mt_number);
 
-        ReactionProductT compute_reaction_products(int parent_zai, int mt_number);
+        // final_state is the isomeric state of the residual nucleus
+        ReactionProductT compute_reaction_products(int parent_zai, int mt_number, int final_state=0);
 
         // collapse a histogram (INT=1) cross section in barns with the flux spectrum
         // returns the reaction rate per atom in 1/s
@@ -92,15 +93,26 @@ namespace nis {
         // adds the rate for the parent going to the products
         // uses the same layout as the decay matrix: (parent, daughter)
         void add_reaction_rate(Eigen::MatrixXd& reaction_mat, const std::map<int, int>& zai_map,
-                               int parent_zai, int mt_number, double rate);
+                               int parent_zai, int mt_number, double rate, int final_state=0);
 
         // one group-wise (INT=1) cross section in barns, for one parent and one MT
+        // final_state of a total (MF=3) cross section, for all residual states together
+        constexpr int ALL_STATES = -1;
+
         struct CrossSection {
             int parent_zai;
             int mt_number;
             std::vector<double> energies;
             std::vector<double> values;
+            // ALL_STATES for MF=3, else the isomeric state of the residual from MF=10
+            int final_state = ALL_STATES;
         };
+
+        // Split the total rate of one reaction into the rates to each residual state.
+        // The total (MF=3) is kept, MF=10 only gives the split, so atoms are conserved
+        // even if MF=3 and MF=10 do not agree exactly.
+        // If there is no ground state in the MF=10 data, it gets the rest of the total.
+        std::map<int, double> split_rate_by_state(double total_rate, const std::map<int, double>& state_rates);
 
         // all the cross sections we can use from a tape
         // read this once, then collapse it with as many spectra as needed

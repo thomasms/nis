@@ -42,6 +42,10 @@ def index(name: str) -> int:
     return _ZAI_INDEX[nis.zai.get_from_name(name)]
 
 
+def _states(ground_zai: int) -> list:
+    return [ground_zai + i for i in range(10) if ground_zai + i in _ZAI_INDEX]
+
+
 def one_group_spectrum(energy: float, flux: float = FLUX) -> nis.core.Spectrum:
     """A narrow group around the energy, so it falls in one data group."""
     return nis.core.Spectrum([energy * 0.9999, energy * 1.0001], [flux])
@@ -71,7 +75,11 @@ class ReactionBenchmarkBase(unittest.TestCase):
         rel_tol: float,
         flux: float = FLUX,
     ) -> None:
-        xs = mat[index(parent), index(daughter)] / flux / BARN
+        # add the isomers of the daughter, the reference is for all states
+        xs = sum(
+            mat[index(parent), _ZAI_INDEX[zai]]
+            for zai in _states(nis.zai.get_from_name(daughter))
+        ) / flux / BARN
         self.assertTrue(
             math.isclose(xs, expected_barns, rel_tol=rel_tol),
             f"{parent} -> {daughter}: {xs:.5g} b, expected {expected_barns:.5g} b",
@@ -105,13 +113,20 @@ class ThermalCrossSectionTests(ReactionBenchmarkBase):
         self.assertTrue(math.isclose(xs, 585.1, rel_tol=0.03), f"{xs} b")
 
     def test_loss_is_sum_of_channels(self) -> None:
-        # for (n,g) only targets the loss rate is the rate to the daughter
+        # for (n,g) only targets the loss rate is the rate to the daughter states
         mat = self.matrix(one_group_spectrum(THERMAL_ENERGY))
         co59 = index("Co59")
-        co60 = index("Co60")
+        co60, co60m = index("Co60"), index("Co60m")
         self.assertTrue(
-            math.isclose(-mat[co59, co59], mat[co59, co60], rel_tol=1e-6)
+            math.isclose(-mat[co59, co59], mat[co59, co60] + mat[co59, co60m], rel_tol=1e-6)
         )
+
+    def test_isomer_production(self) -> None:
+        # Ni62 (n,p) makes both Co62 and Co62m, from MF=10
+        mat = self.matrix(one_group_spectrum(FUSION_ENERGY))
+        ni62 = index("Ni62")
+        self.assertGreater(mat[ni62, index("Co62")], 0.0)
+        self.assertGreater(mat[ni62, index("Co62m")], 0.0)
 
 
 class FusionCrossSectionTests(ReactionBenchmarkBase):
@@ -120,9 +135,9 @@ class FusionCrossSectionTests(ReactionBenchmarkBase):
         cases = [
             ("Fe56", "Mn56", 0.110),  # (n,p)
             ("Al27", "Na24", 0.122),  # (n,a)
-            ("Ni58", "Co58", 0.355),  # (n,p) - total, ground and isomer
+            ("Ni58", "Co58", 0.355),  # (n,p)
             ("Zr90", "Zr89", 0.62),  # (n,2n)
-            ("Nb93", "Nb92", 1.24),  # (n,2n) - total, ground and isomer
+            ("Nb93", "Nb92", 1.24),  # (n,2n)
         ]
         for parent, daughter, expected in cases:
             with self.subTest(parent=parent, daughter=daughter):
@@ -198,18 +213,20 @@ class BurnupTests(ReactionBenchmarkBase):
     def test_au197_capture_chain(self) -> None:
         # Au197 -(n,g)-> Au198 -(n,g)-> Au199, no decay
         # compare with the analytic two step Bateman solution
+        # part of the (n,g) goes to Au198m, so use the fraction to the ground state
         flux = 1e15
         mat = self.matrix(one_group_spectrum(THERMAL_ENERGY, flux))
         au197, au198 = index("Au197"), index("Au198")
         a = -mat[au197, au197]
         b = -mat[au198, au198]
+        to_ground = mat[au197, au198]
 
         n0 = 1e20
         dt = 1.0 / a  # ~63% of Au197 burnt
         nuclides = self.inventory(mat, {"Au197": n0}, dt)
 
         expected_197 = n0 * math.exp(-a * dt)
-        expected_198 = n0 * a / (b - a) * (math.exp(-a * dt) - math.exp(-b * dt))
+        expected_198 = n0 * to_ground / (b - a) * (math.exp(-a * dt) - math.exp(-b * dt))
         self.assertTrue(math.isclose(nuclides["Au197"], expected_197, rel_tol=1e-8))
         self.assertTrue(math.isclose(nuclides["Au198"], expected_198, rel_tol=1e-8))
 
