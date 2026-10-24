@@ -30,7 +30,7 @@ set( CMAKE_CXX_STANDARD_REQUIRED YES )
 set( CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -Wno-unused-parameter" )# -Werror" )
 set( CMAKE_CXX_FLAGS_DEBUG "-O0 -g" )
 set( CMAKE_CXX_FLAGS_RELEASE "-O3" )
-set( CMAKE_EXE_LINKER_FLAGS " ${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++ -static")
+set( CMAKE_EXE_LINKER_FLAGS " ${CMAKE_EXE_LINKER_FLAGS}")# -static-libgcc -static-libstdc++ -static")
 
 set(LINK_SEARCH_START_STATIC TRUE)
 set(LINK_SEARCH_END_STATIC TRUE)

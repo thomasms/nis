@@ -58,7 +58,7 @@ make -j4
 To test your build, after compiling as above, try the following:
 
 ```bash
-./build/bin/nis --decay-data ./data/jeff311.dec --input examples/h3_halflife.inp
+./build/bin/nis --decay-data ./data/jeff311.dec --reaction-data ./data/jeff4.reac --input examples/h3_halflife.inp
 ```
 
 If successful, you should see roughly half remains as H3 and the other half has beta decayed to He3.
