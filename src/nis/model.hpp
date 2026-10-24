@@ -6,6 +6,7 @@
 #include <sstream>
 #include <map>
 #include <memory>
+#include <vector>
 
 #include "nis/spectrum.hpp"
 
@@ -20,6 +21,8 @@ namespace nis{
             // leave it null for decay only
             // otherwise we do a collapse for no reason
             std::shared_ptr<Spectrum<T>> spectrum = nullptr;
+            // decay only steps after dt, each step length in seconds
+            std::vector<T> cooling;
         };
 
         template<typename T=double>

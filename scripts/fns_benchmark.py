@@ -33,7 +33,7 @@ import time
 from dataclasses import dataclass, field
 from pathlib import Path
 
-import pynis as nis
+# pynis is imported where it is used, so the parsers work without the python bindings
 
 _BOUNDS_FILE = Path(__file__).parent / "data" / "ccfe709_bounds.txt"
 
@@ -229,6 +229,7 @@ def load_cases(fns_dir: Path, materials: list) -> list:
 
 def run_case(case: Case, bounds: list, reaction_data, decay_mat, energy_data, times: list = None) -> list:
     """Decay heat (uW/g) at each cooling time (s, ascending), by default the measured times."""
+    import pynis as nis
     times = case.exp_time if times is None else times
     # scale the shape to the total flux in the input, as FISPACT-II does
     shape_total = sum(case.flux_shape)
@@ -292,6 +293,7 @@ def main() -> int:
     parser.add_argument("--materials", nargs="*", default=[])
     parser.add_argument("--jobs", type=int, default=os.cpu_count(), help="number of cases to run at the same time")
     args = parser.parse_args()
+    import pynis as nis
 
     cases = load_cases(args.fns_dir, args.materials)
     print(f"{len(cases)} cases", file=sys.stderr)

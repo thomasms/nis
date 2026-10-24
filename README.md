@@ -82,6 +82,16 @@ For neutron activation, add a `spectrum` to the input (see [examples/activate.in
 The spectrum is the neutron flux in n/cm^2/s per group. The first line gives the group bounds in eV (ascending), the second line gives one value per group.
 The reaction data must be group-wise (INT=1), for example as processed by NJOY GROUPR.
 
+To decay the inventory after the irradiation, add a `cooling` line with the length of each step in seconds:
+
+```
+cooling
+    60 600 3600
+```
+
+The output then gives the nuclides, activity and decay heat after the irradiation, and again after each
+cooling step, under a `cooling <time>` line (the time since the end of the irradiation, in seconds).
+
 Note, you will need to have pulled the decay data via LFS in the [./data](./data) subdirectory.
 
 
@@ -128,3 +138,18 @@ python scripts/fns_plot.py --fns-dir path/to/fns \
 ```
 
 The cases run in parallel, one process per core by default (`--jobs`). The plots need `matplotlib`.
+
+NIS input decks for all the cases are in [benchmarks/fns](benchmarks/fns), one `<material>/<case>.inp` for
+each case (initial atoms, irradiation time, 709 group flux, a cooling step to each measured time), with the
+measured and FISPACT-II decay heat in `<case>.csv`. They are made by
+[scripts/fns_make_decks.py](scripts/fns_make_decks.py), and run with the `nis` program by
+[scripts/fns_run_decks.py](scripts/fns_run_decks.py):
+
+```bash
+./build/bin/nis -d data/jeff311.dec -r data/jeff4.reac -i benchmarks/fns/Co/2000exp_5min.inp
+python scripts/fns_run_decks.py --nis build/bin/nis --decks benchmarks/fns \
+    --decay-data data/jeff311.dec --reaction-data data/jeff4.reac --output fns_decks.csv
+python scripts/fns_stats.py fns_decks.csv
+```
+
+Each `nis` run reads the nuclear data again, so `fns_run_decks.py` is slower than `fns_benchmark.py`.

@@ -61,18 +61,30 @@ int main(int argc, char **argv){
       // do computation using CRAM48 as default
       // permit other solvers in the future
       solver::solver_func<double> solver_function = &core::cram48::solve<double>;
-      const auto result = solver::compute_inventory<double>(model, mat, solver_function);
+      auto result = solver::compute_inventory<double>(model, mat, solver_function);
 
-      // filter out nuclides below a certain threshold
-      const auto filtered_result = core::filter_nuclides<double>(result, threshold);
+      const auto print_step = [&](const core::ModelResult<double>& step_result){
+        // filter out nuclides below a certain threshold
+        std::cout << core::filter_nuclides<double>(step_result, threshold);
 
-      // dump output to std::out
-      std::cout << filtered_result;
+        // activity and decay heat use the full inventory, not the filtered one
+        const Eigen::VectorX<double> inventory = io::helpers::vector_from_inventory<double>(step_result.nuclides);
+        std::cout << "\nactivity\n    total " << core::compute_activity<double>(decay_energy_data, inventory) << "\n";
+        std::cout << core::compute_decay_heat<double>(decay_energy_data, inventory);
+      };
+      print_step(result);
 
-      // activity and decay heat use the full inventory, not the filtered one
-      const Eigen::VectorX<double> final_inventory = io::helpers::vector_from_inventory<double>(result.nuclides);
-      std::cout << "\nactivity\n    total " << core::compute_activity<double>(decay_energy_data, final_inventory) << "\n";
-      std::cout << core::compute_decay_heat<double>(decay_energy_data, final_inventory);
+      // decay only steps, each from the full inventory of the step before
+      double cooling_time = 0.0;
+      for(const auto step: model.cooling){
+        core::BasicModel<double> cooling_model;
+        cooling_model.dt = step;
+        cooling_model.nuclides = result.nuclides;
+        result = solver::compute_inventory<double>(cooling_model, decay_mat, solver_function);
+        cooling_time += step;
+        std::cout << "\ncooling " << cooling_time << "\n";
+        print_step(result);
+      }
     }
     catch(const std::exception& ex){
       std::cerr << ex.what();

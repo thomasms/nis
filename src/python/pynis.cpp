@@ -53,7 +53,8 @@ PYBIND11_MODULE(pynis, m) {
         .def(py::init<>())
         .def_readwrite("nuclides", &BasicModelPyType::nuclides)
         .def_readwrite("dt", &BasicModelPyType::dt)
-        .def_readwrite("spectrum", &BasicModelPyType::spectrum);
+        .def_readwrite("spectrum", &BasicModelPyType::spectrum)
+        .def_readwrite("cooling", &BasicModelPyType::cooling);
 
     using ModelResultPyType = core::ModelResult<double>;
     py::class_<ModelResultPyType>(m_core, "ModelResult")

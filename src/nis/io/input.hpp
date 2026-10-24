@@ -33,6 +33,13 @@ namespace nis{
                     }
                     os << "\n";
                 }
+                if(!data.cooling.empty()){
+                    os << "\ncooling\n    ";
+                    for(auto v: data.cooling){
+                        os << v << " ";
+                    }
+                    os << "\n";
+                }
             }
 
             template<typename T=double>
@@ -82,11 +89,23 @@ namespace nis{
                                 for(auto s: contents){
                                     values.emplace_back(std::stod(s));
                                 }
+                                iss.clear();
                                 break;
                             }
                             iss.clear();
                         }
                         data.spectrum = std::make_shared<core::Spectrum<double>>(energies, values);
+                    } else if (line == "cooling") {
+                        // one line of step lengths in seconds
+                        if (std::getline(is, line) && !line.empty() && line[0] != '#') {
+                            iss.str(line.substr(4));
+                            std::vector<std::string> contents;
+                            util::string_split<' '>(iss, contents);
+                            for(auto s: contents){
+                                data.cooling.emplace_back(std::stod(s));
+                            }
+                            iss.clear();
+                        }
                     }
                 }
 

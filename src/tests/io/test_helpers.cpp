@@ -58,3 +58,45 @@ TEST_CASE( "Inventory to vec", "[inventory_from_vector]" ) {
     REQUIRE( inv.at("Mg27") == 78.345e4 );
     REQUIRE( inv.at("Xe123")  == 45.67 );
 }
+TEST_CASE( "Input with spectrum and cooling", "[input]" ) {
+    std::istringstream is(
+        "dt 3600\n"
+        "\n"
+        "nuclides\n"
+        "    Co59 1e+20\n"
+        "\n"
+        "spectrum\n"
+        "    0 10 20\n"
+        "    5e+15 1e+15\n"
+        "\n"
+        "cooling\n"
+        "    60 120 3e+06\n");
+    core::BasicModel<double> model;
+    is >> model;
+
+    REQUIRE( model.dt == 3600.0 );
+    REQUIRE( model.nuclides.size() == 1 );
+    REQUIRE( model.nuclides.at("Co59") == 1e20 );
+    REQUIRE( model.spectrum != nullptr );
+    REQUIRE( model.spectrum->x() == std::vector<double>{0.0, 10.0, 20.0} );
+    REQUIRE( model.spectrum->y() == std::vector<double>{5e15, 1e15} );
+    REQUIRE( model.cooling == std::vector<double>{60.0, 120.0, 3e6} );
+
+    // write it and read it again
+    std::ostringstream os;
+    os << model;
+    std::istringstream again(os.str());
+    core::BasicModel<double> copy;
+    again >> copy;
+    REQUIRE( copy.dt == model.dt );
+    REQUIRE( copy.nuclides == model.nuclides );
+    REQUIRE( copy.cooling == model.cooling );
+}
+
+TEST_CASE( "Input without cooling", "[input]" ) {
+    std::istringstream is("dt 10\n\nnuclides\n    H3 1e+10\n");
+    core::BasicModel<double> model;
+    is >> model;
+    REQUIRE( model.cooling.empty() );
+    REQUIRE( model.spectrum == nullptr );
+}
