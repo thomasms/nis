@@ -15,6 +15,7 @@
 #include "nis/endf/core.hpp"
 #include "nis/endf/decay.hpp"
 #include "nis/endf/reaction.hpp"
+#include "nis/endf/reaction_cache.hpp"
 
 #include "nis/io/input.hpp"
 #include "nis/io/output.hpp"

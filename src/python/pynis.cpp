@@ -113,9 +113,14 @@ PYBIND11_MODULE(pynis, m) {
             return d[i];
         });
 
-    m_core.def("reaction_data_from_file", &endf::read_reaction_data_from_file);
+    // a cache or an ENDF tape
+    m_core.def("reaction_data_from_file", &endf::read_reaction_data);
+    m_core.def("write_reaction_cache", &endf::write_reaction_cache);
+    m_core.def("is_reaction_cache", &endf::is_reaction_cache);
     m_core.def("reaction_mat", &endf::construct_reaction_matrix);
-    m_core.def("reaction_mat_from_file", &endf::construct_reaction_matrix_from_file);
+    m_core.def("reaction_mat_from_file", [](const std::string& filename, const core::Spectrum<double>& spectrum){
+        return endf::construct_reaction_matrix(endf::read_reaction_data(filename), spectrum);
+    });
     m_core.def("collapse_cross_section", &endf::collapse_cross_section);
 
     // solvers

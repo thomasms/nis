@@ -82,6 +82,17 @@ For neutron activation, add a `spectrum` to the input (see [examples/activate.in
 The spectrum is the neutron flux in n/cm^2/s per group. The first line gives the group bounds in eV (ascending), the second line gives one value per group.
 The reaction data must be group-wise (INT=1), for example as processed by NJOY GROUPR.
 
+Reading the ENDF reaction file (about 1 GB for JEFF-4) takes a few seconds for each run. Make a binary cache
+of it one time, then give the cache to `nis` (or to the Python `reaction_data_from_file`) in place of the ENDF file:
+
+```bash
+./build/bin/nis_cache --reaction-data ./data/jeff4.reac --output ./data/jeff4.nisreac
+./build/bin/nis --decay-data ./data/jeff311.dec --reaction-data ./data/jeff4.nisreac --input examples/activate.inp
+```
+
+`nis` finds from the file header if it is a cache or an ENDF file. Make the cache again when the ENDF file
+changes, or after an update of NIS that changes the cache version. The cache uses the byte order of the machine that made it.
+
 For more than one step, give one `dt` line for each step, in order, with the step length in seconds and the total flux in n/m^2/s:
 
 ```
@@ -149,10 +160,10 @@ measured and FISPACT-II decay heat in `<case>.csv`. They are made by
 [scripts/fns_run_decks.py](scripts/fns_run_decks.py):
 
 ```bash
-./build/bin/nis -d data/jeff311.dec -r data/jeff4.reac -i benchmarks/fns/Co/2000exp_5min.inp
+./build/bin/nis -d data/jeff311.dec -r data/jeff4.nisreac -i benchmarks/fns/Co/2000exp_5min.inp
 python scripts/fns_run_decks.py --nis build/bin/nis --decks benchmarks/fns \
-    --decay-data data/jeff311.dec --reaction-data data/jeff4.reac --output fns_decks.csv
+    --decay-data data/jeff311.dec --reaction-data data/jeff4.nisreac --output fns_decks.csv
 python scripts/fns_stats.py fns_decks.csv
 ```
 
-Each `nis` run reads the nuclear data again, so `fns_run_decks.py` is slower than `fns_benchmark.py`.
+Each `nis` run reads the nuclear data again, so use the reaction cache (`nis_cache`, see above): with it, all the decks run in about 30 s on 4 cores.

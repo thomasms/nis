@@ -96,18 +96,25 @@ namespace nis {
             return split;
         }
 
-        double collapse_cross_section(const core::Spectrum<double>& in_spectrum,
-                                      const std::vector<double>& xs_energies,
-                                      const std::vector<double>& xs_values){
+        void _check_cross_section(const std::vector<double>& xs_energies, const std::vector<double>& xs_values){
             if((xs_energies.size() < 2) || (xs_energies.size() != xs_values.size())){
                 throw std::invalid_argument("Cross section must have at least 2 points and the same number of energies and values");
             }
+        }
 
+        // the flux of each group of the cross section, dotted with its values
+        double _collapse_on_groups(const std::vector<double>& group_flux, const std::vector<double>& xs_values){
             // because it is INT=1 (constant) the last value has no bin, so we drop it
             const std::vector<double> group_values(xs_values.begin(), xs_values.end()-1);
+            return maths::dot_product<double>(group_flux, group_values)*BARN_TO_CM2;
+        }
 
+        double collapse_cross_section(const core::Spectrum<double>& in_spectrum,
+                                      const std::vector<double>& xs_energies,
+                                      const std::vector<double>& xs_values){
+            _check_cross_section(xs_energies, xs_values);
             const core::Spectrum<double> data_spectrum = core::convert_by_lethargy<double>(in_spectrum, xs_energies);
-            return maths::dot_product<double>(data_spectrum.y(), group_values)*BARN_TO_CM2;
+            return _collapse_on_groups(data_spectrum.y(), xs_values);
         }
 
         void add_reaction_rate(Eigen::SparseMatrix<double>& reaction_mat, const std::map<int, int>& zai_map,
@@ -446,18 +453,30 @@ namespace nis {
             // (parent, product ZAI) for MT=4 and MT=5, these come from MF=10 only
             std::map<std::pair<int, int>, double> inelastic_rates;
             std::map<std::pair<int, int>, double> anything_rates;
+
+            // the data has only a few energy grids, so we convert the spectrum once for each
+            std::map<std::vector<double>, std::vector<double>> grid_flux;
+            const auto collapse = [&](const CrossSection& xs){
+                _check_cross_section(xs.energies, xs.values);
+                auto it = grid_flux.find(xs.energies);
+                if(it == grid_flux.end()){
+                    it = grid_flux.emplace(xs.energies, core::convert_by_lethargy<double>(in_spectrum, xs.energies).ycopy()).first;
+                }
+                return _collapse_on_groups(it->second, xs.values);
+            };
+
             for(const auto& xs: reaction_data){
                 if(xs.mt_number == INELASTIC_MT){
                     if(xs.final_state > 0){
                         const int product = zai::make(zai::get_z(xs.parent_zai), zai::get_a(xs.parent_zai), xs.final_state);
-                        inelastic_rates[{xs.parent_zai, product}] += collapse_cross_section(in_spectrum, xs.energies, xs.values);
+                        inelastic_rates[{xs.parent_zai, product}] += collapse(xs);
                     }
                     continue;
                 }
                 if(xs.mt_number == ANYTHING_MT){
                     if(xs.product_za > 0){
                         const int product = xs.product_za*10 + std::max(xs.final_state, 0);
-                        anything_rates[{xs.parent_zai, product}] += collapse_cross_section(in_spectrum, xs.energies, xs.values);
+                        anything_rates[{xs.parent_zai, product}] += collapse(xs);
                     }
                     continue;
                 }
@@ -465,7 +484,7 @@ namespace nis {
                 if(!is_reaction_mt(xs.mt_number)){
                     continue;
                 }
-                const double rate = collapse_cross_section(in_spectrum, xs.energies, xs.values);
+                const double rate = collapse(xs);
                 Rates& r = rates[{xs.parent_zai, xs.mt_number}];
                 if(xs.final_state == ALL_STATES){
                     r.total += rate;

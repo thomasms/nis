@@ -4,6 +4,7 @@ set(NIS_CPP_SOURCES
     endf/core.cpp
     endf/decay.cpp
     endf/reaction.cpp
+    endf/reaction_cache.cpp
     solver.cpp
     zai.cpp
 )

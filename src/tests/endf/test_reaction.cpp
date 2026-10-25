@@ -10,6 +10,7 @@
 #include "nis/cram.hpp"
 #include "nis/nuclides.hpp"
 #include "nis/endf/reaction.hpp"
+#include "nis/endf/reaction_cache.hpp"
 #include "nis/zai.hpp"
 
 using namespace nis;
@@ -351,6 +352,50 @@ TEST_CASE( "read_reaction_data_from_file reads one material at a time" ) {
 
 TEST_CASE( "read_reaction_data_from_file with a missing file" ) {
     REQUIRE_THROWS_AS( read_reaction_data_from_file("no_such_file.endf"), std::runtime_error );
+}
+
+TEST_CASE( "reaction cache" ) {
+    const auto tape_file = std::filesystem::temp_directory_path() / "nis_test_cache_tape.endf";
+    const auto cache_file = std::filesystem::temp_directory_path() / "nis_test_reaction.nisreac";
+    {
+        std::ofstream out(tape_file);
+        out << test_reaction_tape_string;
+    }
+    const ReactionData data = read_reaction_data_from_file(tape_file.string());
+
+    // a threshold reaction, zeros at the start and the end, and all zeros
+    ReactionData more = data;
+    more.push_back(CrossSection{260560, 16, {1.0, 2.0, 3.0, 4.0, 5.0}, {0.0, 0.0, 1.5, 0.0, 0.0}, 1, 0});
+    more.push_back(CrossSection{260560, 102, {1.0, 2.0, 3.0}, {0.0, 0.0, 0.0}});
+    write_reaction_cache(more, cache_file.string());
+
+    REQUIRE( is_reaction_cache(cache_file.string()) );
+    REQUIRE_FALSE( is_reaction_cache(tape_file.string()) );
+    REQUIRE_FALSE( is_reaction_cache("no_such_file.nisreac") );
+
+    const ReactionData from_cache = read_reaction_cache(cache_file.string());
+    REQUIRE( from_cache.size() == more.size() );
+    for(std::size_t i = 0; i < more.size(); ++i){
+        REQUIRE( from_cache[i].parent_zai == more[i].parent_zai );
+        REQUIRE( from_cache[i].mt_number == more[i].mt_number );
+        REQUIRE( from_cache[i].final_state == more[i].final_state );
+        REQUIRE( from_cache[i].product_za == more[i].product_za );
+        REQUIRE( from_cache[i].energies == more[i].energies );
+        REQUIRE( from_cache[i].values == more[i].values );
+    }
+
+    // read_reaction_data reads both
+    check_test_reaction_data(read_reaction_data(tape_file.string()));
+    REQUIRE( read_reaction_data(cache_file.string()).size() == more.size() );
+
+    // not a cache
+    REQUIRE_THROWS_AS( read_reaction_cache(tape_file.string()), std::runtime_error );
+    // a cache that ends too soon
+    std::filesystem::resize_file(cache_file, std::filesystem::file_size(cache_file) - 4);
+    REQUIRE_THROWS_AS( read_reaction_cache(cache_file.string()), std::runtime_error );
+
+    std::filesystem::remove(tape_file);
+    std::filesystem::remove(cache_file);
 }
 
 TEST_CASE( "isomer_states_from_levels" ) {

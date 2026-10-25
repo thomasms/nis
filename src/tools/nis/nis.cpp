@@ -14,6 +14,7 @@
 #include "nis/endf/core.hpp"
 #include "nis/endf/decay.hpp"
 #include "nis/endf/reaction.hpp"
+#include "nis/endf/reaction_cache.hpp"
 #include "nis/io/helpers.hpp"
 
 using namespace nis;
@@ -30,7 +31,7 @@ int main(int argc, char **argv){
     app.add_option("-d,--decay-data", decay_data, "An single ENDF file containing all decay data")
       ->required()
       ->check(CLI::ExistingFile);
-    app.add_option("-r,--reaction-data", reaction_data, "An single ENDF file containing all reaction data, needed if the input has a spectrum")
+    app.add_option("-r,--reaction-data", reaction_data, "An single ENDF file containing all reaction data, or a cache of it from nis_cache, needed if the input has a spectrum")
       ->check(CLI::ExistingFile);
     app.add_option("-i,--input", input, "Input file for inventory simulation")
       ->required()
@@ -58,7 +59,7 @@ int main(int argc, char **argv){
         if(reaction_data.empty()){
           throw std::invalid_argument("The input has a spectrum, so reaction data (--reaction-data) is required.\n");
         }
-        reaction_mat = endf::construct_reaction_matrix_from_file(reaction_data, *model.spectrum.get());
+        reaction_mat = endf::construct_reaction_matrix(endf::read_reaction_data(reaction_data), *model.spectrum.get());
         for(const auto v: model.spectrum->y()){
           spectrum_total += v;
         }

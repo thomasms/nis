@@ -3,14 +3,14 @@ Run the FNS decks from fns_make_decks.py with the nis program, and compare with 
 experiment and FISPACT-II.
 
 Each deck is one nis run (the irradiation step, then the cooling steps). The decks run in
-parallel (--jobs). Each run reads the nuclear data again, so this is slower than
-fns_benchmark.py, which reads the data once.
+parallel (--jobs). Each run reads the nuclear data again, so give a reaction cache from
+nis_cache as --reaction-data, it is read much faster than the ENDF file.
 
 Writes the same CSV as fns_benchmark.py, so fns_stats.py can read it.
 
 Usage:
     python scripts/fns_run_decks.py --nis build/bin/nis --decks benchmarks/fns \\
-        --decay-data data/jeff311.dec --reaction-data data/jeff4.reac \\
+        --decay-data data/jeff311.dec --reaction-data data/jeff4.nisreac \\
         --output fns_decks.csv [--materials Co Fe ...] [--jobs 4]
 """
 
