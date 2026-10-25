@@ -82,15 +82,18 @@ For neutron activation, add a `spectrum` to the input (see [examples/activate.in
 The spectrum is the neutron flux in n/cm^2/s per group. The first line gives the group bounds in eV (ascending), the second line gives one value per group.
 The reaction data must be group-wise (INT=1), for example as processed by NJOY GROUPR.
 
-To decay the inventory after the irradiation, add a `cooling` line with the length of each step in seconds:
+For more than one step, give one `dt` line for each step, in order, with the step length in seconds and the total flux in n/m^2/s:
 
 ```
-cooling
-    60 600 3600
+dt 3600 1e14
+dt 60 0
+dt 600 0
 ```
 
-The output then gives the nuclides, activity and decay heat after the irradiation, and again after each
-cooling step, under a `cooling <time>` line (the time since the end of the irradiation, in seconds).
+The spectrum is normalised to the flux of each step, so it only gives the shape. A flux of 0 is a cooling step (decay only).
+A `dt` line with no flux uses the spectrum as it is given (or decay only if there is no spectrum).
+With more than one step, the output gives the nuclides, activity and decay heat after each step, under a
+`step <n>` line with the time since the start and the flux.
 
 Note, you will need to have pulled the decay data via LFS in the [./data](./data) subdirectory.
 
@@ -140,7 +143,7 @@ python scripts/fns_plot.py --fns-dir path/to/fns \
 The cases run in parallel, one process per core by default (`--jobs`). The plots need `matplotlib`.
 
 NIS input decks for all the cases are in [benchmarks/fns](benchmarks/fns), one `<material>/<case>.inp` for
-each case (initial atoms, irradiation time, 709 group flux, a cooling step to each measured time), with the
+each case (initial atoms, 709 group flux shape, the irradiation step and a cooling step to each measured time), with the
 measured and FISPACT-II decay heat in `<case>.csv`. They are made by
 [scripts/fns_make_decks.py](scripts/fns_make_decks.py), and run with the `nis` program by
 [scripts/fns_run_decks.py](scripts/fns_run_decks.py):

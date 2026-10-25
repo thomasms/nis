@@ -48,13 +48,20 @@ PYBIND11_MODULE(pynis, m) {
     m_core.def("convert_by_energy", &core::convert_by_energy<double>);
     m_core.def("convert_by_lethargy", &core::convert_by_lethargy<double>);
 
+    using TimeStepPyType = core::TimeStep<double>;
+    py::class_<TimeStepPyType>(m_core, "TimeStep")
+        .def(py::init<>())
+        .def(py::init<double, std::optional<double>>(), py::arg("dt"), py::arg("flux") = py::none())
+        .def_readwrite("dt", &TimeStepPyType::dt)
+        .def_readwrite("flux", &TimeStepPyType::flux);
+
     using BasicModelPyType = core::BasicModel<double>;
     py::class_<BasicModelPyType>(m_core, "BasicModel")
         .def(py::init<>())
         .def_readwrite("nuclides", &BasicModelPyType::nuclides)
         .def_readwrite("dt", &BasicModelPyType::dt)
         .def_readwrite("spectrum", &BasicModelPyType::spectrum)
-        .def_readwrite("cooling", &BasicModelPyType::cooling);
+        .def_readwrite("steps", &BasicModelPyType::steps);
 
     using ModelResultPyType = core::ModelResult<double>;
     py::class_<ModelResultPyType>(m_core, "ModelResult")

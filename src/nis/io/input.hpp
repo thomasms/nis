@@ -17,7 +17,17 @@ namespace nis{
 
             template<typename T=double>
             static void Serialize(std::ostream& os, const core::BasicModel<T>& data) {
-                os << "dt " << data.dt << "\n\nnuclides\n";
+                if(data.steps.empty()){
+                    os << "dt " << data.dt << "\n";
+                }
+                for(const auto& step: data.steps){
+                    os << "dt " << step.dt;
+                    if(step.flux.has_value()){
+                        os << " " << step.flux.value();
+                    }
+                    os << "\n";
+                }
+                os << "\nnuclides\n";
                 for (const auto& nuclide : data.nuclides) {
                     os << "    " << nuclide.first << " " << nuclide.second << "\n";
                 }
@@ -29,13 +39,6 @@ namespace nis{
                     }
                     os << "\n" << "    ";
                     for(auto v: data.spectrum->y()){
-                        os << v << " ";
-                    }
-                    os << "\n";
-                }
-                if(!data.cooling.empty()){
-                    os << "\ncooling\n    ";
-                    for(auto v: data.cooling){
                         os << v << " ";
                     }
                     os << "\n";
@@ -55,8 +58,18 @@ namespace nis{
                         continue;
                     }
                     if (line.substr(0, 2) == "dt") {
+                        // "dt <seconds> [flux]", one line for each step
                         iss.str(line.substr(3));
-                        iss >> data.dt;
+                        core::TimeStep<T> step;
+                        iss >> step.dt;
+                        T flux;
+                        if(iss >> flux){
+                            step.flux = flux;
+                        }
+                        if(data.steps.empty()){
+                            data.dt = step.dt;
+                        }
+                        data.steps.push_back(step);
                         iss.clear();
                     } else if (line == "nuclides") {
                         while (std::getline(is, line)) {
@@ -95,17 +108,6 @@ namespace nis{
                             iss.clear();
                         }
                         data.spectrum = std::make_shared<core::Spectrum<double>>(energies, values);
-                    } else if (line == "cooling") {
-                        // one line of step lengths in seconds
-                        if (std::getline(is, line) && !line.empty() && line[0] != '#') {
-                            iss.str(line.substr(4));
-                            std::vector<std::string> contents;
-                            util::string_split<' '>(iss, contents);
-                            for(auto s: contents){
-                                data.cooling.emplace_back(std::stod(s));
-                            }
-                            iss.clear();
-                        }
                     }
                 }
 

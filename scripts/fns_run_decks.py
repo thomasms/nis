@@ -2,7 +2,7 @@
 Run the FNS decks from fns_make_decks.py with the nis program, and compare with the
 experiment and FISPACT-II.
 
-Each deck is one nis run (irradiation, then the cooling steps). The decks run in
+Each deck is one nis run (the irradiation step, then the cooling steps). The decks run in
 parallel (--jobs). Each run reads the nuclear data again, so this is slower than
 fns_benchmark.py, which reads the data once.
 
@@ -36,7 +36,7 @@ def read_mass(deck: Path) -> float:
 
 
 def decay_heats(output: str) -> list:
-    """The total decay heat (W) of each step in the nis output: shutdown, then each cooling step."""
+    """The total decay heat (W) after each step in the nis output: irradiation, then each cooling step."""
     heats = []
     lines = output.splitlines()
     for i, line in enumerate(lines):
@@ -51,7 +51,7 @@ def run_deck(nis: Path, deck: Path, decay_data: Path, reaction_data: Path) -> li
     result = subprocess.run(command, capture_output=True, text=True)
     if result.returncode != 0:
         raise RuntimeError(f"{deck}: {result.stderr.strip()}")
-    # drop shutdown, the measured times are the cooling steps
+    # drop the irradiation step, the measured times are the cooling steps
     return decay_heats(result.stdout)[1:]
 
 

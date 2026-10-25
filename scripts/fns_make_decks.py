@@ -3,13 +3,15 @@ Make NIS input decks for the FNS decay heat benchmark.
 
 Reads the FISPACT-II validation inputs (the same as fns_benchmark.py) and writes, for each case:
 
-    <output-dir>/<material>/<case>.inp   NIS input: irradiation (dt, nuclides, spectrum)
+    <output-dir>/<material>/<case>.inp   NIS input: nuclides, spectrum, the irradiation step
                                          and a cooling step to each measured time
     <output-dir>/<material>/<case>.csv   measured decay heat and FISPACT-II (TENDL-2017)
                                          at the same times, in uW/g
 
 The foil mass is in a comment in the deck ("# mass_kg ..."), fns_run_decks.py uses it
-to give the heat per gram. The flux is scaled to the total flux of the FISPACT-II input.
+to give the heat per gram. The spectrum is the flux shape from FISPACT-II, the irradiation
+step gives the total flux of the FISPACT-II input (in n/m^2/s), and nis normalises the
+spectrum to it.
 
 Usage:
     python scripts/fns_make_decks.py --fns-dir path/to/fns --output-dir benchmarks/fns [--materials Co Fe ...]
@@ -28,23 +30,22 @@ def _numbers(values: list) -> str:
 
 
 def write_deck(case, bounds: list, path: Path) -> None:
-    shape_total = sum(case.flux_shape)
-    flux = [v * case.flux_amplitude / shape_total for v in case.flux_shape]
     steps = [t1 - t0 for t0, t1 in zip([0.0] + case.exp_time[:-1], case.exp_time)]
+    # FISPACT-II gives the flux in n/cm2/s, nis wants n/m2/s
+    flux = case.flux_amplitude * 1e4
 
     lines = [
         f"# FNS decay heat benchmark, {case.material} {case.name}",
         "# made by scripts/fns_make_decks.py from the FISPACT-II validation inputs",
         f"# mass_kg {case.mass_kg:.9e}",
-        f"# total flux {case.flux_amplitude:.9e} n/cm2/s, 709 groups (CCFE-709)",
-        "# cooling: one step to each measured time after shutdown",
-        f"dt {case.irradiation_time:.9e}",
-        "",
-        "nuclides",
+        "# spectrum: 709 group flux shape (CCFE-709), normalised to the flux of the irradiation step",
+        "# irradiation, then one cooling step (flux 0) to each measured time after shutdown",
+        f"dt {case.irradiation_time:.9e} {flux:.9e}",
     ]
+    lines += [f"dt {step:.9e} 0" for step in steps]
+    lines += ["", "nuclides"]
     lines += [f"    {name} {atoms:.9e}" for name, atoms in sorted(case.initial_atoms.items())]
-    lines += ["", "spectrum", f"    {_numbers(bounds)}", f"    {_numbers(flux)}"]
-    lines += ["", "cooling", f"    {_numbers(steps)}", ""]
+    lines += ["", "spectrum", f"    {_numbers(bounds)}", f"    {_numbers(case.flux_shape)}", ""]
     path.write_text("\n".join(lines))
 
 

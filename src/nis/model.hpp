@@ -6,6 +6,7 @@
 #include <sstream>
 #include <map>
 #include <memory>
+#include <optional>
 #include <vector>
 
 #include "nis/spectrum.hpp"
@@ -13,16 +14,26 @@
 namespace nis{
     namespace core{
 
+        // one irradiation or cooling step of the input, a "dt <seconds> [flux]" line
+        template<typename T=double>
+        struct TimeStep {
+            T dt;
+            // total flux in n/m^2/s, the spectrum is normalised to it
+            // 0 is a cooling step (decay only), no value uses the spectrum as it is given
+            std::optional<T> flux;
+        };
+
         template<typename T=double>
         struct BasicModel {
+            // the step length for compute_inventory, the first step of the input
             T dt;
             std::map<std::string, T> nuclides;
             // we use a pointer here so we can
             // leave it null for decay only
             // otherwise we do a collapse for no reason
             std::shared_ptr<Spectrum<T>> spectrum = nullptr;
-            // decay only steps after dt, each step length in seconds
-            std::vector<T> cooling;
+            // all the steps of the input, in order
+            std::vector<TimeStep<T>> steps;
         };
 
         template<typename T=double>

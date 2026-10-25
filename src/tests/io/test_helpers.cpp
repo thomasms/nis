@@ -58,29 +58,35 @@ TEST_CASE( "Inventory to vec", "[inventory_from_vector]" ) {
     REQUIRE( inv.at("Mg27") == 78.345e4 );
     REQUIRE( inv.at("Xe123")  == 45.67 );
 }
-TEST_CASE( "Input with spectrum and cooling", "[input]" ) {
+TEST_CASE( "Input with spectrum and steps", "[input]" ) {
     std::istringstream is(
-        "dt 3600\n"
+        "dt 3600 1e+14\n"
+        "dt 60 0\n"
+        "dt 3e+06\n"
         "\n"
         "nuclides\n"
         "    Co59 1e+20\n"
         "\n"
         "spectrum\n"
         "    0 10 20\n"
-        "    5e+15 1e+15\n"
-        "\n"
-        "cooling\n"
-        "    60 120 3e+06\n");
+        "    5e+15 1e+15\n");
     core::BasicModel<double> model;
     is >> model;
 
+    // the first step is also dt
     REQUIRE( model.dt == 3600.0 );
     REQUIRE( model.nuclides.size() == 1 );
     REQUIRE( model.nuclides.at("Co59") == 1e20 );
     REQUIRE( model.spectrum != nullptr );
     REQUIRE( model.spectrum->x() == std::vector<double>{0.0, 10.0, 20.0} );
     REQUIRE( model.spectrum->y() == std::vector<double>{5e15, 1e15} );
-    REQUIRE( model.cooling == std::vector<double>{60.0, 120.0, 3e6} );
+    REQUIRE( model.steps.size() == 3 );
+    REQUIRE( model.steps[0].dt == 3600.0 );
+    REQUIRE( model.steps[0].flux == 1e14 );
+    REQUIRE( model.steps[1].dt == 60.0 );
+    REQUIRE( model.steps[1].flux == 0.0 );
+    REQUIRE( model.steps[2].dt == 3e6 );
+    REQUIRE_FALSE( model.steps[2].flux.has_value() );
 
     // write it and read it again
     std::ostringstream os;
@@ -90,13 +96,19 @@ TEST_CASE( "Input with spectrum and cooling", "[input]" ) {
     again >> copy;
     REQUIRE( copy.dt == model.dt );
     REQUIRE( copy.nuclides == model.nuclides );
-    REQUIRE( copy.cooling == model.cooling );
+    REQUIRE( copy.steps.size() == 3 );
+    for(std::size_t i = 0; i < 3; ++i){
+        REQUIRE( copy.steps[i].dt == model.steps[i].dt );
+        REQUIRE( copy.steps[i].flux == model.steps[i].flux );
+    }
 }
 
-TEST_CASE( "Input without cooling", "[input]" ) {
+TEST_CASE( "Input with one dt", "[input]" ) {
     std::istringstream is("dt 10\n\nnuclides\n    H3 1e+10\n");
     core::BasicModel<double> model;
     is >> model;
-    REQUIRE( model.cooling.empty() );
+    REQUIRE( model.dt == 10.0 );
+    REQUIRE( model.steps.size() == 1 );
+    REQUIRE_FALSE( model.steps[0].flux.has_value() );
     REQUIRE( model.spectrum == nullptr );
 }
