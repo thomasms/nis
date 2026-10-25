@@ -145,22 +145,30 @@ namespace nis {
         }
 
         using IsomerStates = std::map<std::pair<int, int>, int>;
+        using MF10Sections = std::map<int, njoy::ENDFtk::section::Type<isomer_file_number>>;
 
-        // all the levels of each product in MF=10, to give the isomeric states
-        IsomerStates _isomer_states(const njoy::ENDFtk::tree::Material& material){
-            std::map<int, std::set<int>> levels;
+        // all the MF=10 sections of the material, each parsed once
+        MF10Sections _mf10_sections(const njoy::ENDFtk::tree::Material& material){
+            MF10Sections sections;
             if(material.hasMF(isomer_file_number)){
                 njoy::ENDFtk::tree::File file = material.file(isomer_file_number);
                 for(auto mt_number: file.sectionNumbers()){
-                    // in MT=5 the LFS is already the isomer number (as in JEFF-4 and TENDL), so we leave it out
-                    if(mt_number == ANYTHING_MT){
-                        continue;
-                    }
-                    njoy::ENDFtk::tree::Section section = file.MT(mt_number);
-                    auto parsed_section = section.parse<isomer_file_number>();
-                    for(const auto& product: parsed_section.reactionProducts()){
-                        levels[product.IZAP()].insert(product.LFS());
-                    }
+                    sections.emplace(mt_number, file.MT(mt_number).parse<isomer_file_number>());
+                }
+            }
+            return sections;
+        }
+
+        // all the levels of each product in MF=10, to give the isomeric states
+        IsomerStates _isomer_states(const MF10Sections& sections){
+            std::map<int, std::set<int>> levels;
+            for(const auto& [mt_number, section]: sections){
+                // in MT=5 the LFS is already the isomer number (as in JEFF-4 and TENDL), so we leave it out
+                if(mt_number == ANYTHING_MT){
+                    continue;
+                }
+                for(const auto& product: section.reactionProducts()){
+                    levels[product.IZAP()].insert(product.LFS());
                 }
             }
             return isomer_states_from_levels(levels);
@@ -168,22 +176,17 @@ namespace nis {
 
         // calls func(product) for each product of the MF=10 section, if there is one
         template<typename Func>
-        void _for_each_mf10_product(const njoy::ENDFtk::tree::Material& material, int mt_number, Func func){
-            if(!material.hasMF(isomer_file_number)){
+        void _for_each_mf10_product(const MF10Sections& sections, int mt_number, Func func){
+            const auto it = sections.find(mt_number);
+            if(it == sections.end()){
                 return;
             }
-            njoy::ENDFtk::tree::File file = material.file(isomer_file_number);
-            if(!file.hasMT(mt_number)){
-                return;
-            }
-            njoy::ENDFtk::tree::Section section = file.MT(mt_number);
-            auto parsed_section = section.parse<isomer_file_number>();
-            for(const auto& product: parsed_section.reactionProducts()){
+            for(const auto& product: it->second.reactionProducts()){
                 func(product);
             }
         }
 
-        void _read_isomer_data(const njoy::ENDFtk::tree::Material& material, int parent_zai,
+        void _read_isomer_data(const MF10Sections& sections, int parent_zai,
                                int mt_number, const IsomerStates& states, ReactionData& reaction_data){
             // the residual we expect for this MT, MF=10 can also list other products
             const int residual_zai = std::get<0>(compute_reaction_products(parent_zai, mt_number));
@@ -192,7 +195,7 @@ namespace nis {
             }
             const int residual_za = residual_zai/10;
 
-            _for_each_mf10_product(material, mt_number, [&](const auto& product){
+            _for_each_mf10_product(sections, mt_number, [&](const auto& product){
                 if(product.IZAP() != residual_za){
                     return;
                 }
@@ -208,14 +211,14 @@ namespace nis {
         }
 
         // MT=4 and MT=5 only have data we can use in MF=10
-        void _read_mf10_only_data(const njoy::ENDFtk::tree::Material& material, int parent_zai,
+        void _read_mf10_only_data(const MF10Sections& sections, int parent_zai,
                                   const IsomerStates& states, ReactionData& reaction_data){
             const int parent_za = parent_zai/10;
 
             // (n,n') to the isomers of the target, the ground state does not change the nuclide
             // TODO: (n,n') on a target isomer can also go down to the ground state
             if(zai::get_i(parent_zai) == 0){
-                _for_each_mf10_product(material, INELASTIC_MT, [&](const auto& product){
+                _for_each_mf10_product(sections, INELASTIC_MT, [&](const auto& product){
                     const int state = states.at({product.IZAP(), product.LFS()});
                     if((product.IZAP() != parent_za) || (state == 0)){
                         return;
@@ -232,7 +235,7 @@ namespace nis {
             }
 
             // (n,anything), each product with its own cross section
-            _for_each_mf10_product(material, ANYTHING_MT, [&](const auto& product){
+            _for_each_mf10_product(sections, ANYTHING_MT, [&](const auto& product){
                 // IZAP=0 is photons, they are not tracked
                 if(product.IZAP() <= 0){
                     return;
@@ -259,7 +262,8 @@ namespace nis {
 
             // TODO: MF=10 can give isomer production when MF=3 has no data for it
             // TODO: MF=9 (multiplicities) is not used, JEFF-4 only has MF=10
-            const IsomerStates states = _isomer_states(material);
+            const MF10Sections sections = _mf10_sections(material);
+            const IsomerStates states = _isomer_states(sections);
             njoy::ENDFtk::tree::File file = material.file(file_number);
             for(auto mt_number: file.sectionNumbers()){
                 // we skip sums, elastic, inelastic levels and anything we can't map
@@ -279,10 +283,10 @@ namespace nis {
                     {parsed_section.crossSections().begin(), parsed_section.crossSections().end()}
                 });
 
-                _read_isomer_data(material, parent_zai, mt_number, states, reaction_data);
+                _read_isomer_data(sections, parent_zai, mt_number, states, reaction_data);
             }
 
-            _read_mf10_only_data(material, parent_zai, states, reaction_data);
+            _read_mf10_only_data(sections, parent_zai, states, reaction_data);
         }
 
         // adds the data of one material, if we have not seen its nuclide before
@@ -330,9 +334,26 @@ namespace nis {
             return std::stoi(line.substr(66, 4));
         }
 
+        // the MF and MT numbers are in columns 71-72 and 73-75
+        std::pair<int, int> _mf_mt(const std::string& line){
+            if(line.size() < 75){
+                throw std::runtime_error("ENDF line is too short: '" + line + "'");
+            }
+            return {std::stoi(line.substr(70, 2)), std::stoi(line.substr(72, 3))};
+        }
+
+        // the sections we read: the ZA in MF=1 MT=451, the reactions in MF=3 and all of MF=10
+        bool _is_used_section(int mf_number, int mt_number){
+            return ((mf_number == 1) && (mt_number == 451))
+                || ((mf_number == file_number) && is_reaction_mt(mt_number))
+                || (mf_number == isomer_file_number);
+        }
+
         ReactionData read_reaction_data_from_file(std::string filename){
             // A reaction tape can be ~1 GB, and parsing it all at once needs ~2x that.
             // So we read one material at a time and parse it as a small tape of its own.
+            // We keep only the sections we use, because making the tape index of the
+            // others (e.g. MF=33 covariances) takes most of the time.
             std::ifstream in(filename);
             if(!in){
                 throw std::runtime_error("Could not open file '" + filename + "'");
@@ -350,6 +371,8 @@ namespace nis {
             const std::string tpid = line + "\n";
 
             std::string material_lines;
+            bool section_used = false;
+            bool file_used = false;
             while(std::getline(in, line)){
                 if(!line.empty() && line.back() == '\r'){
                     line.pop_back();
@@ -361,8 +384,27 @@ namespace nis {
                 if(mat_number == -1){
                     break;
                 }
-                material_lines += line;
-                material_lines += '\n';
+                // keep the SEND and FEND records of the sections and files we keep
+                const auto [mf_number, mt_number] = _mf_mt(line);
+                bool keep = true;
+                if(mat_number != 0){
+                    if(mf_number == 0){
+                        keep = file_used;
+                        file_used = false;
+                    }
+                    else if(mt_number == 0){
+                        keep = section_used;
+                    }
+                    else{
+                        section_used = _is_used_section(mf_number, mt_number);
+                        file_used = file_used || section_used;
+                        keep = section_used;
+                    }
+                }
+                if(keep){
+                    material_lines += line;
+                    material_lines += '\n';
+                }
                 // the MEND record (MAT=0) ends a material
                 if(mat_number == 0){
                     const njoy::ENDFtk::tree::Tape tape(tpid + material_lines + tend);
