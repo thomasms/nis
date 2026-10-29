@@ -2,7 +2,9 @@
 add_subdirectory(nis)
 
 # executables
-add_subdirectory(tools)
+if(BUILD_TOOLS)
+  add_subdirectory(tools)
+endif(BUILD_TOOLS)
 
 # unit tests
 if(BUILD_TESTS)

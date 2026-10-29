@@ -5,6 +5,7 @@ project (NIS)
 # cmake options
 option(BUILD_TESTS "Build unit tests" ON)
 option(BUILD_PY_API "Build python bindings" OFF)
+option(BUILD_TOOLS "Build the nis programs" ON)
 option(USE_SYSTEM_CATCH2 "Use a pre-installed version of Catch2" OFF)
 # Set release build by default
 set (CMAKE_BUILD_TYPE Release CACHE STRING "Select which configuration to build.")
@@ -58,19 +59,10 @@ endif(BUILD_TESTS)
 if(BUILD_PY_API)
     set(Python_VIRTUALENV FIRST)
 
-    # Find default python libraries and interpreter
-    set(Python_ADDITIONAL_VERSIONS 3.10)
-
-    # set this to your python 3 lib absolute path, if you set the environment variable PYTHON_LIBRARY
-    if(DEFINED ENV{PYTHON_LIBRARY})
-        set(PYTHON_LIBRARY $ENV{PYTHON_LIBRARY})
-    else()
-        message(WARNING "PYTHON_LIBRARY is not set using default library path. It is advisable to set this.")
-    endif()
-
-    find_package(PythonInterp 3 REQUIRED)
-    find_package(PythonLibs 3 REQUIRED)
-    # find_package(pybind11 REQUIRED)
+    # give -DPython_EXECUTABLE=/path/to/python to build for that python
+    # (pip and uv do this when they build the package from pyproject.toml)
+    find_package(Python 3 COMPONENTS Interpreter Development.Module REQUIRED)
+    set(PYBIND11_FINDPYTHON ON)
     find_package(pybind11 CONFIG REQUIRED)
 
     message(STATUS "Using PyBind")

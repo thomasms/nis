@@ -1,0 +1,35 @@
+[build-system]
+requires = ["scikit-build-core>=0.10", "pybind11>=3"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "pynis"
+description = "Python bindings for NIS, a nuclear inventory solver"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = ["numpy", "scipy"]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+# the FNS benchmark plots
+plot = ["matplotlib"]
+
+[dependency-groups]
+dev = ["pytest", "matplotlib"]
+
+[tool.scikit-build]
+minimum-version = "build-system.requires"
+cmake.version = ">=3.20"
+cmake.build-type = "Release"
+# a build folder for each python version, so a rebuild only compiles what changed
+build-dir = "build/py-{wheel_tag}"
+# only the python module, the nis programs and the C++ tests are built with cmake
+cmake.define = { BUILD_PY_API = "ON", BUILD_TESTS = "OFF", BUILD_TOOLS = "OFF" }
+wheel.packages = []
+# the nuclear data and the benchmark decks are not part of the package
+sdist.exclude = ["data", "benchmarks", "build*", "docker", ".venv"]
+
+[tool.scikit-build.metadata.version]
+provider = "scikit_build_core.metadata.regex"
+input = ".VERSION"
+regex = "(?P<value>\\d+\\.\\d+\\.\\d+)"

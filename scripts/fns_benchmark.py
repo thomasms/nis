@@ -271,6 +271,10 @@ def load_cases(fns_dir: Path, materials: list) -> list:
                 print(f"skip {material_dir.name} {name}: no measurements in time order", file=sys.stderr)
                 continue
             cases.append(case)
+    if not cases:
+        raise SystemExit(f"no FNS cases in {fns_dir}: give the folder of the FISPACT-II FNS validation inputs "
+                         "(<material>/TENDL-2017_<case>.i, .out, .nuclides, <case>.exp and <case>_fluxes). "
+                         "The NIS decks in benchmarks/fns are run with scripts/fns_run_decks.py.")
     return cases
 
 

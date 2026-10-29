@@ -32,10 +32,21 @@ make -j4
 
 ### python bindings
 
-If you want the python bindings (default=OFF), then follow the below steps.
+The easiest way is with [uv](https://docs.astral.sh/uv/), or pip. They build the module with CMake
+(from [pyproject.toml](pyproject.toml)) and install it into a virtual env, for the python of that env:
 
+```bash
+uv sync                      # makes .venv, builds and installs pynis, numpy, scipy, pytest and matplotlib
+uv sync --python 3.15        # the same, for another python version
+uv run python scripts/fns_benchmark.py ...
+uv run pytest src/tests/python/testsuite.py
+```
 
-First make a virtual env and install pybind via:
+or with pip, in a virtual env: `python3 -m pip install .`. You do not need to set `PYTHONPATH` with these.
+The build folder is `build/py-<python version>`, so a rebuild (`uv sync --reinstall-package pynis`)
+only compiles what changed.
+
+To build the python bindings with CMake (default=OFF), make a virtual env with pybind11 first:
 
 ```bash
 python3 -m venv venv
@@ -43,14 +54,17 @@ source venv/bin/activate
 python3 -m pip install pybind11 numpy scipy
 ```
 
-Then build as before but with slightly different cmake args, as below.
+Then build as before, with the python of the env:
 ```bash
 source venv/bin/activate
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_PY_API=ON -Dpybind11_DIR=`pybind11-config --cmakedir` ..
+cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_PY_API=ON -DPython_EXECUTABLE=`which python3` -Dpybind11_DIR=`pybind11-config --cmakedir` ..
 make -j4
 ```
+
+The module is then in `build/bin/python3`, so add that folder to `PYTHONPATH`. `-DBUILD_TOOLS=OFF` builds only the
+library and the python module, not the `nis` programs.
 
 
 ## Example
