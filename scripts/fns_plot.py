@@ -30,7 +30,7 @@ import matplotlib.pyplot as plt
 
 import pynis as nis
 
-from fns_benchmark import cumulative, interpolate_log, load_cases, read_bounds, run_cases
+from fns_benchmark import cumulative, interpolate_log, load_cases, reaction_cache, read_bounds, run_cases
 
 # colours: the experiment is ink, the codes are categorical slots 1 and 2
 _INK = "#0b0b0b"
@@ -116,7 +116,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--fns-dir", type=Path, required=True)
     parser.add_argument("--decay-data", type=Path, required=True)
-    parser.add_argument("--reaction-data", type=Path, required=True)
+    parser.add_argument("--reaction-data", type=Path, required=True,
+                        help="ENDF reaction data or a cache of it, the cache is made first if needed")
     parser.add_argument("--output-dir", type=Path, default=Path("fns_plots"))
     parser.add_argument("--materials", nargs="*", default=[])
     parser.add_argument("--points", type=int, default=60, help="number of log spaced times for the NIS curve")
@@ -129,7 +130,7 @@ def main() -> int:
 
     start = time.time()
     bounds = read_bounds()
-    reaction_data = nis.core.reaction_data_from_file(str(args.reaction_data))
+    reaction_data = nis.core.reaction_data_from_file(str(reaction_cache(args.reaction_data)))
     decay_mat = nis.core.decay_mat_from_file(str(args.decay_data))
     energy_data = nis.core.decay_energy_data_from_file(str(args.decay_data))
     print(f"data read in {time.time() - start:.1f} s", file=sys.stderr)

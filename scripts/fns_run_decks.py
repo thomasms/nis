@@ -3,14 +3,15 @@ Run the FNS decks from fns_make_decks.py with the nis program, and compare with 
 experiment and FISPACT-II.
 
 Each deck is one nis run (the irradiation step, then the cooling steps). The decks run in
-parallel (--jobs). Each run reads the nuclear data again, so give a reaction cache from
-nis_cache as --reaction-data, it is read much faster than the ENDF file.
+parallel (--jobs). Each run reads the nuclear data again, so the runs use a reaction cache,
+which is read much faster than the ENDF file. If --reaction-data is an ENDF file, the cache is
+<file>.nisreac next to it, made first with nis_cache if it does not exist or is out of date.
 
 Writes the same CSV as fns_benchmark.py, so fns_stats.py can read it.
 
 Usage:
     python scripts/fns_run_decks.py --nis build/bin/nis --decks benchmarks/fns \\
-        --decay-data data/jeff311.dec --reaction-data data/jeff4.nisreac \\
+        --decay-data data/jeff311.dec --reaction-data data/jeff4.reac \\
         --output fns_decks.csv [--materials Co Fe ...] [--jobs 4]
 """
 
@@ -23,6 +24,8 @@ import sys
 import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+
+from fns_benchmark import reaction_cache
 
 # 1 W/kg = 1e3 uW/g
 _W_PER_KG_TO_UW_PER_G = 1e3
@@ -60,18 +63,23 @@ def main() -> int:
     parser.add_argument("--nis", type=Path, required=True, help="the nis program")
     parser.add_argument("--decks", type=Path, default=Path("benchmarks/fns"))
     parser.add_argument("--decay-data", type=Path, required=True)
-    parser.add_argument("--reaction-data", type=Path, required=True)
+    parser.add_argument("--reaction-data", type=Path, required=True,
+                        help="ENDF reaction data or a cache of it, the cache is made first if needed")
+    parser.add_argument("--nis-cache", type=Path, default=None,
+                        help="the nis_cache program, by default the one next to --nis")
     parser.add_argument("--output", type=Path, default=Path("fns_decks.csv"))
     parser.add_argument("--materials", nargs="*", default=[])
     parser.add_argument("--jobs", type=int, default=os.cpu_count(), help="number of decks to run at the same time")
     args = parser.parse_args()
+
+    reaction_data = reaction_cache(args.reaction_data, args.nis_cache or args.nis.parent / "nis_cache")
 
     decks = sorted(d for d in args.decks.glob("*/*.inp") if not args.materials or d.parent.name in args.materials)
     print(f"{len(decks)} decks", file=sys.stderr)
 
     start = time.time()
     with ThreadPoolExecutor(args.jobs) as pool:
-        results = pool.map(lambda d: run_deck(args.nis, d, args.decay_data, args.reaction_data), decks)
+        results = pool.map(lambda d: run_deck(args.nis, d, args.decay_data, reaction_data), decks)
 
         with open(args.output, "w", newline="") as f:
             writer = csv.writer(f)

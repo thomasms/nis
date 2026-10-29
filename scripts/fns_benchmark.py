@@ -28,6 +28,8 @@ import math
 import multiprocessing
 import os
 import re
+import struct
+import subprocess
 import sys
 import time
 from dataclasses import dataclass, field
@@ -52,6 +54,51 @@ _KW_PER_KG_TO_UW_PER_G = 1e6
 
 # e.g. "  Co 58m      1.40935E+10 ..." or "  Co 59    #> 1.02186E+22 ..."
 _NUCLIDE_LINE = re.compile(r"^\s+([A-Z][a-z]?)\s*(\d+)([a-z]?)\s+[#>]*\s*([0-9.]+E[+-]\d+)")
+
+
+# the header of a reaction cache, as src/nis/endf/reaction_cache.cpp writes it
+_CACHE_MAGIC = b"NISREAC\0"
+_CACHE_VERSION = 1
+
+
+def _cache_version(path: Path):
+    """The version of the reaction cache, or None if the file is not a cache."""
+    try:
+        with open(path, "rb") as f:
+            header = f.read(len(_CACHE_MAGIC) + 4)
+    except OSError:
+        return None
+    if len(header) < len(_CACHE_MAGIC) + 4 or not header.startswith(_CACHE_MAGIC):
+        return None
+    return struct.unpack("=I", header[len(_CACHE_MAGIC):])[0]
+
+
+def reaction_cache(reaction_data: Path, nis_cache: Path = None) -> Path:
+    """The reaction cache to use for the reaction data.
+
+    If the reaction data is a cache, it is used as it is. Else the cache is <reaction data>.nisreac,
+    and it is made first if it does not exist, is older than the reaction data, or is of another version.
+    It is made with the nis_cache program if one is given, else with the python bindings."""
+    if _cache_version(reaction_data) is not None:
+        return reaction_data
+    cache = reaction_data.with_suffix(".nisreac")
+    if (_cache_version(cache) == _CACHE_VERSION
+            and cache.stat().st_mtime >= reaction_data.stat().st_mtime):
+        return cache
+
+    print(f"making the reaction cache {cache}", file=sys.stderr)
+    start = time.time()
+    # write to a temporary file first, so a stopped run does not leave half a cache
+    temporary = cache.with_suffix(".nisreac.tmp")
+    if nis_cache is not None:
+        subprocess.run([str(nis_cache), "-r", str(reaction_data), "-o", str(temporary)], check=True,
+                       stdout=subprocess.DEVNULL)
+    else:
+        import pynis as nis
+        nis.core.write_reaction_cache(nis.core.reaction_data_from_file(str(reaction_data)), str(temporary))
+    os.replace(temporary, cache)
+    print(f"reaction cache made in {time.time() - start:.1f} s", file=sys.stderr)
+    return cache
 
 
 @dataclass
@@ -286,7 +333,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--fns-dir", type=Path, required=True)
     parser.add_argument("--decay-data", type=Path, required=True)
-    parser.add_argument("--reaction-data", type=Path, required=True)
+    parser.add_argument("--reaction-data", type=Path, required=True,
+                        help="ENDF reaction data or a cache of it, the cache is made first if needed")
     parser.add_argument("--output", type=Path, default=Path("fns_results.csv"))
     parser.add_argument("--nuclides-output", type=Path, default=None,
                         help="CSV of atoms after irradiation, NIS against FISPACT-II")
@@ -300,7 +348,7 @@ def main() -> int:
 
     start = time.time()
     bounds = read_bounds()
-    reaction_data = nis.core.reaction_data_from_file(str(args.reaction_data))
+    reaction_data = nis.core.reaction_data_from_file(str(reaction_cache(args.reaction_data)))
     decay_mat = nis.core.decay_mat_from_file(str(args.decay_data))
     energy_data = nis.core.decay_energy_data_from_file(str(args.decay_data))
     print(f"data read in {time.time() - start:.1f} s", file=sys.stderr)

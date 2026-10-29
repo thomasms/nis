@@ -153,6 +153,10 @@ python scripts/fns_plot.py --fns-dir path/to/fns \
 
 The cases run in parallel, one process per core by default (`--jobs`). The plots need `matplotlib`.
 
+All 3 scripts (`fns_benchmark.py`, `fns_plot.py` and `fns_run_decks.py`) use the reaction cache. If `--reaction-data`
+is an ENDF file, the cache is `<file>.nisreac` next to it (for example `data/jeff4.nisreac`). The scripts make it
+first if it does not exist, is older than the ENDF file, or is of another cache version.
+
 NIS input decks for all the cases are in [benchmarks/fns](benchmarks/fns), one `<material>/<case>.inp` for
 each case (initial atoms, 709 group flux shape, the irradiation step and a cooling step to each measured time), with the
 measured and FISPACT-II decay heat in `<case>.csv`. They are made by
@@ -162,8 +166,8 @@ measured and FISPACT-II decay heat in `<case>.csv`. They are made by
 ```bash
 ./build/bin/nis -d data/jeff311.dec -r data/jeff4.nisreac -i benchmarks/fns/Co/2000exp_5min.inp
 python scripts/fns_run_decks.py --nis build/bin/nis --decks benchmarks/fns \
-    --decay-data data/jeff311.dec --reaction-data data/jeff4.nisreac --output fns_decks.csv
+    --decay-data data/jeff311.dec --reaction-data data/jeff4.reac --output fns_decks.csv
 python scripts/fns_stats.py fns_decks.csv
 ```
 
-Each `nis` run reads the nuclear data again, so use the reaction cache (`nis_cache`, see above): with it, all the decks run in about 30 s on 4 cores.
+Each `nis` run reads the nuclear data again, so the reaction cache is important here: with it, all the decks run in about 30 s on 4 cores. The cache is made with the `nis_cache` program next to `--nis` (or give `--nis-cache`).
