@@ -49,8 +49,10 @@ into the folder `.venv` of this project. You do not run CMake, and you do not se
 
     ```bash
     uv run python                                   # a python shell, "import pynis" works
-    uv run python scripts/fns_benchmark.py ...      # a script
     uv run pytest src/tests/python/testsuite.py     # the tests
+    # a script, for example the FNS benchmark (see "FNS decay heat benchmark" below)
+    uv run python scripts/fns_benchmark.py --fns-dir benchmarks/fns \
+        --decay-data data/jeff311.dec --reaction-data data/jeff4.reac --output fns.csv
     ```
 
     Or activate the env one time in your shell, then use `python` and `pytest` as usual:
