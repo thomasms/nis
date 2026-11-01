@@ -32,26 +32,53 @@ make -j4
 
 ### python bindings
 
-The easiest way is with [uv](https://docs.astral.sh/uv/), or pip. They build the module with CMake
-(from [pyproject.toml](pyproject.toml)) and install it into a virtual env, for the python of that env.
-You do not give the python to CMake, and you do not set `PYTHONPATH`:
+There are 2 ways to build the python module `pynis`. Use only one of them.
+
+#### Way 1: uv (recommended)
+
+[uv](https://docs.astral.sh/uv/) builds `pynis` and installs it, with numpy, scipy, pytest and matplotlib,
+into the folder `.venv` of this project. You do not run CMake, and you do not set `PYTHONPATH`.
+
+1. Build and install (run it again after each change to the C++ code):
+
+    ```bash
+    uv sync
+    ```
+
+2. Run python with `uv run`:
+
+    ```bash
+    uv run python                                   # a python shell, "import pynis" works
+    uv run python scripts/fns_benchmark.py ...      # a script
+    uv run pytest src/tests/python/testsuite.py     # the tests
+    ```
+
+    Or activate the env one time in your shell, then use `python` and `pytest` as usual:
+
+    ```bash
+    source .venv/bin/activate
+    python -c "import pynis"
+    ```
+
+**Important:** `pynis` is only in `.venv`. If you type `python3` without `uv run` and without activating `.venv`,
+you get your system python, and `import pynis` gives `ModuleNotFoundError`.
+
+**Python version:** uv uses the version in [.python-version](.python-version) (3.14). It downloads that version
+if you do not have it. Your system python does not change. To use another version:
 
 ```bash
-uv sync                      # makes .venv, builds and installs pynis, numpy, scipy, pytest and matplotlib
-uv run python scripts/fns_benchmark.py ...
-uv run pytest src/tests/python/testsuite.py
+uv python pin 3.13     # writes 3.13 to .python-version
+uv sync                # makes .venv again, and builds pynis for 3.13
 ```
 
-uv uses the python version in [.python-version](.python-version) (3.14), and downloads it if needed.
-To use another version, change that file (`uv python pin 3.13`) and run `uv sync` again, which makes the env
-again and builds pynis for that version. Do not use a pre-release python (for example 3.15 before its release):
-numpy and pytest can fail on it.
+If numpy or pytest fail to import (for example "unknown slot ID" or "name 'frozendict' is not defined"),
+they do not support that python version yet. Go back to 3.14.
 
-With pip, in a virtual env: `python3 -m pip install .`.
-The build folder is `build/py-<python version>`, so a rebuild (`uv sync --reinstall-package pynis`)
-only compiles what changed.
+If `PYTHONPATH` is set in your shell (from Way 2), unset it before you use uv: `unset PYTHONPATH`.
 
-To build the python bindings with CMake (default=OFF), make a virtual env with pybind11 first:
+#### Way 2: CMake
+
+Make a virtual env with pybind11, numpy and scipy:
 
 ```bash
 python3 -m venv venv
@@ -59,7 +86,9 @@ source venv/bin/activate
 python3 -m pip install pybind11 numpy scipy
 ```
 
-Then build as before, with the python of the env:
+Then build, with the python of the env (`-DPython_EXECUTABLE`). When you change the python version, make a new env
+and a new build folder, and do these steps again:
+
 ```bash
 source venv/bin/activate
 mkdir build
@@ -68,8 +97,14 @@ cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_PY_API=ON -DPython_EXECUTABLE=`which py
 make -j4
 ```
 
-The module is then in `build/bin/python3`, so add that folder to `PYTHONPATH`. `-DBUILD_TOOLS=OFF` builds only the
-library and the python module, not the `nis` programs.
+The module is then in `build/bin/python3`. Add that folder to `PYTHONPATH`, and use the python of the env:
+
+```bash
+export PYTHONPATH=$PWD/bin/python3
+python3 -c "import pynis"
+```
+
+`-DBUILD_TOOLS=OFF` builds only the library and the python module, not the `nis` programs.
 
 
 ## Example
