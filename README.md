@@ -167,6 +167,9 @@ python scripts/fns_plot.py --fns-dir path/to/fns \
 
 The cases run in parallel, one process per core by default (`--jobs`). The plots need `matplotlib`.
 
+`--fns-dir` can also be the NIS decks folder (`--fns-dir benchmarks/fns`, see below), so the FISPACT-II files are not
+needed. The decks have no FISPACT-II atoms, so `--nuclides-output` is empty with the decks.
+
 All 3 scripts (`fns_benchmark.py`, `fns_plot.py` and `fns_run_decks.py`) use the reaction cache. If `--reaction-data`
 is an ENDF file, the cache is `<file>.nisreac` next to it (for example `data/jeff4.nisreac`). The scripts make it
 first if it does not exist, is older than the ENDF file, or is of another cache version.

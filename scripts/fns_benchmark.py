@@ -11,6 +11,10 @@ decay heat. This script uses the FISPACT-II validation inputs for these experime
         <case>_fluxes                709 group flux (high to low energy)
         <case>.exp                   measured decay heat: time, uW/g, uncertainty
 
+or the NIS decks from fns_make_decks.py (--fns-dir benchmarks/fns), which have the same data:
+
+    <fns-dir>/<material>/<case>.inp  <case>.csv
+
 The measured times are in minutes or days (it depends on the case), we take the unit
 that matches the FISPACT-II cooling steps best. NIS gives the decay heat at the measured
 times, FISPACT-II is interpolated to them from its cooling steps.
@@ -120,6 +124,8 @@ class Case:
     exp_heat: list = field(default_factory=list)
     exp_uncertainty: list = field(default_factory=list)
     flux_shape: list = field(default_factory=list)
+    # FISPACT-II (uW/g) at the measured times, set when the case is read from a NIS deck
+    fispact_at_exp: list = field(default_factory=list)
 
 
 def read_bounds() -> list:
@@ -248,7 +254,67 @@ def parse_fluxes(case: Case, path: Path) -> None:
     case.flux_shape = list(reversed(values))
 
 
+def load_deck(case: Case, deck: Path) -> None:
+    """Reads a NIS deck and its CSV from fns_make_decks.py."""
+    lines = deck.read_text().splitlines()
+    steps = []
+    block = None
+    spectrum = []
+    for line in lines:
+        tokens = line.split()
+        if not tokens:
+            continue
+        if tokens[0] == "#":
+            if tokens[1:2] == ["mass_kg"]:
+                case.mass_kg = float(tokens[2])
+        elif tokens[0] == "dt":
+            steps.append((float(tokens[1]), float(tokens[2]) if len(tokens) > 2 else None))
+        elif tokens[0] in ("nuclides", "spectrum"):
+            block = tokens[0]
+        elif block == "nuclides":
+            case.initial_atoms[tokens[0]] = float(tokens[1])
+        elif block == "spectrum":
+            spectrum.append([float(v) for v in tokens])
+    if not steps or not steps[0][1] or len(spectrum) != 2:
+        raise ValueError("not an FNS deck (an irradiation step with a flux and a spectrum are needed)")
+    case.irradiation_time = steps[0][0]
+    # the deck flux is in n/m2/s, the case flux in n/cm2/s
+    case.flux_amplitude = steps[0][1] * 1e-4
+    case.flux_shape = spectrum[1]
+    case.cooling_steps = [dt for dt, _ in steps[1:]]
+
+    with open(deck.with_suffix(".csv")) as f:
+        for row in csv.DictReader(f):
+            case.exp_time.append(float(row["cooling_time_s"]))
+            case.exp_heat.append(float(row["exp_uW_per_g"]))
+            case.exp_uncertainty.append(float(row["exp_unc_uW_per_g"]))
+            case.fispact_at_exp.append(float(row["fispact_uW_per_g"]))
+    # the cooling steps end at the measured times, so the plot can use the same values
+    case.fispact_heat = list(case.fispact_at_exp)
+
+
+def load_decks(decks_dir: Path, materials: list) -> list:
+    cases = []
+    for deck in sorted(decks_dir.glob("*/*.inp")):
+        if materials and deck.parent.name not in materials:
+            continue
+        case = Case(material=deck.parent.name, name=deck.stem)
+        try:
+            load_deck(case, deck)
+        except (OSError, IndexError, KeyError, ValueError) as e:
+            print(f"skip {deck}: {e}", file=sys.stderr)
+            continue
+        cases.append(case)
+    return cases
+
+
 def load_cases(fns_dir: Path, materials: list) -> list:
+    """The cases from the FISPACT-II validation inputs, or from the NIS decks (fns_make_decks.py)."""
+    if not any(fns_dir.glob("*/TENDL-2017_*.i")) and any(fns_dir.glob("*/*.inp")):
+        cases = load_decks(fns_dir, materials)
+        if not cases:
+            raise SystemExit(f"no FNS decks in {fns_dir}")
+        return cases
     cases = []
     for material_dir in sorted(fns_dir.iterdir()):
         if not material_dir.is_dir():
@@ -273,8 +339,8 @@ def load_cases(fns_dir: Path, materials: list) -> list:
             cases.append(case)
     if not cases:
         raise SystemExit(f"no FNS cases in {fns_dir}: give the folder of the FISPACT-II FNS validation inputs "
-                         "(<material>/TENDL-2017_<case>.i, .out, .nuclides, <case>.exp and <case>_fluxes). "
-                         "The NIS decks in benchmarks/fns are run with scripts/fns_run_decks.py.")
+                         "(<material>/TENDL-2017_<case>.i, .out, .nuclides, <case>.exp and <case>_fluxes) "
+                         "or of the NIS decks (<material>/<case>.inp and .csv, e.g. benchmarks/fns).")
     return cases
 
 
@@ -365,7 +431,8 @@ def main() -> int:
         results = run_cases(cases, bounds, reaction_data, decay_mat, energy_data, args.jobs)
         for case, (heats, shutdown_atoms) in zip(cases, results):
             step_times = cumulative(case.cooling_steps)
-            fispact = [interpolate_log(step_times, case.fispact_heat, t) for t in case.exp_time]
+            fispact = case.fispact_at_exp or [interpolate_log(step_times, case.fispact_heat, t)
+                                              for t in case.exp_time]
             for t, e, u, fh, nh in zip(case.exp_time, case.exp_heat, case.exp_uncertainty, fispact, heats):
                 writer.writerow([case.material, case.name, f"{t:.6g}", e, u, f"{fh:.6e}", f"{nh:.6e}"])
             for nuclide, atoms in case.fispact_atoms.items():
