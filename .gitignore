@@ -10,3 +10,4 @@ venv/**
 *.nisreac
 
 .venv/
+uv.lock
