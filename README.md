@@ -33,16 +33,21 @@ make -j4
 ### python bindings
 
 The easiest way is with [uv](https://docs.astral.sh/uv/), or pip. They build the module with CMake
-(from [pyproject.toml](pyproject.toml)) and install it into a virtual env, for the python of that env:
+(from [pyproject.toml](pyproject.toml)) and install it into a virtual env, for the python of that env.
+You do not give the python to CMake, and you do not set `PYTHONPATH`:
 
 ```bash
 uv sync                      # makes .venv, builds and installs pynis, numpy, scipy, pytest and matplotlib
-uv sync --python 3.15        # the same, for another python version
 uv run python scripts/fns_benchmark.py ...
 uv run pytest src/tests/python/testsuite.py
 ```
 
-or with pip, in a virtual env: `python3 -m pip install .`. You do not need to set `PYTHONPATH` with these.
+uv uses the python version in [.python-version](.python-version) (3.14), and downloads it if needed.
+To use another version, change that file (`uv python pin 3.13`) and run `uv sync` again, which makes the env
+again and builds pynis for that version. Do not use a pre-release python (for example 3.15 before its release):
+numpy and pytest can fail on it.
+
+With pip, in a virtual env: `python3 -m pip install .`.
 The build folder is `build/py-<python version>`, so a rebuild (`uv sync --reinstall-package pynis`)
 only compiles what changed.
 
@@ -134,6 +139,8 @@ C++ unit tests:
 Python integration tests and benchmarks (needs the python bindings and the data from LFS):
 
 ```bash
+uv run pytest -v src/tests/python/testsuite.py
+# or, with the CMake build
 export PYTHONPATH=./build/bin/python3:./src/tests/python
 pytest -v src/tests/python/testsuite.py
 ```
@@ -150,6 +157,8 @@ The FNS (JAEA) experiments irradiate foils with 14 MeV neutrons and measure the 
 [scripts/fns_benchmark.py](scripts/fns_benchmark.py) runs NIS for each case of the
 FISPACT-II validation inputs, and compares it with the measured heat and with the FISPACT-II
 (TENDL-2017) results in those files. FISPACT-II is not run.
+
+With uv, put `uv run` before each `python` and do not set `PYTHONPATH`. With the CMake build:
 
 ```bash
 export PYTHONPATH=./build/bin/python3
