@@ -81,7 +81,7 @@ namespace nis {
         // solves only for the nuclides that can be reached from n0, the rest stay zero
         template<typename T>
         Eigen::VectorX<T> solve_reachable(const Eigen::SparseMatrix<T>& mat, const Eigen::VectorX<T>& n0,
-                                          double dt, solver_func<T>& solver){
+                                          double dt, const solver_func<T>& solver){
             const std::vector<int> indices = reachable_indices<T>(mat, n0);
             if(indices.empty()){
                 return n0;
@@ -104,7 +104,7 @@ namespace nis {
         template<typename T>
         inline core::ModelResult<T> compute_inventory(const core::BasicModel<T>& model,
                                                       const Eigen::SparseMatrix<T>& mat,
-                                                      solver_func<T>& solver){
+                                                      const solver_func<T>& solver){
             const Eigen::VectorX<T> n0 = io::helpers::vector_from_inventory<T>(model.nuclides);
             const Eigen::VectorX<T> nt = solve_reachable<T>(mat, n0, model.dt, solver);
             // we should make sure that atoms are conserved
