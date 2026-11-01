@@ -3,6 +3,8 @@
 
 #include <cassert>
 #include <functional>
+#include <optional>
+#include <stdexcept>
 #include <vector>
 
 #include <Eigen/Core>
@@ -113,6 +115,64 @@ namespace nis {
             core::ModelResult<T> result;
             result.nuclides = final_inv;
             return result;
+        }
+
+        // the steps of the model, an input with no dt line is one step of dt
+        template<typename T>
+        std::vector<core::TimeStep<T>> time_steps(const core::BasicModel<T>& model){
+            if(model.steps.empty()){
+                return {core::TimeStep<T>{model.dt, std::nullopt}};
+            }
+            return model.steps;
+        }
+
+        // the factor to scale the reaction matrix by for a step. The reaction matrix is made from
+        // the spectrum as it is given (n/cm^2/s, with a total of spectrum_total), the step flux is in n/m^2/s.
+        // No flux uses the spectrum as it is given (1), a flux of 0 is a cooling step (0).
+        template<typename T>
+        T flux_scale(const core::TimeStep<T>& step, T spectrum_total){
+            if(!step.flux.has_value()){
+                return T(1);
+            }
+            if(step.flux.value() <= T(0)){
+                return T(0);
+            }
+            if(spectrum_total <= T(0)){
+                throw std::invalid_argument("A step has a flux, so the input needs a spectrum with a total above 0.\n");
+            }
+            return step.flux.value() * T(1e-4) / spectrum_total;
+        }
+
+        // Solves each step of the model, each from the result of the step before.
+        // The matrix of a step is decay_mat + reaction_mat * flux_scale(step, spectrum_total).
+        // An empty reaction_mat (0 x 0) is no reactions, then all the steps are decay only.
+        template<typename T>
+        std::vector<core::ModelResult<T>> compute_steps(const core::BasicModel<T>& model,
+                                                        const Eigen::SparseMatrix<T>& decay_mat,
+                                                        const Eigen::SparseMatrix<T>& reaction_mat,
+                                                        T spectrum_total,
+                                                        const solver_func<T>& solver){
+            const bool has_reactions = reaction_mat.size() > 0;
+            if(has_reactions && ((reaction_mat.rows() != decay_mat.rows()) || (reaction_mat.cols() != decay_mat.cols()))){
+                throw std::invalid_argument("The reaction and decay matrices must have the same size.\n");
+            }
+
+            std::vector<core::ModelResult<T>> results;
+            core::BasicModel<T> step_model;
+            step_model.nuclides = model.nuclides;
+            for(const auto& step: time_steps(model)){
+                const T scale = flux_scale(step, spectrum_total);
+                step_model.dt = step.dt;
+                if(has_reactions && (scale > T(0))){
+                    const Eigen::SparseMatrix<T> mat = decay_mat + reaction_mat * scale;
+                    results.push_back(compute_inventory<T>(step_model, mat, solver));
+                }
+                else{
+                    results.push_back(compute_inventory<T>(step_model, decay_mat, solver));
+                }
+                step_model.nuclides = results.back().nuclides;
+            }
+            return results;
         }
 
     }

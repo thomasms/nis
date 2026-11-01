@@ -5,9 +5,11 @@ import unittest
 
 import pynis as nis
 
+from .testdata import ENDFBVII_DECAY, JEFF311_DECAY, has_data
 
-_jeff311_data_file = Path(__file__).parent.parent.parent.parent / "data" / "jeff311.dec"
-_endfbvii_data_file = Path(__file__).parent.parent.parent.parent / "data" / "endfbvii1.dec"
+
+_jeff311_data_file = JEFF311_DECAY
+_endfbvii_data_file = ENDFBVII_DECAY
 
 
 def generate_random_nuclide() -> str:
@@ -51,6 +53,7 @@ class IntegrationBaseTests(unittest.TestCase):
             self.assertTrue(len(y.nuclides) > 0)
 
 
+@unittest.skipUnless(has_data(_jeff311_data_file), "needs data/jeff311.dec from git lfs")
 class IntegrationJeff311Tests(IntegrationBaseTests):
     def setUp(self) -> None:
         self.mat = nis.core.decay_mat_from_file(str(_jeff311_data_file))
@@ -58,6 +61,7 @@ class IntegrationJeff311Tests(IntegrationBaseTests):
         self.solver = nis.core.solver_cram48
 
 
+@unittest.skipUnless(has_data(_endfbvii_data_file), "needs data/endfbvii1.dec from git lfs")
 class IntegrationEndfbVIITests(IntegrationBaseTests):
     def setUp(self) -> None:
         self.mat = nis.core.decay_mat_from_file(str(_endfbvii_data_file))

@@ -22,15 +22,16 @@ import scipy.sparse
 
 import pynis as nis
 
+from .testdata import JEFF311_DECAY, JEFF4_REACTION, has_data
 
-_data_dir = Path(__file__).parent.parent.parent.parent / "data"
-_jeff4_reaction_file = _data_dir / "jeff4.reac"
-_jeff311_decay_file = _data_dir / "jeff311.dec"
+from fns_benchmark import reaction_cache
+
+
+_jeff4_reaction_file = JEFF4_REACTION
+_jeff311_decay_file = JEFF311_DECAY
 
 # LFS pointer files are small text files, the real file is ~1 GB
-_has_reaction_data = (
-    _jeff4_reaction_file.exists() and _jeff4_reaction_file.stat().st_size > 1e6
-)
+_has_reaction_data = has_data(_jeff4_reaction_file)
 
 BARN = 1e-24
 THERMAL_ENERGY = 0.0253
@@ -61,8 +62,9 @@ class ReactionBenchmarkBase(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         if ReactionBenchmarkBase.reaction_data is None:
+            # the cache data/jeff4.nisreac, made first if needed, is much faster to read
             ReactionBenchmarkBase.reaction_data = nis.core.reaction_data_from_file(
-                str(_jeff4_reaction_file)
+                str(reaction_cache(_jeff4_reaction_file))
             )
 
     def matrix(self, spectrum: nis.core.Spectrum) -> scipy.sparse.csc_matrix:

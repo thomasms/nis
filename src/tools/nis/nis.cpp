@@ -81,52 +81,6 @@ namespace {
         return data;
     }
 
-    // an input with no dt line is one step of dt
-    std::vector<core::TimeStep<double>> time_steps(const core::BasicModel<double>& model){
-        if(model.steps.empty()){
-            return {core::TimeStep<double>{model.dt, std::nullopt}};
-        }
-        return model.steps;
-    }
-
-    // the factor to scale the reaction matrix by for this step,
-    // the spectrum is in n/cm^2/s, the step flux in n/m^2/s
-    double flux_scale(const core::TimeStep<double>& step, double spectrum_total){
-        if(!step.flux.has_value()){
-            return 1.0;
-        }
-        if(step.flux.value() <= 0.0){
-            return 0.0;
-        }
-        if(spectrum_total <= 0.0){
-            throw std::invalid_argument("A step has a flux, so the input needs a spectrum with a total above 0.\n");
-        }
-        return step.flux.value() * 1e-4 / spectrum_total;
-    }
-
-    Eigen::SparseMatrix<double> step_matrix(const DecayData& decay,
-                                            const std::optional<ReactionData>& reaction,
-                                            double scale){
-        Eigen::SparseMatrix<double> mat = decay.matrix;
-        if(reaction.has_value() && scale > 0.0){
-            mat += reaction->matrix * scale;
-        }
-        return mat;
-    }
-
-    core::ModelResult<double> solve_step(const core::ModelResult<double>& previous,
-                                         double dt,
-                                         const Eigen::SparseMatrix<double>& mat){
-        // do computation using CRAM48 as default
-        // permit other solvers in the future
-        const solver::solver_func<double> solver_function = &core::cram48::solve<double>;
-
-        core::BasicModel<double> step_model;
-        step_model.dt = dt;
-        step_model.nuclides = previous.nuclides;
-        return solver::compute_inventory<double>(step_model, mat, solver_function);
-    }
-
     void print_result(const core::ModelResult<double>& result,
                       const core::DecayEnergyData<double>& energy_data,
                       double threshold){
@@ -147,20 +101,26 @@ namespace {
         const DecayData decay = read_decay_data(options.decay_data);
         const std::optional<ReactionData> reaction = read_reaction_data(model, options.reaction_data);
         const double spectrum_total = reaction.has_value() ? reaction->spectrum_total : 0.0;
-        const auto steps = time_steps(model);
 
-        core::ModelResult<double> result{model.nuclides};
+        // do computation using CRAM48 as default
+        // permit other solvers in the future
+        const solver::solver_func<double> solver_function = &core::cram48::solve<double>;
+        // an empty matrix is no reactions
+        const Eigen::SparseMatrix<double> no_reactions;
+        const Eigen::SparseMatrix<double>& reaction_mat = reaction.has_value() ? reaction->matrix : no_reactions;
+        const auto results = solver::compute_steps<double>(model, decay.matrix, reaction_mat,
+                                                           spectrum_total, solver_function);
+
+        const auto steps = solver::time_steps(model);
         double time = 0.0;
         for(std::size_t i = 0; i < steps.size(); ++i){
             const auto& step = steps[i];
-            const double scale = flux_scale(step, spectrum_total);
-            result = solve_step(result, step.dt, step_matrix(decay, reaction, scale));
             time += step.dt;
-
             if(steps.size() > 1){
+                const double scale = solver::flux_scale(step, spectrum_total);
                 std::cout << "\nstep " << i + 1 << "\n    time " << time << "\n    flux " << step.flux.value_or(scale * spectrum_total * 1e4) << "\n";
             }
-            print_result(result, decay.energy_data, options.threshold);
+            print_result(results[i], decay.energy_data, options.threshold);
         }
     }
 

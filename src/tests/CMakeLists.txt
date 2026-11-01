@@ -5,14 +5,19 @@ set(CPP_UNIT_TESTS_SOURCES
   test_maths.cpp
   test_solver.cpp
   test_spectrum.cpp
+  test_steps.cpp
   test_util.cpp
   test_zai.cpp
   endf/test_decay.cpp
   endf/test_reaction.cpp
+  io/test_benchmark_decks.cpp
   io/test_helpers.cpp
 )
 
 add_executable(${CPP_UNIT_TESTS_NAME} ${CPP_UNIT_TESTS_SOURCES})
+
+# the FNS decks in benchmarks/fns are read by a test
+target_compile_definitions(${CPP_UNIT_TESTS_NAME} PRIVATE NIS_BENCHMARKS_DIR="${CMAKE_SOURCE_DIR}/benchmarks")
 
 target_link_libraries(${CPP_UNIT_TESTS_NAME}
   PRIVATE

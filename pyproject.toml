@@ -33,3 +33,6 @@ sdist.exclude = ["data", "benchmarks", "build*", "docker", ".venv"]
 provider = "scikit_build_core.metadata.regex"
 input = ".VERSION"
 regex = "(?P<value>\\d+\\.\\d+\\.\\d+)"
+
+[tool.pytest.ini_options]
+markers = ["slow: long tests (the FNS benchmark and the nis program), skip them with -m 'not slow'"]

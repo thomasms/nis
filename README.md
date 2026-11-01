@@ -167,26 +167,64 @@ Note, you will need to have pulled the decay data via LFS in the [./data](./data
 
 ## Tests
 
-C++ unit tests:
+### C++ tests
 
 ```bash
 ./build/bin/nistests
 ```
 
-Python integration tests and benchmarks (needs the python bindings and the data from LFS):
+They need no nuclear data. They test the solver, the steps of an input (irradiation and cooling), the input
+reader (also all the FNS decks in `benchmarks/fns`), ENDF reading, the reaction matrix and the reaction cache.
+
+### Python tests
+
+They need the python bindings (see [python bindings](#python-bindings)):
 
 ```bash
-uv run pytest -v src/tests/python/testsuite.py
-# or, with the CMake build
-export PYTHONPATH=./build/bin/python3:./src/tests/python
-pytest -v src/tests/python/testsuite.py
+uv run pytest src/tests/python/testsuite.py                    # all the tests
+uv run pytest -m "not slow" src/tests/python/testsuite.py      # only the fast tests (less than 30 s)
+uv run pytest -m slow src/tests/python/testsuite.py            # only the slow tests (about 1 min)
 ```
 
-The reaction benchmarks in [src/tests/python/reactiontests.py](src/tests/python/reactiontests.py) use JEFF-4.0 and check:
-- thermal (0.0253 eV) and 14.1 MeV cross sections against reference values,
-- spectrum handling (linear in flux, bin splitting),
-- the structure of the full reaction matrix,
-- burn-up and Co60 activation against the analytic Bateman solution.
+With the CMake build, set `PYTHONPATH` first and use `pytest` in place of `uv run pytest`:
+
+```bash
+export PYTHONPATH=./build/bin/python3
+pytest src/tests/python/testsuite.py
+```
+
+The tests:
+
+| File | What it tests | Needs |
+|---|---|---|
+| [scripttests.py](src/tests/python/scripttests.py) | the benchmark scripts: read a deck, interpolation, statistics, when the reaction cache is made again | nothing |
+| [integrationtests.py](src/tests/python/integrationtests.py) | decay with JEFF-3.1.1 and ENDF/B-VII.1 | decay data |
+| [reactiontests.py](src/tests/python/reactiontests.py) | JEFF-4.0 reactions: thermal and 14.1 MeV cross sections against reference values, the spectrum (linear in flux, bin splitting), the matrix structure, burn-up and Co60 activation against the analytic Bateman solution | reaction data |
+| [fnstests.py](src/tests/python/fnstests.py) (slow) | FNS regression: runs all 132 FNS decks and compares with [nis_reference.csv](benchmarks/fns/nis_reference.csv), and checks that NIS stays as close to the experiment as now | decay and reaction data |
+| [nisprogramtests.py](src/tests/python/nisprogramtests.py) (slow) | the `nis` program: 3 FNS decks give the same as the reference, decay only steps, errors for bad input | decay and reaction data, the `nis` program |
+
+"Decay data" and "reaction data" are the files in `data/` from git lfs. A test that needs a file that is not there
+is skipped. The `nis` program test uses `build/bin/nis`, or give its path: `NIS_BIN=path/to/nis`.
+
+**When the FNS regression test fails:** a change to the code or to the data changed the decay heat (more than
+1e-4, relative). The test gives the first values that changed. If the change is intended, make the reference again
+and commit it:
+
+```bash
+uv run python scripts/fns_benchmark.py --fns-dir benchmarks/fns \
+    --decay-data data/jeff311.dec --reaction-data data/jeff4.reac --output benchmarks/fns/nis_reference.csv
+```
+
+### CI
+
+[.github/workflows/tests.yml](.github/workflows/tests.yml) runs on each push to `main`, `master` or `develop`,
+and on each pull request:
+
+- it builds NIS and runs the C++ tests, on Linux and macOS,
+- it builds `pynis` with uv and runs the fast Python tests, on Linux.
+
+CI does not download the nuclear data (about 1 GB of git lfs), so the tests that need it are skipped there.
+Run them on your machine before you push a change to the physics.
 
 ### FNS decay heat benchmark
 

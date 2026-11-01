@@ -1,9 +1,11 @@
+#include <cstdint>
 #include <filesystem>
 #include <fstream>
 #include <stdexcept>
 
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
+#include <catch2/matchers/catch_matchers_string.hpp>
 
 #include <ENDFtk.hpp>
 
@@ -390,8 +392,27 @@ TEST_CASE( "reaction cache" ) {
 
     // not a cache
     REQUIRE_THROWS_AS( read_reaction_cache(tape_file.string()), std::runtime_error );
+    // changes 4 bytes of the cache at the offset
+    const auto patch = [&](std::streamoff offset, std::uint32_t value){
+        std::fstream f(cache_file, std::ios::in | std::ios::out | std::ios::binary);
+        f.seekp(offset);
+        f.write(reinterpret_cast<const char*>(&value), sizeof(value));
+    };
+    // the header is 8 characters, the version (offset 8), then the byte order check (offset 12)
+    patch(8, 2);
+    REQUIRE( is_reaction_cache(cache_file.string()) );
+    REQUIRE_THROWS_WITH( read_reaction_cache(cache_file.string()), Catch::Matchers::ContainsSubstring("another version") );
+    patch(8, 1);
+    patch(12, 0x04030201);
+    REQUIRE_THROWS_WITH( read_reaction_cache(cache_file.string()), Catch::Matchers::ContainsSubstring("byte order") );
+    patch(12, 0x01020304);
+    REQUIRE( read_reaction_cache(cache_file.string()).size() == more.size() );
+
     // a cache that ends too soon
     std::filesystem::resize_file(cache_file, std::filesystem::file_size(cache_file) - 4);
+    REQUIRE_THROWS_AS( read_reaction_cache(cache_file.string()), std::runtime_error );
+    // only the header
+    std::filesystem::resize_file(cache_file, 16);
     REQUIRE_THROWS_AS( read_reaction_cache(cache_file.string()), std::runtime_error );
 
     std::filesystem::remove(tape_file);

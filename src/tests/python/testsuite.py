@@ -3,6 +3,9 @@ import unittest
 
 from .integrationtests import *
 from .reactiontests import *
+from .scripttests import *
+from .fnstests import *
+from .nisprogramtests import *
 
 
 def main():
