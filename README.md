@@ -268,6 +268,17 @@ These steps use uv (see [python bindings](#python-bindings)), and the nuclear da
         --decay-data data/jeff311.dec --reaction-data data/jeff4.reac --output-dir fns_plots
     ```
 
+5. Make one plot of the C/E of all the cases, NIS against FISPACT-II:
+
+    ```bash
+    uv run python scripts/fns_summary_plot.py fns.csv --output fns_summary.png
+    ```
+
+    This is the plot for [nis_reference.csv](benchmarks/fns/nis_reference.csv) (JEFF-3.1.1 decay and JEFF-4.0
+    reaction data). Each point is the geometric mean of C/E over the measured times of a case:
+
+    ![C/E of all the FNS cases](benchmarks/fns/fns_summary.png)
+
 **Reaction cache:** all the scripts use the reaction cache. If `--reaction-data` is an ENDF file, the cache is
 `<file>.nisreac` next to it (for example `data/jeff4.nisreac`). The scripts make it first if it does not exist,
 is older than the ENDF file, or is of another cache version.
