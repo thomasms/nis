@@ -5,6 +5,7 @@ from .integrationtests import *
 from .reactiontests import *
 from .fissiontests import *
 from .scripttests import *
+from .processingtests import *
 from .fnstests import *
 from .nisprogramtests import *
 

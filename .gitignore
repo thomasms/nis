@@ -16,3 +16,8 @@ uv.lock
 # fission yields, from scripts/get_fission_yields.py
 data/*.nfy
 data/*.sfy
+
+# data processing: NJOY and PREPRO, the raw ENDF files and the processed files
+processing/tools/
+processing/raw/
+processing/out/

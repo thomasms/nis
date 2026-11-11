@@ -137,6 +137,13 @@ For neutron activation, add a `spectrum` to the input (see [examples/activate.in
 
 The spectrum is the neutron flux in n/cm^2/s per group. The first line gives the group bounds in eV (ascending), the second line gives one value per group.
 The reaction data must be group-wise (INT=1), for example as processed by NJOY GROUPR.
+To make it from the raw ENDF files of a library (for example the latest TENDL), with NJOY and PREPRO on all the
+cores, see [processing/README.md](processing/README.md):
+
+```bash
+python3 processing/process.py tools                   # build NJOY and PREPRO
+python3 processing/process.py tendl --year 2023       # data/tendl2023.reac and data/tendl2023.nisreac
+```
 
 Reading the ENDF reaction file (about 1 GB for JEFF-4) takes a few seconds for each run. Make a binary cache
 of it one time, then give the cache to `nis` (or to the Python `reaction_data_from_file`) in place of the ENDF file:
@@ -229,6 +236,7 @@ The tests:
 | File | What it tests | Needs |
 |---|---|---|
 | [scripttests.py](src/tests/python/scripttests.py) | the benchmark format and tools: read and check case files, the decks are made from the case files, units, results files, statistics, the `bench.py` commands, when the reaction cache is made again | nothing |
+| [processingtests.py](src/tests/python/processingtests.py) | the data processing: ENDF headers, the NJOY and PREPRO inputs, joining files; with NJOY and PREPRO, two nuclides through all the steps and read by NIS | NJOY and PREPRO (`processing/process.py tools`) for some tests |
 | [integrationtests.py](src/tests/python/integrationtests.py) | decay with JEFF-3.1.1 and ENDF/B-VII.1 | decay data |
 | [reactiontests.py](src/tests/python/reactiontests.py) | JEFF-4.0 reactions: thermal and 14.1 MeV cross sections against reference values, the spectrum (linear in flux, bin splitting), the matrix structure, burn-up and Co60 activation against the analytic Bateman solution | reaction data |
 | [fissiontests.py](src/tests/python/fissiontests.py) | JEFF-3.1.1 fission yields: 2 products per fission, thermal U235 gives the known Cs137 and Sr90 yields and fission to capture ratio, Cf252 spontaneous fission | decay and reaction data, the yield files |

@@ -63,3 +63,28 @@ jobs:
 
       - name: Python tests (fast)
         run: uv run pytest -v -m "not slow" src/tests/python/testsuite.py
+
+  processing:
+    name: Data processing (NJOY and PREPRO)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get gfortran
+        run: sudo apt-get update -q && sudo apt-get install -y -q gfortran
+
+      - name: Cache NJOY and PREPRO
+        id: tools
+        uses: actions/cache@v4
+        with:
+          path: processing/tools
+          key: tools-${{ runner.os }}-${{ hashFiles('processing/nisdata/tools.py') }}
+
+      - name: Build NJOY and PREPRO
+        if: steps.tools.outputs.cache-hit != 'true'
+        run: python3 processing/process.py tools -j 4
+
+      - uses: astral-sh/setup-uv@v6
+
+      - name: Processing tests (two nuclides through NJOY and PREPRO)
+        run: uv run --no-project --with pytest pytest -v -rs src/tests/python/processingtests.py

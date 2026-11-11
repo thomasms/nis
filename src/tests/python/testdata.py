@@ -23,8 +23,11 @@ NIS_BIN = Path(os.environ.get("NIS_BIN", ROOT / "build" / "bin" / "nis"))
 
 # the benchmark scripts are not a package, so add their folder to the path
 SCRIPTS_DIR = ROOT / "scripts"
-if str(SCRIPTS_DIR) not in sys.path:
-    sys.path.insert(0, str(SCRIPTS_DIR))
+# the data processing package (processing/nisdata)
+PROCESSING_DIR = ROOT / "processing"
+for _folder in (SCRIPTS_DIR, PROCESSING_DIR):
+    if str(_folder) not in sys.path:
+        sys.path.insert(0, str(_folder))
 
 
 def has_data(path: Path, min_size: int = 100_000) -> bool:
