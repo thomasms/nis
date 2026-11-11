@@ -3,6 +3,7 @@ project (${NIS_LIB_NAME})
 set(NIS_CPP_SOURCES
     endf/core.cpp
     endf/decay.cpp
+    endf/fission_yields.cpp
     endf/reaction.cpp
     endf/reaction_cache.cpp
     solver.cpp

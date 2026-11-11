@@ -14,6 +14,7 @@
 
 #include "nis/endf/core.hpp"
 #include "nis/endf/decay.hpp"
+#include "nis/endf/fission_yields.hpp"
 #include "nis/endf/reaction.hpp"
 #include "nis/endf/reaction_cache.hpp"
 

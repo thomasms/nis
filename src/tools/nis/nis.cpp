@@ -16,6 +16,7 @@
 #include "nis/solver.hpp"
 #include "nis/endf/core.hpp"
 #include "nis/endf/decay.hpp"
+#include "nis/endf/fission_yields.hpp"
 #include "nis/endf/reaction.hpp"
 #include "nis/endf/reaction_cache.hpp"
 #include "nis/io/helpers.hpp"
@@ -27,6 +28,8 @@ namespace {
     struct Options {
         std::string decay_data = "data.dec";
         std::string reaction_data = "";
+        std::string fission_yields = "";
+        std::string sf_yields = "";
         std::string input = "run.inp";
         double threshold = 1e10;
     };
@@ -49,6 +52,10 @@ namespace {
           ->check(CLI::ExistingFile);
         app.add_option("-r,--reaction-data", options.reaction_data, "An single ENDF file containing all reaction data, or a cache of it from nis_cache, needed if the input has a spectrum")
           ->check(CLI::ExistingFile);
+        app.add_option("-y,--fission-yields", options.fission_yields, "An ENDF file of neutron induced fission yields (MF=8 MT=454), so fission makes the fission products, else fission goes to the sink")
+          ->check(CLI::ExistingFile);
+        app.add_option("--sf-yields", options.sf_yields, "An ENDF file of spontaneous fission yields (MF=8 MT=454), so spontaneous fission makes the fission products, else it goes to the sink")
+          ->check(CLI::ExistingFile);
         app.add_option("-i,--input", options.input, "Input file for inventory simulation")
           ->required()
           ->check(CLI::ExistingFile);
@@ -57,15 +64,24 @@ namespace {
     }
 
     // read the decay tape once, for the matrix and the decay energies
-    DecayData read_decay_data(const std::string& filename){
+    // no value if no file is given
+    std::optional<endf::FissionYieldData> read_yields(const std::string& filename){
+        if(filename.empty()){
+            return std::nullopt;
+        }
+        return endf::read_fission_yields_from_file(filename);
+    }
+
+    DecayData read_decay_data(const std::string& filename, const std::optional<endf::FissionYieldData>& sf_yields){
         const auto tape = njoy::ENDFtk::tree::fromFile(filename);
-        return DecayData{endf::construct_decay_matrix_from_tape(tape),
+        return DecayData{endf::construct_decay_matrix_from_tape(tape, sf_yields.has_value() ? &sf_yields.value() : nullptr),
                          endf::read_decay_energy_data_from_tape(tape)};
     }
 
     // no value if the input has no spectrum
     std::optional<ReactionData> read_reaction_data(const core::BasicModel<double>& model,
-                                                   const std::string& filename){
+                                                   const std::string& filename,
+                                                   const std::optional<endf::FissionYieldData>& fission_yields){
         if(model.spectrum == nullptr){
             return std::nullopt;
         }
@@ -74,7 +90,8 @@ namespace {
         }
 
         ReactionData data;
-        data.matrix = endf::construct_reaction_matrix(endf::read_reaction_data(filename), *model.spectrum.get());
+        data.matrix = endf::construct_reaction_matrix(endf::read_reaction_data(filename), *model.spectrum.get(),
+                                                      fission_yields.has_value() ? &fission_yields.value() : nullptr);
         for(const auto v: model.spectrum->y()){
             data.spectrum_total += v;
         }
@@ -98,8 +115,9 @@ namespace {
         // dump input to std::out
         // std::cout << model;
 
-        const DecayData decay = read_decay_data(options.decay_data);
-        const std::optional<ReactionData> reaction = read_reaction_data(model, options.reaction_data);
+        const DecayData decay = read_decay_data(options.decay_data, read_yields(options.sf_yields));
+        const std::optional<ReactionData> reaction = read_reaction_data(model, options.reaction_data,
+                                                                        read_yields(options.fission_yields));
         const double spectrum_total = reaction.has_value() ? reaction->spectrum_total : 0.0;
 
         // do computation using CRAM48 as default

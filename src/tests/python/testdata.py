@@ -13,6 +13,9 @@ FNS_REFERENCE = FNS_DECKS_DIR / "nis_reference.csv"
 JEFF311_DECAY = DATA_DIR / "jeff311.dec"
 ENDFBVII_DECAY = DATA_DIR / "endfbvii1.dec"
 JEFF4_REACTION = DATA_DIR / "jeff4.reac"
+# fission yields, from the NEA data bank (see the README)
+JEFF311_NFY = DATA_DIR / "jeff311.nfy"
+JEFF311_SFY = DATA_DIR / "jeff311.sfy"
 
 # the nis program, from the CMake build (or give its path in NIS_BIN)
 NIS_BIN = Path(os.environ.get("NIS_BIN", ROOT / "build" / "bin" / "nis"))
@@ -23,6 +26,6 @@ if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
 
-def has_data(path: Path) -> bool:
+def has_data(path: Path, min_size: int = 100_000) -> bool:
     """True if the data file is there. Without git lfs, the file is a small text pointer file."""
-    return path.exists() and path.stat().st_size > 1_000_000
+    return path.exists() and path.stat().st_size > min_size

@@ -12,6 +12,7 @@
 
 #include "nis/decayheat.hpp"
 #include "nis/endf/decay/product_computer.hpp"
+#include "nis/endf/fission_yields.hpp"
 
 
 namespace nis {
@@ -36,10 +37,18 @@ namespace nis {
 
         DecayProductT compute_products(int parent_zai, double rtyp, int final_isomeric_state);
 
-        // the matrix is sparse, (parent, daughter), with the sink as the last index
-        Eigen::SparseMatrix<double> construct_decay_matrix_from_tape(const njoy::ENDFtk::tree::Tape& tape);
+        // spontaneous fission is decay mode 6 (RTYP)
+        constexpr int SPONTANEOUS_FISSION_RTYP = 6;
+
+        // the matrix is sparse, (parent, daughter), with the sink as the last index.
+        // With sf_yields (a spontaneous fission yield file), spontaneous fission makes the fission products,
+        // at the partial decay rate times the independent yield. Without them, or for a nuclide with no yields,
+        // spontaneous fission goes to the sink.
+        Eigen::SparseMatrix<double> construct_decay_matrix_from_tape(const njoy::ENDFtk::tree::Tape& tape,
+                                                                     const FissionYieldData* sf_yields = nullptr);
         // convience function to avoid calling ENDFtk fromFile
-        Eigen::SparseMatrix<double> construct_decay_matrix_from_file(std::string filename);
+        Eigen::SparseMatrix<double> construct_decay_matrix_from_file(std::string filename,
+                                                                     const FissionYieldData* sf_yields = nullptr);
 
         // decay constants and average decay energies for decay heat
         core::DecayEnergyData<double> read_decay_energy_data_from_tape(const njoy::ENDFtk::tree::Tape& tape);

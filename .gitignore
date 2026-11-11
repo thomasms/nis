@@ -12,3 +12,7 @@ venv/**
 .venv/
 uv.lock
 .pytest_cache/
+
+# fission yields, from scripts/get_fission_yields.py
+data/*.nfy
+data/*.sfy

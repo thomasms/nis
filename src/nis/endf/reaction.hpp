@@ -15,6 +15,7 @@
 
 #include "nis/spectrum.hpp"
 #include "nis/zai.hpp"
+#include "nis/endf/fission_yields.hpp"
 
 namespace nis {
     namespace endf {
@@ -31,7 +32,8 @@ namespace nis {
         // 1 barn = 1e-24 cm^2, the flux is assumed to be in n/cm^2/s
         constexpr double BARN_TO_CM2 = 1e-24;
 
-        // MT=18 (total fission) has no yields yet, so we send it to the sink
+        // MT=18 (total fission). With fission yields, a fission makes the fission products,
+        // else (or for a nuclide with no yields) it goes to the sink.
         constexpr int FISSION_MT = 18;
 
         // (n,n') does not change the nuclide, so we only use its MF=10 data
@@ -144,9 +146,13 @@ namespace nis {
         // reads the file one material at a time, so the whole tape is never in memory
         ReactionData read_reaction_data_from_file(std::string filename);
 
-        // the matrix is sparse, (parent, daughter), with the sink as the last index
+        // the matrix is sparse, (parent, daughter), with the sink as the last index.
+        // With fission_yields, each fission (MT=18) makes the fission products: the rate to each product is
+        // the fission rate times its independent yield, with the yields weighted by the fission rate in each
+        // energy group (see weighted_yields). Without yields, or for a nuclide with no yields, fission goes to the sink.
         Eigen::SparseMatrix<double> construct_reaction_matrix(const ReactionData& reaction_data,
-                                                  const core::Spectrum<double>& in_spectrum);
+                                                  const core::Spectrum<double>& in_spectrum,
+                                                  const FissionYieldData* fission_yields = nullptr);
 
         Eigen::SparseMatrix<double> construct_reaction_matrix_from_tape(const njoy::ENDFtk::tree::Tape& tape,
                                                             const core::Spectrum<double>& in_spectrum);

@@ -16,6 +16,8 @@
 
 // keep the cross sections in C++, they are big
 PYBIND11_MAKE_OPAQUE(nis::endf::ReactionData);
+// the yields of all the fissile nuclides, a dict of FissionYields by parent ZAI in python
+PYBIND11_MAKE_OPAQUE(nis::endf::FissionYieldData);
 
 namespace py = pybind11;
 
@@ -71,7 +73,10 @@ PYBIND11_MODULE(pynis, m) {
     m_core.def("filter_nuclides", &core::filter_nuclides<double>);
 
     // matrices are sparse, so they are scipy.sparse.csc_matrix in python
-    m_core.def("decay_mat_from_file", &endf::construct_decay_matrix_from_file);
+    // with sf_yields (from fission_yields_from_file of a spontaneous fission yield file),
+    // spontaneous fission makes the fission products, else it goes to the sink
+    m_core.def("decay_mat_from_file", &endf::construct_decay_matrix_from_file,
+               py::arg("filename"), py::arg("sf_yields") = nullptr);
 
     using DecayEnergyDataPyType = core::DecayEnergyData<double>;
     py::class_<DecayEnergyDataPyType>(m_core, "DecayEnergyData")
@@ -117,10 +122,42 @@ PYBIND11_MODULE(pynis, m) {
     m_core.def("reaction_data_from_file", &endf::read_reaction_data);
     m_core.def("write_reaction_cache", &endf::write_reaction_cache);
     m_core.def("is_reaction_cache", &endf::is_reaction_cache);
-    m_core.def("reaction_mat", &endf::construct_reaction_matrix);
-    m_core.def("reaction_mat_from_file", [](const std::string& filename, const core::Spectrum<double>& spectrum){
-        return endf::construct_reaction_matrix(endf::read_reaction_data(filename), spectrum);
-    });
+    // with fission_yields (from fission_yields_from_file), fission makes the fission products,
+    // else it goes to the sink
+    m_core.def("reaction_mat", &endf::construct_reaction_matrix,
+               py::arg("reaction_data"), py::arg("spectrum"), py::arg("fission_yields") = nullptr);
+    m_core.def("reaction_mat_from_file", [](const std::string& filename, const core::Spectrum<double>& spectrum,
+                                            const endf::FissionYieldData* fission_yields){
+        return endf::construct_reaction_matrix(endf::read_reaction_data(filename), spectrum, fission_yields);
+    }, py::arg("filename"), py::arg("spectrum"), py::arg("fission_yields") = nullptr);
+
+    // fission yields
+    py::class_<endf::FissionYields>(m_core, "FissionYields")
+        .def_readonly("parent_zai", &endf::FissionYields::parent_zai)
+        .def_readonly("energies", &endf::FissionYields::energies)
+        .def_readonly("yields", &endf::FissionYields::yields);
+
+    py::class_<endf::FissionYieldData>(m_core, "FissionYieldData")
+        .def("__len__", [](const endf::FissionYieldData& d) { return d.size(); })
+        .def("__contains__", [](const endf::FissionYieldData& d, int zai) { return d.count(zai) == 1; })
+        .def("__getitem__", [](const endf::FissionYieldData& d, int zai) {
+            if(d.count(zai) == 0){
+                throw py::key_error(std::to_string(zai));
+            }
+            return d.at(zai);
+        })
+        .def("keys", [](const endf::FissionYieldData& d) {
+            std::vector<int> keys;
+            for(const auto& entry: d){
+                keys.push_back(entry.first);
+            }
+            return keys;
+        });
+
+    m_core.def("fission_yields_from_file", &endf::read_fission_yields_from_file);
+    m_core.def("fission_yield_energy_weights", &endf::energy_weights);
+    m_core.def("fission_yields_at_energy", &endf::yields_at_energy);
+    m_core.def("weighted_fission_yields", &endf::weighted_yields);
     m_core.def("collapse_cross_section", &endf::collapse_cross_section);
 
     // solvers

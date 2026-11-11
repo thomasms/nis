@@ -164,6 +164,37 @@ With more than one step, the output gives the nuclides, activity and decay heat 
 
 Note, you will need to have pulled the decay data via LFS in the [./data](./data) subdirectory.
 
+### Fission yields
+
+Without fission yields, a fission (MT=18) goes to the sink: the fissile nuclide is lost, but no fission products are made.
+Give a fission yield file (ENDF MF=8 MT=454, the independent yields) to make the fission products:
+
+```bash
+# get the JEFF-3.1.1 yields from the NEA data bank: data/jeff311.nfy and data/jeff311.sfy (needs curl)
+python scripts/get_fission_yields.py
+./build/bin/nis -d data/jeff311.dec -r data/jeff4.nisreac -i run.inp \
+    --fission-yields data/jeff311.nfy --sf-yields data/jeff311.sfy
+```
+
+- `--fission-yields` (`-y`): neutron induced fission. Each fission makes each product at the fission rate times its
+  independent yield. The decay data then makes the rest of each decay chain.
+- `--sf-yields`: spontaneous fission (decay mode 6) makes the fission products too, at the partial decay rate times the yield.
+- A nuclide that has no yields in the file still goes to the sink. So does a product that NIS does not track.
+  A product isomer that NIS does not track goes to the ground state.
+
+The yields are given at a few incident energies (for JEFF-3.1.1: thermal, 400 keV or 500 keV, and 14 MeV).
+For each energy group of the fission cross section, NIS takes the yields at the middle of the group (in lethargy),
+with linear interpolation in energy between the yield energies, and the nearest set outside them. The groups are
+weighted by their fission rate. So a thermal spectrum uses the thermal yields, and a 14 MeV spectrum the 14 MeV yields.
+
+In Python:
+
+```python
+yields = nis.core.fission_yields_from_file("data/jeff311.nfy")
+reaction_mat = nis.core.reaction_mat(reaction_data, spectrum, yields)
+decay_mat = nis.core.decay_mat_from_file("data/jeff311.dec", nis.core.fission_yields_from_file("data/jeff311.sfy"))
+```
+
 
 ## Tests
 
@@ -174,7 +205,7 @@ Note, you will need to have pulled the decay data via LFS in the [./data](./data
 ```
 
 They need no nuclear data. They test the solver, the steps of an input (irradiation and cooling), the input
-reader (also all the FNS decks in `benchmarks/fns`), ENDF reading, the reaction matrix and the reaction cache.
+reader (also all the FNS decks in `benchmarks/fns`), ENDF reading, the reaction matrix, fission yields and the reaction cache.
 
 ### Python tests
 
@@ -200,10 +231,12 @@ The tests:
 | [scripttests.py](src/tests/python/scripttests.py) | the benchmark scripts: read a deck, interpolation, statistics, when the reaction cache is made again | nothing |
 | [integrationtests.py](src/tests/python/integrationtests.py) | decay with JEFF-3.1.1 and ENDF/B-VII.1 | decay data |
 | [reactiontests.py](src/tests/python/reactiontests.py) | JEFF-4.0 reactions: thermal and 14.1 MeV cross sections against reference values, the spectrum (linear in flux, bin splitting), the matrix structure, burn-up and Co60 activation against the analytic Bateman solution | reaction data |
+| [fissiontests.py](src/tests/python/fissiontests.py) | JEFF-3.1.1 fission yields: 2 products per fission, thermal U235 gives the known Cs137 and Sr90 yields and fission to capture ratio, Cf252 spontaneous fission | decay and reaction data, the yield files |
 | [fnstests.py](src/tests/python/fnstests.py) (slow) | FNS regression: runs all 132 FNS decks and compares with [nis_reference.csv](benchmarks/fns/nis_reference.csv), and checks that NIS stays as close to the experiment as now | decay and reaction data |
 | [nisprogramtests.py](src/tests/python/nisprogramtests.py) (slow) | the `nis` program: 3 FNS decks give the same as the reference, decay only steps, errors for bad input | decay and reaction data, the `nis` program |
 
-"Decay data" and "reaction data" are the files in `data/` from git lfs. A test that needs a file that is not there
+"Decay data" and "reaction data" are the files in `data/` from git lfs. The yield files come from
+`python scripts/get_fission_yields.py`. A test that needs a file that is not there
 is skipped. The `nis` program test uses `build/bin/nis`, or give its path: `NIS_BIN=path/to/nis`.
 
 **When the FNS regression test fails:** a change to the code or to the data changed the decay heat (more than

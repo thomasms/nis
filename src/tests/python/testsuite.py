@@ -3,6 +3,7 @@ import unittest
 
 from .integrationtests import *
 from .reactiontests import *
+from .fissiontests import *
 from .scripttests import *
 from .fnstests import *
 from .nisprogramtests import *

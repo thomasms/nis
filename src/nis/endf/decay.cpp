@@ -105,8 +105,14 @@ namespace nis {
             return secondaries;
         }
 
+        bool _is_spontaneous_fission(double rtyp){
+            const std::vector<int> rtypes = expand_rtypes(rtyp);
+            return !rtypes.empty() && (rtypes.front() == SPONTANEOUS_FISSION_RTYP);
+        }
+
         void _update_decay_matrix(const njoy::ENDFtk::tree::Material& material,
-                                  const std::map<int, int>& zai_map, Eigen::SparseMatrix<double>& decay_mat){
+                                  const std::map<int, int>& zai_map, Eigen::SparseMatrix<double>& decay_mat,
+                                  const FissionYieldData* sf_yields){
 
             if(material.hasMF(file_number)){
                 njoy::ENDFtk::tree::File file = material.file(file_number);
@@ -130,6 +136,18 @@ namespace nis {
                             const auto decay_modes_collection = parsed_section.decayModes();
                             for(auto decay_mode: decay_modes_collection.decayModes()){
                                 const double br = decay_mode.branchingRatio()[0];
+                                if((sf_yields != nullptr) && (sf_yields->count(zai) == 1)
+                                   && _is_spontaneous_fission(decay_mode.RTYP())){
+                                    // the yields at the first (lowest) energy, a spontaneous fission file has only one
+                                    const FissionYields& yields = sf_yields->at(zai);
+                                    for(const auto& [product, y]: yields_at_energy(yields, yields.energies.front())){
+                                        // if we don't track this isomer, the atoms go to the ground state
+                                        const int tracked = zai_map.count(product) == 1 ? product : (product/10)*10;
+                                        const int dza_index = zai_map.count(tracked) == 1 ? zai_map.at(tracked) : data::SINK_INDEX;
+                                        decay_mat.coeffRef(za_index, dza_index) += br*decay_const*y;
+                                    }
+                                    continue;
+                                }
                                 const auto secondaries = _get_secondaries(zai, decay_mode);
                                 for(auto daughter_zai: secondaries){
                                     // the sink is the last row
@@ -143,7 +161,8 @@ namespace nis {
             }
         }
 
-        Eigen::SparseMatrix<double> construct_decay_matrix_from_tape(const njoy::ENDFtk::tree::Tape& tape){
+        Eigen::SparseMatrix<double> construct_decay_matrix_from_tape(const njoy::ENDFtk::tree::Tape& tape,
+                                                                     const FissionYieldData* sf_yields){
 
             // add 1 for the sink
             const int mat_nr_rows = data::ZAI_SIZE;
@@ -161,7 +180,7 @@ namespace nis {
                 // We don't want to double count...
                 auto materials = tape.material(mat_number);
                 for(auto material: materials){
-                    _update_decay_matrix(material, data::ZAI_MAP, decay_mat);
+                    _update_decay_matrix(material, data::ZAI_MAP, decay_mat, sf_yields);
                 }
             }
 
@@ -169,9 +188,10 @@ namespace nis {
             return decay_mat;
         }
 
-        Eigen::SparseMatrix<double> construct_decay_matrix_from_file(std::string filename){
+        Eigen::SparseMatrix<double> construct_decay_matrix_from_file(std::string filename,
+                                                                     const FissionYieldData* sf_yields){
             auto tape = njoy::ENDFtk::tree::fromFile(filename);
-            return endf::construct_decay_matrix_from_tape(tape);
+            return endf::construct_decay_matrix_from_tape(tape, sf_yields);
         }
 
         void _update_decay_energy_data(const njoy::ENDFtk::tree::Material& material,

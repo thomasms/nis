@@ -9,6 +9,7 @@ set(CPP_UNIT_TESTS_SOURCES
   test_util.cpp
   test_zai.cpp
   endf/test_decay.cpp
+  endf/test_fission_yields.cpp
   endf/test_reaction.cpp
   io/test_benchmark_decks.cpp
   io/test_helpers.cpp

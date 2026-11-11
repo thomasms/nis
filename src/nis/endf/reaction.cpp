@@ -48,7 +48,7 @@ namespace nis {
 
         ReactionProductT compute_reaction_products(int parent_zai, int mt_number, int final_state){
             if(mt_number == FISSION_MT){
-                // TODO: add fission yields, for now all goes to the sink
+                // the fission products come from the yields (construct_reaction_matrix), not from here
                 return ReactionProductT(-1, {});
             }
 
@@ -443,7 +443,8 @@ namespace nis {
         }
 
         Eigen::SparseMatrix<double> construct_reaction_matrix(const ReactionData& reaction_data,
-                                                  const core::Spectrum<double>& in_spectrum){
+                                                  const core::Spectrum<double>& in_spectrum,
+                                                  const FissionYieldData* fission_yields){
             // collapse all first, then split each reaction by residual state
             struct Rates {
                 double total = 0.;
@@ -453,6 +454,12 @@ namespace nis {
             // (parent, product ZAI) for MT=4 and MT=5, these come from MF=10 only
             std::map<std::pair<int, int>, double> inelastic_rates;
             std::map<std::pair<int, int>, double> anything_rates;
+            // fission of a parent with yields: the fission rate in each group of the cross section
+            struct GroupRates {
+                std::vector<double> bounds;
+                std::vector<double> rates;
+            };
+            std::map<int, GroupRates> fission_rates;
 
             // the data has only a few energy grids, so we convert the spectrum once for each
             std::map<std::vector<double>, std::vector<double>> grid_flux;
@@ -484,6 +491,18 @@ namespace nis {
                 if(!is_reaction_mt(xs.mt_number)){
                     continue;
                 }
+                if((xs.mt_number == FISSION_MT) && (fission_yields != nullptr)
+                   && (fission_yields->count(xs.parent_zai) == 1) && (xs.final_state == ALL_STATES)){
+                    collapse(xs);
+                    const std::vector<double>& flux = grid_flux.at(xs.energies);
+                    GroupRates& f = fission_rates[xs.parent_zai];
+                    f.bounds = xs.energies;
+                    f.rates.assign(flux.size(), 0.0);
+                    for(std::size_t g = 0; g < flux.size(); ++g){
+                        f.rates[g] = flux[g]*xs.values[g]*BARN_TO_CM2;
+                    }
+                    continue;
+                }
                 const double rate = collapse(xs);
                 Rates& r = rates[{xs.parent_zai, xs.mt_number}];
                 if(xs.final_state == ALL_STATES){
@@ -503,6 +522,24 @@ namespace nis {
                     const int residual = std::get<0>(compute_reaction_products(parent_zai, mt_number, state));
                     const int final_state = (residual >= 0) && (data::ZAI_MAP.count(residual) == 0) ? 0 : state;
                     add_reaction_rate(reaction_mat, data::ZAI_MAP, parent_zai, mt_number, rate, final_state);
+                }
+            }
+
+            // fission: the parent is lost at the fission rate, each product is made at the rate times its yield
+            for(const auto& [parent_zai, f]: fission_rates){
+                double total = 0.;
+                for(const auto r: f.rates){
+                    total += r;
+                }
+                if((total <= 0.) || (data::ZAI_MAP.count(parent_zai) == 0)){
+                    continue;
+                }
+                const int parent_index = data::ZAI_MAP.at(parent_zai);
+                reaction_mat.coeffRef(parent_index, parent_index) -= total;
+                for(const auto& [product, y]: weighted_yields(fission_yields->at(parent_zai), f.bounds, f.rates)){
+                    // if we don't track this isomer, the atoms go to the ground state
+                    const int tracked = data::ZAI_MAP.count(product) == 1 ? product : (product/10)*10;
+                    _add_transfer(reaction_mat, parent_zai, tracked, total*y, false);
                 }
             }
 
