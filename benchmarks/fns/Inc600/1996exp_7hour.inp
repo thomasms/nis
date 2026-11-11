@@ -1,8 +1,8 @@
-# FNS decay heat benchmark, Inc600 1996exp_7hour
-# made by scripts/fns_make_decks.py from the FISPACT-II validation inputs
+# fns benchmark, Inc600/1996exp_7hour: Inc600, 7 hour irradiation, 1996 experiment
+# made by scripts/bench.py from 1996exp_7hour.json, do not edit
 # mass_kg 1.000000000e-03
-# spectrum: 709 group flux shape (CCFE-709), normalised to the flux of the irradiation step
-# irradiation, then one cooling step (flux 0) to each measured time after shutdown
+# spectrum: 709 group flux shape (CCFE-709), nis normalises it to the flux of each step
+# steps: dt in s, flux in n/m2/s (0 is cooling)
 dt 2.726784000e+04 1.050000000e+14
 dt 5.356800000e+04 0
 dt 5.961600000e+04 0

@@ -1,6 +1,6 @@
 """
 Tests of the nis program (from the CMake build, or NIS_BIN). Some FNS decks are run with the program and
-must give the same decay heat as benchmarks/fns/nis_reference.csv (made with pynis). This tests the parts
+must give the same decay heat as benchmarks/fns/results/nis_reference.csv (made with pynis). This tests the parts
 that only the program has: the input decks, the steps with a flux and the cooling steps, and the output.
 
 Needs the nuclear data from git lfs.
@@ -16,12 +16,13 @@ from pathlib import Path
 
 import pytest
 
-from .testdata import FNS_DECKS_DIR, FNS_REFERENCE, JEFF311_DECAY, JEFF4_REACTION, NIS_BIN, has_data
+from .testdata import FNS_DIR, FNS_REFERENCE, JEFF311_DECAY, JEFF4_REACTION, NIS_BIN, has_data
 
-from fns_benchmark import reaction_cache
-from fns_run_decks import decay_heats, read_mass, run_deck
+from nisbench import load_benchmark
+from nisbench.engines import NuclearData, parse_nis_output, reaction_cache, run
+from nisbench.results import case_rows
 
-DECKS = ["Co/2000exp_5min", "Fe/1996exp_7hour", "Ni/2000exp_5min"]
+CASES = ["Co/2000exp_5min", "Fe/1996exp_7hour", "Ni/2000exp_5min"]
 
 
 def _nis(*arguments) -> subprocess.CompletedProcess:
@@ -39,15 +40,16 @@ class NisProgramTests(unittest.TestCase):
         with open(FNS_REFERENCE) as f:
             reference = list(csv.DictReader(f))
 
-        for name in DECKS:
-            deck = FNS_DECKS_DIR / f"{name}.inp"
-            material, case = name.split("/")
-            expected = [float(r["nis_uW_per_g"]) for r in reference
-                        if r["material"] == material and r["case"] == case]
-            heats = [h / read_mass(deck) * 1e3 for h in run_deck(NIS_BIN, deck, JEFF311_DECAY, cache)]
-            self.assertEqual(len(heats), len(expected), name)
+        cases = load_benchmark(FNS_DIR, CASES).cases
+        self.assertEqual([c.name for c in cases], CASES)
+        results = run(cases, NuclearData(decay=JEFF311_DECAY, reaction=cache), engine="nis", nis=NIS_BIN, jobs=3)
+        for case, step_results in zip(cases, results):
+            expected = [float(r["nis"]) for r in reference if r["case"] == case.name]
+            heats = [float(r["nis"]) for r in case_rows(case, step_results)]
+            self.assertEqual(len(heats), len(expected), case.name)
             for heat, value in zip(heats, expected):
-                self.assertTrue(math.isclose(heat, value, rel_tol=1e-4), f"{name}: {heat:.6e} uW/g, reference {value:.6e}")
+                self.assertTrue(math.isclose(heat, value, rel_tol=1e-4),
+                                f"{case.name}: {heat:.6e} uW/g, reference {value:.6e}")
 
     def test_decay_only_steps(self) -> None:
         # Co60: 2 steps of one half life with no spectrum, so no reaction data is needed
@@ -64,7 +66,7 @@ class NisProgramTests(unittest.TestCase):
         self.assertEqual(len(co60), 2)
         self.assertTrue(math.isclose(co60[0], 0.5e20, rel_tol=1e-3), co60)
         self.assertTrue(math.isclose(co60[1], 0.25e20, rel_tol=1e-3), co60)
-        heats = decay_heats(result.stdout)
+        heats = [step["decay_heat"] for step in parse_nis_output(result.stdout)]
         self.assertEqual(len(heats), 2)
         self.assertTrue(math.isclose(heats[1] / heats[0], 0.5, rel_tol=1e-3))
 

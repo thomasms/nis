@@ -24,7 +24,7 @@ import pynis as nis
 
 from .testdata import JEFF311_DECAY, JEFF4_REACTION, has_data
 
-from fns_benchmark import reaction_cache
+from nisbench.engines import reaction_cache
 
 
 _jeff4_reaction_file = JEFF4_REACTION

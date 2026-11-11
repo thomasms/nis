@@ -1,0 +1,13 @@
+{
+  "format": "nis-benchmark",
+  "version": 1,
+  "name": "fns",
+  "title": "FNS decay heat",
+  "category": "fusion",
+  "description": "Decay heat of thin foils after a 5 minute or 7 hour irradiation with 14 MeV (D-T) neutrons at the Fusion Neutronics Source (FNS) of JAEA, measured from about 1 minute to about 400 days after shutdown. 132 cases of elements and alloys.",
+  "references": [
+    "F. Maekawa, M. Wada, Y. Ikeda, Decay heat experiment and validation of calculation code systems for fusion reactor, JAERI 99-055 (1999)",
+    "J.-Ch. Sublet et al., FISPACT-II: an advanced simulation system for activation, transmutation and material modelling, Nuclear Data Sheets 139 (2017) 77-137"
+  ],
+  "source": "The FISPACT-II validation inputs for FNS (UKAEA), converted with scripts/bench.py convert fns. The spectrum is the 709 group flux of the FISPACT-II input. FISPACT-II (TENDL-2017) is the FISPACT-II output, interpolated to the measured times."
+}

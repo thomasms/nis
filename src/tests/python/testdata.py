@@ -6,9 +6,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent.parent.parent
 DATA_DIR = ROOT / "data"
-FNS_DECKS_DIR = ROOT / "benchmarks" / "fns"
-# the NIS results of all the FNS decks, the FNS regression test compares with it
-FNS_REFERENCE = FNS_DECKS_DIR / "nis_reference.csv"
+BENCHMARKS_DIR = ROOT / "benchmarks"
+FNS_DIR = BENCHMARKS_DIR / "fns"
+# the NIS results of all the FNS cases, the FNS regression test compares with it
+FNS_REFERENCE = FNS_DIR / "results" / "nis_reference.csv"
 
 JEFF311_DECAY = DATA_DIR / "jeff311.dec"
 ENDFBVII_DECAY = DATA_DIR / "endfbvii1.dec"

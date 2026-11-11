@@ -1,8 +1,8 @@
-# FNS decay heat benchmark, NiCr 1996exp_7hour
-# made by scripts/fns_make_decks.py from the FISPACT-II validation inputs
+# fns benchmark, NiCr/1996exp_7hour: NiCr, 7 hour irradiation, 1996 experiment
+# made by scripts/bench.py from 1996exp_7hour.json, do not edit
 # mass_kg 1.000000000e-03
-# spectrum: 709 group flux shape (CCFE-709), normalised to the flux of the irradiation step
-# irradiation, then one cooling step (flux 0) to each measured time after shutdown
+# spectrum: 709 group flux shape (CCFE-709), nis normalises it to the flux of each step
+# steps: dt in s, flux in n/m2/s (0 is cooling)
 dt 2.726784000e+04 1.050000000e+14
 dt 5.529600000e+04 0
 dt 5.702400000e+04 0

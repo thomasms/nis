@@ -50,9 +50,9 @@ into the folder `.venv` of this project. You do not run CMake, and you do not se
     ```bash
     uv run python                                   # a python shell, "import pynis" works
     uv run pytest src/tests/python/testsuite.py     # the tests
-    # a script, for example the FNS benchmark (see "FNS decay heat benchmark" below)
-    uv run python scripts/fns_benchmark.py --fns-dir benchmarks/fns \
-        --decay-data data/jeff311.dec --reaction-data data/jeff4.reac --output fns.csv
+    # a script, for example the benchmarks (see "Benchmarks" below)
+    uv run python scripts/bench.py run fns \
+        --decay-data data/jeff311.dec --reaction-data data/jeff4.reac --output results.csv
     ```
 
     Or activate the env one time in your shell, then use `python` and `pytest` as usual:
@@ -205,7 +205,7 @@ decay_mat = nis.core.decay_mat_from_file("data/jeff311.dec", nis.core.fission_yi
 ```
 
 They need no nuclear data. They test the solver, the steps of an input (irradiation and cooling), the input
-reader (also all the FNS decks in `benchmarks/fns`), ENDF reading, the reaction matrix, fission yields and the reaction cache.
+reader (also all the benchmark decks in `benchmarks/`), ENDF reading, the reaction matrix, fission yields and the reaction cache.
 
 ### Python tests
 
@@ -228,11 +228,11 @@ The tests:
 
 | File | What it tests | Needs |
 |---|---|---|
-| [scripttests.py](src/tests/python/scripttests.py) | the benchmark scripts: read a deck, interpolation, statistics, when the reaction cache is made again | nothing |
+| [scripttests.py](src/tests/python/scripttests.py) | the benchmark format and tools: read and check case files, the decks are made from the case files, units, results files, statistics, the `bench.py` commands, when the reaction cache is made again | nothing |
 | [integrationtests.py](src/tests/python/integrationtests.py) | decay with JEFF-3.1.1 and ENDF/B-VII.1 | decay data |
 | [reactiontests.py](src/tests/python/reactiontests.py) | JEFF-4.0 reactions: thermal and 14.1 MeV cross sections against reference values, the spectrum (linear in flux, bin splitting), the matrix structure, burn-up and Co60 activation against the analytic Bateman solution | reaction data |
 | [fissiontests.py](src/tests/python/fissiontests.py) | JEFF-3.1.1 fission yields: 2 products per fission, thermal U235 gives the known Cs137 and Sr90 yields and fission to capture ratio, Cf252 spontaneous fission | decay and reaction data, the yield files |
-| [fnstests.py](src/tests/python/fnstests.py) (slow) | FNS regression: runs all 132 FNS decks and compares with [nis_reference.csv](benchmarks/fns/nis_reference.csv), and checks that NIS stays as close to the experiment as now | decay and reaction data |
+| [fnstests.py](src/tests/python/fnstests.py) (slow) | FNS regression: runs all 132 FNS cases and compares with [nis_reference.csv](benchmarks/fns/results/nis_reference.csv), and checks that NIS stays as close to the experiment as now | decay and reaction data |
 | [nisprogramtests.py](src/tests/python/nisprogramtests.py) (slow) | the `nis` program: 3 FNS decks give the same as the reference, decay only steps, errors for bad input | decay and reaction data, the `nis` program |
 
 "Decay data" and "reaction data" are the files in `data/` from git lfs. The yield files come from
@@ -244,8 +244,8 @@ is skipped. The `nis` program test uses `build/bin/nis`, or give its path: `NIS_
 and commit it:
 
 ```bash
-uv run python scripts/fns_benchmark.py --fns-dir benchmarks/fns \
-    --decay-data data/jeff311.dec --reaction-data data/jeff4.reac --output benchmarks/fns/nis_reference.csv
+uv run python scripts/bench.py run fns --decay-data data/jeff311.dec --reaction-data data/jeff4.reac \
+    --output benchmarks/fns/results/nis_reference.csv
 ```
 
 ### CI
@@ -259,18 +259,19 @@ and on each pull request:
 CI does not download the nuclear data (about 1 GB of git lfs), so the tests that need it are skipped there.
 Run them on your machine before you push a change to the physics.
 
-### FNS decay heat benchmark
+## Benchmarks
 
-The FNS (JAEA) experiments irradiate foils with 14 MeV neutrons and measure the decay heat.
-The scripts run NIS for each case and compare it with the measured heat and with the FISPACT-II
-(TENDL-2017) results. FISPACT-II is not run.
+All the benchmarks are in [benchmarks/](benchmarks), in one standard format for all types of benchmark
+(fusion, fission, ...). Each case has a case file `<case>.json` (the source of truth: the sample, the time steps,
+the spectrum, the measured values and the results of other codes) and a NIS input deck `<case>.inp` made from it.
+[benchmarks/README.md](benchmarks/README.md) gives the format, and how to add a benchmark.
 
-The input for each case is in [benchmarks/fns](benchmarks/fns): one NIS input deck `<material>/<case>.inp`
-(initial atoms, 709 group flux shape, the irradiation step and a cooling step to each measured time), and the measured
-and FISPACT-II decay heat in `<case>.csv`. [scripts/fns_make_decks.py](scripts/fns_make_decks.py) made them from the
-FISPACT-II validation inputs.
+| Benchmark | Type | Cases | What is measured |
+|---|---|---|---|
+| [fns](benchmarks/fns) | fusion | 132 | decay heat of foils after 14 MeV neutron irradiation (FNS, JAEA) |
 
-These steps use uv (see [python bindings](#python-bindings)), and the nuclear data from LFS.
+One program, [scripts/bench.py](scripts/bench.py), does all the work for all the benchmarks. These steps use uv
+(see [python bindings](#python-bindings)), and the nuclear data from LFS.
 
 1. Build and install `pynis` into `.venv`:
 
@@ -278,68 +279,69 @@ These steps use uv (see [python bindings](#python-bindings)), and the nuclear da
     uv sync
     ```
 
-2. Run all the cases. The results are in `fns.csv`:
+2. See the benchmarks, and check the case files and the decks:
 
     ```bash
-    uv run python scripts/fns_benchmark.py --fns-dir benchmarks/fns \
-        --decay-data data/jeff311.dec --reaction-data data/jeff4.reac --output fns.csv
+    uv run python scripts/bench.py list
+    uv run python scripts/bench.py check
     ```
 
-    The first run makes the reaction cache `data/jeff4.nisreac` (see below). `--materials Co Fe` runs only
-    some materials. The cases run in parallel, one process per core (`--jobs`).
-
-3. Get the C/E statistics for NIS and FISPACT-II:
+3. Run all the cases of a benchmark (or all the benchmarks if you give no name). The results are in `results.csv`:
 
     ```bash
-    uv run python scripts/fns_stats.py fns.csv
+    uv run python scripts/bench.py run fns \
+        --decay-data data/jeff311.dec --reaction-data data/jeff4.reac --output results.csv
     ```
 
-4. Make the plots of NIS (smooth curve) and FISPACT-II against the experiment, one for each case:
+    The first run makes the reaction cache `data/jeff4.nisreac` (see below). `--cases Co Fe/1996exp_7hour` runs
+    only some cases. The cases run in parallel, one process per core (`--jobs`). For a fission benchmark, give the
+    fission yields with `--fission-yields` (and `--sf-yields`).
+
+4. Get the C/E statistics for NIS and the other codes in the case files (for FNS, FISPACT-II):
 
     ```bash
-    uv run python scripts/fns_plot.py --fns-dir benchmarks/fns \
-        --decay-data data/jeff311.dec --reaction-data data/jeff4.reac --output-dir fns_plots
+    uv run python scripts/bench.py stats results.csv
     ```
 
-5. Make one plot of the C/E of all the cases, NIS against FISPACT-II:
+5. Make one plot of the C/E of all the cases, and one plot for each case:
 
     ```bash
-    uv run python scripts/fns_summary_plot.py fns.csv --output fns_summary.png
+    uv run python scripts/bench.py plot results.csv --summary fns_summary.png --cases-dir plots
     ```
 
-    This is the plot for [nis_reference.csv](benchmarks/fns/nis_reference.csv) (JEFF-3.1.1 decay and JEFF-4.0
-    reaction data). Each point is the geometric mean of C/E over the measured times of a case:
+    This is the summary plot for the FNS reference results
+    [nis_reference.csv](benchmarks/fns/results/nis_reference.csv) (JEFF-3.1.1 decay and JEFF-4.0 reaction data).
+    Each point is the geometric mean of C/E over the measured times of a case:
 
-    ![C/E of all the FNS cases](benchmarks/fns/fns_summary.png)
+    ![C/E of all the FNS cases](benchmarks/fns/results/fns_summary.png)
 
-**Reaction cache:** all the scripts use the reaction cache. If `--reaction-data` is an ENDF file, the cache is
-`<file>.nisreac` next to it (for example `data/jeff4.nisreac`). The scripts make it first if it does not exist,
+**Reaction cache:** `run` uses the reaction cache. If `--reaction-data` is an ENDF file, the cache is
+`<file>.nisreac` next to it (for example `data/jeff4.nisreac`). It is made first if it does not exist,
 is older than the ENDF file, or is of another cache version.
 
-**With the FISPACT-II validation inputs:** give their folder to `--fns-dir` in place of `benchmarks/fns`
-(`<material>/TENDL-2017_<case>.i`, `.out`, `.nuclides`, `<case>.exp` and `<case>_fluxes`). Only these files
-have the FISPACT-II atoms, so only with them can you compare the nuclides:
-
-```bash
-uv run python scripts/fns_benchmark.py --fns-dir path/to/fns \
-    --decay-data data/jeff311.dec --reaction-data data/jeff4.reac \
-    --output fns.csv --nuclides-output fns_nuclides.csv
-# the nuclides that cause a difference between NIS and FISPACT-II
-uv run python scripts/fns_heat_by_nuclide.py fns_nuclides.csv --decay-data data/jeff311.dec
-# make the decks in benchmarks/fns again
-uv run python scripts/fns_make_decks.py --fns-dir path/to/fns --output-dir benchmarks/fns
-```
-
-**With the `nis` program:** [scripts/fns_run_decks.py](scripts/fns_run_decks.py) runs each deck with the `nis`
-program, in place of `pynis`. uv does not build `nis`, so build it with CMake first (see [Build](#build)).
-It writes the same CSV:
+**With the `nis` program:** each deck is a normal NIS input, so you can run one with the `nis` program. uv does not
+build `nis`, so build it with CMake first (see [Build](#build)). `run --engine nis` runs all the decks with the
+`nis` program in place of `pynis`, and gives the same results:
 
 ```bash
 ./build/bin/nis -d data/jeff311.dec -r data/jeff4.nisreac -i benchmarks/fns/Co/2000exp_5min.inp   # one deck
-uv run python scripts/fns_run_decks.py --nis build/bin/nis --decks benchmarks/fns \
-    --decay-data data/jeff311.dec --reaction-data data/jeff4.reac --output fns_decks.csv
-uv run python scripts/fns_stats.py fns_decks.csv
+uv run python scripts/bench.py run fns --engine nis --nis build/bin/nis \
+    --decay-data data/jeff311.dec --reaction-data data/jeff4.reac --output results_nis.csv
 ```
 
-Each `nis` run reads the nuclear data again, so the reaction cache is important here: with it, all the decks run in
-about 30 s on 4 cores. The cache is made with the `nis_cache` program next to `--nis` (or give `--nis-cache`).
+Each `nis` run reads the nuclear data again, so the reaction cache is important here: with it, all the FNS decks
+run in about 30 s on 4 cores. The cache is made with the `nis_cache` program next to `--nis` (or give `--nis-cache`).
+
+**Make a benchmark again from its original files:** a converter reads the original files and writes the case files
+and the decks. For FNS, the original files are the FISPACT-II validation inputs
+(`<material>/TENDL-2017_<case>.i`, `.out`, `.nuclides`, `<case>.exp` and `<case>_fluxes`):
+
+```bash
+uv run python scripts/bench.py convert fns --source path/to/fns
+```
+
+**Change a case:** edit the case file `<case>.json`, then make the decks again (do not edit a deck):
+
+```bash
+uv run python scripts/bench.py decks
+```

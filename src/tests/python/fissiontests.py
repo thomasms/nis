@@ -10,7 +10,7 @@ import pynis as nis
 
 from .testdata import JEFF311_DECAY, JEFF311_NFY, JEFF311_SFY, JEFF4_REACTION, has_data
 
-from fns_benchmark import reaction_cache
+from nisbench.engines import reaction_cache
 
 U235 = 922350
 CF252 = 982520
