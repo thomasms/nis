@@ -6,10 +6,10 @@ import tarfile
 import urllib.request
 from pathlib import Path
 
-# the neutron files of each TENDL release. The site: https://tendl.web.psi.ch
-# If the site moves or a release uses another name, give the address with --url.
-TENDL_URL = "https://tendl.web.psi.ch/tendl_{year}/tar_files/TENDL-n.tgz"
-LATEST_TENDL = "2023"
+# the neutron files of a TENDL release. The site: https://tendl.imperial.ac.uk (it was at
+# https://tendl.web.psi.ch before). If the site moves again, give the address with --url.
+TENDL_URL = "https://tendl.imperial.ac.uk/tendl_{year}/tar_files/TENDL-n.tgz"
+LATEST_TENDL = "2025"
 
 
 def download(url: str, target: Path) -> Path:

@@ -142,7 +142,7 @@ cores, see [processing/README.md](processing/README.md):
 
 ```bash
 python3 processing/process.py tools                   # build NJOY and PREPRO
-python3 processing/process.py tendl --year 2023       # data/tendl2023.reac and data/tendl2023.nisreac
+python3 processing/process.py tendl --year 2025       # data/tendl2025.reac and data/tendl2025.nisreac
 ```
 
 Reading the ENDF reaction file (about 1 GB for JEFF-4) takes a few seconds for each run. Make a binary cache

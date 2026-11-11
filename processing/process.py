@@ -10,7 +10,7 @@ Commands:
 
 Examples:
     uv run python processing/process.py tools
-    uv run python processing/process.py tendl --year 2023 --output data/tendl2023.reac
+    uv run python processing/process.py tendl --year 2025 --output data/tendl2025.reac
     uv run python processing/process.py run path/to/endf --output processing/out/mylib -j 16
     uv run python processing/process.py combine processing/out/mylib --output data/mylib.reac --title "My library"
 """

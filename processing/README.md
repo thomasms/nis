@@ -27,17 +27,17 @@ You need git, cmake, make and gfortran. Python 3.9 or newer, no other packages.
 
 ```bash
 python3 processing/process.py tools                       # get and build NJOY and PREPRO (about 1 minute)
-python3 processing/process.py tendl --year 2023           # download, process all, join: data/tendl2023.reac
-./build/bin/nis -d data/jeff311.dec -r data/tendl2023.nisreac -i examples/activate.inp
+python3 processing/process.py tendl --year 2025           # download, process all, join: data/tendl2025.reac
+./build/bin/nis -d data/jeff311.dec -r data/tendl2025.nisreac -i examples/activate.inp
 ```
 
 `tendl` does the 3 steps below. You can also do them one at a time:
 
 ```bash
-python3 processing/process.py fetch --year 2023           # processing/raw/TENDL-2023-n/
-python3 processing/process.py run processing/raw/TENDL-2023-n --output processing/out/tendl2023
-python3 processing/process.py combine processing/out/tendl2023 --output data/tendl2023.reac \
-    --title "TENDL-2023 Incident Neutron File (1102 groups)"
+python3 processing/process.py fetch --year 2025           # processing/raw/TENDL-2025-n/
+python3 processing/process.py run processing/raw/TENDL-2025-n --output processing/out/tendl2025
+python3 processing/process.py combine processing/out/tendl2025 --output data/tendl2025.reac \
+    --title "TENDL-2025 Incident Neutron File (1102 groups)"
 ```
 
 Any library works with `run` and `combine`: give the folders or files of the ENDF neutron files.
@@ -88,8 +88,8 @@ step for each nuclide. `--keep` keeps the work folders, so you can run a step ag
 
 ## Notes
 
-- `fetch` downloads `https://tendl.web.psi.ch/tendl_<year>/tar_files/TENDL-n.tgz`. If the site has another
-  address for a release, give it with `--url`, or download and unpack the files yourself and use `run`.
+- `fetch` downloads `https://tendl.imperial.ac.uk/tendl_<year>/tar_files/TENDL-n.tgz` (TENDL moved there from
+  tendl.web.psi.ch). If the site moves again, give the address with `--url`, or download and unpack the files yourself and use `run`.
 - `tools` takes the latest NJOY2016 and PREPRO. Give a tag with `--njoy-ref` and `--prepro-ref` to fix the
   versions. `--njoy` and `--prepro-dir` (or `NJOY_EXE` and `PREPRO_EXE_DIR`) use programs that you already have.
 - The tests are in [processingtests.py](../src/tests/python/processingtests.py). The tests that run NJOY and PREPRO
