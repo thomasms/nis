@@ -76,6 +76,9 @@ namespace nis{
 
             constexpr Prec_t ALPHA_0 = 2.258038182743983e-47;
 
+            // a diagonal entry is the pivot if it is at least this fraction of the largest entry in its column
+            constexpr Prec_t DIAGONAL_PIVOT_THRESHOLD = 1e-3;
+
             template<typename T=double>
             Eigen::VectorX<T> solve(const Eigen::SparseMatrix<T>& mat, const Eigen::VectorX<T>& n0, double dt){
                 // the matrix is (parent, daughter), the solver needs (daughter, parent)
@@ -85,6 +88,15 @@ namespace nis{
 
                 // solver
                 Eigen::SparseLU<Eigen::SparseMatrix<core::cram48::Coeff_t>, Eigen::COLAMDOrdering<int> > lu_solver;
+                // Use the diagonal as the pivot. Atoms only go from a parent to its daughters, so in the
+                // column of a nuclide (A - theta*I) the diagonal is |lambda*dt + theta| and each other
+                // entry is at most lambda*dt. The diagonal is always at least ~0.8 of the largest entry,
+                // so it is a stable pivot. With the default partial pivoting a row of a very short-lived
+                // nuclide (lambda*dt up to ~1e17) can be swapped in, which mixes chains that are not
+                // connected, and the rounding noise of a large inventory then goes into a small one
+                // (for example As75m, a few atoms, next to 6e21 atoms of As75). That made the result
+                // change with the order of the nuclides and with small changes of dt.
+                lu_solver.setPivotThreshold(DIAGONAL_PIVOT_THRESHOLD);
                 Eigen::SparseMatrix<core::cram48::Coeff_t> A_prime;
                 Eigen::VectorX<core::cram48::Coeff_t> x(mat.cols());
                 core::cram48::Coeff_t alpha, theta;
