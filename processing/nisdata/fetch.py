@@ -3,6 +3,8 @@
 import shutil
 import sys
 import tarfile
+import time
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -12,7 +14,8 @@ TENDL_URL = "https://tendl.imperial.ac.uk/tendl_{year}/tar_files/TENDL-n.tgz"
 LATEST_TENDL = "2025"
 
 
-def download(url: str, target: Path) -> Path:
+def download(url: str, target: Path, tries: int = 50) -> Path:
+    """Download to <target>.part, then rename. A stopped download continues from where it stopped."""
     target = Path(target)
     target.parent.mkdir(parents=True, exist_ok=True)
     if target.is_file():
@@ -20,8 +23,30 @@ def download(url: str, target: Path) -> Path:
         return target
     partial = target.with_suffix(target.suffix + ".part")
     print(f"download {url}", file=sys.stderr, flush=True)
-    with urllib.request.urlopen(url) as response, open(partial, "wb") as out:
-        shutil.copyfileobj(response, out, length=1 << 20)
+    for attempt in range(1, tries + 1):
+        done = partial.stat().st_size if partial.is_file() else 0
+        request = urllib.request.Request(url, headers={"Range": f"bytes={done}-"} if done else {})
+        try:
+            with urllib.request.urlopen(request, timeout=120) as response:
+                # 206: the server sends the rest. 200: it sends all of it again
+                mode = "ab" if done and response.status == 206 else "wb"
+                total = response.headers.get("Content-Range", "").rpartition("/")[2] or \
+                    response.headers.get("Content-Length")
+                with open(partial, mode) as out:
+                    shutil.copyfileobj(response, out, length=1 << 20)
+            if total and total.isdigit() and partial.stat().st_size != int(total):
+                raise OSError(f"got {partial.stat().st_size} of {total} bytes")
+            break
+        except urllib.error.HTTPError as e:
+            # 416: the part file is already complete
+            if e.code == 416 and done:
+                break
+            raise
+        except OSError as e:
+            if attempt == tries:
+                raise
+            print(f"download stopped ({e}), continue ({attempt}/{tries})", file=sys.stderr, flush=True)
+            time.sleep(min(60, 5 * attempt))
     partial.replace(target)
     return target
 

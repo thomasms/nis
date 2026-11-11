@@ -267,3 +267,44 @@ class CommandLineTests(unittest.TestCase):
         run = self.run_process("combine", tempfile.mkdtemp(), "--output", Path(tempfile.mkdtemp()) / "x.reac")
         self.assertNotEqual(run.returncode, 0)
         self.assertIn("no processed files", run.stderr)
+
+
+class DownloadTests(unittest.TestCase):
+    """fetch.download continues a stopped download with a range request."""
+
+    def test_continue_after_a_drop(self) -> None:
+        import http.server
+        import threading
+        from nisdata import fetch
+
+        content = bytes(range(256)) * 4000
+        calls = []
+
+        class Handler(http.server.BaseHTTPRequestHandler):
+            def do_GET(self):
+                start = int(self.headers.get("Range", "bytes=0-")[6:].rstrip("-") or 0)
+                calls.append(start)
+                self.send_response(206 if start else 200)
+                if start:
+                    self.send_header("Content-Range", f"bytes {start}-{len(content) - 1}/{len(content)}")
+                self.send_header("Content-Length", str(len(content) - start))
+                self.end_headers()
+                # the first time, stop after a part of the file
+                end = len(content) // 3 if len(calls) == 1 else len(content)
+                self.wfile.write(content[start:end])
+
+            def log_message(self, *args):
+                pass
+
+        server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+        threading.Thread(target=server.serve_forever, daemon=True).start()
+        self.addCleanup(server.shutdown)
+        original_sleep = fetch.time.sleep
+        fetch.time.sleep = lambda s: None
+        self.addCleanup(setattr, fetch.time, "sleep", original_sleep)
+
+        target = Path(tempfile.mkdtemp()) / "file.tgz"
+        fetch.download(f"http://127.0.0.1:{server.server_port}/file.tgz", target, tries=3)
+        self.assertEqual(target.read_bytes(), content)
+        self.assertEqual(calls, [0, len(content) // 3])
+        self.assertFalse(target.with_suffix(".tgz.part").exists())
