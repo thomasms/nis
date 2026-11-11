@@ -221,6 +221,25 @@ class PipelineTests(unittest.TestCase):
         self.assertTrue((out / "logs" / "Fe56.log").is_file())
         self.assertFalse((out / "Fe56.asc").exists())
 
+    def test_from_archive(self) -> None:
+        import tarfile
+        from nisdata.runner import process_archive
+        archive = self.dir / "library.tgz"
+        with tarfile.open(archive, "w:gz") as tar:
+            for name in TEST_FILES:
+                tar.add(_test_files_dir() / name, arcname=f"lib/{name}")
+            # not a neutron file, and not an ENDF file: both ignored
+            tar.add(_test_files_dir() / "tsl-HinZrH-ENDF8.0.endf", arcname="lib/tsl-HinZrH.endf")
+            readme = self.dir / "README"
+            readme.write_text("text\n")
+            tar.add(readme, arcname="lib/README")
+        out = self.dir / "from_archive"
+        results = process_archive(archive, out, _tools(), jobs=2, quiet=True, only=("Ar37",))
+        self.assertEqual([(r.name, r.ok) for r in results], [("Ar37", True)], [r.error for r in results])
+        self.assertTrue(str(results[0].source).endswith("library.tgz:lib/n-018_Ar_37-tendl2023.endf"))
+        # the same output as from the file
+        self.assertEqual((out / "Ar37.asc").read_text(), (self.out / "Ar37.asc").read_text())
+
     def test_combine_and_read_with_nis(self) -> None:
         output = self.dir / "test.reac"
         run = subprocess.run([sys.executable, str(PROCESS), "combine", str(self.out), "--output", str(output),

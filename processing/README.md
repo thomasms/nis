@@ -31,16 +31,21 @@ python3 processing/process.py tendl --year 2025           # download, process al
 ./build/bin/nis -d data/jeff311.dec -r data/tendl2025.nisreac -i examples/activate.inp
 ```
 
-`tendl` does the 3 steps below. You can also do them one at a time:
+`tendl` downloads the archive (3.5 GB for TENDL-2025, the download continues if the connection drops),
+processes the files **directly from the archive** and joins them. The archive is not unpacked: TENDL-2025 has
+2850 neutron files and 14 GB unpacked, but only a few files are out of the archive at one time.
+
+You can also do the steps one at a time:
 
 ```bash
-python3 processing/process.py fetch --year 2025           # processing/raw/TENDL-2025-n/
+python3 processing/process.py fetch --year 2025           # processing/raw/TENDL-2025-n/ (--no-unpack: only the .tgz)
 python3 processing/process.py run processing/raw/TENDL-2025-n --output processing/out/tendl2025
 python3 processing/process.py combine processing/out/tendl2025 --output data/tendl2025.reac \
     --title "TENDL-2025 Incident Neutron File (1102 groups)"
 ```
 
-Any library works with `run` and `combine`: give the folders or files of the ENDF neutron files.
+Any library works with `run` and `combine`: give the folders or files of the ENDF neutron files, or one tar
+archive of them (for example `processing/raw/TENDL-2025-n.tgz`).
 `run` finds the incident neutron files (NSUB=10) in all the folders and ignores the other files
 (thermal scattering, photo-atomic, ...). `--only Fe56 Co59` processes only some nuclides.
 Each nuclide must be there only one time, because its output file has the name of the nuclide

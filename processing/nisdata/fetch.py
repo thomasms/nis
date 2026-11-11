@@ -51,7 +51,7 @@ def download(url: str, target: Path, tries: int = 50) -> Path:
     return target
 
 
-def unpack(archive: Path, folder: Path) -> Path:
+def unpack_archive(archive: Path, folder: Path) -> Path:
     """Unpack a tar archive safely (no paths out of the folder, no links or devices)."""
     folder = Path(folder)
     folder.mkdir(parents=True, exist_ok=True)
@@ -68,9 +68,12 @@ def unpack(archive: Path, folder: Path) -> Path:
     return folder
 
 
-def fetch_tendl(year: str, folder: Path, url: str = None) -> Path:
-    """Download TENDL-<year> neutron files into <folder>/TENDL-<year>-n/ and return that folder."""
+def fetch_tendl(year: str, folder: Path, url: str = None, unpack: bool = True) -> Path:
+    """
+    Download the TENDL-<year> neutron files to <folder>/TENDL-<year>-n.tgz. With unpack, unpack them into
+    <folder>/TENDL-<year>-n/ and return that folder, else return the archive.
+    """
     folder = Path(folder)
     url = url or TENDL_URL.format(year=year)
     archive = download(url, folder / f"TENDL-{year}-n{''.join(Path(url).suffixes) or '.tgz'}")
-    return unpack(archive, folder / f"TENDL-{year}-n")
+    return unpack_archive(archive, folder / f"TENDL-{year}-n") if unpack else archive

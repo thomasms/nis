@@ -23,7 +23,7 @@ from pathlib import Path
 
 from nisdata import endf, fetch, tools as build_tools
 from nisdata.pipeline import Tools
-from nisdata.runner import process_all
+from nisdata.runner import is_archive, process_all, process_archive
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
@@ -80,21 +80,31 @@ def cmd_tools(args) -> int:
 
 
 def cmd_fetch(args) -> int:
-    folder = fetch.fetch_tendl(args.year, args.raw, args.url)
-    print(f"{len(endf.find_endf_files(folder))} neutron files in {folder}", file=sys.stderr)
+    path = fetch.fetch_tendl(args.year, args.raw, args.url, unpack=not args.no_unpack)
+    if path.is_dir():
+        print(f"{len(endf.find_endf_files(path))} neutron files in {path}", file=sys.stderr)
+    else:
+        print(f"the archive is {path} (run can read it, it is not necessary to unpack it)", file=sys.stderr)
     return 0
 
 
-def cmd_run(args) -> int:
+def _process(sources: list, output: Path, args) -> list:
+    """Folders and files of ENDF files, or one tar archive of them."""
+    if len(sources) == 1 and is_archive(sources[0]):
+        return process_archive(sources[0], output, _tools(args), args.jobs, args.temperature, args.work_dir,
+                               args.keep, args.force, only=tuple(args.only))
     files = []
-    for source in args.sources:
+    for source in sources:
         files += endf.find_endf_files(source) if source.is_dir() else [source]
     files = _select(files, args.only)
     if not files:
         raise SystemExit("no ENDF neutron files")
-    results = process_all(files, args.output, _tools(args), args.jobs, args.temperature, args.work_dir,
-                          args.keep, args.force)
-    return _report(results, args.output)
+    return process_all(files, output, _tools(args), args.jobs, args.temperature, args.work_dir, args.keep,
+                       args.force)
+
+
+def cmd_run(args) -> int:
+    return _report(_process(args.sources, args.output, args), args.output)
 
 
 def cmd_combine(args) -> int:
@@ -103,12 +113,10 @@ def cmd_combine(args) -> int:
 
 
 def cmd_tendl(args) -> int:
-    folder = fetch.fetch_tendl(args.year, args.raw, args.url)
-    files = _select(endf.find_endf_files(folder), args.only)
+    # the files are read from the archive, so the 14 GB of TENDL are never all on the disk
+    archive = fetch.fetch_tendl(args.year, args.raw, args.url, unpack=False)
     out = args.processed or DEFAULT_OUT / f"tendl{args.year}"
-    results = process_all(files, out, _tools(args), args.jobs, args.temperature, args.work_dir, args.keep,
-                          args.force)
-    status = _report(results, out)
+    status = _report(_process([archive], out, args), out)
     output = args.output or ROOT / "data" / f"tendl{args.year}.reac"
     _combine(out, output, f"TENDL-{args.year} Incident Neutron File (1102 groups)", args.nis_cache)
     return status
@@ -145,10 +153,12 @@ def main() -> int:
     p.add_argument("--year", default=fetch.LATEST_TENDL, help=f"the TENDL release, default {fetch.LATEST_TENDL}")
     p.add_argument("--raw", type=Path, default=DEFAULT_RAW, help="where to put them")
     p.add_argument("--url", default=None, help="the address of the archive, if not the usual one")
+    p.add_argument("--no-unpack", action="store_true", help="only download the archive (about 14 GB less disk)")
     p.set_defaults(func=cmd_fetch)
 
     p = commands.add_parser("run", help="process ENDF files (or folders of them)")
-    p.add_argument("sources", nargs="+", type=Path)
+    p.add_argument("sources", nargs="+", type=Path,
+                   help="ENDF files, folders of them, or one tar archive of them (e.g. TENDL-n.tgz, not unpacked)")
     p.add_argument("--output", type=Path, required=True, help="the folder for the processed files")
     _add_run_options(p)
     p.set_defaults(func=cmd_run)
