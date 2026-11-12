@@ -21,3 +21,6 @@ data/*.sfy
 processing/tools/
 processing/raw/
 processing/out/
+
+# reaction data made with processing/process.py tendl (too large for git, make it again with the command)
+data/tendl*.reac
