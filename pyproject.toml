@@ -15,7 +15,7 @@ dynamic = ["version"]
 plot = ["matplotlib"]
 
 [dependency-groups]
-dev = ["pytest", "matplotlib"]
+dev = ["pytest", "matplotlib", "mpmath"]
 
 [tool.scikit-build]
 minimum-version = "build-system.requires"

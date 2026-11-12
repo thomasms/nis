@@ -2,6 +2,8 @@ import os
 import unittest
 
 from .integrationtests import *
+from .solvertests import *
+from .datatests import *
 from .reactiontests import *
 from .fissiontests import *
 from .scripttests import *

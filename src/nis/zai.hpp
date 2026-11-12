@@ -12,6 +12,7 @@ namespace nis {
         using triple = std::tuple<int, int, int>;
 
         const int ALPHA = 20040;
+        const int PROTON = 10010;
         // would be better to make at compile time
         const std::map<int, unsigned char> META_STABLE_MAP = {
             {0, ' '},

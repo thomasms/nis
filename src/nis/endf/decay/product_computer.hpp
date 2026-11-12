@@ -94,14 +94,15 @@ namespace nis {
             };
         };
 
+        // the proton is a nucleon, so the daughter has one less in Z and in A, and the proton is an H1 atom
         struct ProtonEmissionDecayReactionProducts{
 
             DecayProductT get_products(int parent_zai) const{
                 const zai::triple parent_triple = zai::decompose(parent_zai);
                 const int daughter_zai = zai::make(std::get<0>(parent_triple)-1,
-                                                   std::get<1>(parent_triple),
+                                                   std::get<1>(parent_triple)-1,
                                                    std::get<2>(parent_triple));
-                return DecayProductT(daughter_zai, {});
+                return DecayProductT(daughter_zai, {zai::PROTON});
             };
         };
 
