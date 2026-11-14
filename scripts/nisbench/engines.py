@@ -91,8 +91,31 @@ class _PynisData:
         self.reaction_data = nis.core.reaction_data_from_file(str(data.reaction)) if data.reaction else None
 
 
+def _with_source(mat, yields: dict, rate: float):
+    """The matrix with one more nuclide at the end, the source: it does not decay, and makes rate * yield atoms/s
+    of each fission product (yields: index -> yield). With 1 atom of the source, the solve adds the products of a
+    constant fission rate to the inventory."""
+    import scipy.sparse as sp
+    size = mat.shape[0]
+    columns = list(yields)
+    row = sp.csr_matrix(([rate * yields[c] for c in columns], ([0] * len(columns), columns)), shape=(1, size + 1))
+    return sp.vstack([sp.hstack([mat, sp.csr_matrix((size, 1))]), row]).tocsc()
+
+
+def _inventory_from_vector(nis, vector) -> dict:
+    zais = nis.data.ALL_ZAIS()
+    return {nis.zai.get_name_from(zais[i]): float(v) for i, v in enumerate(vector[:len(zais)]) if v > 0}
+
+
 def _run_pynis(case: Case, d: _PynisData) -> list:
     nis = d.nis
+    source_yields = None
+    if case.fission_source is not None:
+        if d.fission_yields is None:
+            raise RuntimeError(f"{case.name}: the case has a fission source, so it needs --fission-yields")
+        from .pulse import pulse_inventory
+        source_yields = pulse_inventory(d.fission_yields, case.fission_source["nuclide"],
+                                        case.fission_source["neutron_energy_ev"])
     reaction_mat, spectrum_total = None, None
     if case.spectrum is not None and any(flux > 0 for _, flux in case.steps):
         if d.reaction_data is None:
@@ -103,15 +126,30 @@ def _run_pynis(case: Case, d: _PynisData) -> list:
 
     matrices = {}
     nuclides = dict(case.atoms)
+    if source_yields is not None and case.fission_source["fissions_at_start"] > 0:
+        for name, y in source_yields.items():
+            nuclides[name] = nuclides.get(name, 0.0) + case.fission_source["fissions_at_start"] * y
+    # the index of each fission product in the inventory vector
+    source_index = None
+    if source_yields is not None:
+        import numpy as np
+        source_index = {n: int(np.argmax(nis.core.vector_from_inventory({n: 1.0}))) for n in source_yields}
+        source_index = {n: (i, source_yields[n]) for n, i in source_index.items()}
     results = []
-    for dt, flux in case.steps:
+    for (dt, flux), rate in zip(case.steps, case.step_fission_rates()):
         if flux not in matrices:
             # the same as solver::flux_scale: the spectrum is in n/cm2/s and its total is the step flux
             matrices[flux] = d.decay_mat if flux == 0 else d.decay_mat + reaction_mat * (flux * 1e-4 / spectrum_total)
-        model = nis.core.BasicModel()
-        model.nuclides = nuclides
-        model.dt = dt
-        nuclides = nis.core.compute_inventory(model, matrices[flux], nis.core.solver_cram48).nuclides
+        if rate > 0:
+            import numpy as np
+            mat = _with_source(matrices[flux], dict(source_index.values()), rate)
+            n0 = np.append(nis.core.vector_from_inventory(nuclides), 1.0)
+            nuclides = _inventory_from_vector(nis, nis.core.solver_cram48(mat, n0, dt))
+        else:
+            model = nis.core.BasicModel()
+            model.nuclides = nuclides
+            model.dt = dt
+            nuclides = nis.core.compute_inventory(model, matrices[flux], nis.core.solver_cram48).nuclides
         inventory = nis.core.vector_from_inventory(nuclides)
         heat = nis.core.compute_decay_heat(d.energy_data, inventory)
         result = {quantity: getattr(heat, part) for part, quantity in _HEAT_PARTS.items()}
@@ -163,6 +201,8 @@ def parse_nis_output(output: str) -> list:
 
 
 def _run_program(case: Case, nis: Path, data: NuclearData) -> list:
+    if not case.has_deck:
+        raise RuntimeError(f"{case.name}: a case with a fission source has no deck, run it with --engine pynis")
     if not case.deck_path.exists():
         raise RuntimeError(f"{case.name}: no deck {case.deck_path}, make it with scripts/bench.py decks")
     # a large threshold, so the output has no nuclide list

@@ -53,11 +53,13 @@ def cmd_check(args) -> int:
     from nisbench.deck import deck_is_current
     errors = 0
     for b in load_benchmarks(args.benchmarks, args.root, args.cases):
-        stale = [c for c in b.cases if not deck_is_current(c)]
+        with_deck = [c for c in b.cases if c.has_deck]
+        stale = [c for c in with_deck if not deck_is_current(c)]
         for c in stale:
             print(f"{c.deck_path}: missing or not made from {c.path.name}, run: scripts/bench.py decks {b.name}")
         errors += len(stale)
-        print(f"{b.name}: {len(b.cases)} cases, {len(b.cases) - len(stale)} decks up to date", file=sys.stderr)
+        no_deck = f", {len(b.cases) - len(with_deck)} with a fission source (no deck)" if len(with_deck) < len(b.cases) else ""
+        print(f"{b.name}: {len(b.cases)} cases, {len(with_deck) - len(stale)} decks up to date{no_deck}", file=sys.stderr)
     return 1 if errors else 0
 
 
@@ -76,7 +78,8 @@ def cmd_convert(args) -> int:
     for case in cases:
         path = folder / f"{case.name}.json"
         write_case(case, path)
-        write_deck(load_case(path))
+        if case.has_deck:
+            write_deck(load_case(path))
     print(f"{len(cases)} cases in {folder}", file=sys.stderr)
     return 0
 
@@ -84,9 +87,10 @@ def cmd_convert(args) -> int:
 def cmd_decks(args) -> int:
     from nisbench.deck import write_deck
     for b in load_benchmarks(args.benchmarks, args.root, args.cases):
-        for c in b.cases:
+        with_deck = [c for c in b.cases if c.has_deck]
+        for c in with_deck:
             write_deck(c)
-        print(f"{b.name}: {len(b.cases)} decks", file=sys.stderr)
+        print(f"{b.name}: {len(with_deck)} decks", file=sys.stderr)
     return 0
 
 

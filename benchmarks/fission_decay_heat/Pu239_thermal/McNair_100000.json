@@ -1,0 +1,31 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "fission_decay_heat",
+  "name": "Pu239_thermal/McNair_100000",
+  "title": "Pu239 thermal fission, 100000 s irradiation, McNair",
+  "sample": {
+    "atoms": {}
+  },
+  "steps": {
+    "dt_s": [100000.0, 15.0, 5.0, 30.0, 50.0, 100.0, 300.0, 500.0, 1000.0, 3000.0, 5000.0, 10000.0, 28800.0, 43400.0],
+    "flux_n_m2_s": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+    "fission_rate_per_s": [1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  },
+  "spectrum": null,
+  "fission_source": {
+    "nuclide": "Pu239",
+    "neutron_energy_ev": 0.0253,
+    "fissions_at_start": 0.0
+  },
+  "measurements": [
+    {
+      "quantity": "beta_heat",
+      "unit": "MeV/(fission/s)",
+      "steps": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+      "values": [3.442, 3.139, 2.554, 2.168, 1.813, 1.399, 1.091, 0.796, 0.5, 0.354, 0.245, 0.125, 0.0578],
+      "uncertainties": [0.148006, 0.134977, 0.112376, 0.095392, 0.085211, 0.065753, 0.050186, 0.036616, 0.023, 0.01593, 0.01127, 0.00575, 0.0028322],
+      "calculations": {}
+    }
+  ]
+}

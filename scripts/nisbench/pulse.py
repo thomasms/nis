@@ -62,22 +62,31 @@ def pulse_decay_heat(decay_mat, energy_data, inventory: dict, times=None) -> lis
     return results
 
 
-def delayed_energy(decay_mat, energy_data, inventory: dict, max_half_life_s: float = 1e15) -> tuple:
-    """The (beta, gamma) energy in MeV that the decays of the fission products give in all time after the
-    pulse: the integral of the decay heat. This is EB and EGD of ENDF MF=1 MT=458.
+def released_energy(decay_mat, energy_data, inventory: dict, time_s: float = math.inf,
+                    max_half_life_s: float = 1e15) -> tuple:
+    """The (beta, gamma) energy in MeV that the decays give from t = 0 to time_s (all time if inf).
 
-    The integral of the atoms of the radionuclides is solved directly: -A^T x = n0. Nuclides with a half-life
-    longer than max_half_life_s are left out: some libraries give the double-beta emitters (Zr96, Mo100,
-    Xe136, ...) a half-life of ~1e27 s, which adds ~0.9 MeV of beta energy that is never seen."""
+    The integral of the atoms of the radionuclides A is solved directly: A^T x = n(t) - n(0), with n(t) = 0 for
+    all time. Nuclides with a half-life longer than max_half_life_s are left out: some libraries give the
+    double-beta emitters (Zr96, Mo100, Xe136, ...) a half-life of ~1e27 s, which adds ~0.9 MeV of beta energy
+    over all time that is never seen."""
     import numpy as np
     import scipy.sparse.linalg as spl
     import pynis as nis
     lam = np.asarray(energy_data.decay_constants)
     radioactive = np.nonzero(lam > math.log(2) / max_half_life_s)[0]
     n0 = np.asarray(nis.core.vector_from_inventory(inventory))
+    change = -n0[radioactive]
+    if math.isfinite(time_s):
+        change = change + np.asarray(nis.core.solver_cram48(decay_mat, n0, time_s))[radioactive]
     a = decay_mat.tocsc().T.tocsr()[radioactive][:, radioactive].tocsc()
-    integral = spl.spsolve(a, -n0[radioactive])
-    decays = lam[radioactive] * integral
+    decays = lam[radioactive] * spl.spsolve(a, change)
     beta = decays @ np.asarray(energy_data.light_particle)[radioactive] / 1e6
     gamma = decays @ np.asarray(energy_data.electromagnetic)[radioactive] / 1e6
     return float(beta), float(gamma)
+
+
+def delayed_energy(decay_mat, energy_data, inventory: dict, max_half_life_s: float = 1e15) -> tuple:
+    """The (beta, gamma) energy in MeV that the decays of the fission products give in all time after the pulse:
+    the integral of the decay heat. This is EB and EGD of ENDF MF=1 MT=458."""
+    return released_energy(decay_mat, energy_data, inventory, math.inf, max_half_life_s)

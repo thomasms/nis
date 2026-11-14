@@ -1,0 +1,24 @@
+{
+  "format": "nis-benchmark",
+  "version": 1,
+  "name": "fission_decay_heat",
+  "title": "Fission decay heat",
+  "category": "fission",
+  "description": "Beta, gamma and total decay heat after the fission of U233, U235, U238, Pu239, Pu241 and Th232 by thermal or fast neutrons: fission pulses, and irradiations from 10 s to 1e5 s, measured from 0.25 s to 300 days after the fissions. The decay heat is per fission (pulse) or per fission/s (irradiation).",
+  "references": [
+    "J.K. Dickens et al., Fission product energy release for times following thermal-neutron fission of U235 between 2 and 14000 seconds, ORNL/NUREG-14 (1979); J.K. Dickens, ORNL/TM-10094 (1986)",
+    "M. Akiyama et al., J. Nucl. Sci. Technol. 24 (1982) 709-722 (gamma) and 803-816 (beta)",
+    "A. Tobias, Derivation of decay heat benchmarks for U235 and Pu239 by a least squares fit to measured data, CEGB (1989)",
+    "W.A. Schier, G.P. Couchell, DOE/ER/40723-4, University of Massachusetts Lowell (1997)",
+    "K. Baumung, KfK 3262, Kernforschungszentrum Karlsruhe (1981)",
+    "J.L. Yarnell, P.J. Bendt, LA-NUREG-6713 (1977) and LA-7452-MS (1978)",
+    "M. Lott, G. Lhiaubet, F. Defreche, Journal of Nuclear Energy 27 (1973) 597-605",
+    "E. Jurney, P. Bendt, T. England, Fission product gamma spectra, LA-7620-MS (1979)",
+    "T.D. MacMahon, R. Wellum, H.W. Wilson, Journal of Nuclear Energy 24 (1970) 493-501",
+    "J. Scobie, R.D. Scott, H.W. Wilson, Journal of Nuclear Energy 25 (1971) 1-10",
+    "A. McNair et al., Journal of Nuclear Energy 23 (1969) 73-86 (U235) and 697-703 (Pu239)",
+    "M. Murphy et al., AEEW-R 1212, UK Atomic Energy Authority (1979)",
+    "M. Fleming, J.-Ch. Sublet, Validation of FISPACT-II decay heat and inventory predictions for fission events, UKAEA-R(18)003 (2018)"
+  ],
+  "source": "The IAEA CoNDERC fission archive (fission.zip, fission/expDataSystem), converted with scripts/bench.py convert fission_decay_heat. Each case is a fission source with the independent fission yields (thermal: 0.0253 eV, fast: 400 keV); run it with --fission-yields."
+}

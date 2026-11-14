@@ -1,0 +1,31 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "fission_decay_heat",
+  "name": "U235_thermal/Jurney_20000",
+  "title": "U235 thermal fission, 20000 s irradiation, Jurney",
+  "sample": {
+    "atoms": {}
+  },
+  "steps": {
+    "dt_s": [20000.0, 29.0, 99.0, 156.0, 254.0, 670.0, 1322.0, 1400.0, 1080.0, 18750.0, 35560.0, 37520.0, 49660.0],
+    "flux_n_m2_s": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+    "fission_rate_per_s": [1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  },
+  "spectrum": null,
+  "fission_source": {
+    "nuclide": "U235",
+    "neutron_energy_ev": 0.0253,
+    "fissions_at_start": 0.0
+  },
+  "measurements": [
+    {
+      "quantity": "gamma_heat",
+      "unit": "MeV/(fission/s)",
+      "steps": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      "values": [3.762, 2.502, 1.975, 1.658, 1.195, 0.823, 0.626, 0.531, 0.108, 0.042, 0.024, 0.014],
+      "uncertainties": [0.1978812, 0.1080864, 0.0890725, 0.0709624, 0.027007, 0.0289696, 0.0289838, 0.033984, 0.003996, 0.0019992, 0.0019992, 0.0020006],
+      "calculations": {}
+    }
+  ]
+}

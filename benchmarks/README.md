@@ -6,6 +6,7 @@ tools reads it: [scripts/bench.py](../scripts/bench.py) (the code is in [scripts
 | Benchmark | Type | Cases | What is measured |
 |---|---|---|---|
 | [fns](fns) | fusion | 132 | decay heat of foils after 14 MeV neutron irradiation (FNS, JAEA) |
+| [fission_decay_heat](fission_decay_heat) | fission | 44 | beta, gamma and total decay heat after the fission of U233, U235, U238, Pu239, Pu241 and Th232: pulses and irradiations of 10 s to 1e5 s (IAEA CoNDERC) |
 
 ## Folders
 
@@ -88,7 +89,9 @@ benchmarks/
 | `name` | the path of the file in the benchmark folder, without `.json` |
 | `sample.atoms` | the atoms of each nuclide at the start (`Co59`, `Ag110m`, ...) |
 | `sample.mass_kg` | the sample mass. Needed for a unit per mass (`uW/g`, `W/kg`, ...) |
-| `fissions` | the number of fissions. Needed for a unit per fission (`MeV/fission`, ...) |
+| `fissions` | the number of fissions. Needed for a unit per fission (`MeV/fission`, ...). Not given with a `fission_source` |
+| `fission_source` | optional, in place of a flux: `nuclide` (e.g. `U235`), `neutron_energy_ev` (the energy of the fission yields) and `fissions_at_start` (a pulse, default 0). Each fission adds the independent fission yields of the nuclide. With it, `sample.atoms` can be empty, and `fissions` is the fissions of the source |
+| `steps.fission_rate_per_s` | optional, with a `fission_source`: the fission rate of each step (0 for cooling) |
 | `steps` | the time steps in order: the length (s), and the total neutron flux (n/m²/s, 0 for cooling). The example shows only the first steps |
 | `spectrum` | the flux shape: `values` (one for each group, any scale), with `group_structure` (a file in `group_structures/`) or `energy_bounds_ev` (ascending, one more than the values). `null` if no step has a flux. For each step, NIS scales the shape so that its total is the flux of the step |
 | `measurements` | one or more measured quantities |
@@ -103,18 +106,21 @@ The **cooling time** of a value is the time from the end of the last step with a
 
 | Quantity | NIS result | Units |
 |---|---|---|
-| `decay_heat` | total decay heat | `W`, `MeV/s`, `W/kg`, `kW/kg`, `mW/g`, `uW/g`, `W/fission`, `MeV/s/fission`, `MeV/fission` |
+| `decay_heat` | total decay heat | `W`, `MeV/s`, `W/kg`, `kW/kg`, `mW/g`, `uW/g`, `W/fission`, `MeV/s/fission`, `MeV/fission`, `MeV/(fission/s)` |
 | `beta_heat` | decay heat of beta particles and electrons | the same |
 | `gamma_heat` | decay heat of gamma and X rays | the same |
 | `alpha_heat` | decay heat of alpha particles | the same |
 | `activity` | total activity | `Bq`, `Bq/kg`, `Bq/g`, `Bq/fission` |
 
 `MeV/fission` is the decay heat per fission times the cooling time, t·P(t), which is the usual way to give the decay
-heat after a fission pulse.
+heat after a fission pulse. `MeV/(fission/s)` is the decay heat over the fission rate of the last step with a
+fission rate, the usual way to give it after an irradiation of some length.
 
-A **fission pulse** case (for example U235 thermal fission) uses the same keys: the fissile atoms in
-`sample.atoms`, a thermal spectrum, a short irradiation step, then the cooling steps, and `fissions` for the
-units per fission. Run it with fission yields (`--fission-yields`).
+A **fission** case can be given in two ways. With a `fission_source` (as in `fission_decay_heat`): no cross sections
+are needed, only the fission yields; a pulse is `fissions_at_start: 1`, an irradiation is a step with a fission rate.
+Or as a real irradiation: the fissile atoms in `sample.atoms`, a spectrum, an irradiation step with a flux, then the
+cooling steps, and `fissions` for the units per fission. Run both with fission yields (`--fission-yields`).
+A case with a `fission_source` has no deck (the `nis` program has no fission source), so run it with `pynis`.
 
 `scripts/bench.py pulse U235 --decay-data data/jeff311.dec --fission-yields data/jeff311.nfy` gives the decay heat
 of an ideal pulse (the yields of one fission at t = 0, then decay) in MeV/s per fission, and the delayed beta and

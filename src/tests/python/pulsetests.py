@@ -20,7 +20,7 @@ import pynis as nis
 
 from .testdata import ENDFBVII_DECAY, JEFF311_DECAY, JEFF311_NFY, JEFF4_REACTION, has_data
 
-from nisbench.pulse import DEFAULT_TIMES, delayed_energy, pulse_decay_heat, pulse_inventory
+from nisbench.pulse import DEFAULT_TIMES, delayed_energy, pulse_decay_heat, pulse_inventory, released_energy
 
 # ENDF/B-VII.1 MF=1 MT=458, the energy independent terms: the delayed beta (EB) and gamma (EGD) energy per
 # fission in MeV, and their uncertainties
@@ -87,6 +87,49 @@ class FissionPulseTests(unittest.TestCase):
         exact_beta, exact_gamma = delayed_energy(decay_mat, energy, inventory)
         self.assertAlmostEqual(beta / exact_beta, 1.0, delta=1e-3)
         self.assertAlmostEqual(gamma / exact_gamma, 1.0, delta=1e-3)
+
+    def test_released_energy(self) -> None:
+        # the energy released to t goes up to the delayed energy, and is the integral of the heat
+        decay_mat, energy = self.libraries["jeff311"]
+        inventory = pulse_inventory(self.yields, "U235")
+        total = delayed_energy(decay_mat, energy, inventory)
+        previous = (0.0, 0.0)
+        # the half-lives go to 1e15 s (left out above), so all is released by 1e17 s
+        for t in (1.0, 100.0, 1e4, 1e6, 1e9, 1e12, 1e17):
+            released = released_energy(decay_mat, energy, inventory, t)
+            self.assertTrue(previous[0] < released[0] <= total[0] * (1 + 1e-9))
+            self.assertTrue(previous[1] < released[1] <= total[1] * (1 + 1e-9))
+            previous = released
+        self.assertAlmostEqual(previous[0] / total[0], 1.0, delta=1e-3)
+        times = np.logspace(0, 4, 161)
+        heats = pulse_decay_heat(decay_mat, energy, inventory, times)
+        integral = np.trapezoid([h.time_s * h.beta for h in heats], np.log(times))
+        exact = released_energy(decay_mat, energy, inventory, 1e4)[0] - released_energy(decay_mat, energy, inventory, 1.0)[0]
+        self.assertAlmostEqual(integral / exact, 1.0, delta=1e-3)
+
+    def test_fission_source_engine_is_exact(self) -> None:
+        # an irradiation case of the benchmark tools (a fission source at 1 fission/s for T, then cooling) gives
+        # the energy the pulse releases from t to t + T
+        from nisbench.engines import _PynisData, NuclearData, _run_pynis
+        from nisbench.format import parse_case
+        T, cooling = 1000.0, [10.0, 300.0, 1e4]
+        dts = [T] + [b - a for a, b in zip([0.0] + cooling, cooling)]
+        case = parse_case({
+            "format": "nis-benchmark-case", "version": 1, "benchmark": "test", "name": "source", "sample": {"atoms": {}},
+            "steps": {"dt_s": dts, "flux_n_m2_s": [0.0] * len(dts), "fission_rate_per_s": [1.0] + [0.0] * len(cooling)},
+            "spectrum": None, "fission_source": {"nuclide": "U235", "neutron_energy_ev": 0.0253},
+            "measurements": [{"quantity": "beta_heat", "unit": "MeV/(fission/s)", "steps": [1, 2, 3],
+                              "values": [1.0, 1.0, 1.0], "uncertainties": [0.0, 0.0, 0.0]}]})
+        self.assertEqual(case.fissions, T)
+        results = _run_pynis(case, _PynisData(NuclearData(decay=JEFF311_DECAY, fission_yields=JEFF311_NFY)))
+        decay_mat, energy = self.libraries["jeff311"]
+        inventory = pulse_inventory(self.yields, "U235")
+        for t, result in zip(cooling, results[1:]):
+            with self.subTest(time=t):
+                b0 = released_energy(decay_mat, energy, inventory, t)[0]
+                b1 = released_energy(decay_mat, energy, inventory, t + T)[0]
+                # heat in W at 1 fission/s is the energy released from t to t+T (MeV) per s
+                self.assertAlmostEqual(result["beta_heat"] / 1.602176634e-13 / (b1 - b0), 1.0, delta=1e-6)
 
     def test_heat_at_the_start(self) -> None:
         # at t = 0 the heat is sum(yield * lambda * E), the solver must give it at very short times

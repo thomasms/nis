@@ -29,7 +29,8 @@ QUANTITIES = {
 _MEV_TO_J = 1.602176634e-13
 
 # unit -> (factor from the SI value: W for heat, Bq for activity, normalisation, multiply by the cooling time)
-# normalisation: None (the whole sample), "mass" (divide by sample.mass_kg) or "fission" (divide by "fissions")
+# normalisation: None (the whole sample), "mass" (divide by sample.mass_kg), "fission" (divide by "fissions")
+# or "fission_rate" (divide by the fission rate of the last step with a fission source)
 HEAT_UNITS = {
     "W": (1.0, None, False),
     "MeV/s": (1.0 / _MEV_TO_J, None, False),
@@ -41,6 +42,8 @@ HEAT_UNITS = {
     "MeV/s/fission": (1.0 / _MEV_TO_J, "fission", False),
     # t * P(t), the usual way to give the decay heat after a fission pulse
     "MeV/fission": (1.0 / _MEV_TO_J, "fission", True),
+    # the decay heat over the fission rate of the irradiation, the usual way after an irradiation of some length
+    "MeV/(fission/s)": (1.0 / _MEV_TO_J, "fission_rate", False),
 }
 ACTIVITY_UNITS = {
     "Bq": (1.0, None, False),
@@ -89,10 +92,28 @@ class Case:
     group_structure: str = None
     fissions: float = None
     path: Path = None
+    # a fission source in place of a neutron flux: {"nuclide", "neutron_energy_ev", "fissions_at_start"}.
+    # Each fission adds the independent fission yields of the nuclide at that neutron energy.
+    fission_source: dict = None
+    # the fission rate (fissions/s) of each step, with a fission source
+    fission_rates: list = None
 
     @property
     def deck_path(self) -> Path:
         return self.path.with_suffix(".inp")
+
+    @property
+    def has_deck(self) -> bool:
+        """A NIS input deck cannot give a fission source, so such a case has no deck (pynis runs it)."""
+        return self.fission_source is None
+
+    def step_fission_rates(self) -> list:
+        return self.fission_rates or [0.0] * len(self.steps)
+
+    @property
+    def last_fission_rate(self) -> float:
+        rates = [r for r in self.step_fission_rates() if r > 0]
+        return rates[-1] if rates else None
 
     def end_times(self) -> list:
         """The time at the end of each step, from the start, in s."""
@@ -106,7 +127,8 @@ class Case:
         """The time of the end of each given step after the end of the last irradiation step, in s.
         With no irradiation, the time from the start."""
         end = self.end_times()
-        irradiated = [i for i, (_, flux) in enumerate(self.steps) if flux > 0]
+        irradiated = [i for i, ((_, flux), rate) in enumerate(zip(self.steps, self.step_fission_rates()))
+                      if flux > 0 or rate > 0]
         shutdown = end[irradiated[-1]] if irradiated else 0.0
         return [end[s] - shutdown for s in steps]
 
@@ -217,7 +239,9 @@ def parse_case(data: dict, where: str = "case") -> Case:
     mass = sample.get("mass_kg")
     mass = None if mass is None else _number(mass, where, "sample.mass_kg", positive=True)
     atoms = sample.get("atoms")
-    _require(isinstance(atoms, dict) and atoms, where, '"sample.atoms" must be an object that is not empty')
+    source = data.get("fission_source")
+    _require(isinstance(atoms, dict) and (atoms or source is not None), where,
+             '"sample.atoms" must be an object that is not empty (it can be empty with a "fission_source")')
     for nuclide, n in atoms.items():
         _require(bool(_NUCLIDE.match(nuclide)), where, f"{nuclide!r} is not a nuclide name, such as Co59 or Ag110m")
         _number(n, where, f"the atoms of {nuclide}", minimum=0.0)
@@ -232,12 +256,34 @@ def parse_case(data: dict, where: str = "case") -> Case:
     steps = [(_number(dt, where, "dt_s", positive=True), _number(flux, where, "flux_n_m2_s", minimum=0.0))
              for dt, flux in zip(dts, fluxes)]
 
+    rates = raw_steps.get("fission_rate_per_s")
+    if rates is not None:
+        _require(source is not None, where, '"steps.fission_rate_per_s" needs a "fission_source"')
+        _require(isinstance(rates, list) and len(rates) == len(dts), where,
+                 '"steps.fission_rate_per_s" must be a list with one rate for each step')
+        rates = [_number(r, where, "fission_rate_per_s", minimum=0.0) for r in rates]
+    if source is not None:
+        _require(isinstance(source, dict), where, '"fission_source" must be an object')
+        _require(isinstance(source.get("nuclide"), str) and bool(_NUCLIDE.match(source["nuclide"])), where,
+                 '"fission_source.nuclide" must be a nuclide name, such as U235')
+        source = {"nuclide": source["nuclide"],
+                  "neutron_energy_ev": _number(source.get("neutron_energy_ev"), where,
+                                               "fission_source.neutron_energy_ev", minimum=0.0),
+                  "fissions_at_start": _number(source.get("fissions_at_start", 0.0), where,
+                                               "fission_source.fissions_at_start", minimum=0.0)}
+        _require(source["fissions_at_start"] > 0 or any(r > 0 for r in rates or []), where,
+                 'the fission source needs "fissions_at_start" or a step with a fission rate')
+
     spectrum, group_structure = _spectrum(data.get("spectrum"), where)
     _require(spectrum is not None or all(flux == 0 for _, flux in steps), where,
              "a step has a flux, so the case needs a spectrum")
 
     fissions = data.get("fissions")
     fissions = None if fissions is None else _number(fissions, where, "fissions", positive=True)
+    if source is not None:
+        made = source["fissions_at_start"] + sum(dt * r for (dt, _), r in zip(steps, rates or [0.0] * len(steps)))
+        _require(fissions is None, where, 'with a "fission_source", "fissions" is the fissions of the source')
+        fissions = made
 
     raw = data.get("measurements")
     _require(isinstance(raw, list) and raw, where, '"measurements" must be a list that is not empty')
@@ -246,10 +292,13 @@ def parse_case(data: dict, where: str = "case") -> Case:
         normalisation = units_for(m.quantity)[m.unit][1]
         _require(normalisation != "mass" or mass is not None, where, f"the unit {m.unit} needs sample.mass_kg")
         _require(normalisation != "fission" or fissions is not None, where, f'the unit {m.unit} needs "fissions"')
+        _require(normalisation != "fission_rate" or any(r > 0 for r in rates or []), where,
+                 f"the unit {m.unit} needs a step with a fission rate")
 
     return Case(benchmark=data["benchmark"], name=data["name"], title=data.get("title", data["name"]),
                 mass_kg=mass, atoms={k: float(v) for k, v in atoms.items()}, steps=steps,
-                measurements=measurements, spectrum=spectrum, group_structure=group_structure, fissions=fissions)
+                measurements=measurements, spectrum=spectrum, group_structure=group_structure, fissions=fissions,
+                fission_source=source, fission_rates=rates)
 
 
 def load_case(path: Path) -> Case:
@@ -326,6 +375,8 @@ def case_to_json(case: Case) -> dict:
         "steps": {"dt_s": [_compact(dt) for dt, _ in case.steps],
                   "flux_n_m2_s": [_compact(flux) for _, flux in case.steps]},
     }
+    if case.fission_rates is not None:
+        data["steps"]["fission_rate_per_s"] = [_compact(r) for r in case.fission_rates]
     if case.mass_kg is not None:
         data["sample"] = {"mass_kg": _compact(case.mass_kg), **data["sample"]}
     if case.spectrum is None:
@@ -335,7 +386,9 @@ def case_to_json(case: Case) -> dict:
     else:
         data["spectrum"] = {"energy_bounds_ev": [_compact(v) for v in case.spectrum[0]],
                             "values": [_compact(v) for v in case.spectrum[1]]}
-    if case.fissions is not None:
+    if case.fission_source is not None:
+        data["fission_source"] = {k: _compact(v) if isinstance(v, float) else v for k, v in case.fission_source.items()}
+    elif case.fissions is not None:
         data["fissions"] = _compact(case.fissions)
     data["measurements"] = [{
         "quantity": m.quantity,

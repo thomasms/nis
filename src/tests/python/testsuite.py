@@ -10,6 +10,7 @@ from .fissiontests import *
 from .scripttests import *
 from .processingtests import *
 from .fnstests import *
+from .fissionheattests import *
 from .nisprogramtests import *
 
 

@@ -25,6 +25,8 @@ def nis_value(case: Case, quantity: str, unit: str, step_result: dict, cooling_t
         value /= case.mass_kg
     elif normalisation == "fission":
         value /= case.fissions
+    elif normalisation == "fission_rate":
+        value /= case.last_fission_rate
     if times_time:
         value *= cooling_time
     return value

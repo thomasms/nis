@@ -116,6 +116,79 @@ class FormatTests(unittest.TestCase):
                 self.assertIn(message, self.errors(change))
 
 
+def _source_case() -> dict:
+    """A case with a fission source: 1 fission/s for 100 s, then 2 cooling steps."""
+    return {
+        "format": "nis-benchmark-case", "version": 1, "benchmark": "test", "name": "a/source", "sample": {"atoms": {}},
+        "steps": {"dt_s": [100.0, 10.0, 20.0], "flux_n_m2_s": [0.0, 0.0, 0.0], "fission_rate_per_s": [1.0, 0.0, 0.0]},
+        "spectrum": None, "fission_source": {"nuclide": "U235", "neutron_energy_ev": 0.0253},
+        "measurements": [{"quantity": "beta_heat", "unit": "MeV/(fission/s)", "steps": [1, 2], "values": [3.0, 2.0],
+                          "uncertainties": [0.3, 0.2]}],
+    }
+
+
+class FissionSourceFormatTests(unittest.TestCase):
+    def errors(self, change) -> str:
+        data = _source_case()
+        change(data)
+        with self.assertRaises(FormatError) as context:
+            format.parse_case(data)
+        return str(context.exception)
+
+    def test_source_case(self) -> None:
+        case = format.parse_case(_source_case())
+        self.assertFalse(case.has_deck)
+        self.assertEqual(case.fissions, 100.0)
+        self.assertEqual(case.last_fission_rate, 1.0)
+        # the cooling time is from the end of the step with the fission rate
+        self.assertEqual(case.cooling_times([1, 2]), [10.0, 30.0])
+        # write and read again
+        self.assertEqual(format.parse_case(json.loads(json.dumps(format.case_to_json(case)))), case)
+
+    def test_pulse(self) -> None:
+        data = _source_case()
+        del data["steps"]["fission_rate_per_s"]
+        data["fission_source"]["fissions_at_start"] = 1.0
+        data["measurements"][0]["unit"] = "MeV/fission"
+        case = format.parse_case(data)
+        self.assertEqual(case.fissions, 1.0)
+        self.assertEqual(case.cooling_times([1, 2]), [110.0, 130.0])
+
+    def test_units(self) -> None:
+        case = format.parse_case(_source_case())
+        mev = 1.602176634e-13
+        # heat over the fission rate (1/s): 2 MeV/s at 1 fission/s is 2 MeV/(fission/s)
+        self.assertAlmostEqual(results.nis_value(case, "beta_heat", "MeV/(fission/s)", {"beta_heat": 2 * mev}, 10.0), 2.0)
+        # t * P per fission: 100 fissions
+        self.assertAlmostEqual(results.nis_value(case, "beta_heat", "MeV/fission", {"beta_heat": 2 * mev}, 10.0), 0.2)
+
+    def test_bad_source_cases(self) -> None:
+        checks = [
+            (lambda d: d.pop("fission_source"), "it can be empty with a"),
+            (lambda d: (d.pop("fission_source"), d["sample"].update(atoms={"U235": 1.0})), 'needs a "fission_source"'),
+            (lambda d: d["fission_source"].update(nuclide="Uranium"), "must be a nuclide name"),
+            (lambda d: d["fission_source"].pop("neutron_energy_ev"), "neutron_energy_ev must be a number"),
+            (lambda d: d["steps"].update(fission_rate_per_s=[1.0]), "one rate for each step"),
+            (lambda d: d["steps"].update(fission_rate_per_s=[0.0, 0.0, 0.0]), "needs \"fissions_at_start\" or a step"),
+            (lambda d: d.update(fissions=5.0), '"fissions" is the fissions of the source'),
+        ]
+        for change_data, message in checks:
+            with self.subTest(message=message):
+                self.assertIn(message, self.errors(change_data))
+        # a unit per fission rate needs a step with a fission rate
+        data = _source_case()
+        del data["steps"]["fission_rate_per_s"]
+        data["fission_source"]["fissions_at_start"] = 1.0
+        with self.assertRaises(FormatError) as context:
+            format.parse_case(data)
+        self.assertIn("needs a step with a fission rate", str(context.exception))
+
+    def test_no_deck_for_the_nis_program(self) -> None:
+        case = format.parse_case(_source_case())
+        with self.assertRaises(RuntimeError):
+            engines._run_program(case, Path("nis"), engines.NuclearData(decay=Path("x")))
+
+
 class FnsBenchmarkTests(unittest.TestCase):
     def test_all_cases_load(self) -> None:
         benchmark = load_benchmark(FNS_DIR)

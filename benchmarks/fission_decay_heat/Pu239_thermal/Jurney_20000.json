@@ -1,0 +1,31 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "fission_decay_heat",
+  "name": "Pu239_thermal/Jurney_20000",
+  "title": "Pu239 thermal fission, 20000 s irradiation, Jurney",
+  "sample": {
+    "atoms": {}
+  },
+  "steps": {
+    "dt_s": [20000.0, 29.0, 99.0, 156.0, 254.0, 670.0, 1322.0, 1400.0, 1080.0, 18750.0, 35560.0, 37520.0, 49660.0],
+    "flux_n_m2_s": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+    "fission_rate_per_s": [1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  },
+  "spectrum": null,
+  "fission_source": {
+    "nuclide": "Pu239",
+    "neutron_energy_ev": 0.0253,
+    "fissions_at_start": 0.0
+  },
+  "measurements": [
+    {
+      "quantity": "gamma_heat",
+      "unit": "MeV/(fission/s)",
+      "steps": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      "values": [3.1, 2.136, 1.747, 1.502, 1.104, 0.725, 0.533, 0.444, 0.099, 0.041, 0.024, 0.015],
+      "uncertainties": [0.1674, 0.08544, 0.073374, 0.061582, 0.024288, 0.02465, 0.023985, 0.027972, 0.00297, 0.002009, 0.001992, 0.001995],
+      "calculations": {}
+    }
+  ]
+}

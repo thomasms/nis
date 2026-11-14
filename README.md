@@ -244,6 +244,7 @@ The tests:
 | [reactiontests.py](src/tests/python/reactiontests.py) | JEFF-4.0 reactions: thermal and 14.1 MeV cross sections against reference values, the spectrum (linear in flux, bin splitting), the matrix structure, burn-up and Co60 activation against the analytic Bateman solution | reaction data |
 | [fissiontests.py](src/tests/python/fissiontests.py) | JEFF-3.1.1 fission yields: 2 products per fission, thermal U235 gives the known Cs137 and Sr90 yields and fission to capture ratio, Cf252 spontaneous fission | decay and reaction data, the yield files |
 | [fnstests.py](src/tests/python/fnstests.py) (slow) | FNS regression: runs all 132 FNS cases and compares with [nis_reference.csv](benchmarks/fns/results/nis_reference.csv), and checks that NIS stays as close to the experiment as now | decay and reaction data |
+| [fissionheattests.py](src/tests/python/fissionheattests.py) | the fission decay heat benchmark: the 44 cases load, the reference has all of them; regression against [nis_reference.csv](benchmarks/fission_decay_heat/results/nis_reference.csv) and C/E limits | the regression: decay data and the yield files |
 | [nisprogramtests.py](src/tests/python/nisprogramtests.py) (slow) | the `nis` program: 3 FNS decks give the same as the reference, decay only steps, errors for bad input | decay and reaction data, the `nis` program |
 
 "Decay data" and "reaction data" are the files in `data/` from git lfs. The yield files come from
@@ -280,6 +281,7 @@ the spectrum, the measured values and the results of other codes) and a NIS inpu
 | Benchmark | Type | Cases | What is measured |
 |---|---|---|---|
 | [fns](benchmarks/fns) | fusion | 132 | decay heat of foils after 14 MeV neutron irradiation (FNS, JAEA) |
+| [fission_decay_heat](benchmarks/fission_decay_heat) | fission | 44 | beta, gamma and total decay heat after fission pulses and irradiations of U233, U235, U238, Pu239, Pu241 and Th232 (IAEA CoNDERC) |
 
 One program, [scripts/bench.py](scripts/bench.py), does all the work for all the benchmarks. These steps use uv
 (see [python bindings](#python-bindings)), and the nuclear data from LFS.
@@ -350,6 +352,20 @@ and the decks. For FNS, the original files are the FISPACT-II validation inputs
 ```bash
 uv run python scripts/bench.py convert fns --source path/to/fns
 ```
+
+For the fission decay heat, the original file is the CoNDERC fission archive (`fission.zip`, from the fission section
+of www-nds.iaea.org/conderc; download it with a web browser). Its cases have a fission source, so they need the
+fission yields, and no reaction data:
+
+```bash
+uv run python scripts/bench.py convert fission_decay_heat --source path/to/fission.zip
+uv run python scripts/bench.py run fission_decay_heat --decay-data data/jeff311.dec \
+    --fission-yields data/jeff311.nfy --output results.csv
+```
+
+The C/E summary plots for the reference results (JEFF-3.1.1 decay data and fission yields) are in
+[benchmarks/fission_decay_heat/results](benchmarks/fission_decay_heat/results). With JEFF-3.1.1, all 18 cases of the total
+decay heat are within 10 % of the experiment. The beta heat of MacMahon (U235) is 19-28 % below NIS.
 
 **Change a case:** edit the case file `<case>.json`, then make the decks again (do not edit a deck):
 
