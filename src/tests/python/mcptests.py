@@ -514,6 +514,318 @@ class MCPHttpTest(unittest.TestCase):
         self.assertTrue(result.is_error)
 
 
+class FakeGitHub:
+    """GitHub for the tests: the code "<login>-code" logs in the user <login>."""
+
+    def __init__(self):
+        from nismcp.oauth import GitHub
+        self._real = GitHub("fake-id", "fake-secret")
+        self.redirects = []
+
+    def login_url(self, state, redirect_uri):
+        self.redirects.append(redirect_uri)
+        return self._real.login_url(state, redirect_uri)
+
+    def user_login(self, code, redirect_uri):
+        if not code.endswith("-code"):
+            raise ValueError("bad code")
+        return code[:-len("-code")]
+
+
+@unittest.skipUnless(_has_mcp, "the mcp group is not installed (uv sync --group mcp)")
+class MCPAllowListTest(unittest.TestCase):
+
+    def test_allow_list(self) -> None:
+        from nismcp.oauth import AllowList
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "users.txt"
+            path.write_text("# the users\nAlice\n  bob  # a comment\n\n")
+            allow = AllowList(path)
+            self.assertTrue(allow.allows("alice"))
+            self.assertTrue(allow.allows("ALICE"))
+            self.assertTrue(allow.allows("bob"))
+            self.assertFalse(allow.allows("mallory"))
+            time.sleep(0.01)
+            path.write_text("bob\n")
+            self.assertFalse(allow.allows("alice"))
+            self.assertTrue(allow.allows("bob"))
+
+
+@unittest.skipUnless(_has_mcp, "the mcp group is not installed (uv sync --group mcp)")
+class MCPOAuthTest(unittest.TestCase):
+    """OAuth as claude.ai does it: metadata, registration, authorize (PKCE), the GitHub login (fake), token,
+    refresh, then the tools with the token. The API keys work on the same server."""
+
+    REDIRECT = "https://claude.ai/api/mcp/auth_callback"
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        import uvicorn
+        from nismcp.auth import KeyStore, add_key
+        from nismcp.model import Runner
+        from nismcp.oauth import AllowList, ApiKeyHeader, GitHubOAuthProvider, auth_settings
+        from nismcp.server import build_server
+        cls.folder = tempfile.TemporaryDirectory()
+        folder = Path(cls.folder.name)
+        keys = folder / "keys.txt"
+        cls.key = add_key(keys, "scripts")
+        cls.users = folder / "users.txt"
+        cls.users.write_text("alice\nbob\n")
+        cls.state_file = folder / "oauth.json"
+        cls.port = _free_port()
+        cls.public = f"http://127.0.0.1:{cls.port}"
+        cls.github = FakeGitHub()
+        store = KeyStore(keys)
+        cls.provider = GitHubOAuthProvider(cls.github, AllowList(cls.users), cls.public, state_file=cls.state_file,
+                                           key_store=store)
+        loader = _loader()
+        server = build_server(loader, Runner(loader), key_store=store,
+                              oauth=(cls.provider, auth_settings(cls.public)))
+        app = ApiKeyHeader(server.streamable_http_app())
+        cls.uvicorn = uvicorn.Server(uvicorn.Config(app, host="127.0.0.1", port=cls.port, log_level="warning"))
+        cls.thread = threading.Thread(target=cls.uvicorn.run, daemon=True)
+        cls.thread.start()
+        for _ in range(100):
+            if cls.uvicorn.started:
+                break
+            time.sleep(0.05)
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        cls.uvicorn.should_exit = True
+        cls.thread.join(5)
+        cls.folder.cleanup()
+
+    def http(self):
+        import httpx2
+        return httpx2.Client(base_url=self.public, follow_redirects=False)
+
+    def register(self, http) -> str:
+        response = http.post("/register", json={
+            "redirect_uris": [self.REDIRECT], "token_endpoint_auth_method": "none", "client_name": "test",
+            "grant_types": ["authorization_code", "refresh_token"], "response_types": ["code"]})
+        self.assertEqual(response.status_code, 201, response.text)
+        return response.json()["client_id"]
+
+    def login(self, http, client_id: str, login: str):
+        """The browser part: /authorize, GitHub, the callback. The redirect to the client, as a dict."""
+        import base64
+        import hashlib
+        import secrets
+        from urllib.parse import parse_qs, urlparse
+        verifier = secrets.token_urlsafe(48)
+        challenge = base64.urlsafe_b64encode(hashlib.sha256(verifier.encode()).digest()).rstrip(b"=").decode()
+        response = http.get("/authorize", params={
+            "response_type": "code", "client_id": client_id, "redirect_uri": self.REDIRECT, "state": "s1",
+            "code_challenge": challenge, "code_challenge_method": "S256", "resource": f"{self.public}/mcp"})
+        self.assertEqual(response.status_code, 302, response.text)
+        consent = urlparse(response.headers["location"])
+        self.assertEqual(consent.path, "/oauth/consent")
+        response = self.consent(http, f"{consent.path}?{consent.query}", "allow")
+        self.assertEqual(response.status_code, 303, response.text)
+        github = urlparse(response.headers["location"])
+        self.assertEqual(github.netloc, "github.com")
+        query = parse_qs(github.query)
+        self.assertEqual(query["redirect_uri"], [f"{self.public}/oauth/github/callback"])
+        response = http.get("/oauth/github/callback", params={"code": f"{login}-code", "state": query["state"][0]})
+        self.assertEqual(response.status_code, 302, response.text)
+        back = urlparse(response.headers["location"])
+        self.assertEqual(f"{back.scheme}://{back.netloc}{back.path}", self.REDIRECT)
+        result = {k: v[0] for k, v in parse_qs(back.query).items()}
+        result["verifier"] = verifier
+        return result
+
+    def consent(self, http, url: str, action: str, page_check=None):
+        """Open the consent page, and click a button."""
+        import re
+        page = http.get(url)
+        self.assertEqual(page.status_code, 200, page.text)
+        self.assertEqual(page.headers["x-frame-options"], "DENY")
+        self.assertIn("frame-ancestors 'none'", page.headers["content-security-policy"])
+        if page_check:
+            page_check(page.text)
+        fields = dict(re.findall(r"name=(state|csrf) value='([^']*)'", page.text))
+        return http.post("/oauth/consent", data={**fields, "action": action})
+
+    def start(self, http, client_id: str, redirect=None) -> str:
+        """/authorize: the URL of the consent page."""
+        from urllib.parse import urlparse
+        response = http.get("/authorize", params={
+            "response_type": "code", "client_id": client_id, "redirect_uri": redirect or self.REDIRECT,
+            "state": "s1", "code_challenge": "x" * 43, "code_challenge_method": "S256"})
+        self.assertEqual(response.status_code, 302, response.text)
+        location = urlparse(response.headers["location"])
+        return f"{location.path}?{location.query}"
+
+    def tokens(self, http, client_id: str, login: str) -> dict:
+        back = self.login(http, client_id, login)
+        self.assertEqual(back["state"], "s1")
+        response = http.post("/token", data={
+            "grant_type": "authorization_code", "code": back["code"], "redirect_uri": self.REDIRECT,
+            "client_id": client_id, "code_verifier": back["verifier"], "resource": f"{self.public}/mcp"})
+        self.assertEqual(response.status_code, 200, response.text)
+        return response.json()
+
+    def call(self, token, tool, arguments, header="authorization"):
+        from mcp import Client
+        from mcp.client.streamable_http import streamable_http_client
+        from mcp.shared._httpx_utils import create_mcp_http_client
+        headers = {"Authorization": f"Bearer {token}"} if header == "authorization" else {"X-API-Key": token}
+
+        async def run():
+            http = create_mcp_http_client(headers=headers)
+            async with http:
+                async with Client(streamable_http_client(f"{self.public}/mcp", http_client=http)) as client:
+                    return await client.call_tool(tool, arguments)
+        return asyncio.run(run())
+
+    def test_metadata(self) -> None:
+        with self.http() as http:
+            response = http.post("/mcp", json={"jsonrpc": "2.0", "id": 1, "method": "tools/list"})
+            self.assertEqual(response.status_code, 401)
+            self.assertIn("resource_metadata=", response.headers["www-authenticate"])
+            resource = http.get("/.well-known/oauth-protected-resource/mcp").json()
+            self.assertEqual(resource["resource"], f"{self.public}/mcp")
+            self.assertEqual(resource["authorization_servers"], [self.public])
+            server = http.get("/.well-known/oauth-authorization-server").json()
+            self.assertEqual(server["registration_endpoint"], f"{self.public}/register")
+            self.assertIn("S256", server["code_challenge_methods_supported"])
+            self.assertEqual(http.get("/health").status_code, 200)
+
+    def test_login_and_tools(self) -> None:
+        with self.http() as http:
+            client_id = self.register(http)
+            alice = self.tokens(http, client_id, "alice")
+            bob = self.tokens(http, client_id, "Bob")
+        result = self.call(alice["access_token"], "irradiate",
+                           {"atoms": {"H3": 1e20}, "irradiation_time": "1 y", "flux_n_cm2_s": 0})
+        self.assertFalse(result.is_error, _text(result))
+        run_id = result.structured_content["run_id"]
+        self.assertEqual(self.provider.access[next(iter(self.provider.access))].subject[:7], "github:")
+        result = self.call(alice["access_token"], "get_results", {"run_id": run_id})
+        self.assertFalse(result.is_error, _text(result))
+        # bob cannot see the run of alice
+        result = self.call(bob["access_token"], "get_results", {"run_id": run_id})
+        self.assertTrue(result.is_error)
+        # a wrong token
+        with self.assertRaises(Exception):
+            self.call("not-a-token", "list_runs", {})
+
+    def test_not_allowed(self) -> None:
+        with self.http() as http:
+            client_id = self.register(http)
+            back = self.login(http, client_id, "mallory")
+        self.assertEqual(back["error"], "access_denied")
+        self.assertNotIn("code", back)
+
+    def test_consent_page(self) -> None:
+        from urllib.parse import parse_qs, urlparse
+        with self.http() as http:
+            client_id = self.register(http)
+            # the page names the client and the place the code goes
+            def check(text):
+                self.assertIn("test", text)
+                self.assertIn("claude.ai", text)
+                self.assertNotIn("does not send you back to claude.ai", text)
+            response = self.consent(http, self.start(http, client_id), "deny", check)
+            self.assertEqual(response.status_code, 303)
+            back = parse_qs(urlparse(response.headers["location"]).query)
+            self.assertEqual(back["error"], ["access_denied"])
+
+        # a client that sends the code somewhere else: the page warns
+        with self.http() as http:
+            response = http.post("/register", json={"redirect_uris": ["https://evil.example.com/cb"],
+                                                    "token_endpoint_auth_method": "none", "client_name": "evil"})
+            evil = response.json()["client_id"]
+            url = self.start(http, evil, "https://evil.example.com/cb")
+            response = self.consent(http, url, "allow", lambda text: self.assertIn(
+                "does not send you back to claude.ai", text))
+            self.assertEqual(response.status_code, 303)
+
+        # a form post from another site has no cookie: refused, and it does not go to GitHub
+        import re
+        with self.http() as http:
+            url = self.start(http, client_id)
+            page = http.get(url).text
+        fields = dict(re.findall(r"name=(state|csrf) value='([^']*)'", page))
+        with self.http() as other:
+            response = other.post("/oauth/consent", data={**fields, "action": "allow"})
+            self.assertEqual(response.status_code, 400)
+            # and a form with no csrf field, with the cookie, is refused too
+        with self.http() as http:
+            url = self.start(http, client_id)
+            http.get(url)
+            state = parse_qs(urlparse(url).query)["state"][0]
+            response = http.post("/oauth/consent", data={"state": state, "action": "allow"})
+            self.assertEqual(response.status_code, 400)
+            # the GitHub callback of a login that the user did not allow is refused
+            response = http.get("/oauth/github/callback", params={"code": "alice-code", "state": state})
+            self.assertEqual(response.status_code, 400)
+
+    def test_bad_callback(self) -> None:
+        with self.http() as http:
+            response = http.get("/oauth/github/callback", params={"code": "alice-code", "state": "unknown"})
+            self.assertEqual(response.status_code, 400)
+            response = http.get("/oauth/github/callback", params={"error": "access_denied"})
+            self.assertEqual(response.status_code, 400)
+
+    def test_code_once_and_pkce(self) -> None:
+        with self.http() as http:
+            client_id = self.register(http)
+            back = self.login(http, client_id, "alice")
+            data = {"grant_type": "authorization_code", "code": back["code"], "redirect_uri": self.REDIRECT,
+                    "client_id": client_id, "code_verifier": "wrong" * 10}
+            self.assertEqual(http.post("/token", data=data).status_code, 400)
+            data["code_verifier"] = back["verifier"]
+            self.assertEqual(http.post("/token", data=data).status_code, 200)
+            # a code is used one time only
+            self.assertEqual(http.post("/token", data=data).status_code, 400)
+
+    def test_refresh_and_remove_user(self) -> None:
+        with self.http() as http:
+            client_id = self.register(http)
+            first = self.tokens(http, client_id, "bob")
+            data = {"grant_type": "refresh_token", "refresh_token": first["refresh_token"], "client_id": client_id}
+            response = http.post("/token", data=data)
+            self.assertEqual(response.status_code, 200, response.text)
+            second = response.json()
+            self.assertNotEqual(second["access_token"], first["access_token"])
+            # the refresh token is rotated
+            self.assertEqual(http.post("/token", data=data).status_code, 400)
+            self.assertFalse(self.call(second["access_token"], "list_runs", {}).is_error)
+
+            # the state file has no tokens in clear, and a new provider knows the client and the refresh token
+            text = self.state_file.read_text()
+            self.assertNotIn(second["refresh_token"], text)
+            self.assertNotIn(second["access_token"], text)
+            from nismcp.oauth import AllowList, GitHubOAuthProvider
+            again = GitHubOAuthProvider(FakeGitHub(), AllowList(self.users), self.public, state_file=self.state_file)
+            client = asyncio.run(again.get_client(client_id))
+            self.assertIsNotNone(client)
+            self.assertIsNotNone(asyncio.run(again.load_refresh_token(client, second["refresh_token"])))
+            self.assertIsNotNone(asyncio.run(again.load_access_token(second["access_token"])))
+
+            # remove bob: his token stops at once, and he cannot refresh it
+            text = self.users.read_text()
+            time.sleep(0.01)
+            self.users.write_text("alice\n")
+            try:
+                response = http.post("/mcp", json={"jsonrpc": "2.0", "id": 1, "method": "tools/list"},
+                                     headers={"Authorization": f"Bearer {second['access_token']}"})
+                self.assertEqual(response.status_code, 401)
+                data["refresh_token"] = second["refresh_token"]
+                self.assertEqual(http.post("/token", data=data).status_code, 400)
+            finally:
+                time.sleep(0.01)
+                self.users.write_text(text)
+
+    def test_api_key_too(self) -> None:
+        for header in ("authorization", "x-api-key"):
+            result = self.call(self.key, "irradiate", {"atoms": {"H3": 1.0}, "irradiation_time": 60,
+                                                       "flux_n_cm2_s": 0}, header=header)
+            self.assertFalse(result.is_error, _text(result))
+
+
 @unittest.skipUnless(_has_mcp and has_data(JEFF311_DECAY) and has_data(JEFF4_REACTION),
                      "needs the mcp group and the decay and reaction data")
 class MCPRealDataTest(unittest.TestCase):

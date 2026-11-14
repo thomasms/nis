@@ -1,8 +1,8 @@
 """
 The MCP server: tools to irradiate a material with NIS, get the results, and plot them.
 
-Over stdio (a local client) there is no authentication. Over HTTP each request needs an API key (see auth.py), and
-each user sees only their own runs.
+Over stdio (a local client) there is no authentication. Over HTTP each request needs an API key (see auth.py) or
+an OAuth token from the GitHub login (see oauth.py), and each user sees only their own runs.
 """
 
 import functools
@@ -56,16 +56,25 @@ def _errors_to_user(fn):
     return wrapper
 
 
-def _user(ctx: Context, store) -> str:
-    if store is None:
+def _user(ctx: Context, store, secured: bool) -> str:
+    """The user of the request: the subject of the OAuth token (github:<login>) or of the API key (its name).
+    Without authentication (stdio), the one local user."""
+    request = getattr(ctx.request_context, "request", None) if ctx is not None else None
+    # with OAuth, the SDK checks the token and puts the user in the request
+    authenticated = getattr(request, "scope", {}).get("user") if request is not None else None
+    access = getattr(authenticated, "access_token", None)
+    if access is not None and access.subject:
+        return access.subject
+    if store is not None:
+        headers = ctx.headers if ctx is not None else None
+        key = key_from_headers({k.lower(): v for k, v in (headers or {}).items()})
+        user = store.user(key) if key else None
+        if user is not None:
+            return user
+    if not secured:
         return LOCAL_USER
-    headers = ctx.headers if ctx is not None else None
-    key = key_from_headers({k.lower(): v for k, v in (headers or {}).items()})
-    user = store.user(key) if key else None
-    if user is None:
-        # the middleware lets no request through without a key, so this is not expected
-        raise PermissionError("no valid API key")
-    return user
+    # the middleware lets no request through without a key or a token, so this is not expected
+    raise PermissionError("no valid API key or token")
 
 
 def _time_rows(result: m.RunResult, tables, top_n: int, quantity: str) -> list:
@@ -113,7 +122,10 @@ def _resolve_time(result: m.RunResult, time_since_start, cooling_time):
     return None
 
 
-def build_server(loader, runner: m.Runner, key_store=None) -> MCPServer:
+def build_server(loader, runner: m.Runner, key_store=None, oauth=None) -> MCPServer:
+    """The MCP server. key_store: the API keys (HTTP). oauth: (GitHubOAuthProvider, AuthSettings), for OAuth with
+    the GitHub login (HTTP); the provider also takes the API keys."""
+    secured = key_store is not None or oauth is not None
     @asynccontextmanager
     async def lifespan(_server):
         # over stdio, start to read the data when the transport has the standard streams, so a message of the
@@ -121,8 +133,14 @@ def build_server(loader, runner: m.Runner, key_store=None) -> MCPServer:
         loader.start()
         yield None
 
+    provider, settings = oauth if oauth is not None else (None, None)
     server = MCPServer("nis", title="NIS nuclear inventory", instructions=INSTRUCTIONS,
-                       description="Neutron activation, fission products and decay with NIS", lifespan=lifespan)
+                       description="Neutron activation, fission products and decay with NIS", lifespan=lifespan,
+                       auth_server_provider=provider, auth=settings)
+    if provider is not None:
+        from .oauth import CALLBACK_PATH, CONSENT_PATH, callback_handler, consent_handler
+        server.custom_route(CONSENT_PATH, methods=["GET", "POST"], include_in_schema=False)(consent_handler(provider))
+        server.custom_route(CALLBACK_PATH, methods=["GET"], include_in_schema=False)(callback_handler(provider))
 
     @server.tool(title="NIS status and nuclear data")
     @_errors_to_user
@@ -177,7 +195,7 @@ def build_server(loader, runner: m.Runner, key_store=None) -> MCPServer:
         It gives the total activity and decay heat, and the top nuclides, at the end of each step. Use the
         run_id with get_results and plot_nuclides. Example: 1 kg of U235 in a 14 MeV flux for 1 day, results
         1 h and 1 d after: material={'U235': 1}, mass_kg=1, irradiation_time='1 d', cooling_times=['1 h', '1 d']."""
-        user = _user(ctx, key_store)
+        user = _user(ctx, key_store, secured)
         if rank_by not in m.QUANTITIES:
             raise ValueError(f"rank_by must be one of {sorted(m.QUANTITIES)}")
         data, tables = loader.get()
@@ -228,7 +246,7 @@ def build_server(loader, runner: m.Runner, key_store=None) -> MCPServer:
     ) -> dict[str, Any]:
         """The nuclides of a run at one time (the last time if no time is given), with the quantity, the percent
         of the total and the half-life, and the totals."""
-        user = _user(ctx, key_store)
+        user = _user(ctx, key_store, secured)
         if quantity not in m.QUANTITIES:
             raise ValueError(f"quantity must be one of {sorted(m.QUANTITIES)}")
         _, tables = loader.get()
@@ -272,7 +290,7 @@ def build_server(loader, runner: m.Runner, key_store=None) -> MCPServer:
     ) -> list:
         """A PNG plot of a quantity (activity by default) of some nuclides against the time since the start.
         The irradiation is a shaded band. Example: the top 3 products by activity: top_n=3."""
-        user = _user(ctx, key_store)
+        user = _user(ctx, key_store, secured)
         _, tables = loader.get()
         result = runner.get(user, run_id)
         if nuclides:
@@ -296,7 +314,7 @@ def build_server(loader, runner: m.Runner, key_store=None) -> MCPServer:
     @_errors_to_user
     def list_runs(ctx: Context = None) -> dict[str, Any]:
         """The runs of this user that the server keeps in memory (the last few)."""
-        user = _user(ctx, key_store)
+        user = _user(ctx, key_store, secured)
         runs = [{"run_id": r.run_id, "input": r.material, "spectrum": r.spectrum.split(":")[0],
                  "steps": [f"{s.kind} {format_time(s.duration)}" for s in r.steps]} for r in runner.list(user)]
         return {"runs": runs}

@@ -7,7 +7,8 @@ irradiate a material with NIS, get the nuclides and plot them. A user can ask, f
 
 > Plot the top 3 radionuclides that it makes.
 
-The server calls `pynis` directly. It reads the nuclear data one time at the start and keeps it in memory.
+It runs on your computer (stdio), or on a server over HTTP with API keys and OAuth (GitHub login), so that
+claude.ai users can connect. The server calls `pynis` directly. It reads the nuclear data one time at the start and keeps it in memory.
 
 ## Tools
 
@@ -158,7 +159,77 @@ Claude Desktop (its config file starts local servers only, so use the `mcp-remot
 }
 ```
 
-The claude.ai web and mobile apps cannot send a fixed key. They need OAuth, which this server does not have yet.
+The claude.ai web, desktop and mobile apps cannot send a fixed key. For them, turn on OAuth (next section).
+
+## OAuth with the GitHub login (for claude.ai)
+
+With OAuth, a claude.ai user adds the server as a custom connector and logs in with GitHub. Only the GitHub users
+in your allow list get in. The server is its own OAuth authorization server (dynamic client registration, PKCE,
+access tokens of 1 hour, refresh tokens of 30 days); GitHub only does the login. The API keys still work on the
+same server, for Claude Code and scripts.
+
+### 1. Make a GitHub OAuth app
+
+On GitHub: **Settings → Developer settings → OAuth Apps → New OAuth App**:
+
+- **Homepage URL:** `https://nis.example.com`
+- **Authorization callback URL:** `https://nis.example.com/oauth/github/callback`
+
+Copy the **Client ID**, and make a **client secret**. The app needs no scopes: the server reads only the GitHub
+login of the user.
+
+### 2. Make the allow list
+
+One GitHub login on each line (`#` starts a comment), for example `/etc/nis/users.txt`:
+
+```
+alice
+bob
+```
+
+To remove a user, delete the line. The server reads the file again when it changes, and checks it each time a token
+is used, so the user loses access at once.
+
+### 3. Run the server
+
+Give the secret in the environment only (not on the command line, where other users of the machine can see it):
+
+```bash
+export NIS_GITHUB_CLIENT_SECRET=<client secret>
+uv run python -m nismcp serve --transport http --port 8000 \
+    --public-url https://nis.example.com --github-client-id <client id> \
+    --allowed-users-file /etc/nis/users.txt --oauth-state-file /var/lib/nis/oauth.json \
+    --keys-file /etc/nis/keys.txt \
+    --decay-data data/jeff311.dec --reaction-data data/jeff4.nisreac \
+    --fission-yields data/jeff311.nfy --sf-yields data/jeff311.sfy
+```
+
+- `--public-url` is the HTTPS URL of the server, as the users see it (behind the reverse proxy).
+- `--oauth-state-file` keeps the registered clients and the tokens over a restart, so the users do not have to log
+  in again. It has only a hash of each token. Without it, everything is in memory.
+- `--keys-file` is optional with OAuth. With it, the API keys work too.
+
+With systemd, put the secret in a file that only root can read, and give it to the service:
+
+```ini
+[Service]
+EnvironmentFile=/etc/nis/oauth.env     # NIS_GITHUB_CLIENT_SECRET=..., chmod 600
+```
+
+### 4. Connect claude.ai
+
+In claude.ai: **Settings → Connectors → Add custom connector**. Give the URL `https://nis.example.com/mcp`, and
+leave the OAuth client ID and secret empty (the server registers claude.ai itself). Then click **Connect**. The user sees a
+page of the NIS server that names the client and the site the login goes back to, and clicks **Log in with
+GitHub**. GitHub asks the user to log in (and, the first time, to allow the app), and the user comes back to
+claude.ai.
+
+The NIS page is necessary for security: the server uses one GitHub app for all the clients, and anyone can register
+a client, so without the page a bad client could get access as a user that allowed the app before. The page warns
+if the login does not go back to claude.ai. On a Team or Enterprise plan,
+an owner adds the connector for the organization, and each user connects with their own GitHub login.
+
+Each user sees only their own runs (the user is `github:<login>`).
 
 ### Size of the server
 
@@ -173,5 +244,6 @@ uv run pytest src/tests/python/mcptests.py
 ```
 
 The tests use a small fake data set, so they need no nuclear data. They test the times, the materials, the API keys,
-the runs (against the analytic solution of Co59 activation), the plots, and the tools in-process and over HTTP with
-keys. One test irradiates 1 kg of U235 at 14 MeV with the real data, if it is there.
+the runs (against the analytic solution of Co59 activation), the plots, the tools in-process and over HTTP with
+keys, and the OAuth flow as claude.ai does it (registration, PKCE, a fake GitHub login, tokens, refresh, the
+allow list, the state file). One test irradiates 1 kg of U235 at 14 MeV with the real data, if it is there.
