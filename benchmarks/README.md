@@ -116,6 +116,11 @@ A **fission pulse** case (for example U235 thermal fission) uses the same keys: 
 `sample.atoms`, a thermal spectrum, a short irradiation step, then the cooling steps, and `fissions` for the
 units per fission. Run it with fission yields (`--fission-yields`).
 
+`scripts/bench.py pulse U235 --decay-data data/jeff311.dec --fission-yields data/jeff311.nfy` gives the decay heat
+of an ideal pulse (the yields of one fission at t = 0, then decay) in MeV/s per fission, and the delayed beta and
+gamma energy over all time. Use it to check a pulse case: for cooling times much longer than the irradiation, the
+two must agree.
+
 ## Results file
 
 `scripts/bench.py run` writes one CSV for all the benchmarks, one row for each measured value:

@@ -9,6 +9,7 @@ Commands:
     run        run the cases with NIS, write the results (one CSV for all benchmarks)
     stats      C/E statistics of a results file
     plot       plots of a results file: a summary for each benchmark, or one plot for each case
+    pulse      the decay heat after a fission pulse (the yields of one fission, then decay)
 
 Examples:
     uv run python scripts/bench.py list
@@ -16,6 +17,7 @@ Examples:
         --output results.csv
     uv run python scripts/bench.py stats results.csv
     uv run python scripts/bench.py plot results.csv --summary fns_summary.png
+    uv run python scripts/bench.py pulse U235 --decay-data data/jeff311.dec --fission-yields data/jeff311.nfy
 """
 
 import argparse
@@ -156,6 +158,29 @@ def cmd_plot(args) -> int:
     return 0
 
 
+def cmd_pulse(args) -> int:
+    import csv
+    import pynis as nis
+    from nisbench.pulse import DEFAULT_TIMES, delayed_energy, pulse_decay_heat, pulse_inventory
+    decay_mat = nis.core.decay_mat_from_file(str(args.decay_data))
+    energy_data = nis.core.decay_energy_data_from_file(str(args.decay_data))
+    inventory = pulse_inventory(nis.core.fission_yields_from_file(str(args.fission_yields)), args.parent,
+                                args.energy_ev)
+    heats = pulse_decay_heat(decay_mat, energy_data, inventory, args.times or DEFAULT_TIMES)
+    out = open(args.output, "w", newline="") if args.output else sys.stdout
+    writer = csv.writer(out)
+    writer.writerow(["time_s", "beta_MeV_s", "gamma_MeV_s", "total_MeV_s", "t_total_MeV"])
+    for h in heats:
+        writer.writerow([f"{h.time_s:.6g}", f"{h.beta:.6e}", f"{h.gamma:.6e}", f"{h.total:.6e}",
+                         f"{h.time_s * h.total:.6e}"])
+    if args.output:
+        out.close()
+    beta, gamma = delayed_energy(decay_mat, energy_data, inventory)
+    print(f"{args.parent} at {args.energy_ev:g} eV: {sum(inventory.values()):.4f} products per fission, "
+          f"delayed energy (all time): beta {beta:.3f} MeV, gamma {gamma:.3f} MeV", file=sys.stderr)
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     commands = parser.add_subparsers(dest="command", required=True)
@@ -211,6 +236,16 @@ def main() -> int:
     p.add_argument("--format", default="png", help="file format of the case plots, e.g. png, pdf, svg")
     p.add_argument("--root", type=Path, default=BENCHMARKS_DIR, help="the benchmarks folder (for the titles)")
     p.set_defaults(func=cmd_plot)
+
+    p = commands.add_parser("pulse", help="the decay heat after a fission pulse, in MeV/s per fission")
+    p.add_argument("parent", help="the fissile nuclide, e.g. U235")
+    p.add_argument("--decay-data", type=Path, required=True)
+    p.add_argument("--fission-yields", type=Path, required=True, help="neutron induced fission yields (ENDF)")
+    p.add_argument("--energy-ev", type=float, default=0.0253, help="the neutron energy of the yields")
+    p.add_argument("--times", type=float, nargs="*", default=None,
+                   help="the times after the pulse (s, going up), by default 0.1 s to 30 years")
+    p.add_argument("--output", type=Path, default=None, help="a CSV file, else the standard output")
+    p.set_defaults(func=cmd_pulse)
 
     args = parser.parse_args()
     try:
