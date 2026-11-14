@@ -203,6 +203,20 @@ decay_mat = nis.core.decay_mat_from_file("data/jeff311.dec", nis.core.fission_yi
 ```
 
 
+## MCP server
+
+[nismcp](nismcp) is an [MCP](https://modelcontextprotocol.io) server for NIS. With it, an AI assistant such as
+Claude can irradiate a material, get the nuclides and plot them, from a question like "irradiate 1 kg of U235 with
+14 MeV neutrons for 1 day, what is the activity after 1 day?". It runs on your computer (stdio), or on a server
+over HTTP with API keys. See [nismcp/README.md](nismcp/README.md).
+
+```bash
+uv sync --group mcp
+uv run python -m nismcp serve --decay-data data/jeff311.dec --reaction-data data/jeff4.nisreac \
+    --fission-yields data/jeff311.nfy --sf-yields data/jeff311.sfy
+```
+
+
 ## Tests
 
 ### C++ tests
@@ -245,6 +259,7 @@ The tests:
 | [fissiontests.py](src/tests/python/fissiontests.py) | JEFF-3.1.1 fission yields: 2 products per fission, thermal U235 gives the known Cs137 and Sr90 yields and fission to capture ratio, Cf252 spontaneous fission | decay and reaction data, the yield files |
 | [fnstests.py](src/tests/python/fnstests.py) (slow) | FNS regression: runs all 132 FNS cases and compares with [nis_reference.csv](benchmarks/fns/results/nis_reference.csv), and checks that NIS stays as close to the experiment as now | decay and reaction data |
 | [fissionheattests.py](src/tests/python/fissionheattests.py) | the fission decay heat benchmark: the 44 cases load, the reference has all of them; regression against [nis_reference.csv](benchmarks/fission_decay_heat/results/nis_reference.csv) and C/E limits | the regression: decay data and the yield files |
+| [mcptests.py](src/tests/python/mcptests.py) | the MCP server: times, materials, API keys, runs (Co59 activation against the analytic solution), plots, the tools in-process and over HTTP; with the real data, 1 kg of U235 at 14 MeV | nothing (a fake data set), the `mcp` group (Python 3.10 or later) |
 | [nisprogramtests.py](src/tests/python/nisprogramtests.py) (slow) | the `nis` program: 3 FNS decks give the same as the reference, decay only steps, errors for bad input | decay and reaction data, the `nis` program |
 
 "Decay data" and "reaction data" are the files in `data/` from git lfs. The yield files come from

@@ -1,0 +1,304 @@
+"""
+One run: a material in a neutron spectrum, with irradiation and cooling steps, solved with CRAM48.
+
+Each step is cut into a few sub-steps (log spaced in time), so the results have enough points for a plot of the
+activity against time. The result keeps the atoms of all the nuclides at each point.
+"""
+
+import math
+import threading
+import time
+import uuid
+from collections import OrderedDict
+from dataclasses import dataclass, field
+
+import numpy as np
+
+from .units import format_time, parse_time, sig
+
+# the spectra the user can give by name: (group bounds in eV, flux per group). Only the shape is used, the
+# flux of each step sets the size. A narrow group at the energy, as in the reaction tests.
+FUSION_ENERGY_EV = 14.1e6
+THERMAL_ENERGY_EV = 0.0253
+SPECTRA = {
+    "14MeV": ([FUSION_ENERGY_EV * 0.9999, FUSION_ENERGY_EV * 1.0001], [1.0],
+              "D-T fusion neutrons, all at 14.1 MeV (one narrow group)"),
+    "thermal": ([THERMAL_ENERGY_EV * 0.9999, THERMAL_ENERGY_EV * 1.0001], [1.0],
+                "thermal neutrons, all at 0.0253 eV (2200 m/s, one narrow group)"),
+}
+SPECTRUM_ALIASES = {"14mev": "14MeV", "14.1mev": "14MeV", "fusion": "14MeV", "dt": "14MeV", "d-t": "14MeV",
+                    "thermal": "thermal", "0.0253ev": "thermal"}
+
+DEFAULT_FLUX = 1e14            # n/cm2/s
+SUB_STEPS = 12                 # points in each step, for the plots
+MAX_STEPS = 50
+MAX_TOTAL_TIME = 1e4 * 3.15576e7  # 10000 years
+
+
+@dataclass
+class Step:
+    duration: float          # s
+    flux: float              # n/cm2/s, 0 for cooling
+
+    @property
+    def kind(self) -> str:
+        return "irradiation" if self.flux > 0 else "cooling"
+
+
+def spectrum_from_input(spectrum) -> tuple:
+    """(bounds, values, description) from a name ("14MeV", "thermal") or {"bounds_ev": [...], "flux": [...]}."""
+    if spectrum is None:
+        spectrum = "14MeV"
+    if isinstance(spectrum, str):
+        key = SPECTRUM_ALIASES.get(spectrum.replace(" ", "").lower())
+        if key is None:
+            raise ValueError(f"unknown spectrum {spectrum!r}, use one of {sorted(SPECTRA)}, "
+                             f"or give {{'bounds_ev': [...], 'flux': [...]}}")
+        bounds, values, text = SPECTRA[key]
+        return list(bounds), list(values), f"{key}: {text}"
+    if isinstance(spectrum, dict):
+        bounds = [float(x) for x in spectrum.get("bounds_ev", [])]
+        values = [float(x) for x in spectrum.get("flux", [])]
+        if len(bounds) < 2 or len(values) != len(bounds) - 1:
+            raise ValueError("a spectrum needs bounds_ev (n+1 group bounds in eV) and flux (n values, one per group)")
+        if any(b <= a for a, b in zip(bounds, bounds[1:])) or bounds[0] <= 0:
+            raise ValueError("the group bounds must be more than 0 and go up")
+        if any(v < 0 for v in values) or sum(values) <= 0:
+            raise ValueError("the group fluxes must be 0 or more, and not all 0")
+        return bounds, values, f"custom: {len(values)} groups, {bounds[0]:g} eV to {bounds[-1]:g} eV"
+    raise ValueError("the spectrum is a name ('14MeV', 'thermal') or {'bounds_ev': [...], 'flux': [...]}")
+
+
+def steps_from_input(irradiation_time, cooling_times, schedule, flux) -> list:
+    """The steps from a schedule [{"duration": "1 d", "flux": 1e14}, ...], or from an irradiation time and
+    the cooling times to report (each is the time after the end of the irradiation)."""
+    steps = []
+    if schedule:
+        if irradiation_time is not None or cooling_times:
+            raise ValueError("give a schedule, or irradiation_time and cooling_times, not both")
+        for i, item in enumerate(schedule):
+            if not isinstance(item, dict) or "duration" not in item:
+                raise ValueError(f"schedule step {i + 1}: give {{'duration': '1 d', 'flux': 1e14}}")
+            step_flux = float(item.get("flux", flux if flux is not None else DEFAULT_FLUX))
+            if step_flux < 0 or not math.isfinite(step_flux):
+                raise ValueError(f"schedule step {i + 1}: the flux must be 0 or more")
+            steps.append(Step(parse_time(item["duration"], f"schedule step {i + 1}"), step_flux))
+    else:
+        if irradiation_time is None:
+            raise ValueError("give irradiation_time (for example '1 d'), or a schedule")
+        flux = DEFAULT_FLUX if flux is None else float(flux)
+        if flux < 0 or not math.isfinite(flux):
+            raise ValueError("the flux must be 0 or more")
+        steps.append(Step(parse_time(irradiation_time, "irradiation_time"), flux))
+        times = sorted(parse_time(t, "cooling_times") for t in (cooling_times or []))
+        previous = 0.0
+        for t in times:
+            if t > previous:
+                steps.append(Step(t - previous, 0.0))
+                previous = t
+    steps = [s for s in steps if s.duration > 0]
+    if not steps:
+        raise ValueError("all the steps have a duration of 0")
+    if len(steps) > MAX_STEPS:
+        raise ValueError(f"give at most {MAX_STEPS} steps")
+    if sum(s.duration for s in steps) > MAX_TOTAL_TIME:
+        raise ValueError("the total time must be at most 10000 years")
+    return steps
+
+
+@dataclass
+class Point:
+    time: float              # s since the start
+    step: int                # index of the step
+    end_of_step: bool
+    atoms: np.ndarray        # atoms of each nuclide (no sink)
+
+
+@dataclass
+class RunResult:
+    run_id: str
+    owner: str
+    created: float
+    material: dict           # the input, for the record
+    initial_atoms: dict
+    steps: list
+    spectrum: str
+    points: list
+    notes: list = field(default_factory=list)
+    solve_seconds: float = 0.0
+
+    @property
+    def irradiation_end(self) -> float:
+        """The time of the end of the last irradiation step (0 if no irradiation)."""
+        t, end = 0.0, 0.0
+        for s in self.steps:
+            t += s.duration
+            if s.flux > 0:
+                end = t
+        return end
+
+    def point_at(self, time_s=None) -> Point:
+        """The point at the time (s since the start), or the last point. The time must be a point of the run:
+        the end of a step, or one of the sub-steps."""
+        if time_s is None:
+            return self.points[-1]
+        best = min(self.points, key=lambda p: abs(p.time - time_s))
+        if abs(best.time - time_s) > 1e-6 * max(time_s, 1.0):
+            raise ValueError(f"the run has no result at {format_time(time_s)}; the step ends are at "
+                             + ", ".join(format_time(p.time) for p in self.points if p.end_of_step))
+        return best
+
+
+def sub_step_times(duration: float, count: int = SUB_STEPS) -> list:
+    """The times in a step (from its start) of the points of the results, log spaced, the last is the duration."""
+    if count <= 1:
+        return [duration]
+    times = np.geomspace(duration * 1e-3, duration, count)
+    times[-1] = duration
+    return [float(t) for t in times]
+
+
+class Runner:
+    """Runs the models and keeps the results (the last max_runs, for each user)."""
+
+    def __init__(self, loader, max_runs: int = 20, reaction_cache_size: int = 4):
+        self.loader = loader
+        self.max_runs = max_runs
+        self._runs = OrderedDict()
+        self._matrices = OrderedDict()
+        self._reaction_cache_size = reaction_cache_size
+        # one solve at a time: the runs are short, and the nuclear data is shared
+        self._solve_lock = threading.Lock()
+        self._runs_lock = threading.Lock()
+
+    # ------------------------------------------------------------------ runs
+
+    def _reaction_matrix(self, data, bounds, values):
+        key = (tuple(bounds), tuple(values))
+        if key in self._matrices:
+            self._matrices.move_to_end(key)
+            return self._matrices[key]
+        mat = data.reaction_matrix(bounds, values)
+        self._matrices[key] = mat
+        while len(self._matrices) > self._reaction_cache_size:
+            self._matrices.popitem(last=False)
+        return mat
+
+    def run(self, owner: str, initial_atoms: dict, steps: list, spectrum, material: dict, notes: list) -> RunResult:
+        data, tables = self.loader.get()
+        nis = data.nis
+        bounds, values, spectrum_text = spectrum
+        start = time.time()
+        with self._solve_lock:
+            reaction = None
+            if any(s.flux > 0 for s in steps):
+                reaction = self._reaction_matrix(data, bounds, values)
+                total = float(sum(values))
+            n = np.asarray(nis.core.vector_from_inventory(initial_atoms), dtype=float)
+            size = len(tables.names)
+            points = [Point(0.0, -1, True, n[:size].copy())]
+            t = 0.0
+            matrices = {}
+            for index, step in enumerate(steps):
+                if step.flux not in matrices:
+                    # the spectrum is in n/cm2/s, and its total is the flux of the step
+                    matrices[step.flux] = (data.decay_mat if step.flux == 0
+                                           else data.decay_mat + reaction * (step.flux / total))
+                mat = matrices[step.flux]
+                previous = 0.0
+                times = sub_step_times(step.duration)
+                for k, sub in enumerate(times):
+                    n = np.asarray(nis.core.solve_reachable(mat, n, sub - previous, nis.core.solver_cram48))
+                    # a solve can give very small negative values, they are 0
+                    n = np.where(n < 0, 0.0, n)
+                    previous = sub
+                    points.append(Point(t + sub, index, k == len(times) - 1, n[:size].copy()))
+                t += step.duration
+        result = RunResult(run_id=uuid.uuid4().hex[:8], owner=owner, created=time.time(), material=material,
+                           initial_atoms=initial_atoms, steps=steps, spectrum=spectrum_text, points=points,
+                           notes=notes, solve_seconds=time.time() - start)
+        with self._runs_lock:
+            self._runs[result.run_id] = result
+            mine = [k for k, r in self._runs.items() if r.owner == owner]
+            for k in mine[:-self.max_runs]:
+                del self._runs[k]
+        return result
+
+    def get(self, owner: str, run_id: str) -> RunResult:
+        with self._runs_lock:
+            result = self._runs.get(run_id)
+        if result is None or result.owner != owner:
+            raise ValueError(f"no run {run_id!r}; the runs are kept in memory only, so run the irradiation again")
+        return result
+
+    def list(self, owner: str) -> list:
+        with self._runs_lock:
+            return [r for r in self._runs.values() if r.owner == owner]
+
+
+# ---------------------------------------------------------------------- the quantities of a result
+
+QUANTITIES = {
+    "activity": "Bq",
+    "decay_heat": "W",
+    "atoms": "atoms",
+    "mass": "g",
+}
+
+
+def nuclide_values(tables, atoms: np.ndarray, quantity: str) -> np.ndarray:
+    """The quantity for each nuclide, from its atoms."""
+    lam = tables.decay_constants[:len(atoms)]
+    if quantity == "activity":
+        return lam * atoms
+    if quantity == "decay_heat":
+        return lam * atoms * tables.energy["total"][:len(atoms)]
+    if quantity == "atoms":
+        return atoms
+    if quantity == "mass":
+        return atoms * tables.mass_numbers / 6.02214076e23
+    raise ValueError(f"unknown quantity {quantity!r}, use one of {sorted(QUANTITIES)}")
+
+
+def totals(tables, atoms: np.ndarray) -> dict:
+    activities = tables.decay_constants[:len(atoms)] * atoms
+    heat = {part: float(activities @ e[:len(atoms)]) for part, e in tables.energy.items()}
+    return {"activity_Bq": sig(float(activities.sum())), "decay_heat_W": sig(heat["total"]),
+            "beta_heat_W": sig(heat["light_particle"]), "gamma_heat_W": sig(heat["electromagnetic"]),
+            "alpha_heat_W": sig(heat["heavy_particle"])}
+
+
+def half_life_text(lam: float) -> str:
+    if lam <= 0:
+        return "stable"
+    return format_time(math.log(2) / lam)
+
+
+def top_nuclides(tables, atoms: np.ndarray, quantity: str, count: int, exclude=()) -> list:
+    """The names of the count nuclides with the largest quantity, largest first."""
+    values = nuclide_values(tables, atoms, quantity)
+    order = np.argsort(values)[::-1]
+    names = []
+    for i in order:
+        if values[i] <= 0 or len(names) >= count:
+            break
+        if tables.names[i] not in exclude:
+            names.append(tables.names[i])
+    return names
+
+
+def nuclide_table(tables, atoms: np.ndarray, quantity: str, names: list) -> list:
+    """Rows of the nuclides: the quantity, its fraction of the total, the half-life."""
+    values = nuclide_values(tables, atoms, quantity)
+    total = float(values.sum())
+    unit = QUANTITIES[quantity]
+    rows = []
+    for name in names:
+        i = tables.index[name]
+        value = float(values[i])
+        row = {"nuclide": name, f"{quantity}_{unit}": sig(value),
+               "half_life": half_life_text(float(tables.decay_constants[i]))}
+        if total > 0:
+            row["percent_of_total"] = sig(100.0 * value / total, 3)
+        rows.append(row)
+    return rows

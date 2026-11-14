@@ -15,7 +15,14 @@ dynamic = ["version"]
 plot = ["matplotlib"]
 
 [dependency-groups]
-dev = ["pytest", "matplotlib", "mpmath"]
+dev = ["pytest", "matplotlib", "mpmath", {include-group = "mcp"}]
+# the MCP server (nismcp/), python 3.10 or later: uv sync --group mcp (the dev group has it too)
+mcp = [
+    "mcp>=2.3; python_version >= '3.10'",
+    "periodictable>=2.1; python_version >= '3.10'",
+    "matplotlib",
+    "uvicorn>=0.30; python_version >= '3.10'",
+]
 
 [tool.scikit-build]
 minimum-version = "build-system.requires"
