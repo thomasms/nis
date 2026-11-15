@@ -57,7 +57,7 @@ def _errors_to_user(fn):
 
 
 def _user(ctx: Context, store, secured: bool) -> str:
-    """The user of the request: the subject of the OAuth token (github:<login>) or of the API key (its name).
+    """The user of the request: the subject of the OAuth token (github:<account id>) or of the API key (its name).
     Without authentication (stdio), the one local user."""
     request = getattr(ctx.request_context, "request", None) if ctx is not None else None
     # with OAuth, the SDK checks the token and puts the user in the request
@@ -283,7 +283,8 @@ def build_server(loader, runner: m.Runner, key_store=None, oauth=None) -> MCPSer
                         "the run). If not given: at the last time.")] = None,
         include_initial: Annotated[bool, Field(
             description="For top_n: also rank the nuclides of the material at the start (for example U235). "
-                        "If false, only the products are ranked.")] = False,
+                        "If false, only the products are ranked (but a run with no irradiation, or with no "
+                        "products, ranks all the nuclides).")] = False,
         log_time: Annotated[bool | None, Field(description="A log time axis. If not given: log if the times "
                                                            "span more than a factor of 100.")] = None,
         log_value: Annotated[bool, Field(description="A log axis for the quantity.")] = True,
@@ -300,9 +301,15 @@ def build_server(loader, runner: m.Runner, key_store=None, oauth=None) -> MCPSer
             ranked = ""
         else:
             point = _point(result, cooling_time=rank_at_cooling_time, what="rank_at_cooling_time")
-            exclude = () if include_initial else set(result.initial_atoms)
+            # a decay-only run has no products to speak of: rank the nuclides of the material too
+            exclude = () if include_initial or result.irradiation_end == 0 else set(result.initial_atoms)
             names = m.top_nuclides(tables, point.atoms, quantity, top_n, exclude=exclude)
             ranked = f", ranked by {quantity} at {format_time(point.time)} since the start"
+            if not names and exclude:
+                names = m.top_nuclides(tables, point.atoms, quantity, top_n)
+                ranked += " (the run made no products with this quantity, so the initial nuclides are included)"
+            elif exclude:
+                ranked += ", products only"
             if not names:
                 raise ValueError(f"no nuclides with {quantity} at that time")
         png = plot_png(result, tables, names, quantity, log_time=log_time, log_value=log_value)

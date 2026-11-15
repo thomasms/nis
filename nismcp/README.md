@@ -243,6 +243,10 @@ an owner adds the connector for the organization, and each user connects with th
 
 Each user sees only their own runs (the user is `github:<account id>`).
 
+Anyone can register a client and start a login, so the server has limits: at most 1000 clients and 1000 logins in
+progress, and a client that has no token a day after its registration is removed. For more protection, add a rate
+limit for `/register` and `/authorize` in the reverse proxy.
+
 ### Size of the server
 
 The memory is mostly the nuclear data. The results of the runs use at most 500 MB for all the users together

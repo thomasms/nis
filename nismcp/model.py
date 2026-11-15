@@ -79,7 +79,13 @@ def steps_from_input(irradiation_time, cooling_times, schedule, flux) -> list:
         for i, item in enumerate(schedule):
             if not isinstance(item, dict) or "duration" not in item:
                 raise ValueError(f"schedule step {i + 1}: give {{'duration': '1 d', 'flux': 1e14}}")
-            step_flux = float(item.get("flux", flux if flux is not None else DEFAULT_FLUX))
+            step_flux = item.get("flux")
+            if step_flux is None:
+                step_flux = flux if flux is not None else DEFAULT_FLUX
+            try:
+                step_flux = float(step_flux)
+            except (TypeError, ValueError):
+                raise ValueError(f"schedule step {i + 1}: the flux must be a number in n/cm2/s") from None
             if step_flux < 0 or not math.isfinite(step_flux):
                 raise ValueError(f"schedule step {i + 1}: the flux must be 0 or more")
             steps.append(Step(parse_time(item["duration"], f"schedule step {i + 1}"), step_flux))

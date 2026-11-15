@@ -18,8 +18,10 @@ from pathlib import Path
 import numpy as np
 
 try:
+    import httpx2  # noqa: F401
     import mcp  # noqa: F401
     import periodictable  # noqa: F401
+    import uvicorn  # noqa: F401
     _has_mcp = True
 except ImportError:  # python 3.9, or without the mcp group
     _has_mcp = False
@@ -95,6 +97,24 @@ def _free_port() -> int:
     with socket.socket() as s:
         s.bind(("127.0.0.1", 0))
         return s.getsockname()[1]
+
+
+def _start_uvicorn(app, port: int):
+    """Run the app with uvicorn in a thread. Fails at once if the server does not start (for example if another
+    process took the port), so the tests do not fail later with connection errors."""
+    import uvicorn
+    server = uvicorn.Server(uvicorn.Config(app, host="127.0.0.1", port=port, log_level="warning"))
+    thread = threading.Thread(target=server.run, daemon=True)
+    thread.start()
+    for _ in range(200):
+        if server.started:
+            return server, thread
+        if not thread.is_alive():
+            break
+        time.sleep(0.05)
+    server.should_exit = True
+    thread.join(5)
+    raise RuntimeError(f"the test server did not start on port {port}")
 
 
 @unittest.skipUnless(_has_mcp, "the mcp group is not installed (uv sync --group mcp)")
@@ -489,6 +509,21 @@ class MCPToolsTest(unittest.TestCase):
         result = self.call("get_results", {"run_id": "nope"})
         self.assertTrue(result.is_error)
         self.assertIn("no run", _text(result))
+        # a schedule step with a flux that is null uses the default flux; a flux that is not a number is a clear
+        # error for the model, not an internal error
+        result = self.call("irradiate", {"atoms": {"Co59": 1e20}, "schedule": [{"duration": "1 d", "flux": None}]})
+        self.assertFalse(result.is_error, _text(result))
+        result = self.call("irradiate", {"atoms": {"Co59": 1e20}, "schedule": [{"duration": "1 d", "flux": "big"}]})
+        self.assertTrue(result.is_error)
+        self.assertIn("flux must be a number", _text(result))
+
+    def test_plot_decay_only(self) -> None:
+        """A run with no irradiation makes no products: the plot ranks the nuclides of the material."""
+        result = self.call("irradiate", {"atoms": {"Co60": 1e20}, "irradiation_time": "1 y", "flux_n_cm2_s": 0})
+        self.assertFalse(result.is_error, _text(result))
+        result = self.call("plot_nuclides", {"run_id": result.structured_content["run_id"], "top_n": 1})
+        self.assertFalse(result.is_error, _text(result))
+        self.assertIn("Co60", _text(result))
 
     def test_info(self) -> None:
         result = self.call("nuclear_data_info", {})
@@ -503,7 +538,6 @@ class MCPHttpTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        import uvicorn
         from nismcp.auth import ApiKeyMiddleware, KeyStore, add_key
         from nismcp.model import Runner
         from nismcp.server import build_server
@@ -516,19 +550,13 @@ class MCPHttpTest(unittest.TestCase):
         server = build_server(loader, Runner(loader), key_store=store)
         app = ApiKeyMiddleware(server.streamable_http_app(), store)
         cls.port = _free_port()
-        cls.uvicorn = uvicorn.Server(uvicorn.Config(app, host="127.0.0.1", port=cls.port, log_level="warning"))
-        cls.thread = threading.Thread(target=cls.uvicorn.run, daemon=True)
-        cls.thread.start()
-        for _ in range(100):
-            if cls.uvicorn.started:
-                break
-            time.sleep(0.05)
+        cls.addClassCleanup(cls.folder.cleanup)
+        cls.uvicorn, cls.thread = _start_uvicorn(app, cls.port)
 
     @classmethod
     def tearDownClass(cls) -> None:
         cls.uvicorn.should_exit = True
         cls.thread.join(5)
-        cls.folder.cleanup()
 
     def url(self, path="/mcp") -> str:
         return f"http://127.0.0.1:{self.port}{path}"
@@ -631,7 +659,6 @@ class MCPOAuthTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        import uvicorn
         from nismcp.auth import KeyStore, add_key
         from nismcp.model import Runner
         from nismcp.oauth import AllowList, ApiKeyHeader, GitHubOAuthProvider, auth_settings
@@ -653,19 +680,13 @@ class MCPOAuthTest(unittest.TestCase):
         server = build_server(loader, Runner(loader), key_store=store,
                               oauth=(cls.provider, auth_settings(cls.public)))
         app = ApiKeyHeader(server.streamable_http_app())
-        cls.uvicorn = uvicorn.Server(uvicorn.Config(app, host="127.0.0.1", port=cls.port, log_level="warning"))
-        cls.thread = threading.Thread(target=cls.uvicorn.run, daemon=True)
-        cls.thread.start()
-        for _ in range(100):
-            if cls.uvicorn.started:
-                break
-            time.sleep(0.05)
+        cls.addClassCleanup(cls.folder.cleanup)
+        cls.uvicorn, cls.thread = _start_uvicorn(app, cls.port)
 
     @classmethod
     def tearDownClass(cls) -> None:
         cls.uvicorn.should_exit = True
         cls.thread.join(5)
-        cls.folder.cleanup()
 
     def http(self):
         import httpx2
@@ -881,6 +902,37 @@ class MCPOAuthTest(unittest.TestCase):
         # the tokens of the first account still work
         self.assertFalse(self.call(first["access_token"], "list_runs", {}).is_error)
 
+    def test_limits(self) -> None:
+        """Anyone can register a client and start a login, so both have a limit. A client that got no token in a
+        day is removed."""
+        from nismcp import oauth
+        with self.http() as http:
+            client_id = self.register(http)
+            clients, logins = self.provider.max_clients, self.provider.max_logins
+            try:
+                self.provider.max_clients = len(self.provider.clients)
+                response = http.post("/register", json={"redirect_uris": [self.REDIRECT],
+                                                        "token_endpoint_auth_method": "none"})
+                self.assertEqual(response.status_code, 400)
+                self.assertIn("too many clients", response.text)
+                self.provider.max_logins = 0
+                response = http.get("/authorize", params={
+                    "response_type": "code", "client_id": client_id, "redirect_uri": self.REDIRECT, "state": "s1",
+                    "code_challenge": "x" * 43, "code_challenge_method": "S256"})
+                self.assertEqual(response.status_code, 302)
+                self.assertIn("temporarily_unavailable", response.headers["location"])
+            finally:
+                self.provider.max_clients, self.provider.max_logins = clients, logins
+        # an old client with no token is removed at the next registration; a client with a token stays
+        with self.provider._lock:
+            for client in self.provider.clients.values():
+                client.client_id_issued_at = int(time.time() - oauth.UNUSED_CLIENT_SECONDS - 10)
+        used = {t.client_id for t in self.provider.refresh.values()}
+        with self.http() as http:
+            self.register(http)
+        self.assertNotIn(client_id, self.provider.clients)
+        self.assertTrue(used <= set(self.provider.clients))
+
     def test_bad_callback(self) -> None:
         with self.http() as http:
             response = http.get("/oauth/github/callback", params={"code": "alice-code", "state": "unknown"})
@@ -943,6 +995,88 @@ class MCPOAuthTest(unittest.TestCase):
             result = self.call(self.key, "irradiate", {"atoms": {"H3": 1.0}, "irradiation_time": 60,
                                                        "flux_n_cm2_s": 0}, header=header)
             self.assertFalse(result.is_error, _text(result))
+
+
+@unittest.skipUnless(_has_mcp, "the mcp group is not installed (uv sync --group mcp)")
+class MCPCommandTest(unittest.TestCase):
+    """The command python -m nismcp serve: the checks of the options, and the HTTP server as it really runs
+    (the host check, the keys, /health), in a process of its own."""
+
+    def setUp(self) -> None:
+        self.folder = tempfile.TemporaryDirectory()
+        self.addCleanup(self.folder.cleanup)
+        self.path = Path(self.folder.name)
+
+    def serve(self, *options, env=None) -> int:
+        import contextlib
+        import io
+        import os
+        from unittest import mock
+        from nismcp.__main__ import main
+        environment = {k: v for k, v in os.environ.items() if k != "NIS_GITHUB_CLIENT_SECRET"}
+        environment.update(env or {})
+        with mock.patch.dict(os.environ, environment, clear=True), contextlib.redirect_stderr(io.StringIO()) as err:
+            code = main(["serve", "--transport", "http", "--decay-data", str(self.path / "none.dec"), *options])
+        self.stderr = err.getvalue()
+        return code
+
+    def test_option_checks(self) -> None:
+        users = self.path / "users.txt"
+        users.write_text("alice\n")
+        # HTTP needs keys or OAuth
+        self.assertEqual(self.serve(), 2)
+        self.assertIn("--keys-file", self.stderr)
+        # OAuth needs the secret, the public URL and the allow list
+        self.assertEqual(self.serve("--github-client-id", "id", "--public-url", "https://nis.example.com",
+                                    "--allowed-users-file", str(users)), 2)
+        self.assertIn("NIS_GITHUB_CLIENT_SECRET", self.stderr)
+        self.assertEqual(self.serve("--github-client-id", "id", env={"NIS_GITHUB_CLIENT_SECRET": "s"}), 2)
+        self.assertIn("--public-url", self.stderr)
+        self.assertIn("--allowed-users-file", self.stderr)
+        # and HTTPS, except on this machine
+        self.assertEqual(self.serve("--github-client-id", "id", "--public-url", "http://nis.example.com",
+                                    "--allowed-users-file", str(users), env={"NIS_GITHUB_CLIENT_SECRET": "s"}), 2)
+        self.assertIn("must be https", self.stderr)
+
+    def test_http_server(self) -> None:
+        import subprocess
+        import sys
+        import httpx2
+        from nismcp.auth import add_key
+        keys = self.path / "keys.txt"
+        key = add_key(keys, "alice")
+        port = _free_port()
+        process = subprocess.Popen(
+            [sys.executable, "-m", "nismcp", "serve", "--transport", "http", "--port", str(port),
+             "--keys-file", str(keys), "--allowed-host", "nis.example.com",
+             "--decay-data", str(self.path / "none.dec"), "--log-level", "WARNING"],
+            cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+        try:
+            url = f"http://127.0.0.1:{port}"
+            health = None
+            for _ in range(200):
+                try:
+                    health = httpx2.get(f"{url}/health")
+                    break
+                except httpx2.TransportError:
+                    if process.poll() is not None:
+                        break
+                    time.sleep(0.05)
+            self.assertIsNotNone(health, process.stderr.read().decode() if process.poll() is not None else "")
+            # the data file is not there: /health says so
+            self.assertIn("error", health.json()["status"])
+            body = {"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {
+                "protocolVersion": "2025-06-18", "capabilities": {}, "clientInfo": {"name": "t", "version": "1"}}}
+            headers = {"Accept": "application/json, text/event-stream", "Authorization": f"Bearer {key}"}
+            self.assertEqual(httpx2.post(f"{url}/mcp", json=body).status_code, 401)
+            response = httpx2.post(f"{url}/mcp", json=body, headers={**headers, "Host": "nis.example.com"})
+            self.assertEqual(response.status_code, 200, response.text)
+            response = httpx2.post(f"{url}/mcp", json=body, headers={**headers, "Host": "evil.example.com"})
+            self.assertEqual(response.status_code, 421)
+        finally:
+            process.terminate()
+            process.wait(10)
+            process.stderr.close()
 
 
 @unittest.skipUnless(_has_mcp and has_data(JEFF311_DECAY) and has_data(JEFF4_REACTION),

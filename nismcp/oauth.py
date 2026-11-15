@@ -39,7 +39,7 @@ import urllib.request
 from pathlib import Path
 
 from mcp.server.auth.provider import (AccessToken, AuthorizationCode, AuthorizationParams, AuthorizeError,
-                                      RefreshToken, TokenError, construct_redirect_uri)
+                                      RefreshToken, RegistrationError, TokenError, construct_redirect_uri)
 from mcp.shared.auth import OAuthClientInformationFull, OAuthToken
 
 log = logging.getLogger("nismcp.oauth")
@@ -63,6 +63,11 @@ ACCESS_TOKEN_SECONDS = 3600
 REFRESH_TOKEN_SECONDS = 30 * 86400
 CODE_SECONDS = 300
 LOGIN_SECONDS = 600
+# anyone can register a client and start a login, so there are limits: a client that has no token a day after
+# its registration is removed, and there are at most MAX_CLIENTS clients and MAX_LOGINS logins in progress
+UNUSED_CLIENT_SECONDS = 86400
+MAX_CLIENTS = 1000
+MAX_LOGINS = 1000
 
 
 def _hash(token: str) -> str:
@@ -161,6 +166,9 @@ class _Login:
 class GitHubOAuthProvider:
     """The OAuth authorization server of the MCP SDK (OAuthAuthorizationServerProvider), with the GitHub login."""
 
+    max_clients = MAX_CLIENTS
+    max_logins = MAX_LOGINS
+
     def __init__(self, github: GitHub, allow_list: AllowList, public_url: str, state_file: Path = None,
                  key_store=None):
         self.github = github
@@ -220,8 +228,22 @@ class GitHubOAuthProvider:
     async def get_client(self, client_id: str):
         return self.clients.get(client_id)
 
+    def _prune_clients(self) -> None:
+        """Remove the clients that got no token in a day (most likely scripts, or a login that was stopped)."""
+        old = time.time() - UNUSED_CLIENT_SECONDS
+        used = ({t.client_id for t in self.access.values()} | {t.client_id for t in self.refresh.values()}
+                | {c.client_id for c in self.codes.values()} | {e.client_id for e in self.logins.values()})
+        self.clients = {k: c for k, c in self.clients.items()
+                        if k in used or (c.client_id_issued_at or 0) > old}
+
     async def register_client(self, client_info: OAuthClientInformationFull) -> None:
         with self._lock:
+            self._clean()
+            self._prune_clients()
+            if len(self.clients) >= self.max_clients:
+                log.warning("refused a client registration: there are %d clients already", len(self.clients))
+                raise RegistrationError(error="invalid_client_metadata",
+                                        error_description="the server has too many clients, try again later")
             self.clients[client_info.client_id] = client_info
             self._save()
         log.info("registered the OAuth client %s (%s)", client_info.client_id, client_info.client_name)
@@ -233,6 +255,10 @@ class GitHubOAuthProvider:
         state = secrets.token_urlsafe(32)
         with self._lock:
             self._clean()
+            if len(self.logins) >= self.max_logins:
+                log.warning("refused a login: there are %d logins in progress", len(self.logins))
+                raise AuthorizeError(error="temporarily_unavailable",
+                                     error_description="the server has too many logins in progress, try again later")
             self.logins[state] = _Login(time.time() + LOGIN_SECONDS, client.client_id, params,
                                         csrf=secrets.token_urlsafe(32))
         return f"{self.public_url}{CONSENT_PATH}?{urllib.parse.urlencode({'state': state})}"
