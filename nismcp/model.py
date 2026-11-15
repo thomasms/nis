@@ -33,6 +33,14 @@ DEFAULT_FLUX = 1e14            # n/cm2/s
 SUB_STEPS = 12                 # points in each step, for the plots
 MAX_STEPS = 50
 MAX_TOTAL_TIME = 1e4 * 3.15576e7  # 10000 years
+# the groups of a custom spectrum: the time to collapse the cross sections grows with the number of groups, so
+# there is a limit (the large group structures have 709 or 1102 groups)
+MAX_SPECTRUM_GROUPS = 2000
+# the limits of the solves: there is one solve at a time, so a user can wait for the solves of other users
+MAX_RUNS_IN_PROGRESS = 8            # all the users: the run that solves, and the runs that wait for it
+MAX_RUNS_IN_PROGRESS_PER_USER = 2
+SOLVE_WAIT_SECONDS = 120            # the longest wait for the solves of others
+MAX_SOLVE_SECONDS = 300             # a run that takes longer stops (it is checked between the sub-steps)
 
 
 @dataclass
@@ -57,14 +65,30 @@ def spectrum_from_input(spectrum) -> tuple:
         bounds, values, text = SPECTRA[key]
         return list(bounds), list(values), f"{key}: {text}"
     if isinstance(spectrum, dict):
-        bounds = [float(x) for x in spectrum.get("bounds_ev", [])]
-        values = [float(x) for x in spectrum.get("flux", [])]
+        raw_bounds, raw_values = spectrum.get("bounds_ev", []), spectrum.get("flux", [])
+        if not isinstance(raw_bounds, list) or not isinstance(raw_values, list):
+            raise ValueError("a spectrum needs bounds_ev (n+1 group bounds in eV) and flux (n values, one per group)")
+        if len(raw_values) > MAX_SPECTRUM_GROUPS:
+            raise ValueError(f"a spectrum can have at most {MAX_SPECTRUM_GROUPS} groups")
+        try:
+            bounds = [float(x) for x in raw_bounds]
+            values = [float(x) for x in raw_values]
+        except (TypeError, ValueError, OverflowError):
+            raise ValueError("the group bounds and fluxes of the spectrum must be numbers") from None
         if len(bounds) < 2 or len(values) != len(bounds) - 1:
             raise ValueError("a spectrum needs bounds_ev (n+1 group bounds in eV) and flux (n values, one per group)")
-        if any(b <= a for a, b in zip(bounds, bounds[1:])) or bounds[0] <= 0:
+        # NaN and inf first: a comparison with NaN is always false, so NaN gets past the tests below (and a NaN
+        # bound stopped the C++ code)
+        if not all(math.isfinite(x) for x in bounds + values):
+            raise ValueError("the group bounds and fluxes of the spectrum must be finite numbers")
+        if any(not b > a for a, b in zip(bounds, bounds[1:])) or not bounds[0] > 0:
             raise ValueError("the group bounds must be more than 0 and go up")
-        if any(v < 0 for v in values) or sum(values) <= 0:
+        if any(v < 0 for v in values) or not max(values) > 0:
             raise ValueError("the group fluxes must be 0 or more, and not all 0")
+        # only the shape is used, so scale the fluxes to a largest value of 1: the sum then cannot overflow or be
+        # so small that the flux of a step divided by it is inf
+        largest = max(values)
+        values = [v / largest for v in values]
         return bounds, values, f"custom: {len(values)} groups, {bounds[0]:g} eV to {bounds[-1]:g} eV"
     raise ValueError("the spectrum is a name ('14MeV', 'thermal') or {'bounds_ev': [...], 'flux': [...]}")
 
@@ -215,6 +239,13 @@ class Runner:
         # one solve at a time: the runs are short, and the nuclear data is shared
         self._solve_lock = threading.Lock()
         self._runs_lock = threading.Lock()
+        # the runs in progress of each user (solving, or waiting for the solve lock), so that one user cannot
+        # take all the threads of the server with runs that wait
+        self._in_progress = {}
+        self.max_in_progress = MAX_RUNS_IN_PROGRESS
+        self.max_in_progress_per_user = MAX_RUNS_IN_PROGRESS_PER_USER
+        self.solve_wait_seconds = SOLVE_WAIT_SECONDS
+        self.max_solve_seconds = MAX_SOLVE_SECONDS
 
     # ------------------------------------------------------------------ runs
 
@@ -229,36 +260,70 @@ class Runner:
             self._matrices.popitem(last=False)
         return mat
 
+    def _enter(self, owner: str) -> None:
+        with self._runs_lock:
+            if self._in_progress.get(owner, 0) >= self.max_in_progress_per_user:
+                raise RuntimeError(f"you have {self.max_in_progress_per_user} runs in progress already: wait for "
+                                   "them to end, then try again")
+            if sum(self._in_progress.values()) >= self.max_in_progress:
+                raise RuntimeError("the server is busy with the runs of other users, try again in a minute")
+            self._in_progress[owner] = self._in_progress.get(owner, 0) + 1
+
+    def _leave(self, owner: str) -> None:
+        with self._runs_lock:
+            count = self._in_progress.get(owner, 0) - 1
+            if count > 0:
+                self._in_progress[owner] = count
+            else:
+                self._in_progress.pop(owner, None)
+
     def run(self, owner: str, initial_atoms: dict, steps: list, spectrum, material: dict, notes: list) -> RunResult:
         data, tables = self.loader.get()
+        self._enter(owner)
+        try:
+            if not self._solve_lock.acquire(timeout=self.solve_wait_seconds):
+                raise TimeoutError("the server is busy with the runs of other users, try again in a minute")
+            try:
+                return self._run(data, tables, owner, initial_atoms, steps, spectrum, material, notes)
+            finally:
+                self._solve_lock.release()
+        finally:
+            self._leave(owner)
+
+    def _run(self, data, tables, owner, initial_atoms, steps, spectrum, material, notes) -> RunResult:
+        """The solve, with the solve lock held."""
         nis = data.nis
         bounds, values, spectrum_text = spectrum
         start = time.time()
-        with self._solve_lock:
-            reaction = None
-            if any(s.flux > 0 for s in steps):
-                reaction = self._reaction_matrix(data, bounds, values)
-                total = float(sum(values))
-            n = np.asarray(nis.core.vector_from_inventory(initial_atoms), dtype=float)
-            size = len(tables.names)
-            points = [Point(0.0, -1, True, n[:size].copy())]
-            t = 0.0
-            matrices = {}
-            for index, step in enumerate(steps):
-                if step.flux not in matrices:
-                    # the spectrum is in n/cm2/s, and its total is the flux of the step
-                    matrices[step.flux] = (data.decay_mat if step.flux == 0
-                                           else data.decay_mat + reaction * (step.flux / total))
-                mat = matrices[step.flux]
-                previous = 0.0
-                times = sub_step_times(step.duration)
-                for k, sub in enumerate(times):
-                    n = np.asarray(nis.core.solve_reachable(mat, n, sub - previous, nis.core.solver_cram48))
-                    # a solve can give very small negative values, they are 0
-                    n = np.where(n < 0, 0.0, n)
-                    previous = sub
-                    points.append(Point(t + sub, index, k == len(times) - 1, n[:size].copy()))
-                t += step.duration
+        reaction = None
+        if any(s.flux > 0 for s in steps):
+            reaction = self._reaction_matrix(data, bounds, values)
+            total = float(sum(values))
+        n = np.asarray(nis.core.vector_from_inventory(initial_atoms), dtype=float)
+        size = len(tables.names)
+        points = [Point(0.0, -1, True, n[:size].copy())]
+        t = 0.0
+        matrices = {}
+        for index, step in enumerate(steps):
+            if step.flux not in matrices:
+                # the spectrum is in n/cm2/s, and its total is the flux of the step
+                matrices[step.flux] = (data.decay_mat if step.flux == 0
+                                       else data.decay_mat + reaction * (step.flux / total))
+            mat = matrices[step.flux]
+            previous = 0.0
+            times = sub_step_times(step.duration)
+            for k, sub in enumerate(times):
+                if time.time() - start > self.max_solve_seconds:
+                    raise RuntimeError(f"the run took more than {self.max_solve_seconds:g} s, so it was "
+                                       "stopped: give fewer steps or a smaller material")
+                n = np.asarray(nis.core.solve_reachable(mat, n, sub - previous, nis.core.solver_cram48))
+                if not np.all(np.isfinite(n)):
+                    raise RuntimeError("the solve gave numbers that are not finite; check the input")
+                # a solve can give very small negative values, they are 0
+                n = np.where(n < 0, 0.0, n)
+                previous = sub
+                points.append(Point(t + sub, index, k == len(times) - 1, n[:size].copy()))
+            t += step.duration
         result = RunResult(run_id=uuid.uuid4().hex[:8], owner=owner, created=time.time(), material=material,
                            initial_atoms=initial_atoms, steps=steps, spectrum=spectrum_text, points=points,
                            notes=notes, solve_seconds=time.time() - start)

@@ -152,6 +152,9 @@ def build_server(loader, runner: m.Runner, key_store=None, oauth=None) -> MCPSer
                 "spectra": {name: text for name, (_, _, text) in m.SPECTRA.items()},
                 "defaults": {"flux_n_cm2_s": m.DEFAULT_FLUX, "spectrum": "14MeV"},
                 "limits": {"max_steps": m.MAX_STEPS, "max_total_time": "10000 y",
+                           "max_spectrum_groups": m.MAX_SPECTRUM_GROUPS,
+                           "runs_in_progress_per_user": runner.max_in_progress_per_user,
+                           "max_solve_time_s": runner.max_solve_seconds,
                            "runs_kept_per_user": runner.max_runs, "max_series_in_a_plot": MAX_SERIES}}
         if loader.ready:
             data, tables = loader.get()

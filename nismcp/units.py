@@ -18,7 +18,11 @@ _UNITS = {
     "w": 7 * DAY, "wk": 7 * DAY, "week": 7 * DAY, "weeks": 7 * DAY,
     "y": YEAR, "yr": YEAR, "yrs": YEAR, "year": YEAR, "years": YEAR, "a": YEAR,
 }
-_TIME = re.compile(r"^\s*([0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?)\s*([A-Za-z]*)\s*$")
+# a number (12, 1.5, .5, 2e3) and a unit. Each part of the pattern can match a text in one way only, so the time
+# to match is linear in the length of the text (the old pattern took minutes for a long text of digits, and the
+# whole server waited). The text is also short: a longer text is refused before the match.
+_TIME = re.compile(r"((?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?)\s*([A-Za-z]*)")
+MAX_TIME_TEXT = 64
 
 
 def parse_time(value, what: str = "time") -> float:
@@ -26,9 +30,16 @@ def parse_time(value, what: str = "time") -> float:
     if isinstance(value, bool):
         raise ValueError(f"{what}: give a number of seconds or a text like '1 d'")
     if isinstance(value, (int, float)):
-        seconds = float(value)
+        try:
+            seconds = float(value)
+        except OverflowError:
+            # an int too large for a float
+            raise ValueError(f"{what}: the time is too large") from None
     else:
-        match = _TIME.match(str(value))
+        text = str(value).strip()
+        if len(text) > MAX_TIME_TEXT:
+            raise ValueError(f"{what}: the text of the time is too long, give for example '1 d', '30 min' or 3600")
+        match = _TIME.fullmatch(text)
         if not match:
             raise ValueError(f"{what}: cannot read {value!r}, give for example '1 d', '30 min' or 3600")
         number, unit = match.groups()

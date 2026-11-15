@@ -5,6 +5,7 @@ number of atoms of each nuclide.
 The atomic masses and the natural abundances come from the periodictable package (NIST and IUPAC values).
 """
 
+import math
 import re
 
 AVOGADRO = 6.02214076e23
@@ -88,17 +89,18 @@ def atoms_from_mass(mass_kg: float, composition: dict, known: dict) -> tuple:
     normalised to a sum of 1, so percent or fractions both work."""
     if not composition:
         raise ValueError("give the material, for example {'U235': 1.0} or {'Fe': 0.7, 'Cr': 0.18, 'Ni': 0.12}")
-    if not mass_kg > 0:
-        raise ValueError("the mass must be more than 0 kg")
+    # not (x > 0) and isfinite: a comparison with NaN is always false, so NaN gets past a test such as x < 0
+    if not mass_kg > 0 or not math.isfinite(mass_kg):
+        raise ValueError("the mass must be a finite number more than 0 kg")
     fractions = {}
     for name, fraction in composition.items():
-        fraction = float(fraction)
+        fraction = _number(fraction, f"the fraction of {name}")
         if fraction < 0:
             raise ValueError(f"the fraction of {name} must be 0 or more")
         fractions[name] = fractions.get(name, 0.0) + fraction
     total = sum(fractions.values())
-    if total <= 0:
-        raise ValueError("the sum of the mass fractions must be more than 0")
+    if not total > 0 or not math.isfinite(total):
+        raise ValueError("the sum of the mass fractions must be a finite number more than 0")
     notes = []
     if abs(total - 1.0) > 1e-3 and abs(total - 100.0) > 0.1:
         notes.append(f"the mass fractions add to {total:g}, so they were normalised to 1")
@@ -126,6 +128,8 @@ def atoms_from_mass(mass_kg: float, composition: dict, known: dict) -> tuple:
             symbol, a = _NUCLIDE.match(nuclide).groups()[:2]
             moles = element_grams / atomic_mass(symbol, int(a))
             atoms[nuclide] = atoms.get(nuclide, 0.0) + moles * AVOGADRO
+    if not all(math.isfinite(v) for v in atoms.values()):
+        raise ValueError("the mass is too large")
     return atoms, notes
 
 
@@ -135,9 +139,22 @@ def check_atoms(atoms: dict, known: dict) -> dict:
         raise ValueError("give at least one nuclide")
     result = {}
     for name, value in atoms.items():
-        value = float(value)
+        value = _number(value, f"the atoms of {name}")
         if value < 0:
             raise ValueError(f"the atoms of {name} must be 0 or more")
         nuclide = canonical_nuclide(name, known)
         result[nuclide] = result.get(nuclide, 0.0) + value
+    if not all(math.isfinite(v) for v in result.values()):
+        raise ValueError("the numbers of atoms are too large")
     return result
+
+
+def _number(value, what: str) -> float:
+    """A finite float, else a ValueError: NaN and inf are not numbers of atoms or fractions."""
+    try:
+        value = float(value)
+    except (TypeError, ValueError, OverflowError):
+        raise ValueError(f"{what} must be a number") from None
+    if not math.isfinite(value):
+        raise ValueError(f"{what} must be a finite number")
+    return value

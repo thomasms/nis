@@ -68,6 +68,14 @@ LOGIN_SECONDS = 600
 UNUSED_CLIENT_SECONDS = 86400
 MAX_CLIENTS = 1000
 MAX_LOGINS = 1000
+# the size of a client registration: the server keeps it in memory and in the state file, and anyone can register
+# (the SDK lets the body of a registration be 4 MiB). The registration of claude.ai is a few hundred bytes.
+MAX_CLIENT_BYTES = 8 * 1024
+MAX_REDIRECT_URIS = 10
+MAX_URI_LENGTH = 2048
+MAX_CLIENT_NAME = 200
+# the body of the form of the consent page (it has 3 short fields): the SDK does not limit the body of this route
+MAX_FORM_BYTES = 16 * 1024
 
 
 def _hash(token: str) -> str:
@@ -236,7 +244,24 @@ class GitHubOAuthProvider:
         self.clients = {k: c for k, c in self.clients.items()
                         if k in used or (c.client_id_issued_at or 0) > old}
 
+    @staticmethod
+    def _check_client_size(client_info: OAuthClientInformationFull) -> None:
+        """Refuse a registration that is too large, before the server keeps it."""
+        def refuse(text):
+            log.warning("refused a client registration: %s", text)
+            raise RegistrationError(error="invalid_client_metadata", error_description=text)
+        uris = client_info.redirect_uris or []
+        if len(uris) > MAX_REDIRECT_URIS:
+            refuse(f"give at most {MAX_REDIRECT_URIS} redirect_uris")
+        if any(len(str(u)) > MAX_URI_LENGTH for u in uris):
+            refuse(f"a redirect_uri can have at most {MAX_URI_LENGTH} characters")
+        if client_info.client_name is not None and len(client_info.client_name) > MAX_CLIENT_NAME:
+            refuse(f"the client_name can have at most {MAX_CLIENT_NAME} characters")
+        if len(client_info.model_dump_json(exclude_none=True)) > MAX_CLIENT_BYTES:
+            refuse(f"the client metadata can be at most {MAX_CLIENT_BYTES} bytes")
+
     async def register_client(self, client_info: OAuthClientInformationFull) -> None:
+        self._check_client_size(client_info)
         with self._lock:
             self._clean()
             self._prune_clients()
@@ -246,7 +271,8 @@ class GitHubOAuthProvider:
                                         error_description="the server has too many clients, try again later")
             self.clients[client_info.client_id] = client_info
             self._save()
-        log.info("registered the OAuth client %s (%s)", client_info.client_id, client_info.client_name)
+        # %r: the name is from the client, so its newlines cannot make false lines in the log
+        log.info("registered the OAuth client %s (%r)", client_info.client_id, client_info.client_name)
 
     # ------------------------------------------------------------------ the login
 
@@ -455,6 +481,25 @@ def _page(status: int, body: str, headers: dict = None):
     return HTMLResponse(html, status_code=status, headers={**_PAGE_HEADERS, **(headers or {})})
 
 
+async def _read_form(request):
+    """The fields of a form body (application/x-www-form-urlencoded), or None if the body is more than
+    MAX_FORM_BYTES. The body is read in parts and the read stops at the limit, so a large body (anyone can send
+    one, before the checks of the form) cannot fill the memory of the server."""
+    length = request.headers.get("content-length")
+    if length is not None:
+        try:
+            if int(length) > MAX_FORM_BYTES:
+                return None
+        except ValueError:
+            return None
+    body = bytearray()
+    async for chunk in request.stream():
+        body += chunk
+        if len(body) > MAX_FORM_BYTES:
+            return None
+    return urllib.parse.parse_qs(body.decode("utf-8", "replace"))
+
+
 def consent_handler(provider: GitHubOAuthProvider):
     """The consent page (GET) and the answer of the user (POST), a Starlette handler for CONSENT_PATH."""
     import html
@@ -489,7 +534,9 @@ def consent_handler(provider: GitHubOAuthProvider):
                                 httponly=True, samesite="strict")
             return response
 
-        form = urllib.parse.parse_qs((await request.body()).decode("utf-8", "replace"))
+        form = await _read_form(request)
+        if form is None:
+            return _page(413, "<p>This request is too large.</p>")
         state = form.get("state", [""])[0]
         csrf = form.get("csrf", [""])[0]
         found = provider.pending(state)

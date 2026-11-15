@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cmath>
 #include <functional>
+#include <stdexcept>
 
 
 namespace nis {
@@ -18,8 +19,13 @@ namespace nis {
         template <template <typename> class Container, typename xT=double, typename yT=double>
         struct Histogram{
             explicit Histogram(const Container<xT>& x, const Container<yT>& y) : _x(x), _y(y) {
-                assert(_x.size() > 1);
-                assert(_y.size() + 1 <= _x.size());
+                // exceptions, not asserts: a spectrum can come from a user, and an assert stops the whole process
+                if(_x.size() < 2){
+                    throw std::invalid_argument("a histogram needs at least 2 bounds");
+                }
+                if(_y.size() + 1 > _x.size()){
+                    throw std::invalid_argument("a histogram has more values than groups");
+                }
             }
 
             Container<xT> xcopy() const { return _x;};

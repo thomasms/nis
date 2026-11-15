@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cmath>
 #include <functional>
+#include <stdexcept>
 
 #include "nis/histogram.hpp"
 
@@ -14,7 +15,12 @@ namespace nis {
         template<typename T=double>
         struct Edge{
             explicit Edge(T lower, T upper) : _lower(lower), _upper(upper) {
-                assert(lower <= upper);
+                // an exception, not an assert: the bounds can come from a user (a NaN fails this test too), and an
+                // assert stops the whole process
+                if(!(lower <= upper)){
+                    throw std::invalid_argument("a group of the spectrum has a lower bound above its upper bound, "
+                                                "or a bound that is not a number");
+                }
             }
 
             bool operator==(const Edge& rhs){
@@ -105,6 +111,10 @@ namespace nis {
                 if(!has_overlap && prev_has_overlap){
                     break;
                 }
+                // the input edges go up, so no edge after this one can overlap the output edge
+                if(input_edges[i].lower() >= oedge.upper()){
+                    break;
+                }
 
                 prev_has_overlap = has_overlap;
             }
@@ -130,7 +140,9 @@ namespace nis {
             Assumes that input and output bounds are in ascending energy. If not
             then it will go unchecked and will produce odd results
             */
-            assert(output_bounds.size() > 1);
+            if(output_bounds.size() < 2){
+                throw std::invalid_argument("the output spectrum needs at least 2 group bounds");
+            }
 
             const auto input_edges = _get_edges_from_bounds<T>(in_spectrum.x());
             const auto output_edges = _get_edges_from_bounds<T>(output_bounds);

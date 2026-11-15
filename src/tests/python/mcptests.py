@@ -134,6 +134,27 @@ class MCPUnitsTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 parse_time(bad)
 
+    def test_parse_time_long_text(self) -> None:
+        """A long text is refused at once. The old pattern backtracked: a text of 20000 digits took 19 s, and the
+        whole server waited."""
+        from nismcp.units import _TIME, parse_time
+        self.assertEqual(parse_time(".5 h"), 1800)
+        self.assertEqual(parse_time("  2e-3  "), 0.002)
+        start = time.perf_counter()
+        for bad in ("1" * 100_000 + "!", "1" + " " * 100_000 + "!", "1" * 65):
+            with self.assertRaises(ValueError):
+                parse_time(bad)
+        # the pattern itself is linear too, without the limit of the length
+        self.assertIsNone(_TIME.fullmatch("1" * 200_000 + "!"))
+        self.assertIsNone(_TIME.fullmatch("1" + " " * 200_000 + "!"))
+        self.assertLess(time.perf_counter() - start, 1.0)
+        # an int too large for a float is an input error, not an OverflowError
+        with self.assertRaises(ValueError):
+            parse_time(10 ** 400)
+        for bad in ("nan", "inf", "1e400 s", float("nan"), float("inf")):
+            with self.assertRaises(ValueError):
+                parse_time(bad)
+
     def test_format_time(self) -> None:
         from nismcp.units import format_time
         self.assertEqual(format_time(86400), "1 d")
@@ -198,6 +219,22 @@ class MCPMaterialsTest(unittest.TestCase):
                 atoms_from_mass(1.0, bad, self.known)
         with self.assertRaises(ValueError):
             atoms_from_mass(0.0, {"Fe": 1}, self.known)
+
+    def test_not_finite(self) -> None:
+        """NaN and inf are refused: a comparison with NaN is always false, so NaN got past the tests (x < 0)."""
+        from nismcp.materials import atoms_from_mass, check_atoms
+        nan, inf = float("nan"), float("inf")
+        for mass in (nan, inf, -inf, 1e308):
+            with self.assertRaises(ValueError, msg=mass):
+                atoms_from_mass(mass, {"Co59": 1.0}, self.known)
+        for composition in ({"Co59": nan}, {"Co59": inf}, {"Co59": 1.0, "Fe": nan}, {"Co59": 1e308, "Fe": 1e308},
+                            {"Co59": "x"}):
+            with self.assertRaises(ValueError, msg=composition):
+                atoms_from_mass(1.0, composition, self.known)
+        for atoms in ({"Co59": nan}, {"Co59": inf}, {"Co59": 1e308, "co59": 1e308}, {"Co59": None}):
+            with self.assertRaises(ValueError, msg=atoms):
+                check_atoms(atoms, self.known)
+        self.assertEqual(check_atoms({"Co59": 1e20}, self.known), {"Co59": 1e20})
 
 
 @unittest.skipUnless(_has_mcp, "the mcp group is not installed (uv sync --group mcp)")
@@ -328,10 +365,38 @@ class MCPModelTest(unittest.TestCase):
         self.assertTrue(spectrum_from_input(None)[2].startswith("14MeV"))
         self.assertTrue(spectrum_from_input("Thermal")[2].startswith("thermal"))
         bounds, values, _ = spectrum_from_input({"bounds_ev": [1, 10, 100], "flux": [1, 2]})
-        self.assertEqual(values, [1.0, 2.0])
+        # only the shape is used, so the fluxes are scaled to a largest value of 1
+        self.assertEqual(values, [0.5, 1.0])
         for bad in ("fission", {"bounds_ev": [10, 1], "flux": [1]}, {"bounds_ev": [1, 10], "flux": [1, 2]}, 3):
             with self.assertRaises(ValueError):
                 spectrum_from_input(bad)
+
+    def test_spectrum_not_finite(self) -> None:
+        """A NaN group bound got past the check (NaN <= x is false), and then an assert in the C++ code stopped the
+        whole server. NaN and inf are refused, and so is a spectrum with too many groups (the time of the collapse
+        grows with the number of groups)."""
+        from nismcp.model import MAX_SPECTRUM_GROUPS, spectrum_from_input
+        nan, inf = float("nan"), float("inf")
+        for bad in ({"bounds_ev": [1, nan, 2], "flux": [1, 1]}, {"bounds_ev": [nan, 1e7], "flux": [1]},
+                    {"bounds_ev": [1, inf], "flux": [1]}, {"bounds_ev": [1, 2], "flux": [nan]},
+                    {"bounds_ev": [1, 2, 3], "flux": [1, inf]}, {"bounds_ev": [0, 1], "flux": [1]},
+                    {"bounds_ev": [1, 1], "flux": [1]}, {"bounds_ev": "12", "flux": [1]},
+                    {"bounds_ev": [1, "x"], "flux": [1]}):
+            with self.assertRaises(ValueError, msg=bad):
+                spectrum_from_input(bad)
+        groups = MAX_SPECTRUM_GROUPS + 1
+        many = {"bounds_ev": [1.0 + i for i in range(groups + 1)], "flux": [1.0] * groups}
+        with self.assertRaises(ValueError) as error:
+            spectrum_from_input(many)
+        self.assertIn("at most", str(error.exception))
+        many["bounds_ev"], many["flux"] = many["bounds_ev"][:-1], many["flux"][:-1]
+        self.assertEqual(len(spectrum_from_input(many)[1]), MAX_SPECTRUM_GROUPS)
+        # only the shape is used: the fluxes are scaled to a largest value of 1, so their sum cannot overflow,
+        # and a flux divided by it cannot be inf
+        for values in ([1e308, 1e308], [5e-324, 0.0]):
+            _, scaled, _ = spectrum_from_input({"bounds_ev": [1, 2, 3], "flux": values})
+            self.assertEqual(max(scaled), 1.0)
+            self.assertTrue(math.isfinite(sum(scaled)))
 
     def test_decay_half_life(self) -> None:
         from nismcp.model import Step, spectrum_from_input
@@ -409,6 +474,65 @@ class MCPModelTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             runner.get("alice", bob)
         self.assertEqual(runner.get("bob", bob).run_id, bob)
+
+    def test_runs_in_progress(self) -> None:
+        """One solve at a time. The runs that wait have limits (per user and for all the users), and a run does not
+        wait for ever: else a user could take all the threads of the server, and the tools of all the users stop."""
+        from nismcp.model import Runner, Step, spectrum_from_input
+        runner = Runner(self.loader)
+        runner.max_in_progress, runner.max_in_progress_per_user, runner.solve_wait_seconds = 2, 1, 30
+        spec = spectrum_from_input(None)
+
+        def run(user):
+            return runner.run(user, {"H3": 1.0}, [Step(1.0, 0.0)], spec, {}, [])
+
+        def wait_for(count):
+            for _ in range(200):
+                if sum(runner._in_progress.values()) == count:
+                    return
+                time.sleep(0.01)
+            self.fail(f"not {count} runs in progress: {runner._in_progress}")
+
+        results = []
+        runner._solve_lock.acquire()      # another solve that takes a long time
+        try:
+            alice = threading.Thread(target=lambda: results.append(run("alice")))
+            alice.start()
+            wait_for(1)
+            with self.assertRaises(RuntimeError) as error:
+                run("alice")
+            self.assertIn("in progress", str(error.exception))
+            bob = threading.Thread(target=lambda: results.append(run("bob")))
+            bob.start()
+            wait_for(2)
+            with self.assertRaises(RuntimeError) as error:
+                run("carol")
+            self.assertIn("busy", str(error.exception))
+        finally:
+            runner._solve_lock.release()
+        alice.join(10)
+        bob.join(10)
+        self.assertEqual(sorted(r.owner for r in results), ["alice", "bob"])
+        self.assertEqual(runner._in_progress, {})
+        # a run that waits too long for the solves of others stops, and is no more in progress
+        runner.solve_wait_seconds = 0.1
+        with runner._solve_lock:
+            with self.assertRaises(TimeoutError):
+                run("alice")
+        self.assertEqual(runner._in_progress, {})
+        self.assertEqual(run("alice").owner, "alice")
+
+    def test_solve_time_limit(self) -> None:
+        """A run that takes longer than max_solve_seconds stops between two sub-steps, and frees the solve lock."""
+        from nismcp.model import Runner, Step, spectrum_from_input
+        runner = Runner(self.loader)
+        runner.max_solve_seconds = 0.0
+        with self.assertRaises(RuntimeError) as error:
+            runner.run("alice", {"H3": 1.0}, [Step(1.0, 0.0)], spectrum_from_input(None), {}, [])
+        self.assertIn("took more than", str(error.exception))
+        self.assertFalse(runner._solve_lock.locked())
+        self.assertEqual(runner._in_progress, {})
+        self.assertEqual(runner.list("alice"), [])
 
     def test_plot(self) -> None:
         from nismcp.model import Step, spectrum_from_input
@@ -517,6 +641,30 @@ class MCPToolsTest(unittest.TestCase):
         self.assertTrue(result.is_error)
         self.assertIn("flux must be a number", _text(result))
 
+    def test_bad_inputs(self) -> None:
+        """Long times and large spectra are tool errors (the model can correct the call), and they are quick: the
+        server does not wait for them. (NaN and inf: MCPHttpTest.test_not_finite_numbers, because this client
+        sends them as null.)"""
+        base = {"atoms": {"Co59": 1e20}, "irradiation_time": "1 d"}
+        for change, message in (
+                ({"spectrum": {"bounds_ev": [1.0 + i for i in range(5002)], "flux": [1.0] * 5001}}, "at most"),
+                ({"irradiation_time": "1" * 20_000 + "!"}, "too long"),
+                ({"cooling_times": ["1" * 20_000 + "!"]}, "too long"),
+                ({"schedule": [{"duration": "1" * 20_000 + "!"}], "irradiation_time": None}, "too long")):
+            arguments = {k: v for k, v in {**base, **change}.items() if v is not None}
+            start = time.perf_counter()
+            result = self.call("irradiate", arguments)
+            # a tool error with the reason (an internal error has only "Error executing tool irradiate")
+            self.assertTrue(result.is_error, change)
+            self.assertIn(message, _text(result), change)
+            self.assertLess(time.perf_counter() - start, 5.0, change)
+        result = self.call("irradiate", base)
+        self.assertFalse(result.is_error, _text(result))
+        run_id = result.structured_content["run_id"]
+        result = self.call("get_results", {"run_id": run_id, "cooling_time": "1" * 20_000 + "!"})
+        self.assertTrue(result.is_error)
+        self.assertIn("too long", _text(result))
+
     def test_plot_decay_only(self) -> None:
         """A run with no irradiation makes no products: the plot ranks the nuclides of the material."""
         result = self.call("irradiate", {"atoms": {"Co60": 1e20}, "irradiation_time": "1 y", "flux_n_cm2_s": 0})
@@ -596,6 +744,59 @@ class MCPHttpTest(unittest.TestCase):
         # bob cannot see the run of alice
         result = self.call(self.bob, "get_results", {"run_id": run_id})
         self.assertTrue(result.is_error)
+
+    def call_with_literals(self, key, tool, arguments):
+        """A tool call with the real client, with the JSON literals NaN and Infinity in the body: a client library
+        does not send them, but the JSON parser of the SDK accepts them, so any client can. A string "<NaN>" or
+        "<Infinity>" in the arguments becomes the literal."""
+        import httpx2
+        from mcp import Client
+        from mcp.client.streamable_http import streamable_http_client
+
+        class Literals(httpx2.AsyncBaseTransport):
+            def __init__(self):
+                self.transport = httpx2.AsyncHTTPTransport()
+
+            async def handle_async_request(self, request):
+                body = await request.aread()
+                if b'"<NaN>"' in body or b'"<Infinity>"' in body:
+                    body = body.replace(b'"<NaN>"', b"NaN").replace(b'"<Infinity>"', b"Infinity")
+                    headers = [(k, v) for k, v in request.headers.raw if k.lower() != b"content-length"]
+                    request = httpx2.Request(request.method, request.url, headers=headers, content=body)
+                return await self.transport.handle_async_request(request)
+
+            async def aclose(self):
+                await self.transport.aclose()
+
+        async def run():
+            http = httpx2.AsyncClient(transport=Literals(), headers={"Authorization": f"Bearer {key}"},
+                                      timeout=30)
+            async with http:
+                async with Client(streamable_http_client(self.url(), http_client=http)) as client:
+                    return await client.call_tool(tool, arguments)
+        return asyncio.run(run())
+
+    def test_not_finite_numbers(self) -> None:
+        """NaN and Infinity in the JSON of a call are tool errors with the reason, and the server lives on. Before,
+        a NaN group bound got past the check of the spectrum, and an assert in the C++ code stopped the server."""
+        nan, inf = "<NaN>", "<Infinity>"
+        base = {"atoms": {"Co59": 1e20}, "irradiation_time": "1 d"}
+        for change, message in (({"spectrum": {"bounds_ev": [1, nan, 2], "flux": [1, 1]}}, "finite"),
+                                ({"spectrum": {"bounds_ev": [nan, 1e7], "flux": [1]}}, "finite"),
+                                ({"spectrum": {"bounds_ev": [1, 2], "flux": [inf]}}, "finite"),
+                                ({"atoms": {"Co59": nan}}, "finite"),
+                                ({"atoms": {"Co59": inf}}, "finite"),
+                                ({"atoms": None, "material": {"Co59": 1}, "mass_kg": inf}, "finite"),
+                                ({"atoms": None, "material": {"Co59": nan}, "mass_kg": 1}, "finite"),
+                                ({"irradiation_time": nan}, "0 or more"),
+                                ({"flux_n_cm2_s": nan}, "0 or more")):
+            arguments = {k: v for k, v in {**base, **change}.items() if v is not None}
+            result = self.call_with_literals(self.alice, "irradiate", arguments)
+            self.assertTrue(result.is_error, change)
+            self.assertIn(message, _text(result), change)
+        # the server is still up
+        result = self.call(self.alice, "irradiate", base)
+        self.assertFalse(result.is_error, _text(result))
 
 
 class FakeGitHub:
@@ -933,6 +1134,45 @@ class MCPOAuthTest(unittest.TestCase):
         self.assertNotIn(client_id, self.provider.clients)
         self.assertTrue(used <= set(self.provider.clients))
 
+    def test_consent_body_limit(self) -> None:
+        """Anyone can post to the consent page, so its body has a limit: a large body is refused before it is read,
+        and a body with no length (chunked) stops at the limit. Before, the server read all of it: one request of
+        300 MB took 1 GB of memory."""
+        from nismcp.oauth import MAX_FORM_BYTES
+        form = {"content-type": "application/x-www-form-urlencoded"}
+        with self.http() as http:
+            response = http.post("/oauth/consent", content=b"a" * (MAX_FORM_BYTES + 1), headers=form)
+            self.assertEqual(response.status_code, 413)
+
+            def chunks():
+                for _ in range(64):
+                    yield b"a" * 65536
+            response = http.post("/oauth/consent", content=chunks(), headers=form)
+            self.assertEqual(response.status_code, 413)
+            # a small form that is not valid is still a 400, and a real login still works (test_login_and_tools)
+            response = http.post("/oauth/consent", data={"state": "x", "csrf": "y", "action": "allow"})
+            self.assertEqual(response.status_code, 400)
+
+    def test_registration_size(self) -> None:
+        """Anyone can register a client, and the server keeps it in memory and in the state file, so the size of a
+        registration has limits."""
+        from nismcp.oauth import MAX_CLIENT_NAME, MAX_REDIRECT_URIS, MAX_URI_LENGTH
+        good = {"redirect_uris": [self.REDIRECT], "token_endpoint_auth_method": "none"}
+        bad = [{"client_name": "x" * (MAX_CLIENT_NAME + 1)},
+               {"redirect_uris": [f"{self.REDIRECT}/{i}" for i in range(MAX_REDIRECT_URIS + 1)]},
+               {"redirect_uris": [self.REDIRECT + "?" + "a" * MAX_URI_LENGTH]},
+               {"contacts": ["someone@example.com" * 20] * 30},
+               {"client_name": "a" * 100, "software_id": "b" * 9000}]
+        with self.http() as http:
+            before = len(self.provider.clients)
+            for change in bad:
+                response = http.post("/register", json={**good, **change})
+                self.assertEqual(response.status_code, 400, change)
+                self.assertEqual(response.json()["error"], "invalid_client_metadata")
+            self.assertEqual(len(self.provider.clients), before)
+            response = http.post("/register", json={**good, "client_name": "Claude"})
+            self.assertEqual(response.status_code, 201, response.text)
+
     def test_bad_callback(self) -> None:
         with self.http() as http:
             response = http.get("/oauth/github/callback", params={"code": "alice-code", "state": "unknown"})
@@ -1077,6 +1317,75 @@ class MCPCommandTest(unittest.TestCase):
             process.terminate()
             process.wait(10)
             process.stderr.close()
+
+
+class MCPNativeTest(unittest.TestCase):
+    """The C++ code that the server calls with the input of users. One process serves all the users, so the C++
+    code must not stop the process, and must not stop the other threads (the event loop of the server)."""
+
+    def test_bad_spectrum_is_an_exception(self) -> None:
+        """A NaN group bound failed an assert in the C++ code, and the assert stopped the process (the asserts are
+        on in the Release build). Now it is a ValueError. In a new process, so a stop is a failure of this test."""
+        import subprocess
+        import sys
+        code = (
+            "import pynis as nis\n"
+            "nan = float('nan')\n"
+            "for bounds, values in (([1.0, nan, 2.0], [1.0, 1.0]), ([nan, 1e7], [1.0]), ([2.0, 1.0], [1.0])):\n"
+            "    try:\n"
+            "        nis.core.convert_by_lethargy(nis.core.Spectrum(bounds, values), [1.0, 1.5, 2.0])\n"
+            "        print('no error')\n"
+            "    except ValueError:\n"
+            "        print('ValueError')\n"
+            "for bounds, values in (([1.0], []), ([1.0, 2.0], [1.0, 2.0])):\n"
+            "    try:\n"
+            "        nis.core.Spectrum(bounds, values)\n"
+            "        print('no error')\n"
+            "    except ValueError:\n"
+            "        print('ValueError')\n")
+        result = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, timeout=60)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout.split(), ["ValueError"] * 5)
+
+    def test_solve_releases_the_gil(self) -> None:
+        """A solve is all in C++, so it releases the GIL: the other python threads (the event loop of the server,
+        the requests of other users) run during it. Before, they all waited for each solve."""
+        import scipy.sparse as sp
+        size = len(nis.core.vector_from_inventory({}))
+        # a chain with branches: all the nuclides can be reached from the first, so the solve is of the full size
+        rows, cols, values = [], [], []
+        for i in range(size):
+            rows.append(i)
+            cols.append(i)
+            values.append(-1.0 - i % 7)
+            for k in (1, 2, 30):
+                if i + k < size:
+                    rows.append(i)
+                    cols.append(i + k)
+                    values.append(0.3)
+        mat = sp.csc_matrix((values, (rows, cols)), shape=(size, size))
+        n0 = np.zeros(size)
+        n0[0] = 1.0
+        ticks, stop = [0], threading.Event()
+
+        def tick():
+            while not stop.is_set():
+                ticks[0] += 1
+                time.sleep(0.0005)
+        thread = threading.Thread(target=tick)
+        thread.start()
+        try:
+            time.sleep(0.05)
+            before = ticks[0]
+            start = time.perf_counter()
+            nis.core.solve_reachable(mat, n0, 1.0, nis.core.solver_cram48)
+            duration = time.perf_counter() - start
+            during = ticks[0] - before
+        finally:
+            stop.set()
+            thread.join()
+        # with the GIL held for the solve, the other thread does not tick at all (0 or 1); else about once a ms
+        self.assertGreaterEqual(during, max(5, int(duration / 0.01)), f"{during} ticks in {duration:.3f} s")
 
 
 @unittest.skipUnless(_has_mcp and has_data(JEFF311_DECAY) and has_data(JEFF4_REACTION),

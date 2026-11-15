@@ -244,7 +244,8 @@ an owner adds the connector for the organization, and each user connects with th
 Each user sees only their own runs (the user is `github:<account id>`).
 
 Anyone can register a client and start a login, so the server has limits: at most 1000 clients and 1000 logins in
-progress, and a client that has no token a day after its registration is removed. For more protection, add a rate
+progress, and a client that has no token a day after its registration is removed. A registration can be at most
+8 KB (at most 10 redirect URIs), and the form of the consent page at most 16 KB. For more protection, add a rate
 limit for `/register` and `/authorize` in the reverse proxy.
 
 ### Size of the server
@@ -252,7 +253,16 @@ limit for `/register` and `/authorize` in the reverse proxy.
 The memory is mostly the nuclear data. The results of the runs use at most 500 MB for all the users together
 (`--max-results-mb`); when they need more, the oldest runs are removed. With the reaction cache, a VM with 2 vCPU,
 4 GB of memory and 20 GB of disk is enough for a few requests per minute. The server does one run at a time;
-other requests wait.
+other runs wait, with limits, so that one user cannot block the server:
+
+- a user can have at most 2 runs in progress (solving or waiting), and all the users together at most 8;
+- a run waits at most 120 s for the runs of others, then gets "the server is busy, try again";
+- a run stops after 300 s of solving;
+- a custom spectrum can have at most 2000 groups, and a time text at most 64 characters;
+- numbers that are not finite (NaN, Infinity) are refused.
+
+A solve is all in C++ and releases the Python GIL, so the server answers other requests (for example `/health`
+and the OAuth pages) during a solve.
 
 ## Tests
 
