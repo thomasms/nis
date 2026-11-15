@@ -1,6 +1,7 @@
 """PNG plots of a run: a quantity of some nuclides against the time."""
 
 import io
+import threading
 
 import numpy as np
 
@@ -26,12 +27,15 @@ def _time_unit(seconds: float) -> tuple:
     return "s", 1.0
 
 
+# the tools run in threads; the matplotlib settings (rcParams) are global, so one plot at a time
+_PLOT_LOCK = threading.Lock()
+
+_RC = {"font.size": 10, "axes.edgecolor": TEXT_SECONDARY, "axes.labelcolor": TEXT,
+       "xtick.color": TEXT_SECONDARY, "ytick.color": TEXT_SECONDARY, "text.color": TEXT}
+
+
 def plot_png(result, tables, names: list, quantity: str = "activity", log_time: bool = None,
              log_value: bool = True, title: str = None) -> bytes:
-    import matplotlib
-    matplotlib.use("Agg")
-    import matplotlib.pyplot as plt
-
     if quantity not in QUANTITIES:
         raise ValueError(f"unknown quantity {quantity!r}, use one of {sorted(QUANTITIES)}")
     if not names:
@@ -47,9 +51,20 @@ def plot_png(result, tables, names: list, quantity: str = "activity", log_time: 
     if log_time is None:
         log_time = times[-1] / times[0] > 100
 
-    plt.rcParams.update({"font.size": 10, "axes.edgecolor": TEXT_SECONDARY, "axes.labelcolor": TEXT,
-                         "xtick.color": TEXT_SECONDARY, "ytick.color": TEXT_SECONDARY, "text.color": TEXT})
-    fig, ax = plt.subplots(figsize=(8, 4.8), dpi=150)
+    with _PLOT_LOCK:
+        import matplotlib
+        with matplotlib.rc_context(_RC):
+            return _draw(result, tables, names, quantity, log_time, log_value, title, times, x, unit, size, values)
+
+
+def _draw(result, tables, names, quantity, log_time, log_value, title, times, x, unit, size, values) -> bytes:
+    # a Figure with its own canvas, not pyplot: pyplot keeps a global list of the figures
+    from matplotlib.backends.backend_agg import FigureCanvasAgg
+    from matplotlib.figure import Figure
+
+    fig = Figure(figsize=(8, 4.8), dpi=150)
+    FigureCanvasAgg(fig)
+    ax = fig.add_subplot()
     fig.patch.set_facecolor(SURFACE)
     ax.set_facecolor(SURFACE)
 
@@ -74,7 +89,6 @@ def plot_png(result, tables, names: list, quantity: str = "activity", log_time: 
         ax.plot(x, y, color=colour, lw=2, label=name, zorder=3, solid_capstyle="round")
         plotted.append((name, colour, y))
     if not plotted:
-        plt.close(fig)
         raise ValueError(f"the nuclides {', '.join(names)} have no {quantity} in this run")
 
     if log_time:
@@ -103,5 +117,4 @@ def plot_png(result, tables, names: list, quantity: str = "activity", log_time: 
     fig.tight_layout()
     buffer = io.BytesIO()
     fig.savefig(buffer, format="png", facecolor=SURFACE)
-    plt.close(fig)
     return buffer.getvalue()

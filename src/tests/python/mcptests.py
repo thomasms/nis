@@ -157,6 +157,13 @@ class MCPMaterialsTest(unittest.TestCase):
         self.assertAlmostEqual(sum(u.values()), 1.0)
         with self.assertRaises(ValueError):
             natural_abundances("Pu")
+        # the natural Ta180 is the metastable state (almost stable), not the 8 h ground state
+        atoms, _ = atoms_from_mass(1.0, {"Ta": 1.0}, self.known)
+        self.assertEqual(set(atoms), {"Ta180m", "Ta181"})
+        self.assertAlmostEqual(atoms["Ta180m"] / sum(atoms.values()), 1.201e-4, places=7)
+        # natural Th is all Th232
+        atoms, _ = atoms_from_mass(1.0, {"Th": 1.0}, self.known)
+        self.assertEqual(set(atoms), {"Th232"})
 
     def test_mixture_and_normalisation(self) -> None:
         from nismcp.materials import atoms_from_mass
@@ -209,9 +216,14 @@ class MCPAuthTest(unittest.TestCase):
         self.assertIsNone(store.user(bob))
         self.assertEqual(store.user(alice), "alice")
 
-        # a bad edit keeps the keys that were read before
+        # fail closed: a bad edit, or no file, and no key works (else a user that was just removed keeps access)
+        good = self.keys.read_text()
         time.sleep(0.01)
         self.keys.write_text("this is not a key line\n")
+        self.assertIsNone(store.user(alice))
+        self.keys.unlink()
+        self.assertIsNone(store.user(alice))
+        self.keys.write_text(good)
         self.assertEqual(store.user(alice), "alice")
 
     def test_bad_file(self) -> None:
@@ -332,6 +344,39 @@ class MCPModelTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             result.point_at(1.2345)
 
+    def test_short_cooling_after_long_irradiation(self) -> None:
+        """After 1 y of irradiation, a cooling time of 1 min is not the point at 44 s (the nearest sub-step)."""
+        from nismcp.model import spectrum_from_input, steps_from_input
+        steps = steps_from_input("1 y", ["1 h"], None, 1e14)
+        result = self.runner.run("t", {"Co59": 1e24}, steps, spectrum_from_input("thermal"), {}, [])
+        end = result.irradiation_end
+        self.assertEqual(result.point_at(0, after=end).time, end)
+        self.assertAlmostEqual(result.point_at(3600, after=end).time - end, 3600, places=3)
+        for t in (60, 10, 1):
+            with self.assertRaises(ValueError):
+                result.point_at(t, after=end)
+
+    def test_point_storage(self) -> None:
+        import numpy as np
+        from nismcp.model import Point
+        atoms = np.zeros(4131)
+        atoms[[3, 100, 4000]] = [1.5, 2e20, 3e-5]
+        point = Point(1.0, 0, True, atoms)
+        np.testing.assert_array_equal(point.atoms, atoms)
+        self.assertLess(point.nbytes, 1000)
+
+    def test_memory_of_all_runs(self) -> None:
+        """At most max_results_bytes for all the users: the oldest runs go first, the last run stays."""
+        from nismcp.model import Runner, Step, spectrum_from_input
+        spec = spectrum_from_input(None)
+        runner = Runner(self.loader, max_results_bytes=1)
+        first = runner.run("alice", {"H3": 1.0}, [Step(1.0, 0.0)], spec, {}, []).run_id
+        last = runner.run("bob", {"H3": 1.0}, [Step(1.0, 0.0)], spec, {}, []).run_id
+        self.assertEqual(runner.list("alice"), [])
+        self.assertEqual(runner.get("bob", last).run_id, last)
+        with self.assertRaises(ValueError):
+            runner.get("alice", first)
+
     def test_runs_per_user(self) -> None:
         from nismcp.model import Runner, Step, spectrum_from_input
         runner = Runner(self.loader, max_runs=2)
@@ -358,6 +403,17 @@ class MCPModelTest(unittest.TestCase):
             plot_png(result, self.tables, ["Ni60"], "activity")
         with self.assertRaises(ValueError):
             plot_png(result, self.tables, ["Co60"] * 9, "activity")
+
+    def test_plots_in_threads(self) -> None:
+        """The tools run in threads, so plots can be made at the same time."""
+        from concurrent.futures import ThreadPoolExecutor
+        from nismcp.model import Step, spectrum_from_input
+        from nismcp.plot import plot_png
+        result = self.runner.run("t", {"Co59": 1e24, "H3": 1e20}, [Step(86400, 1e14), Step(YEAR, 0.0)],
+                                 spectrum_from_input(None), {}, [])
+        with ThreadPoolExecutor(8) as pool:
+            pngs = list(pool.map(lambda i: plot_png(result, self.tables, ["Co60", "H3"][: 1 + i % 2]), range(16)))
+        self.assertTrue(all(png.startswith(b"\x89PNG") for png in pngs))
 
 
 def _text(result) -> str:
@@ -515,12 +571,13 @@ class MCPHttpTest(unittest.TestCase):
 
 
 class FakeGitHub:
-    """GitHub for the tests: the code "<login>-code" logs in the user <login>."""
+    """GitHub for the tests: the code "<login>-code" logs in the user <login>. The account ids are in ids."""
 
     def __init__(self):
         from nismcp.oauth import GitHub
         self._real = GitHub("fake-id", "fake-secret")
         self.redirects = []
+        self.ids = {}
 
     def login_url(self, state, redirect_uri):
         self.redirects.append(redirect_uri)
@@ -529,7 +586,8 @@ class FakeGitHub:
     def user_login(self, code, redirect_uri):
         if not code.endswith("-code"):
             raise ValueError("bad code")
-        return code[:-len("-code")]
+        login = code[:-len("-code")]
+        return login, self.ids.setdefault(login.lower(), 1000 + len(self.ids))
 
 
 @unittest.skipUnless(_has_mcp, "the mcp group is not installed (uv sync --group mcp)")
@@ -549,6 +607,19 @@ class MCPAllowListTest(unittest.TestCase):
             path.write_text("bob\n")
             self.assertFalse(allow.allows("alice"))
             self.assertTrue(allow.allows("bob"))
+            # a login with its account id: only that account
+            time.sleep(0.01)
+            path.write_text("bob 42\n")
+            self.assertTrue(allow.allows("bob", 42))
+            self.assertFalse(allow.allows("bob", 43))
+            # fail closed: a bad line, or no file, lets no one in
+            time.sleep(0.01)
+            path.write_text("bob 42 extra\n")
+            self.assertFalse(allow.allows("bob", 42))
+            path.unlink()
+            self.assertFalse(allow.allows("bob", 42))
+            path.write_text("bob\n")
+            self.assertTrue(allow.allows("bob", 42))
 
 
 @unittest.skipUnless(_has_mcp, "the mcp group is not installed (uv sync --group mcp)")
@@ -701,15 +772,19 @@ class MCPOAuthTest(unittest.TestCase):
                            {"atoms": {"H3": 1e20}, "irradiation_time": "1 y", "flux_n_cm2_s": 0})
         self.assertFalse(result.is_error, _text(result))
         run_id = result.structured_content["run_id"]
-        self.assertEqual(self.provider.access[next(iter(self.provider.access))].subject[:7], "github:")
+        subject = self.provider.access[next(iter(self.provider.access))].subject
+        # the user is the GitHub account id, not the login
+        self.assertTrue(subject.startswith("github:") and subject[7:].isdigit(), subject)
         result = self.call(alice["access_token"], "get_results", {"run_id": run_id})
         self.assertFalse(result.is_error, _text(result))
         # bob cannot see the run of alice
         result = self.call(bob["access_token"], "get_results", {"run_id": run_id})
         self.assertTrue(result.is_error)
         # a wrong token
-        with self.assertRaises(Exception):
-            self.call("not-a-token", "list_runs", {})
+        with self.http() as http:
+            response = http.post("/mcp", json={"jsonrpc": "2.0", "id": 1, "method": "tools/list"},
+                                 headers={"Authorization": "Bearer not-a-token"})
+            self.assertEqual(response.status_code, 401)
 
     def test_not_allowed(self) -> None:
         with self.http() as http:
@@ -761,6 +836,50 @@ class MCPOAuthTest(unittest.TestCase):
             # the GitHub callback of a login that the user did not allow is refused
             response = http.get("/oauth/github/callback", params={"code": "alice-code", "state": state})
             self.assertEqual(response.status_code, 400)
+
+    def test_login_in_another_browser(self) -> None:
+        """An attacker allows the consent page in their own browser, then sends the GitHub link to a user. GitHub
+        sends the user back with a code at once (the user allowed the app before), but the user's browser does
+        not have the cookie of the consent page: refused, and no code goes to the attacker."""
+        import base64
+        import hashlib
+        import secrets
+        from urllib.parse import parse_qs, urlparse
+        evil = "https://evil.example.com/cb"
+        with self.http() as attacker:
+            response = attacker.post("/register", json={"redirect_uris": [evil], "token_endpoint_auth_method": "none",
+                                                        "client_name": "Claude"})
+            client_id = response.json()["client_id"]
+            verifier = secrets.token_urlsafe(48)
+            challenge = base64.urlsafe_b64encode(hashlib.sha256(verifier.encode()).digest()).rstrip(b"=").decode()
+            response = attacker.get("/authorize", params={
+                "response_type": "code", "client_id": client_id, "redirect_uri": evil, "state": "x",
+                "code_challenge": challenge, "code_challenge_method": "S256"})
+            consent = urlparse(response.headers["location"])
+            response = self.consent(attacker, f"{consent.path}?{consent.query}", "allow")
+            state = parse_qs(urlparse(response.headers["location"]).query)["state"][0]
+        with self.http() as victim:
+            response = victim.get("/oauth/github/callback", params={"code": "alice-code", "state": state})
+            self.assertEqual(response.status_code, 400)
+            self.assertNotIn("location", response.headers)
+        # and the attacker cannot complete the login with the code of the user either: the server refused
+        # before it called GitHub, but the login is still there for the attacker's own browser only
+        self.assertTrue(state in self.provider.logins)
+
+    def test_renamed_github_login(self) -> None:
+        """A login that is taken by another GitHub account (after a rename) does not get in."""
+        with self.http() as http:
+            client_id = self.register(http)
+            first = self.tokens(http, client_id, "alice")
+            old = self.github.ids["alice"]
+            self.github.ids["alice"] = 999999
+            try:
+                back = self.login(http, client_id, "alice")
+                self.assertEqual(back["error"], "access_denied")
+            finally:
+                self.github.ids["alice"] = old
+        # the tokens of the first account still work
+        self.assertFalse(self.call(first["access_token"], "list_runs", {}).is_error)
 
     def test_bad_callback(self) -> None:
         with self.http() as http:

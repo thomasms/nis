@@ -112,14 +112,15 @@ def _assumptions(result: m.RunResult, data, flux_given: bool) -> list:
     return lines
 
 
-def _resolve_time(result: m.RunResult, time_since_start, cooling_time):
+def _point(result: m.RunResult, time_since_start=None, cooling_time=None, what="cooling_time") -> m.Point:
+    """The point of the run at a time since the start, or at a cooling time (after the end of the irradiation)."""
     if time_since_start is not None and cooling_time is not None:
         raise ValueError("give time_since_start or cooling_time, not both")
     if cooling_time is not None:
-        return result.irradiation_end + parse_time(cooling_time, "cooling_time")
+        return result.point_at(parse_time(cooling_time, what), after=result.irradiation_end)
     if time_since_start is not None:
-        return parse_time(time_since_start, "time_since_start")
-    return None
+        return result.point_at(parse_time(time_since_start, "time_since_start"))
+    return result.point_at(None)
 
 
 def build_server(loader, runner: m.Runner, key_store=None, oauth=None) -> MCPServer:
@@ -251,7 +252,7 @@ def build_server(loader, runner: m.Runner, key_store=None, oauth=None) -> MCPSer
             raise ValueError(f"quantity must be one of {sorted(m.QUANTITIES)}")
         _, tables = loader.get()
         result = runner.get(user, run_id)
-        point = result.point_at(_resolve_time(result, time_since_start, cooling_time))
+        point = _point(result, time_since_start, cooling_time)
         if nuclides:
             from .materials import canonical_nuclide
             names = [canonical_nuclide(n, tables.index) for n in nuclides]
@@ -298,9 +299,7 @@ def build_server(loader, runner: m.Runner, key_store=None, oauth=None) -> MCPSer
             names = [canonical_nuclide(n, tables.index) for n in nuclides]
             ranked = ""
         else:
-            time = None if rank_at_cooling_time is None else (
-                result.irradiation_end + parse_time(rank_at_cooling_time, "rank_at_cooling_time"))
-            point = result.point_at(time)
+            point = _point(result, cooling_time=rank_at_cooling_time, what="rank_at_cooling_time")
             exclude = () if include_initial else set(result.initial_atoms)
             names = m.top_nuclides(tables, point.atoms, quantity, top_n, exclude=exclude)
             ranked = f", ranked by {quantity} at {format_time(point.time)} since the start"

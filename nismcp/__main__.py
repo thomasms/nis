@@ -35,7 +35,7 @@ def _serve(args) -> int:
     files = DataFiles(decay=args.decay_data, reaction=args.reaction_data, fission_yields=args.fission_yields,
                       sf_yields=args.sf_yields)
     loader = DataLoader(files)
-    runner = Runner(loader, max_runs=args.max_runs)
+    runner = Runner(loader, max_runs=args.max_runs, max_results_bytes=args.max_results_mb * 1024 * 1024)
 
     if args.transport == "stdio":
         server = build_server(loader, runner)
@@ -136,6 +136,8 @@ def main(argv=None) -> int:
     serve.add_argument("--oauth-state-file", type=Path, default=_env_path("NIS_OAUTH_STATE_FILE"),
                        help="OAuth: a file to keep the clients and tokens over a restart (else in memory only)")
     serve.add_argument("--max-runs", type=int, default=20, help="the runs kept in memory for each user")
+    serve.add_argument("--max-results-mb", type=int, default=500,
+                       help="the memory for the runs of all the users together; the oldest runs go first")
     serve.add_argument("--log-level", default="INFO", choices=("DEBUG", "INFO", "WARNING", "ERROR"))
     serve.set_defaults(func=_serve)
 

@@ -48,23 +48,24 @@ Without fission yields, a fission removes the nuclide but makes no fission produ
 ## Use it on your computer (stdio, no keys)
 
 The client (Claude Code or Claude Desktop) starts the server as a process. Only you can use it, so there are no
-keys. Give the full paths:
+keys. The `nismcp` package is not installed in the virtual environment, so Python finds it only from the NIS
+folder: `uv run --directory` starts it there, from any folder. Give the full paths:
 
 ```bash
-claude mcp add nis -- /path/to/nis/.venv/bin/python -m nismcp serve \
+claude mcp add nis -- uv run --directory /path/to/nis python -m nismcp serve \
     --decay-data /path/to/nis/data/jeff311.dec --reaction-data /path/to/nis/data/jeff4.nisreac \
     --fission-yields /path/to/nis/data/jeff311.nfy --sf-yields /path/to/nis/data/jeff311.sfy
 ```
 
-For Claude Desktop, add this to `claude_desktop_config.json`:
+For Claude Desktop, add this to `claude_desktop_config.json` (give the full path of `uv` if Claude Desktop does
+not find it, for example `/opt/homebrew/bin/uv`; `which uv` shows it):
 
 ```json
 {
   "mcpServers": {
     "nis": {
-      "command": "/path/to/nis/.venv/bin/python",
-      "args": ["-m", "nismcp", "serve"],
-      "cwd": "/path/to/nis",
+      "command": "uv",
+      "args": ["run", "--directory", "/path/to/nis", "python", "-m", "nismcp", "serve"],
       "env": {
         "NIS_DECAY_DATA": "/path/to/nis/data/jeff311.dec",
         "NIS_REACTION_DATA": "/path/to/nis/data/jeff4.nisreac",
@@ -90,7 +91,8 @@ uv run python -m nismcp keygen --name alice --keys-file /etc/nis/keys.txt
 ```
 
 Send the key to the user on a safe channel. To remove access, delete the line of the user from the file. The
-server reads the file again when it changes, so you do not have to restart it.
+server reads the file again when it changes, so you do not have to restart it. If the file has an error or is
+not there, no key works until you correct it (the server writes the error in its log).
 
 ### 2. Run the server
 
@@ -180,15 +182,23 @@ login of the user.
 
 ### 2. Make the allow list
 
-One GitHub login on each line (`#` starts a comment), for example `/etc/nis/users.txt`:
+One GitHub login on each line (`#` starts a comment), optionally with the GitHub account id, for example
+`/etc/nis/users.txt`:
 
 ```
 alice
-bob
+bob 1234567
 ```
 
 To remove a user, delete the line. The server reads the file again when it changes, and checks it each time a token
-is used, so the user loses access at once.
+is used, so the user loses access at once. If the file has an error or is not there, no one gets in until you
+correct it.
+
+A GitHub login can change: a user can rename their account, and then another person can register the old login.
+So the server identifies a user by the account id, not by the login. It keeps the id of each login the first time
+the user logs in (in the state file), and refuses the login if the id changes. To be sure from the start, give the
+id in the allow list (`https://api.github.com/users/<login>` shows it as `id`). If the id of a login changes for a
+correct reason, give the new id in the allow list, and remove the login from `github_ids` in the state file.
 
 ### 3. Run the server
 
@@ -205,15 +215,17 @@ uv run python -m nismcp serve --transport http --port 8000 \
 ```
 
 - `--public-url` is the HTTPS URL of the server, as the users see it (behind the reverse proxy).
-- `--oauth-state-file` keeps the registered clients and the tokens over a restart, so the users do not have to log
-  in again. It has only a hash of each token. Without it, everything is in memory.
+- `--oauth-state-file` keeps the registered clients, the tokens and the account id of each login over a restart,
+  so the users do not have to log in again. It has only a hash of each token. Without it, everything is in memory.
 - `--keys-file` is optional with OAuth. With it, the API keys work too.
 
 With systemd, put the secret in a file that only root can read, and give it to the service:
 
 ```ini
 [Service]
-EnvironmentFile=/etc/nis/oauth.env     # NIS_GITHUB_CLIENT_SECRET=..., chmod 600
+# the file has the line NIS_GITHUB_CLIENT_SECRET=... (chmod 600). Keep this comment on its own line: systemd
+# reads a # after a value as part of the value.
+EnvironmentFile=/etc/nis/oauth.env
 ```
 
 ### 4. Connect claude.ai
@@ -221,7 +233,7 @@ EnvironmentFile=/etc/nis/oauth.env     # NIS_GITHUB_CLIENT_SECRET=..., chmod 600
 In claude.ai: **Settings → Connectors → Add custom connector**. Give the URL `https://nis.example.com/mcp`, and
 leave the OAuth client ID and secret empty (the server registers claude.ai itself). Then click **Connect**. The user sees a
 page of the NIS server that names the client and the site the login goes back to, and clicks **Log in with
-GitHub**. GitHub asks the user to log in (and, the first time, to allow the app), and the user comes back to
+GitHub**. The login must complete in the same browser. GitHub asks the user to log in (and, the first time, to allow the app), and the user comes back to
 claude.ai.
 
 The NIS page is necessary for security: the server uses one GitHub app for all the clients, and anyone can register
@@ -229,11 +241,12 @@ a client, so without the page a bad client could get access as a user that allow
 if the login does not go back to claude.ai. On a Team or Enterprise plan,
 an owner adds the connector for the organization, and each user connects with their own GitHub login.
 
-Each user sees only their own runs (the user is `github:<login>`).
+Each user sees only their own runs (the user is `github:<account id>`).
 
 ### Size of the server
 
-The memory is set by the nuclear data, not by the number of users. With the reaction cache, a VM with 2 vCPU,
+The memory is mostly the nuclear data. The results of the runs use at most 500 MB for all the users together
+(`--max-results-mb`); when they need more, the oldest runs are removed. With the reaction cache, a VM with 2 vCPU,
 4 GB of memory and 20 GB of disk is enough for a few requests per minute. The server does one run at a time;
 other requests wait.
 

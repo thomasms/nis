@@ -105,10 +105,13 @@ class KeyStore:
             try:
                 self._reload()
             except (OSError, ValueError) as e:
-                # keep the keys we have, a bad edit of the file must not stop the server
-                log.error("cannot read the keys file again: %s", e)
+                # fail closed: if the file is deleted or has an error, no key works until it is correct again
+                # (keeping the old keys would keep a user that was just removed)
+                log.error("cannot read the keys file, so no API key works until it is correct: %s", e)
+                self._keys, self._stamp = {}, None
+            keys = self._keys
         digest = hash_key(key)
-        for known, name in self._keys.items():
+        for known, name in keys.items():
             if hmac.compare_digest(known, digest):
                 return name
         return None

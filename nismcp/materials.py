@@ -9,9 +9,15 @@ import re
 
 AVOGADRO = 6.02214076e23
 
-# periodictable has no natural abundance for U, so use the IUPAC 2013 values (atom %)
+# where periodictable is wrong for a natural element, the IUPAC values (atom %). The key is the mass number, with
+# "m" for a metastable state.
+# - U: periodictable has no natural abundance (IUPAC 2013 values).
+# - Ta: the natural Ta180 is the metastable state Ta180m (almost stable), not the ground state (8 h half-life).
+# - Th: natural Th is all Th232 (IUPAC); the 0.02 % of Th230 in periodictable is from uranium ores only.
 _ABUNDANCE_OVERRIDES = {
     "U": {234: 0.0054, 235: 0.7204, 238: 99.2742},
+    "Ta": {"180m": 0.01201, 181: 99.98799},
+    "Th": {232: 100.0},
 }
 
 _ELEMENT = re.compile(r"^([A-Za-z]{1,2})$")
@@ -28,7 +34,8 @@ def _element(symbol: str):
 
 
 def natural_abundances(symbol: str) -> dict:
-    """{mass number: atom fraction} of the natural element."""
+    """{mass number: atom fraction} of the natural element. The mass number is an int, or a str such as "180m"
+    for a metastable state."""
     element = _element(symbol)
     if element.symbol in _ABUNDANCE_OVERRIDES:
         percent = _ABUNDANCE_OVERRIDES[element.symbol]
@@ -41,8 +48,10 @@ def natural_abundances(symbol: str) -> dict:
     return {a: p / total for a, p in percent.items()}
 
 
-def atomic_mass(symbol: str, a: int) -> float:
-    """The atomic mass in g/mol (u). If the table has no value for the nuclide, the mass number."""
+def atomic_mass(symbol: str, a) -> float:
+    """The atomic mass in g/mol (u). If the table has no value for the nuclide, the mass number. a is the mass
+    number (an int, or a str such as "180m": a metastable state has the mass of the ground state here)."""
+    a = int(str(a).rstrip("mn"))
     element = _element(symbol)
     if a in element.isotopes and element[a].mass:
         return float(element[a].mass)

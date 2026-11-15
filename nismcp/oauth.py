@@ -11,12 +11,18 @@ The consent page shows the user which client asks for access, and where the code
 the server uses one GitHub app for all the clients, and anyone can register a client: GitHub remembers that the
 user allowed the app, so without the page a bad client could get a code with no question to the user (the MCP
 security best practices require it for this case). The page cannot be in a frame, and its form needs a cookie
-that a request from another site does not have.
+that a request from another site does not have. When the user allows, the server sets a second cookie, and the
+GitHub callback needs it: so the login completes only in the browser that saw the page (else an attacker could
+allow the page in their own browser and send the GitHub link to a user).
+
+The user is the GitHub account id ("github:<id>"), not the login: a login can be renamed and then registered by
+another person. The server keeps the id of each login the first time it sees it, and refuses the login if the id
+changes later. A line of the allow list can also give the id ("alice 1234567").
 
 The tokens are random strings. The state file keeps the registered clients and a hash of each token (not the
 tokens), so a restart does not log the users out, and a copy of the file gives no access.
 
-The allow list file has one GitHub login on each line (# for comments). The server reads it again when it changes,
+The allow list file has one GitHub login on each line, optionally with the account id (# for comments). The server reads it again when it changes,
 and it checks the list each time a token is used, so a user that you remove loses access at once.
 """
 
@@ -41,12 +47,17 @@ log = logging.getLogger("nismcp.oauth")
 CALLBACK_PATH = "/oauth/github/callback"
 CONSENT_PATH = "/oauth/consent"
 CSRF_COOKIE = "nis_consent"
+BROWSER_COOKIE = "nis_login"
+USER_PREFIX = "github:"
 
 
 def csrf_cookie_name(state: str) -> str:
     """One cookie for each login, so two logins at the same time do not replace the cookie of the other."""
     return f"{CSRF_COOKIE}_{_hash(state)[:16]}"
-USER_PREFIX = "github:"
+
+
+def browser_cookie_name(state: str) -> str:
+    return f"{BROWSER_COOKIE}_{_hash(state)[:16]}"
 
 ACCESS_TOKEN_SECONDS = 3600
 REFRESH_TOKEN_SECONDS = 30 * 86400
@@ -59,13 +70,14 @@ def _hash(token: str) -> str:
 
 
 class AllowList:
-    """The GitHub logins that can use the server, from a file that is read again when it changes."""
+    """The GitHub logins that can use the server, from a file that is read again when it changes. A line is a
+    login, or a login and its account id (then only that account gets in with the login)."""
 
     def __init__(self, path: Path):
         self.path = Path(path)
         self._lock = threading.Lock()
         self._stamp = None
-        self._logins = set()
+        self._logins = {}       # login (lower case) -> account id, or None
         self._reload()
         if not self._logins:
             log.warning("the allow list %s is empty, so no GitHub user can log in", self.path)
@@ -75,22 +87,30 @@ class AllowList:
         stamp = (stat.st_mtime_ns, stat.st_size)
         if stamp == self._stamp:
             return
-        logins = set()
-        for line in self.path.read_text().splitlines():
-            line = line.split("#", 1)[0].strip()
-            if line:
-                logins.add(line.lower())
+        logins = {}
+        for number, line in enumerate(self.path.read_text().splitlines(), 1):
+            words = line.split("#", 1)[0].split()
+            if not words:
+                continue
+            if len(words) > 2 or (len(words) == 2 and not words[1].isdigit()):
+                raise ValueError(f"{self.path}:{number}: give a GitHub login, and optionally its account id")
+            logins[words[0].lower()] = int(words[1]) if len(words) == 2 else None
         self._logins, self._stamp = logins, stamp
         log.info("%d GitHub users in the allow list %s", len(logins), self.path)
 
-    def allows(self, login: str) -> bool:
+    def allows(self, login: str, user_id: int = None) -> bool:
+        """True if the login is in the list, and (if the list gives an id for it) the id is the same."""
         with self._lock:
             try:
                 self._reload()
-            except OSError as e:
-                # keep the list we have, a bad edit must not stop the server
-                log.error("cannot read the allow list again: %s", e)
-            return login.lower() in self._logins
+            except (OSError, ValueError) as e:
+                # fail closed: if the file is deleted or cannot be read, no one gets in until it is correct again
+                log.error("cannot read the allow list, so no GitHub user gets in until it is correct: %s", e)
+                self._logins, self._stamp = {}, None
+            if login is None or login.lower() not in self._logins:
+                return False
+            pinned = self._logins[login.lower()]
+            return pinned is None or pinned == user_id
 
 
 class GitHub:
@@ -110,8 +130,8 @@ class GitHub:
                                         "allow_signup": "false"})
         return f"{self.AUTHORIZE_URL}?{query}"
 
-    def user_login(self, code: str, redirect_uri: str) -> str:
-        """The GitHub login of the user that gave the code. Blocks, so call it in a thread."""
+    def user_login(self, code: str, redirect_uri: str) -> tuple:
+        """(login, account id) of the GitHub user that gave the code. Blocks, so call it in a thread."""
         body = urllib.parse.urlencode({"client_id": self.client_id, "client_secret": self.client_secret,
                                        "code": code, "redirect_uri": redirect_uri}).encode()
         request = urllib.request.Request(self.TOKEN_URL, data=body, headers={"Accept": "application/json"})
@@ -123,7 +143,8 @@ class GitHub:
             "Accept": "application/vnd.github+json", "Authorization": f"Bearer {token['access_token']}",
             "User-Agent": "nis-mcp"})
         with urllib.request.urlopen(request, timeout=20) as response:
-            return json.load(response)["login"]
+            user = json.load(response)
+        return user["login"], int(user["id"])
 
 
 @dataclass
@@ -134,6 +155,7 @@ class _Login:
     params: AuthorizationParams
     csrf: str
     approved: bool = False
+    browser: str = ""       # the hash of the cookie set in the browser that allowed the login
 
 
 class GitHubOAuthProvider:
@@ -155,6 +177,7 @@ class GitHubOAuthProvider:
         self.codes = {}         # code -> AuthorizationCode
         self.access = {}        # hash -> AccessToken (with the hash as the token)
         self.refresh = {}       # hash -> RefreshToken (with the hash as the token)
+        self.github_ids = {}    # GitHub login (lower case) -> account id, the first time it logged in
         self._load()
 
     # ------------------------------------------------------------------ the state file
@@ -169,6 +192,7 @@ class GitHubOAuthProvider:
                        if t.get("expires_at") is None or t["expires_at"] > now}
         self.refresh = {t["token"]: RefreshToken.model_validate(t) for t in state.get("refresh", [])
                         if t.get("expires_at") is None or t["expires_at"] > now}
+        self.github_ids = {k: int(v) for k, v in state.get("github_ids", {}).items()}
         log.info("OAuth state: %d clients, %d refresh tokens", len(self.clients), len(self.refresh))
 
     def _save(self) -> None:
@@ -176,7 +200,8 @@ class GitHubOAuthProvider:
             return
         state = {"clients": [c.model_dump(mode="json", exclude_none=True) for c in self.clients.values()],
                  "access": [t.model_dump(mode="json") for t in self.access.values()],
-                 "refresh": [t.model_dump(mode="json") for t in self.refresh.values()]}
+                 "refresh": [t.model_dump(mode="json") for t in self.refresh.values()],
+                 "github_ids": self.github_ids}
         temporary = self.state_file.with_suffix(".tmp")
         fd = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
         with os.fdopen(fd, "w") as f:
@@ -221,8 +246,9 @@ class GitHubOAuthProvider:
             return None
         return entry, self.clients[entry.client_id]
 
-    def decide(self, state: str, allow: bool) -> str:
-        """After the consent page: the GitHub login if the user allows, else back to the client with an error."""
+    def decide(self, state: str, allow: bool) -> tuple:
+        """After the consent page: (the GitHub login URL, the browser cookie value) if the user allows, else
+        (back to the client with an error, None). The callback needs the cookie, see browser_ok."""
         with self._lock:
             entry = self.logins.get(state)
             if entry is None:
@@ -230,22 +256,60 @@ class GitHubOAuthProvider:
             if not allow:
                 del self.logins[state]
             else:
-                entry.approved = True
+                browser = secrets.token_urlsafe(32)
+                entry.approved, entry.browser = True, _hash(browser)
         if not allow:
             return construct_redirect_uri(str(entry.params.redirect_uri), error="access_denied",
-                                          state=entry.params.state, error_description="the user did not allow access")
-        return self.github.login_url(state, self.callback_url)
+                                          state=entry.params.state,
+                                          error_description="the user did not allow access"), None
+        return self.github.login_url(state, self.callback_url), browser
 
-    def complete_login(self, state: str, login: str) -> str:
+    def browser_ok(self, state: str, browser: str) -> bool:
+        """True if the login is known, the user allowed it, and the browser has the cookie of the consent page."""
+        with self._lock:
+            self._clean()
+            entry = self.logins.get(state)
+        return (entry is not None and entry.approved and bool(browser)
+                and secrets.compare_digest(_hash(browser), entry.browser))
+
+    def _allowed(self, login: str, user_id: int) -> bool:
+        """The allow list has the login, and the login is the same GitHub account as the first time."""
+        if not self.allow_list.allows(login, user_id):
+            return False
+        with self._lock:
+            known = self.github_ids.get(login.lower())
+            if known is None:
+                self.github_ids[login.lower()] = user_id
+                self._save()
+                return True
+        if known != user_id:
+            log.warning("refused the GitHub user %s: the account id is %s, but it was %s before (a renamed or "
+                        "deleted account?). If it is correct, give the id in the allow list and remove the login "
+                        "from github_ids in the state file", login, user_id, known)
+            return False
+        return True
+
+    def _login_of(self, subject) -> tuple:
+        """(login, account id) of a token subject "github:<id>", or (None, None)."""
+        value = (subject or "").removeprefix(USER_PREFIX)
+        if not value.isdigit():
+            return None, None
+        user_id = int(value)
+        with self._lock:
+            login = next((k for k, v in self.github_ids.items() if v == user_id), None)
+        return login, user_id
+
+    def complete_login(self, state: str, login: str, user_id: int, browser: str) -> str:
         """After the GitHub login: the URL that sends the user back to the client, with a code or an error."""
         with self._lock:
             self._clean()
             entry = self.logins.pop(state, None)
-        if entry is None or not entry.approved:
+        if (entry is None or not entry.approved or not browser
+                or not secrets.compare_digest(_hash(browser), entry.browser)):
             raise ValueError("the login took too long or is not known, start again from your client")
         client_id, params = entry.client_id, entry.params
-        if not self.allow_list.allows(login):
-            log.warning("refused the GitHub user %s: not in the allow list", login)
+        if not self._allowed(login, user_id):
+            log.warning("refused the GitHub user %s (id %s): not in the allow list", login, user_id)
             return construct_redirect_uri(str(params.redirect_uri), error="access_denied", state=params.state,
                                           error_description=f"the GitHub user {login} is not allowed on this server")
         code = secrets.token_urlsafe(32)
@@ -254,8 +318,8 @@ class GitHubOAuthProvider:
                 code=code, scopes=params.scopes or [], expires_at=time.time() + CODE_SECONDS, client_id=client_id,
                 code_challenge=params.code_challenge, redirect_uri=params.redirect_uri,
                 redirect_uri_provided_explicitly=params.redirect_uri_provided_explicitly, resource=params.resource,
-                subject=USER_PREFIX + login.lower())
-        log.info("GitHub user %s logged in", login)
+                subject=f"{USER_PREFIX}{user_id}")
+        log.info("GitHub user %s (id %s) logged in", login, user_id)
         return construct_redirect_uri(str(params.redirect_uri), code=code, state=params.state)
 
     # ------------------------------------------------------------------ tokens
@@ -303,12 +367,12 @@ class GitHubOAuthProvider:
         return token
 
     async def exchange_refresh_token(self, client, refresh_token: RefreshToken, scopes: list) -> OAuthToken:
-        login = (refresh_token.subject or "").removeprefix(USER_PREFIX)
+        login, user_id = self._login_of(refresh_token.subject)
         with self._lock:
             # the token is used one time: a new refresh token comes with the new access token
             self.refresh.pop(refresh_token.token, None)
             self._save()
-        if not self.allow_list.allows(login):
+        if login is None or not self._allowed(login, user_id):
             raise TokenError(error="invalid_grant", error_description="the user is not allowed on this server")
         return self._issue(client.client_id, scopes or refresh_token.scopes, refresh_token.resource,
                            refresh_token.subject)
@@ -324,7 +388,8 @@ class GitHubOAuthProvider:
         if access.expires_at is not None and access.expires_at < time.time():
             return None
         # a user removed from the allow list loses access at once
-        if not self.allow_list.allows((access.subject or "").removeprefix(USER_PREFIX)):
+        login, user_id = self._login_of(access.subject)
+        if login is None or not self._allowed(login, user_id):
             return None
         return access
 
@@ -407,11 +472,16 @@ def consent_handler(provider: GitHubOAuthProvider):
                 or not secrets.compare_digest(cookie, found[0].csrf)):
             return _page(400, "<p>This request is not valid. Start again from your client.</p>")
         try:
-            target = provider.decide(state, form.get("action", [""])[0] == "allow")
+            target, browser = provider.decide(state, form.get("action", [""])[0] == "allow")
         except ValueError as e:
             return _page(400, f"<p>{html.escape(str(e))}</p>")
         response = RedirectResponse(target, status_code=303)
         response.delete_cookie(csrf_cookie_name(state), path=CONSENT_PATH)
+        if browser:
+            # the GitHub callback needs this cookie, so the login completes only in this browser. Lax (not
+            # Strict), so the browser sends it when GitHub sends the user back (a top-level GET from github.com).
+            response.set_cookie(browser_cookie_name(state), browser, max_age=LOGIN_SECONDS, path=CALLBACK_PATH,
+                                secure=secure, httponly=True, samesite="lax")
         return response
 
     return consent
@@ -433,13 +503,21 @@ def callback_handler(provider: GitHubOAuthProvider):
         if not state or not code:
             error = request.query_params.get("error_description") or request.query_params.get("error") or "no code"
             return page(400, f"The GitHub login did not complete: {error}")
+        browser = request.cookies.get(browser_cookie_name(state), "")
+        # check the login before the GitHub call: only the browser that allowed it on the consent page
+        if not provider.browser_ok(state, browser):
+            return page(400, "This login is too old, not known, or was started in another browser. Start again "
+                             "from your client.")
         try:
-            login = await anyio.to_thread.run_sync(provider.github.user_login, code, provider.callback_url)
-            target = provider.complete_login(state, login)
+            login, user_id = await anyio.to_thread.run_sync(provider.github.user_login, code,
+                                                            provider.callback_url)
+            target = provider.complete_login(state, login, user_id, browser)
         except Exception as e:  # noqa: BLE001, the user sees the reason
             log.warning("GitHub login failed: %s", e)
             return page(400, f"The GitHub login failed: {e}")
-        return RedirectResponse(target, status_code=302)
+        response = RedirectResponse(target, status_code=302)
+        response.delete_cookie(browser_cookie_name(state), path=CALLBACK_PATH)
+        return response
 
     return callback
 

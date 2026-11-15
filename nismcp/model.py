@@ -106,12 +106,31 @@ def steps_from_input(irradiation_time, cooling_times, schedule, flux) -> list:
     return steps
 
 
-@dataclass
 class Point:
-    time: float              # s since the start
-    step: int                # index of the step
-    end_of_step: bool
-    atoms: np.ndarray        # atoms of each nuclide (no sink)
+    """The atoms of all the nuclides at one time. Most nuclides have no atoms, so only the others are kept: a run
+    can have 600 points of 4000 nuclides."""
+
+    __slots__ = ("time", "step", "end_of_step", "size", "_index", "_values")
+
+    def __init__(self, time: float, step: int, end_of_step: bool, atoms: np.ndarray):
+        self.time = time              # s since the start
+        self.step = step              # index of the step
+        self.end_of_step = end_of_step
+        atoms = np.asarray(atoms, dtype=float)
+        self.size = len(atoms)
+        self._index = np.flatnonzero(atoms).astype(np.int32)
+        self._values = atoms[self._index]
+
+    @property
+    def atoms(self) -> np.ndarray:
+        """The atoms of each nuclide (no sink)."""
+        atoms = np.zeros(self.size)
+        atoms[self._index] = self._values
+        return atoms
+
+    @property
+    def nbytes(self) -> int:
+        return self._index.nbytes + self._values.nbytes + 64
 
 
 @dataclass
@@ -128,6 +147,11 @@ class RunResult:
     solve_seconds: float = 0.0
 
     @property
+    def nbytes(self) -> int:
+        """About the memory of the result."""
+        return sum(p.nbytes for p in self.points)
+
+    @property
     def irradiation_end(self) -> float:
         """The time of the end of the last irradiation step (0 if no irradiation)."""
         t, end = 0.0, 0.0
@@ -137,15 +161,23 @@ class RunResult:
                 end = t
         return end
 
-    def point_at(self, time_s=None) -> Point:
-        """The point at the time (s since the start), or the last point. The time must be a point of the run:
-        the end of a step, or one of the sub-steps."""
+    def point_at(self, time_s=None, after: float = 0.0) -> Point:
+        """The point at time_s after the time `after` (both in s since the start; for a cooling time, `after` is
+        the end of the irradiation), or the last point. The time must be a point of the run: the end of a step,
+        or one of the sub-steps. The tolerance is relative to time_s, so a short cooling time after a long
+        irradiation does not give a point a few seconds away."""
         if time_s is None:
             return self.points[-1]
-        best = min(self.points, key=lambda p: abs(p.time - time_s))
-        if abs(best.time - time_s) > 1e-6 * max(time_s, 1.0):
-            raise ValueError(f"the run has no result at {format_time(time_s)}; the step ends are at "
-                             + ", ".join(format_time(p.time) for p in self.points if p.end_of_step))
+        if time_s < 0:
+            raise ValueError("the time must be 0 or more")
+        best = min(self.points, key=lambda p: abs((p.time - after) - time_s))
+        # the times are sums of the step durations, so they have a rounding error of the size of the total time
+        tolerance = 1e-6 * max(time_s, 1e-3) + 1e-12 * max(after, best.time)
+        if abs((best.time - after) - time_s) > tolerance:
+            frame = "after the end of the irradiation" if after > 0 else "since the start"
+            ends = [format_time(p.time - after) for p in self.points if p.end_of_step and p.time >= after]
+            raise ValueError(f"the run has no result at {format_time(time_s)} {frame}; the step ends are at "
+                             + ", ".join(ends) + ". Run the irradiation again with this time in cooling_times.")
         return best
 
 
@@ -158,12 +190,19 @@ def sub_step_times(duration: float, count: int = SUB_STEPS) -> list:
     return [float(t) for t in times]
 
 
-class Runner:
-    """Runs the models and keeps the results (the last max_runs, for each user)."""
+# the memory for the results of all the users together; the oldest runs go first
+DEFAULT_MAX_RESULTS_BYTES = 500 * 1024 * 1024
 
-    def __init__(self, loader, max_runs: int = 20, reaction_cache_size: int = 4):
+
+class Runner:
+    """Runs the models and keeps the results: the last max_runs of each user, and at most max_results_bytes for
+    all the users together (the oldest runs are removed first, the run just made is always kept)."""
+
+    def __init__(self, loader, max_runs: int = 20, reaction_cache_size: int = 4,
+                 max_results_bytes: int = DEFAULT_MAX_RESULTS_BYTES):
         self.loader = loader
         self.max_runs = max_runs
+        self.max_results_bytes = max_results_bytes
         self._runs = OrderedDict()
         self._matrices = OrderedDict()
         self._reaction_cache_size = reaction_cache_size
@@ -222,6 +261,10 @@ class Runner:
             mine = [k for k, r in self._runs.items() if r.owner == owner]
             for k in mine[:-self.max_runs]:
                 del self._runs[k]
+            total = sum(r.nbytes for r in self._runs.values())
+            while total > self.max_results_bytes and len(self._runs) > 1:
+                _, removed = self._runs.popitem(last=False)
+                total -= removed.nbytes
         return result
 
     def get(self, owner: str, run_id: str) -> RunResult:
