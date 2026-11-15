@@ -73,10 +73,11 @@ PYBIND11_MODULE(pynis, m) {
     m_core.def("filter_nuclides", &core::filter_nuclides<double>);
 
     // matrices are sparse, so they are scipy.sparse.csc_matrix in python
+    // the readers of the data files release the GIL (the work is all in C++), so a server can answer while it reads
     // with sf_yields (from fission_yields_from_file of a spontaneous fission yield file),
     // spontaneous fission makes the fission products, else it goes to the sink
     m_core.def("decay_mat_from_file", &endf::construct_decay_matrix_from_file,
-               py::arg("filename"), py::arg("sf_yields") = nullptr);
+               py::arg("filename"), py::arg("sf_yields") = nullptr, py::call_guard<py::gil_scoped_release>());
 
     using DecayEnergyDataPyType = core::DecayEnergyData<double>;
     py::class_<DecayEnergyDataPyType>(m_core, "DecayEnergyData")
@@ -94,7 +95,7 @@ PYBIND11_MODULE(pynis, m) {
         .def_readwrite("heavy_particle", &DecayHeatPyType::heavy_particle)
         .def_property_readonly("total", &DecayHeatPyType::total);
 
-    m_core.def("decay_energy_data_from_file", &endf::read_decay_energy_data_from_file);
+    m_core.def("decay_energy_data_from_file", &endf::read_decay_energy_data_from_file, py::call_guard<py::gil_scoped_release>());
     m_core.def("compute_activities", &core::compute_activities<double>);
     m_core.def("compute_activity", &core::compute_activity<double>);
     m_core.def("compute_decay_heat", &core::compute_decay_heat<double>);
@@ -119,17 +120,17 @@ PYBIND11_MODULE(pynis, m) {
         });
 
     // a cache or an ENDF tape
-    m_core.def("reaction_data_from_file", &endf::read_reaction_data);
+    m_core.def("reaction_data_from_file", &endf::read_reaction_data, py::call_guard<py::gil_scoped_release>());
     m_core.def("write_reaction_cache", &endf::write_reaction_cache);
     m_core.def("is_reaction_cache", &endf::is_reaction_cache);
     // with fission_yields (from fission_yields_from_file), fission makes the fission products,
     // else it goes to the sink
     m_core.def("reaction_mat", &endf::construct_reaction_matrix,
-               py::arg("reaction_data"), py::arg("spectrum"), py::arg("fission_yields") = nullptr);
+               py::arg("reaction_data"), py::arg("spectrum"), py::arg("fission_yields") = nullptr, py::call_guard<py::gil_scoped_release>());
     m_core.def("reaction_mat_from_file", [](const std::string& filename, const core::Spectrum<double>& spectrum,
                                             const endf::FissionYieldData* fission_yields){
         return endf::construct_reaction_matrix(endf::read_reaction_data(filename), spectrum, fission_yields);
-    }, py::arg("filename"), py::arg("spectrum"), py::arg("fission_yields") = nullptr);
+    }, py::arg("filename"), py::arg("spectrum"), py::arg("fission_yields") = nullptr, py::call_guard<py::gil_scoped_release>());
 
     // fission yields
     py::class_<endf::FissionYields>(m_core, "FissionYields")
@@ -154,16 +155,19 @@ PYBIND11_MODULE(pynis, m) {
             return keys;
         });
 
-    m_core.def("fission_yields_from_file", &endf::read_fission_yields_from_file);
+    m_core.def("fission_yields_from_file", &endf::read_fission_yields_from_file, py::call_guard<py::gil_scoped_release>());
     m_core.def("fission_yield_energy_weights", &endf::energy_weights);
     m_core.def("fission_yields_at_energy", &endf::yields_at_energy);
     m_core.def("weighted_fission_yields", &endf::weighted_yields);
     m_core.def("collapse_cross_section", &endf::collapse_cross_section);
 
     // solvers
-    m_core.def("solver_cram48", &core::cram48::solve<double>);
+    // the work of these functions is all in C++, so they release the GIL: the python threads (for example the
+    // event loop of the MCP server) can run during a solve. The arguments and the result are converted with the
+    // GIL held, and a python callable given as the solver takes the GIL again when it is called.
+    m_core.def("solver_cram48", &core::cram48::solve<double>, py::call_guard<py::gil_scoped_release>());
     m_core.def("reachable_indices", &solver::reachable_indices<double>);
-    m_core.def("solve_reachable", &solver::solve_reachable<double>);
+    m_core.def("solve_reachable", &solver::solve_reachable<double>, py::call_guard<py::gil_scoped_release>());
     m_core.def("compute_inventory", py::overload_cast<const BasicModelPyType&, const Eigen::SparseMatrix<double>&, const solver::solver_func<double>&>(&solver::compute_inventory<double>));
 
     py::module m_data = m.def_submodule("data");

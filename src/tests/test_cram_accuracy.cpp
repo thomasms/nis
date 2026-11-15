@@ -18,9 +18,13 @@
 #include "nis/cram.hpp"
 #include "nis/solver.hpp"
 
+#include "exact_bateman.hpp"
+
 using namespace nis;
 
 using Catch::Matchers::WithinRel;
+// the exact solution of a chain, in double-double arithmetic, so it is the same on all platforms
+using nis::tests::bateman;
 
 namespace {
 
@@ -38,49 +42,14 @@ namespace {
     // (of the atoms at the start), so a value that is exactly 0 can be ~1e-47 of the atoms at the start
     constexpr double CRAM_ERROR = 1e-45;
 
-    // the exact solution of a linear chain 0 -> 1 -> ... -> n-1 with all the atoms in 0 at the start
-    // (the Bateman equations). The decay constants must all be different, the last can be 0 (stable).
-    // The sum has terms of both signs, so for a small lambda*t it loses digits. error[m] is the
-    // rounding error of result[m] (long double).
-    struct Bateman {
-        std::vector<long double> result;
-        std::vector<long double> error;
-    };
-
-    Bateman bateman(const std::vector<long double>& lambda, long double n0, long double t){
-        const int n = static_cast<int>(lambda.size());
-        Bateman b{std::vector<long double>(n, 0.0L), std::vector<long double>(n, 0.0L)};
-        for(int m=0; m<n; ++m){
-            long double production = 1.0L;
-            for(int i=0; i<m; ++i){
-                production *= lambda[i];
-            }
-            long double sum = 0.0L;
-            long double sum_abs = 0.0L;
-            for(int j=0; j<=m; ++j){
-                long double denominator = 1.0L;
-                for(int k=0; k<=m; ++k){
-                    if(k != j){
-                        denominator *= (lambda[k] - lambda[j]);
-                    }
-                }
-                sum += std::exp(-lambda[j]*t)/denominator;
-                sum_abs += std::abs(std::exp(-lambda[j]*t)/denominator);
-            }
-            b.result[m] = n0*production*sum;
-            b.error[m] = 1e-18L*n0*production*sum_abs;
-        }
-        return b;
-    }
-
-    Eigen::SparseMatrix<double> chain_matrix(const std::vector<long double>& lambda){
+    Eigen::SparseMatrix<double> chain_matrix(const std::vector<double>& lambda){
         Triplets triplets;
         const int n = static_cast<int>(lambda.size());
         for(int i=0; i<n; ++i){
             if(lambda[i] > 0){
-                triplets.emplace_back(i, i, -static_cast<double>(lambda[i]));
+                triplets.emplace_back(i, i, -lambda[i]);
                 if(i + 1 < n){
-                    triplets.emplace_back(i, i + 1, static_cast<double>(lambda[i]));
+                    triplets.emplace_back(i, i + 1, lambda[i]);
                 }
             }
         }
@@ -132,7 +101,7 @@ namespace {
 
 TEST_CASE( "CRAM48 gives the Bateman solution of a linear chain" ) {
     // half-lives from ~22 years to ~3e-17 s (like Be8), each a factor of 10 or more from the others
-    const std::vector<long double> lambda = {1e-9L, 3e-6L, 1e-3L, 0.7L, 40.0L, 2e4L, 1e8L, 2e16L, 0.0L};
+    const std::vector<double> lambda = {1e-9, 3e-6, 1e-3, 0.7, 40.0, 2e4, 1e8, 2e16, 0.0};
     const int n = static_cast<int>(lambda.size());
     const Eigen::SparseMatrix<double> mat = chain_matrix(lambda);
     const double n0_total = 1e20;
@@ -146,10 +115,10 @@ TEST_CASE( "CRAM48 gives the Bateman solution of a linear chain" ) {
         const Eigen::VectorXd full = cram(mat, n0, dt);
         const Eigen::VectorXd reduced = solver::solve_reachable<double>(mat, n0, dt, cram);
         for(int i=0; i<n; ++i){
-            const double expected = static_cast<double>(exact.result[i]);
-            const double abs_tol = std::max(static_cast<double>(exact.error[i]), CRAM_ERROR*n0_total);
+            const double expected = exact.result[i];
+            const double abs_tol = std::max(exact.error[i], CRAM_ERROR*n0_total);
             INFO( "dt " << dt << ", nuclide " << i << ", exact " << expected << ", cram " << full(i)
-                  << ", error of the exact value " << static_cast<double>(exact.error[i]) );
+                  << ", error of the exact value " << exact.error[i] );
             // each nuclide to 1e-10 of its own value, it does not matter how small it is next to the others
             REQUIRE( close(full(i), expected, 1e-10, abs_tol) );
             REQUIRE( close(reduced(i), expected, 1e-10, abs_tol) );
@@ -165,26 +134,26 @@ TEST_CASE( "CRAM48 gives the Bateman solution of a linear chain" ) {
 
 TEST_CASE( "CRAM48 with branching: two paths to the same daughter" ) {
     // A -> B (30 %) and A -> C (70 %), B -> D, C -> D, D stable
-    const long double la = 2e-4L, lb = 5e-2L, lc = 3e1L;
+    const double la = 2e-4, lb = 5e-2, lc = 3e1;
     const Eigen::SparseMatrix<double> mat = make_matrix(4, {
-        {0, 0, -double(la)}, {0, 1, 0.3*double(la)}, {0, 2, 0.7*double(la)},
-        {1, 1, -double(lb)}, {1, 3, double(lb)},
-        {2, 2, -double(lc)}, {2, 3, double(lc)},
+        {0, 0, -la}, {0, 1, 0.3*la}, {0, 2, 0.7*la},
+        {1, 1, -lb}, {1, 3, lb},
+        {2, 2, -lc}, {2, 3, lc},
     });
     const double total = 6e21;
     Eigen::VectorXd n0 = Eigen::VectorXd::Zero(4);
     n0(0) = total;
     for(double dt: {0.01, 10.0, 1e3, 1e5}){
-        const auto via_b = bateman({la, lb, 0.0L}, total, dt);
-        const auto via_c = bateman({la, lc, 0.0L}, total, dt);
+        const auto via_b = bateman({la, lb, 0.0}, total, dt);
+        const auto via_c = bateman({la, lc, 0.0}, total, dt);
         const std::vector<double> exact = {
-            double(via_b.result[0]), 0.3*double(via_b.result[1]), 0.7*double(via_c.result[1]),
-            0.3*double(via_b.result[2]) + 0.7*double(via_c.result[2])
+            via_b.result[0], 0.3*via_b.result[1], 0.7*via_c.result[1],
+            0.3*via_b.result[2] + 0.7*via_c.result[2]
         };
         const Eigen::VectorXd nt = cram(mat, n0, dt);
         for(int i=0; i<4; ++i){
             INFO( "dt " << dt << ", nuclide " << i );
-            const double abs_tol = std::max({double(via_b.error[2]), double(via_c.error[2]), CRAM_ERROR*total});
+            const double abs_tol = std::max({via_b.error[2], via_c.error[2], CRAM_ERROR*total});
             REQUIRE( close(nt(i), exact[i], 1e-10, abs_tol) );
         }
         REQUIRE_THAT( nt.sum(), WithinRel(total, 1e-13) );

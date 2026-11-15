@@ -12,6 +12,7 @@ from .processingtests import *
 from .fnstests import *
 from .fissionheattests import *
 from .nisprogramtests import *
+from .mcptests import *
 
 
 def main():

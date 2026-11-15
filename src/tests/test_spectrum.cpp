@@ -150,3 +150,33 @@ TEST_CASE( "convert_by_lethargy keeps the total flux" ) {
         REQUIRE_THAT( total, Catch::Matchers::WithinRel(1.0, 1e-5) );
     }
 }
+TEST_CASE( "bad bounds throw an exception and do not assert" ) {
+    // the bounds of a spectrum can come from a user (the MCP server): an assert would stop the whole process
+    const double nan = std::nan("");
+    REQUIRE_THROWS_AS( Edge<double>(2.0, 1.0), std::invalid_argument );
+    REQUIRE_THROWS_AS( Edge<double>(nan, 1.0), std::invalid_argument );
+    REQUIRE_THROWS_AS( Edge<double>(1.0, nan), std::invalid_argument );
+    REQUIRE_NOTHROW( Edge<double>(1.0, 1.0) );
+    REQUIRE_THROWS_AS( Spectrum<double>({1.0}, {}), std::invalid_argument );
+    REQUIRE_THROWS_AS( Spectrum<double>({1.0, 2.0}, {1.0, 2.0}), std::invalid_argument );
+    const Spectrum<double> with_nan({1.0, nan, 2.0}, {1.0, 1.0});
+    REQUIRE_THROWS_AS( convert_by_lethargy(with_nan, {1.0, 1.5, 2.0}), std::invalid_argument );
+    REQUIRE_THROWS_AS( convert_by_energy(with_nan, {1.0, 1.5, 2.0}), std::invalid_argument );
+    const Spectrum<double> good({1.0, 2.0}, {1.0});
+    REQUIRE_THROWS_AS( convert_by_lethargy(good, {1.0}), std::invalid_argument );
+}
+
+TEST_CASE( "convert_by_lethargy with many input groups below and above the output" ) {
+    // the loop over the input groups stops once it is past an output group: the result is the same
+    std::vector<double> bounds;
+    std::vector<double> values;
+    for(int i=0; i<=1000; ++i){
+        bounds.push_back(1.0 + i);
+    }
+    for(int i=0; i<1000; ++i){
+        values.push_back(1.0);
+    }
+    const Spectrum<double> in(bounds, values);
+    const auto out = convert_by_energy(in, {100.0, 100.5, 102.0, 500.0});
+    REQUIRE_THAT( out.y(), Approx(std::vector<double>{0.5, 1.5, 398.0}) );
+}
