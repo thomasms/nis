@@ -257,6 +257,13 @@ Notes:
 - NIS does not check the branching ratios. `DecayNuclide.total_branching_ratio` gives their sum.
 - Only nuclides in `nis.data.ALL_ZAIS()` are in the matrices. A product that is not tracked goes to the sink.
 
+For a full example that needs no data files, see [examples/python/tritium_decay.py](examples/python/tritium_decay.py).
+It makes the H3 decay data by hand, then gives the inventory, activity and decay heat for 5 half-lives:
+
+```bash
+uv run python examples/python/tritium_decay.py
+```
+
 
 ## Tests
 
