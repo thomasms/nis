@@ -202,6 +202,61 @@ reaction_mat = nis.core.reaction_mat(reaction_data, spectrum, yields)
 decay_mat = nis.core.decay_mat_from_file("data/jeff311.dec", nis.core.fission_yields_from_file("data/jeff311.sfy"))
 ```
 
+### Change the nuclear data (Python API)
+
+The matrices are made from data types that do not depend on ENDF (C++: [src/nis/data](src/nis/data), namespace `nis::data`).
+ENDF ([src/nis/endf](src/nis/endf)) is only one way to fill them. You can read the data from a file, change it, or make it
+by hand, and then make the matrices from it:
+
+| Data | Type | Read from a file | Make the matrix |
+|---|---|---|---|
+| Decay | `DecayData`: a dict of `DecayNuclide` by ZAI | `decay_data_from_file` | `decay_mat(decay_data, sf_yields=None)`, `decay_energy_data(decay_data)` |
+| Cross sections | `ReactionData`: a list of `CrossSection` | `reaction_data_from_file` | `reaction_mat(reaction_data, spectrum, fission_yields=None)` |
+| Fission yields | `FissionYieldData`: a dict of `FissionYields` by parent ZAI | `fission_yields_from_file` | (given to the two functions above) |
+
+```python
+import pynis as nis
+core = nis.core
+co60 = nis.zai.get_from_name("Co60")
+
+# decay: change a half-life (s) and the decay modes
+decay_data = core.decay_data_from_file("data/jeff311.dec")
+decay_data[co60].half_life = 1.5e8
+decay_data[co60].modes = [core.DecayMode(rtyp=1, branching_ratio=0.9),      # beta-
+                          core.DecayMode(rtyp=10, branching_ratio=0.1)]     # unknown, to the sink
+decay_data[co60].modes[0].branching_ratio = 0.95                            # change one mode in place
+decay_data[nis.zai.get_from_name("H3")] = core.DecayNuclide(half_life=3.9e8, modes=[core.DecayMode(1, 1.0)])
+decay_mat = core.decay_mat(decay_data)
+energy_data = core.decay_energy_data(decay_data)   # for activity and decay heat
+
+# cross sections: change, add or remove a reaction (ENDF MT number, group bounds in eV, values in barns)
+reaction_data = core.reaction_data_from_file("data/jeff4.nisreac")
+fe56 = nis.zai.get_from_name("Fe56")
+for xs in reaction_data.find(fe56, 102):          # (n,g)
+    xs.values = [1.1*v for v in xs.values]
+reaction_data.remove_reactions(fe56, 103)         # no (n,p)
+reaction_data.append(core.CrossSection(fe56, 107, [1e6, 2e7], [0.05, 0.05]))   # (n,a)
+reaction_mat = core.reaction_mat(reaction_data, spectrum)
+
+# fission yields: one dict (product ZAI -> independent yield) for each incident energy (eV)
+yields = core.fission_yields_from_file("data/jeff311.nfy")
+u235 = nis.zai.get_from_name("U235")
+yields[u235] = core.FissionYields(u235, [0.0253], [{561400: 0.06, 421000: 0.06}])
+reaction_mat = core.reaction_mat(reaction_data, spectrum, yields)
+```
+
+Notes:
+
+- `decay_data[zai]`, `reaction_data[i]`, `reaction_data.find(...)` and `yields[zai]` give the item in the data, not a copy,
+  so a change to them changes the data. Do not keep them after you add items to `reaction_data`.
+- List fields (`CrossSection.energies` and `values`, `FissionYields.energies` and `yields`) are copies in Python.
+  Set them as a whole (`xs.values = new_values`), not one item at a time. `DecayNuclide.modes` is not a copy.
+- `DecayMode.rtyp` uses the ENDF decay numbers: 0 gamma, 1 beta-, 2 beta+/EC, 3 IT, 4 alpha, 5 neutron,
+  6 spontaneous fission, 7 proton, 10 unknown (to the sink). 1.5 is beta- then neutron emission.
+- A half-life of infinity (or 0) is stable. `DecayNuclide.decay_constant` can be read and set too.
+- NIS does not check the branching ratios. `DecayNuclide.total_branching_ratio` gives their sum.
+- Only nuclides in `nis.data.ALL_ZAIS()` are in the matrices. A product that is not tracked goes to the sink.
+
 
 ## Tests
 

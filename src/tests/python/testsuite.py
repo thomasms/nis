@@ -11,6 +11,7 @@ from .scripttests import *
 from .processingtests import *
 from .fnstests import *
 from .fissionheattests import *
+from .nucleardatatests import *
 from .nisprogramtests import *
 
 

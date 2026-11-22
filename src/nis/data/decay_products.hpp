@@ -1,13 +1,15 @@
-#ifndef ENDF_DECAY_PRODUCT_COMPUTER_HPP
-#define ENDF_DECAY_PRODUCT_COMPUTER_HPP
+#ifndef DATA_DECAY_PRODUCTS_HPP
+#define DATA_DECAY_PRODUCTS_HPP
 
+#include <tuple>
 #include <variant>
+#include <vector>
 
 #include "nis/zai.hpp"
 
 
 namespace nis {
-    namespace endf {
+    namespace data {
 
         // (primary, {secondaries})
         using DecayProductT = std::tuple<int, std::vector<int>>;
@@ -127,4 +129,4 @@ namespace nis {
     }
 }
 
-#endif //ENDF_DECAY_PRODUCT_COMPUTER_HPP
+#endif //DATA_DECAY_PRODUCTS_HPP

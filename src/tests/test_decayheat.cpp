@@ -1,4 +1,5 @@
 #include <cmath>
+#include <limits>
 
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
@@ -166,4 +167,61 @@ TEST_CASE( "no inventory gives no heat" ) {
     const Eigen::VectorXd inventory = Eigen::VectorXd::Zero(data::ZAI_SIZE);
     REQUIRE( core::compute_activity<double>(energy_data, inventory) == 0.0 );
     REQUIRE( core::compute_decay_heat<double>(energy_data, inventory).total() == 0.0 );
+}
+
+TEST_CASE( "read_decay_data_from_tape" ) {
+    const data::DecayData decay_data = endf::read_decay_data_from_tape(test_tape());
+    // the stable Ni60 is in the data too
+    REQUIRE( decay_data.size() == 3 );
+
+    const data::DecayNuclide& co60 = decay_data.at(270600);
+    REQUIRE( co60.half_life == CO60_HALF_LIFE );
+    REQUIRE( co60.modes.size() == 1 );
+    REQUIRE( co60.modes[0].rtyp == 1.0 );
+    REQUIRE( co60.modes[0].branching_ratio == 1.0 );
+    REQUIRE( co60.modes[0].final_state == 0 );
+    REQUIRE( co60.light_particle == CO60_ELP );
+    REQUIRE( co60.electromagnetic == CO60_EEM );
+
+    const data::DecayNuclide& ni60 = decay_data.at(280600);
+    REQUIRE( ni60.is_stable() );
+    REQUIRE( ni60.modes.empty() );
+
+    const data::DecayNuclide& po210 = decay_data.at(842100);
+    REQUIRE( po210.modes[0].rtyp == 4.0 );
+    REQUIRE( po210.heavy_particle == PO210_EHP );
+}
+
+TEST_CASE( "the matrix and energies from the tape are the same as from the decay data" ) {
+    const auto tape = test_tape();
+    const data::DecayData decay_data = endf::read_decay_data_from_tape(tape);
+
+    const Eigen::SparseMatrix<double> from_tape = endf::construct_decay_matrix_from_tape(tape);
+    const Eigen::SparseMatrix<double> from_data = data::construct_decay_matrix(decay_data);
+    REQUIRE( from_tape.nonZeros() == from_data.nonZeros() );
+    REQUIRE( Eigen::MatrixXd(from_tape - from_data).cwiseAbs().maxCoeff() == 0.0 );
+
+    const auto energy_tape = endf::read_decay_energy_data_from_tape(tape);
+    const auto energy_data = data::construct_decay_energy_data(decay_data);
+    REQUIRE( energy_tape.decay_constants == energy_data.decay_constants );
+    REQUIRE( energy_tape.light_particle == energy_data.light_particle );
+    REQUIRE( energy_tape.electromagnetic == energy_data.electromagnetic );
+    REQUIRE( energy_tape.heavy_particle == energy_data.heavy_particle );
+}
+
+TEST_CASE( "change the decay data read from the tape" ) {
+    data::DecayData decay_data = endf::read_decay_data_from_tape(test_tape());
+    // Co60 with a 10 times shorter half-life, and Po210 made stable
+    decay_data.at(270600).half_life = CO60_HALF_LIFE/10.0;
+    decay_data.at(842100).half_life = std::numeric_limits<double>::infinity();
+
+    const Eigen::SparseMatrix<double> mat = data::construct_decay_matrix(decay_data);
+    const double co60_lambda = 10.0*physics::LN_2/CO60_HALF_LIFE;
+    REQUIRE_THAT( mat.coeff(index(270600), index(280600)), WithinRel(co60_lambda, 1e-12) );
+    REQUIRE( mat.coeff(index(842100), index(842100)) == 0.0 );
+    REQUIRE( mat.coeff(index(842100), index(822060)) == 0.0 );
+
+    const auto energy_data = data::construct_decay_energy_data(decay_data);
+    REQUIRE( energy_data.decay_constants(index(842100)) == 0.0 );
+    REQUIRE_THAT( energy_data.decay_constants(index(270600)), WithinRel(co60_lambda, 1e-12) );
 }

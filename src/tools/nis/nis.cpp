@@ -65,23 +65,23 @@ namespace {
 
     // read the decay tape once, for the matrix and the decay energies
     // no value if no file is given
-    std::optional<endf::FissionYieldData> read_yields(const std::string& filename){
+    std::optional<data::FissionYieldData> read_yields(const std::string& filename){
         if(filename.empty()){
             return std::nullopt;
         }
         return endf::read_fission_yields_from_file(filename);
     }
 
-    DecayData read_decay_data(const std::string& filename, const std::optional<endf::FissionYieldData>& sf_yields){
-        const auto tape = njoy::ENDFtk::tree::fromFile(filename);
-        return DecayData{endf::construct_decay_matrix_from_tape(tape, sf_yields.has_value() ? &sf_yields.value() : nullptr),
-                         endf::read_decay_energy_data_from_tape(tape)};
+    DecayData read_decay_data(const std::string& filename, const std::optional<data::FissionYieldData>& sf_yields){
+        const data::DecayData decay_data = endf::read_decay_data_from_file(filename);
+        return DecayData{data::construct_decay_matrix(decay_data, sf_yields.has_value() ? &sf_yields.value() : nullptr),
+                         data::construct_decay_energy_data(decay_data)};
     }
 
     // no value if the input has no spectrum
     std::optional<ReactionData> read_reaction_data(const core::BasicModel<double>& model,
                                                    const std::string& filename,
-                                                   const std::optional<endf::FissionYieldData>& fission_yields){
+                                                   const std::optional<data::FissionYieldData>& fission_yields){
         if(model.spectrum == nullptr){
             return std::nullopt;
         }

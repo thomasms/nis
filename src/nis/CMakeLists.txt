@@ -1,6 +1,9 @@
 project (${NIS_LIB_NAME})
 
 set(NIS_CPP_SOURCES
+    data/decay.cpp
+    data/fission_yields.cpp
+    data/reaction.cpp
     endf/core.cpp
     endf/decay.cpp
     endf/fission_yields.cpp

@@ -12,6 +12,11 @@
 #include "nis/util.hpp"
 #include "nis/zai.hpp"
 
+#include "nis/data/decay.hpp"
+#include "nis/data/decay_products.hpp"
+#include "nis/data/fission_yields.hpp"
+#include "nis/data/reaction.hpp"
+
 #include "nis/endf/core.hpp"
 #include "nis/endf/decay.hpp"
 #include "nis/endf/fission_yields.hpp"
