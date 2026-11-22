@@ -273,6 +273,51 @@ class ResultsTests(unittest.TestCase):
         self.assertEqual(read[0]["nis"], 3.0)
         self.assertTrue(math.isnan(read[1]["Other code"]))
 
+    def _write_run(self, directory: str, name: str, heats: tuple, label: str = None) -> Path:
+        case = format.parse_case(_small_case())
+        steps = [{"decay_heat": h, "beta_heat": 0, "gamma_heat": 0, "alpha_heat": 0, "activity": 0} for h in heats]
+        column = results.nis_column(label)
+        path = Path(directory) / name
+        results.write_results(path, results.case_rows(case, steps, column), results.calculation_names([case]), column)
+        return path
+
+    def test_labelled_runs_are_next_to_each_other(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            jeff = self._write_run(directory, "jeff.csv", (9e-6, 6e-6, 4e-6), "JEFF-4.0")
+            tendl = self._write_run(directory, "tendl.csv", (9e-6, 3e-6, 1e-6), "TENDL-2025")
+            with open(tendl) as f:
+                self.assertIn("nis (TENDL-2025)", f.readline())
+            rows, calculations, nis_name = results.read_runs([jeff, tendl])
+        self.assertEqual(nis_name, "NIS (JEFF-4.0)")
+        self.assertEqual(calculations, ["NIS (TENDL-2025)", "Other code"])
+        self.assertEqual([r["nis"] for r in rows], [3.0, 2.0])
+        self.assertEqual([r["NIS (TENDL-2025)"] for r in rows], [1.5, 0.5])
+        self.assertEqual(rows[0]["Other code"], 3.3)
+
+        text = stats.report(rows, calculations, worst=3, nis_name=nis_name)
+        self.assertIn("cases NIS-JEFF-4.0", text)
+        self.assertIn("NIS-JEFF-4.0/NIS-TENDL-2025 within 10%", text)
+
+    def test_files_of_the_same_run_are_joined(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            first = self._write_run(directory, "a.csv", (9e-6, 6e-6, 4e-6))
+            again = self._write_run(directory, "b.csv", (9e-6, 3e-6, 1e-6))
+            rows, calculations, nis_name = results.read_runs([first, again])
+            # no label and a label are two runs
+            labelled = self._write_run(directory, "c.csv", (9e-6, 3e-6, 1e-6), "X")
+            _, with_label, _ = results.read_runs([first, labelled])
+        # the later file replaces the values of the same run
+        self.assertEqual(nis_name, "NIS")
+        self.assertEqual(calculations, ["Other code"])
+        self.assertEqual([r["nis"] for r in rows], [1.5, 0.5])
+        self.assertEqual(with_label, ["NIS (X)", "Other code"])
+
+    def test_label_check(self) -> None:
+        self.assertEqual(results.nis_column(), "nis")
+        self.assertEqual(results.nis_column("TENDL-2025"), "nis (TENDL-2025)")
+        with self.assertRaises(ValueError):
+            results.nis_column("a,b")
+
     def test_nis_output(self) -> None:
         output = textwrap.dedent("""\
             step 1

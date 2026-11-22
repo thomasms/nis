@@ -410,6 +410,19 @@ One program, [scripts/bench.py](scripts/bench.py), does all the work for all the
 
     ![C/E of all the FNS cases](benchmarks/fns/results/fns_summary.png)
 
+**Compare nuclear data:** give each run a name with `--label`. The results column is then `nis (<label>)`, and
+`stats` and `plot` show the runs with different labels next to each other (the first file is the one the others
+are compared with). Files with the same label, or with no label, are joined: a later file replaces the same values.
+
+```bash
+uv run python scripts/bench.py run fns --label JEFF-4.0 \
+    --decay-data data/jeff311.dec --reaction-data data/jeff4.nisreac --output results_jeff4.csv
+uv run python scripts/bench.py run fns --label TENDL-2025 \
+    --decay-data data/jeff311.dec --reaction-data data/tendl2025.nisreac --output results_tendl2025.csv
+uv run python scripts/bench.py stats results_jeff4.csv results_tendl2025.csv
+uv run python scripts/bench.py plot results_jeff4.csv results_tendl2025.csv --summary fns_compare.png
+```
+
 **Reaction cache:** `run` uses the reaction cache. If `--reaction-data` is an ENDF file, the cache is
 `<file>.nisreac` next to it (for example `data/jeff4.nisreac`). It is made first if it does not exist,
 is older than the ENDF file, or is of another cache version.

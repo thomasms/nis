@@ -42,39 +42,51 @@ def case_ratios(rows: list, calculations: list) -> dict:
     return out
 
 
-def report(rows: list, calculations: list, worst: int = 25) -> str:
+def report(rows: list, calculations: list, worst: int = 25, nis_name: str = "NIS") -> str:
+    """nis_name: the name of the run in row["nis"], i.e. "NIS (JEFF-4.0)"."""
+    def name(code: str) -> str:
+        return nis_name if code == "nis" else code
+
     lines = []
     for (benchmark, quantity), cases in case_ratios(rows, calculations).items():
         codes = ["nis"] + [c for c in calculations if any(c in r for r in cases.values())]
         points = sum(len(r["nis"]) for r in cases.values())
         lines.append(f"{benchmark}, {quantity}: {len(cases)} cases, {points} points")
-        lines.append(f"  {'C/E within':>10s}" + "".join(f" {'cases ' + _short(c):>16s} {'points':>7s}" for c in codes))
+        headers = [f"cases {_short(name(c))}" for c in codes]
+        widths = [max(16, len(h)) for h in headers]
+        lines.append(f"  {'C/E within':>10s}" + "".join(f" {h:>{w}s} {'points':>7s}" for h, w in zip(headers, widths)))
         for tolerance in (0.1, 0.2, 0.5):
             text = f"  {tolerance:>10.0%}"
-            for code in codes:
+            for code, w in zip(codes, widths):
                 with_code = [r[code] for r in cases.values() if code in r]
                 means = [geometric_mean(v) for v in with_code]
                 all_points = [x for v in with_code for x in v]
-                text += f" {fraction_within(means, tolerance):>16.0%} {fraction_within(all_points, tolerance):>7.0%}"
+                text += f" {fraction_within(means, tolerance):>{w}.0%} {fraction_within(all_points, tolerance):>7.0%}"
             lines.append(text)
 
+        first = _short(nis_name)
         for code in codes[1:]:
             pairs = [(case, geometric_mean(r["nis"]), geometric_mean(r[code])) for case, r in cases.items() if code in r]
             ratio = [n / c for _, n, c in pairs]
-            lines.append(f"  NIS/{code} within 10%: {fraction_within(ratio, 0.1):.0%}, within 20%: "
+            lines.append(f"  {first}/{_short(code)} within 10%: {fraction_within(ratio, 0.1):.0%}, within 20%: "
                          f"{fraction_within(ratio, 0.2):.0%}")
             if worst:
-                lines.append(f"  cases where NIS and {code} differ most:")
+                lines.append(f"  cases where {first} and {_short(code)} differ most:")
                 for case, n, c in sorted(pairs, key=lambda p: -abs(math.log(p[1] / p[2])))[:worst]:
-                    lines.append(f"    {case:24s} NIS C/E {n:7.3f}  {_short(code)} C/E {c:7.3f}  ratio {n / c:7.3f}")
+                    lines.append(f"    {case:24s} {first} C/E {n:7.3f}  {_short(code)} C/E {c:7.3f}  ratio {n / c:7.3f}")
         if len(codes) == 1 and worst:
             lines.append("  cases furthest from the experiment:")
             far = sorted(((case, geometric_mean(r["nis"])) for case, r in cases.items()), key=lambda p: -abs(math.log(p[1])))
             for case, n in far[:worst]:
-                lines.append(f"    {case:24s} NIS C/E {n:7.3f}")
+                lines.append(f"    {case:24s} {first} C/E {n:7.3f}")
         lines.append("")
     return "\n".join(lines)
 
 
 def _short(code: str) -> str:
-    return "NIS" if code == "nis" else code.split(" ")[0]
+    """NIS, NIS-TENDL-2025 for the run 'NIS (TENDL-2025)', FISPACT-II for 'FISPACT-II (TENDL-2017)'"""
+    if code == "nis":
+        return "NIS"
+    if code.startswith("NIS (") and code.endswith(")"):
+        return "NIS-" + code[5:-1]
+    return code.split(" ")[0]

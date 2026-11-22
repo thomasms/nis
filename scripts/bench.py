@@ -7,8 +7,8 @@ Commands:
     convert    make a benchmark in the standard format from its original files
     decks      make the NIS decks from the case files again
     run        run the cases with NIS, write the results (one CSV for all benchmarks)
-    stats      C/E statistics of a results file
-    plot       plots of a results file: a summary for each benchmark, or one plot for each case
+    stats      C/E statistics of results files (runs with different labels next to each other)
+    plot       plots of results files: a summary for each benchmark, or one plot for each case
     pulse      the decay heat after a fission pulse (the yields of one fission, then decay)
 
 Examples:
@@ -96,7 +96,8 @@ def cmd_decks(args) -> int:
 
 def cmd_run(args) -> int:
     from nisbench.engines import NuclearData, reaction_cache, run
-    from nisbench.results import calculation_names, case_rows, write_results
+    from nisbench.results import calculation_names, case_rows, nis_column, write_results
+    column = nis_column(args.label)
     benchmarks = load_benchmarks(args.benchmarks, args.root, args.cases)
     cases = [c for b in benchmarks for c in b.cases]
     if not cases:
@@ -113,28 +114,28 @@ def cmd_run(args) -> int:
     start = time.time()
     rows = []
     for case, results in zip(cases, run(cases, data, args.engine, args.nis, args.jobs)):
-        case_result = case_rows(case, results)
+        case_result = case_rows(case, results, column)
         rows += case_result
         if args.verbose:
-            ce = [float(r["nis"]) / float(r["experiment"]) for r in case_result if float(r["experiment"]) > 0]
+            ce = [float(r[column]) / float(r["experiment"]) for r in case_result if float(r["experiment"]) > 0]
             print(f"{case.benchmark} {case.name:28s} NIS C/E {sum(ce) / len(ce):7.3f}", file=sys.stderr)
-    write_results(args.output, rows, calculation_names(cases))
+    write_results(args.output, rows, calculation_names(cases), column)
     print(f"done in {time.time() - start:.1f} s, results in {args.output}", file=sys.stderr)
     return 0
 
 
 def cmd_stats(args) -> int:
-    from nisbench.results import read_results
+    from nisbench.results import read_runs
     from nisbench.stats import report
-    rows, calculations = read_results(args.results)
-    print(report(rows, calculations, args.worst))
+    rows, calculations, nis_name = read_runs(args.results)
+    print(report(rows, calculations, args.worst, nis_name))
     return 0
 
 
 def cmd_plot(args) -> int:
     from nisbench import plot
-    from nisbench.results import read_results
-    rows, calculations = read_results(args.results)
+    from nisbench.results import read_runs
+    rows, calculations, nis_name = read_runs(args.results)
     pairs = sorted({(r["benchmark"], r["quantity"]) for r in rows})
     if args.benchmark:
         pairs = [p for p in pairs if p[0] == args.benchmark]
@@ -151,11 +152,12 @@ def cmd_plot(args) -> int:
             import json
             name = json.loads((args.root / benchmark / "benchmark.json").read_text()).get("title", benchmark)
             title = f"{name}: C/E for each case"
-        plot.summary(rows, calculations, benchmark, quantity, args.summary, columns=args.columns, title=title)
+        plot.summary(rows, calculations, benchmark, quantity, args.summary, columns=args.columns, title=title,
+                     nis_name=nis_name)
         print(f"plot in {args.summary}", file=sys.stderr)
     if args.cases_dir:
         selected = [r for r in rows if (r["benchmark"], r["quantity"]) in pairs]
-        files = plot.cases(selected, calculations, args.cases_dir, args.format)
+        files = plot.cases(selected, calculations, args.cases_dir, args.format, nis_name)
         print(f"{len(files)} plots in {args.cases_dir}", file=sys.stderr)
     if not args.summary and not args.cases_dir:
         raise SystemExit("give --summary and/or --cases-dir")
@@ -221,6 +223,9 @@ def main() -> int:
     p.add_argument("--nis", type=Path, default=None, help="the nis program, for --engine nis")
     p.add_argument("--nis-cache", type=Path, default=None, help="the nis_cache program, by default next to --nis")
     p.add_argument("--output", type=Path, default=Path("results.csv"))
+    p.add_argument("--label", default=None,
+                   help="a name for this run, i.e. the data (TENDL-2025). The results column is then 'nis (<label>)', "
+                        "so stats and plot show runs with different labels next to each other")
     p.add_argument("--jobs", type=int, default=os.cpu_count() or 1, help="number of cases to run at the same time")
     p.add_argument("-v", "--verbose", action="store_true", help="the mean C/E of each case")
     p.set_defaults(func=cmd_run)

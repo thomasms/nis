@@ -34,15 +34,15 @@ def _pyplot():
     return plt
 
 
-def _label(code: str) -> str:
-    return "NIS" if code == "nis" else code
+def _label(code: str, nis_name: str = "NIS") -> str:
+    return nis_name if code == "nis" else code
 
 
 def _clip(v: float) -> float:
     return min(max(v, X_MIN), X_MAX)
 
 
-def _summary_column(ax, rows: list, codes: list, show_legend: bool) -> None:
+def _summary_column(ax, rows: list, codes: list, show_legend: bool, nis_name: str = "NIS") -> None:
     """rows: [(label, {code: C/E}), ...], top to bottom."""
     y = list(range(len(rows)))[::-1]
     ax.axvspan(1 / 1.2, 1.2, color=BAND, zorder=0, lw=0)
@@ -61,7 +61,7 @@ def _summary_column(ax, rows: list, codes: list, show_legend: bool) -> None:
         points = [(values[code], yi + offset) for (_, values), yi in zip(rows, y) if code in values]
         inside = [(v, yy) for v, yy in points if X_MIN <= v <= X_MAX]
         ax.scatter([v for v, _ in inside], [yy for _, yy in inside], s=26, marker=marker, color=colour,
-                   edgecolors=SURFACE, linewidths=0.8, zorder=3, label=_label(code))
+                   edgecolors=SURFACE, linewidths=0.8, zorder=3, label=_label(code, nis_name))
         for v, yy in points:
             if X_MIN <= v <= X_MAX:
                 continue
@@ -94,7 +94,7 @@ def _summary_column(ax, rows: list, codes: list, show_legend: bool) -> None:
 
 
 def summary(rows: list, calculations: list, benchmark: str, quantity: str, output: Path,
-            columns: int = 2, title: str = None) -> None:
+            columns: int = 2, title: str = None, nis_name: str = "NIS") -> None:
     ratios = case_ratios(rows, calculations).get((benchmark, quantity))
     if not ratios:
         raise ValueError(f"no results for {benchmark}, {quantity}")
@@ -108,9 +108,9 @@ def summary(rows: list, calculations: list, benchmark: str, quantity: str, outpu
     fig, axes = plt.subplots(1, len(parts), figsize=(5.2 * len(parts), 0.16 * per_column + 1.6),
                              squeeze=False, facecolor=SURFACE)
     for i, (ax, part) in enumerate(zip(axes[0], parts)):
-        _summary_column(ax, part, codes, show_legend=(i == 0))
+        _summary_column(ax, part, codes, show_legend=(i == 0), nis_name=nis_name)
 
-    within = ", ".join(f"{_label(c)} {fraction_within([r[1][c] for r in table if c in r[1]], 0.2):.0%}" for c in codes)
+    within = ", ".join(f"{_label(c, nis_name)} {fraction_within([r[1][c] for r in table if c in r[1]], 0.2):.0%}" for c in codes)
     height = fig.get_figheight()
     fig.text(0.01, 1 - 0.25 / height, title or f"{benchmark}: C/E of the {_QUANTITY_LABELS[quantity].lower()} for each case",
              fontsize=12, color=TEXT, ha="left", va="top")
@@ -131,7 +131,8 @@ def _unit_for(times: list) -> tuple:
     return 86400.0, "d"
 
 
-def cases(rows: list, calculations: list, output_dir: Path, file_format: str = "png") -> list:
+def cases(rows: list, calculations: list, output_dir: Path, file_format: str = "png",
+          nis_name: str = "NIS") -> list:
     """One plot for each (benchmark, case, quantity). Returns the files."""
     plt = _pyplot()
     groups = collections.defaultdict(list)
@@ -161,7 +162,7 @@ def cases(rows: list, calculations: list, output_dir: Path, file_format: str = "
             colour, marker = CODE_COLOURS[i % len(CODE_COLOURS)], CODE_MARKERS[i % len(CODE_MARKERS)]
             values = [r[code] for r in group]
             ax.plot(t, values, color=colour, lw=2, ls="-" if i == 0 else "--", marker=marker, ms=3,
-                    label=_label(code), zorder=2)
+                    label=_label(code, nis_name), zorder=2)
             ce = [v / e if e > 0 else math.nan for v, e in zip(values, exp)]
             ax_ce.plot(t, ce, marker, ms=4, color=colour, zorder=3)
             all_ce += [v for v in ce if v > 0 and not math.isnan(v)]
