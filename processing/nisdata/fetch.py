@@ -1,6 +1,5 @@
 """Download and unpack the ENDF files of a library (for now: the TENDL neutron files)."""
 
-import shutil
 import sys
 import tarfile
 import time
@@ -12,6 +11,72 @@ from pathlib import Path
 # https://tendl.web.psi.ch before). If the site moves again, give the address with --url.
 TENDL_URL = "https://tendl.imperial.ac.uk/tendl_{year}/tar_files/TENDL-n.tgz"
 LATEST_TENDL = "2025"
+
+
+def _size(n: float) -> str:
+    for unit in ("B", "kB", "MB", "GB"):
+        if n < 1000 or unit == "GB":
+            return f"{n:.0f} {unit}" if unit == "B" else f"{n:.2f} {unit}"
+        n /= 1000
+
+
+def _duration(seconds: float) -> str:
+    seconds = int(seconds)
+    if seconds >= 3600:
+        return f"{seconds // 3600}h{seconds % 3600 // 60:02d}m"
+    return f"{seconds // 60}m{seconds % 60:02d}s"
+
+
+class Progress:
+    """The progress of a download on stderr: one line that changes in a terminal, else a line every 30 s."""
+
+    def __init__(self, total: int = None, done: int = 0, stream=sys.stderr):
+        self.total, self.done, self.stream = total, done, stream
+        self.start_done, self.start = done, time.monotonic()
+        self.terminal = hasattr(stream, "isatty") and stream.isatty()
+        self.interval = 0.5 if self.terminal else 30.0
+        self.shown = 0.0
+
+    def text(self) -> str:
+        elapsed = time.monotonic() - self.start
+        speed = (self.done - self.start_done) / elapsed if elapsed > 0 else 0.0
+        if self.total:
+            fraction = min(1.0, self.done / self.total)
+            width = 30
+            bar = "#" * int(width * fraction) + "-" * (width - int(width * fraction))
+            left = f", {_duration((self.total - self.done) / speed)} left" if speed > 0 else ""
+            return (f"[{bar}] {fraction:6.1%}  {_size(self.done)} of {_size(self.total)}"
+                    f"  {_size(speed)}/s{left}")
+        return f"{_size(self.done)}  {_size(speed)}/s"
+
+    def add(self, n: int) -> None:
+        self.done += n
+        now = time.monotonic()
+        if now - self.shown >= self.interval:
+            self.shown = now
+            self.show()
+
+    def show(self) -> None:
+        if self.terminal:
+            self.stream.write("\r" + self.text() + "\033[K")
+        else:
+            self.stream.write(self.text() + "\n")
+        self.stream.flush()
+
+    def end(self) -> None:
+        self.show()
+        if self.terminal:
+            self.stream.write("\n")
+            self.stream.flush()
+
+
+def _copy(response, out, progress: Progress, chunk: int = 1 << 20) -> None:
+    while True:
+        data = response.read(chunk)
+        if not data:
+            break
+        out.write(data)
+        progress.add(len(data))
 
 
 def download(url: str, target: Path, tries: int = 50) -> Path:
@@ -32,8 +97,15 @@ def download(url: str, target: Path, tries: int = 50) -> Path:
                 mode = "ab" if done and response.status == 206 else "wb"
                 total = response.headers.get("Content-Range", "").rpartition("/")[2] or \
                     response.headers.get("Content-Length")
-                with open(partial, mode) as out:
-                    shutil.copyfileobj(response, out, length=1 << 20)
+                start = done if mode == "ab" else 0
+                if start:
+                    print(f"continue from {_size(start)}", file=sys.stderr, flush=True)
+                progress = Progress(int(total) if total and total.isdigit() else None, start)
+                try:
+                    with open(partial, mode) as out:
+                        _copy(response, out, progress)
+                finally:
+                    progress.end()
             if total and total.isdigit() and partial.stat().st_size != int(total):
                 raise OSError(f"got {partial.stat().st_size} of {total} bytes")
             break
