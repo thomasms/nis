@@ -2,8 +2,8 @@
 Tritium decay, with decay data made by hand. No nuclear data files are needed.
 
 H3 decays by beta- to He3, with a half-life of 12.32 years.
-We make the decay data, make the decay matrix from it, then solve for the inventory
-at each time. Then we compare the result with the analytic answer N(t) = N0 * exp(-lambda*t).
+We make the decay data, make the decay matrix from it, then solve 5 steps of one half-life
+with compute_steps. Then we compare the result with the analytic answer N(t) = N0 * exp(-lambda*t).
 
 Run it with:
     uv run python examples/python/tritium_decay.py
@@ -52,10 +52,14 @@ def main():
     print(f"H3 half-life {decay_data[H3].half_life/YEAR:.2f} y, decay constant {lam:.6e} 1/s\n")
     print(f"{'time (y)':>9} {'H3':>13} {'He3':>13} {'H3 exact':>13} {'rel diff':>10} {'activity (Bq)':>14} {'heat (W)':>11}")
 
-    # solve from t=0 for each time, in steps of one half-life
-    for n in range(6):
+    # 5 steps of one half-life, each step starts from the result of the step before
+    model = core.BasicModel()
+    model.nuclides = {"H3": N0}
+    model.steps = [core.TimeStep(H3_HALF_LIFE) for _ in range(5)]
+    results = core.compute_steps(model, decay_mat)
+
+    for n, nuclides in enumerate([model.nuclides] + [r.nuclides for r in results]):
         t = n*H3_HALF_LIFE
-        nuclides = solve(decay_mat, {"H3": N0}, t) if t > 0 else {"H3": N0}
         h3 = nuclides.get("H3", 0.0)
         he3 = nuclides.get("He3", 0.0)
         exact = N0*math.exp(-lam*t)

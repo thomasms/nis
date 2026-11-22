@@ -303,6 +303,44 @@ PYBIND11_MODULE(pynis, m) {
     m_core.def("solve_reachable", &solver::solve_reachable<double>);
     m_core.def("compute_inventory", py::overload_cast<const BasicModelPyType&, const Eigen::SparseMatrix<double>&, const solver::solver_func<double>&>(&solver::compute_inventory<double>));
 
+    // the steps of a model: irradiation (with a flux) and cooling (flux 0) steps
+    m_core.def("time_steps", &solver::time_steps<double>, py::arg("model"),
+               "The steps of the model. A model with no steps is one step of model.dt.");
+    m_core.def("flux_scale", &solver::flux_scale<double>, py::arg("step"), py::arg("spectrum_total"),
+               "The factor for the reaction matrix in a step. The step flux is in n/m^2/s, the spectrum in n/cm^2/s.");
+    m_core.def("compute_steps", [](const BasicModelPyType& model,
+                                   const Eigen::SparseMatrix<double>& decay_mat,
+                                   std::optional<Eigen::SparseMatrix<double>> reaction_mat,
+                                   std::optional<double> spectrum_total,
+                                   std::optional<solver::solver_func<double>> solver){
+                   // no spectrum total given: the total of model.spectrum, the reaction matrix is made from it
+                   double total = 0.0;
+                   if(spectrum_total.has_value()){
+                       total = spectrum_total.value();
+                   }
+                   else if(model.spectrum != nullptr){
+                       for(const auto v: model.spectrum->y()){
+                           total += v;
+                       }
+                   }
+                   // an empty matrix is no reactions
+                   const Eigen::SparseMatrix<double> no_reactions;
+                   return solver::compute_steps<double>(model, decay_mat,
+                                                        reaction_mat.has_value() ? reaction_mat.value() : no_reactions,
+                                                        total,
+                                                        solver.has_value() ? solver.value() : &core::cram48::solve<double>);
+               },
+               py::arg("model"), py::arg("decay_mat"), py::arg("reaction_mat") = py::none(),
+               py::arg("spectrum_total") = py::none(), py::arg("solver") = py::none(),
+               R"pbdoc(
+                   Solves each step of the model, each from the result of the step before.
+                   Gives one result for each step.
+
+                   The matrix of a step is decay_mat + reaction_mat * flux_scale(step, spectrum_total).
+                   No reaction_mat is decay only. No spectrum_total uses the total of model.spectrum.
+                   No solver uses CRAM48.
+               )pbdoc");
+
     py::module m_data = m.def_submodule("data");
     // would be nice to make these all read only attributes, if possible
     m_data.def("ALL_ZAIS",  []() { return data::ALL_ZAIS; });

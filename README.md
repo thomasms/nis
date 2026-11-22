@@ -257,6 +257,22 @@ Notes:
 - NIS does not check the branching ratios. `DecayNuclide.total_branching_ratio` gives their sum.
 - Only nuclides in `nis.data.ALL_ZAIS()` are in the matrices. A product that is not tracked goes to the sink.
 
+To solve irradiation and cooling steps, use `compute_steps`. Each step starts from the result of the step before,
+and it gives one result for each step. The flux of a step is in n/m^2/s, like in the input files:
+
+```python
+model = core.BasicModel()
+model.nuclides = {"Co59": 1e20}
+model.spectrum = spectrum                        # the spectrum of reaction_mat, in n/cm^2/s
+model.steps = [core.TimeStep(3600.0, 1e17),      # 1 hour at 1e17 n/m^2/s
+               core.TimeStep(86400.0, 0.0),      # 1 day of cooling
+               core.TimeStep(3600.0)]            # 1 hour with the spectrum as it is given
+results = core.compute_steps(model, decay_mat, reaction_mat)   # no reaction_mat is decay only
+```
+
+The flux of a step scales the reaction matrix by `flux_scale(step, spectrum_total)`. By default, `spectrum_total` is the total of
+`model.spectrum`. You can also give `spectrum_total` and `solver` (default `solver_cram48`).
+
 For a full example that needs no data files, see [examples/python/tritium_decay.py](examples/python/tritium_decay.py).
 It makes the H3 decay data by hand, then gives the inventory, activity and decay heat for 5 half-lives:
 
