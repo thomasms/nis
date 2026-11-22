@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 #include <numeric>
 #include <random>
 #include <vector>
@@ -41,7 +42,7 @@ namespace {
     // the exact solution of a linear chain 0 -> 1 -> ... -> n-1 with all the atoms in 0 at the start
     // (the Bateman equations). The decay constants must all be different, the last can be 0 (stable).
     // The sum has terms of both signs, so for a small lambda*t it loses digits. error[m] is the
-    // rounding error of result[m] (long double).
+    // rounding error of result[m] (long double, so it depends on the machine).
     struct Bateman {
         std::vector<long double> result;
         std::vector<long double> error;
@@ -68,7 +69,9 @@ namespace {
                 sum_abs += std::abs(std::exp(-lambda[j]*t)/denominator);
             }
             b.result[m] = n0*production*sum;
-            b.error[m] = 1e-18L*n0*production*sum_abs;
+            // ~10 roundings of the largest term. long double is 80 bit on x86 (epsilon ~1e-19),
+            // but on some machines (i.e. Apple arm64) it is the same as double (epsilon ~2e-16)
+            b.error[m] = 10.0L*std::numeric_limits<long double>::epsilon()*n0*production*sum_abs;
         }
         return b;
     }
@@ -159,8 +162,10 @@ TEST_CASE( "CRAM48 gives the Bateman solution of a linear chain" ) {
             }
         }
     }
-    // most of the exact values are precise enough to check CRAM to 1e-10
-    REQUIRE( precise_checks >= 0.7*checks );
+    // most of the exact values are precise enough to check CRAM to 1e-10.
+    // Where long double is the same as double (i.e. Apple arm64) fewer of them are (~62 %).
+    const bool extended = std::numeric_limits<long double>::digits > std::numeric_limits<double>::digits;
+    REQUIRE( precise_checks >= (extended ? 0.7 : 0.6)*checks );
 }
 
 TEST_CASE( "CRAM48 with branching: two paths to the same daughter" ) {
