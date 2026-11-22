@@ -45,6 +45,10 @@ into the folder `.venv` of this project. You do not run CMake, and you do not se
     uv sync
     ```
 
+    `uv sync` builds `pynis` again when a file in `src/` (`.cpp`, `.hpp`, `CMakeLists.txt`) changes, or `pyproject.toml`.
+    To make it build again in all cases: `uv sync --reinstall-package pynis`.
+    `uv sync` does not build the `nis` program (`build/bin/nis`) or the C++ tests. For them, use CMake (Way 2).
+
 2. Run python with `uv run`:
 
     ```bash

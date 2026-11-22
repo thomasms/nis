@@ -36,3 +36,14 @@ regex = "(?P<value>\\d+\\.\\d+\\.\\d+)"
 
 [tool.pytest.ini_options]
 markers = ["slow: long tests (the FNS benchmark and the nis program), skip them with -m 'not slow'"]
+
+[tool.uv]
+# build pynis again when the C++ code changes, not only when the version changes
+cache-keys = [
+    { file = "pyproject.toml" },
+    { file = ".VERSION" },
+    { file = "CMakeLists.txt" },
+    { file = "src/**/CMakeLists.txt" },
+    { file = "src/**/*.cpp" },
+    { file = "src/**/*.hpp" },
+]
