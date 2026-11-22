@@ -1,10 +1,5 @@
 #include <cmath>
-#include <memory>
-
-#include "nis/physics.hpp"
-#include "nis/nuclides.hpp"
-#include "nis/util.hpp"
-#include "nis/zai.hpp"
+#include <limits>
 
 #include "nis/endf/decay.hpp"
 
@@ -12,236 +7,89 @@
 namespace nis {
     namespace endf {
 
-        std::vector<int> expand_rtypes(double rtyp){
-            // rtype is actually a double which can contain multiple reaction modes
-            // i.e. 1.5 is beta minus followed by neutron emission
-            // We assume that at most we can have 7 subsequent reactions, hence the 1e6 factor.
-            // Since this is stored in the ENDF file, with limited precision, it should hold
-            constexpr int _rtyp_factor = 1'000'000;
-            const int initial_rtype = static_cast<int>(std::floor(rtyp));
+        namespace {
 
-            // if we are zero first then we are gamma
-            if(initial_rtype == 0){
-                return std::vector<int>{0};
+            constexpr int file_number = 8;
+            constexpr int mt_number = 457;
+
+            using DecaySection = njoy::ENDFtk::section::Type<file_number, mt_number>;
+
+            int _get_zai_from_section(const DecaySection& section){
+                const int za = section.ZA();
+                // ENDFtk gives us the isomeric state as an unsigned int
+                const int i = static_cast<int>(section.LISO());
+                return za*10 + i;
             }
 
-            // if the initial rtype is not valid
-            // then return an empty vector
-            // regardless of what else comes next
-            if(DECAY_MAP.count(initial_rtype) == 0){
-                return std::vector<int>();
-            }
-
-            // all other cases we process the subsequent values
-            const int rtyp_as_int = static_cast<int>(rtyp*_rtyp_factor);
-            const int expanded_rtype = rtyp_as_int - (initial_rtype*_rtyp_factor);
-            std::list<int> rtypes = util::get_digits(expanded_rtype);
-            // we also need to remove trailing zeros,
-            // as this does not mean GammaRay emission
-            // it is the end
-            std::vector<int> reaction_types{initial_rtype};
-            for(int v: rtypes){
-                if((v == 0) || (DECAY_MAP.count(v) == 0)){
-                    break;
+            data::DecayNuclide _read_nuclide(const DecaySection& section){
+                data::DecayNuclide nuclide;
+                const double half_life = section.halfLife()[0];
+                // a stable nuclide (or one with no half-life) keeps the infinite half-life, with no modes
+                if(section.isStable() || (half_life <= 0.)){
+                    return nuclide;
                 }
-                reaction_types.emplace_back(v);
-            }
-            return reaction_types;
-        }
-
-        DecayProductT compute_products(int parent_zai, double rtyp, int final_isomeric_state){
-            const std::vector<int> rtypes = expand_rtypes(rtyp);
-
-            // we need to trim remaining zeros, as there is no way to tell between
-            // 1.0 (beta -> gamma) and 1.0 (beta)
-            DecayProductComputer dpc = ToSinkDecayReactionProducts();
-            int primary_zai = parent_zai;
-            std::vector<int> secondaries;
-            for(auto reaction_type: rtypes){
-                if (DECAY_MAP.count(reaction_type) == 1){
-                    dpc = DECAY_MAP.at(reaction_type);
-                    // we assume - and because the data tells us this -
-                    // that SF (6) doesn't have any modes following it
-                    // to make this simpler with the primary
-                    // Perhaps a tree is a better data structure here....
-                    DecayProductT prods = std::visit([&primary_zai](auto const& obj) {
-                        return obj.get_products(primary_zai);
-                    }, dpc);
-                    primary_zai = std::get<0>(prods);
-                    for(auto& secondary: std::get<1>(prods)){
-                        secondaries.emplace_back(secondary);
-                    }
+                nuclide.half_life = half_life;
+                for(const auto& decay_mode: section.decayModes().decayModes()){
+                    data::DecayMode mode;
+                    mode.rtyp = decay_mode.RTYP();
+                    mode.branching_ratio = decay_mode.branchingRatio()[0];
+                    mode.final_state = static_cast<int>(std::floor(decay_mode.finalIsomericState()));
+                    nuclide.modes.push_back(mode);
                 }
+                const auto& energies = section.averageDecayEnergies();
+                nuclide.light_particle = energies.ELP()[0];
+                nuclide.electromagnetic = energies.EEM()[0];
+                nuclide.heavy_particle = energies.EHP()[0];
+                return nuclide;
             }
-            // finally check the final isomeric state
-            const zai::triple primary_triple = zai::decompose(primary_zai);
-            primary_zai = zai::make(std::get<0>(primary_triple),
-                                    std::get<1>(primary_triple),
-                                    final_isomeric_state);
 
-            return DecayProductT(primary_zai, secondaries);
-        }
-
-        constexpr int file_number = 8;
-        constexpr int mt_number = 457;
-
-        int _get_zai_from_section(const njoy::ENDFtk::section::Type<file_number, mt_number>& section){
-            const int za = section.ZA();
-            // ENDFtk gives us the isomeric state as an unsigned int
-            const int i = static_cast<int>(section.LISO());
-            const int zai = za*10 + i;
-            return zai;
-        }
-
-        std::vector<int> _get_secondaries(int zai, const njoy::ENDFtk::section::Type<file_number, mt_number>::DecayMode& decay_mode){
-            const double reaction_type = decay_mode.RTYP();
-            const int final_isomeric_state = std::floor(decay_mode.finalIsomericState());
-            const auto products = compute_products(zai, reaction_type, final_isomeric_state);
-            const int primary = std::get<0>(products);
-
-            std::vector<int> secondaries = std::get<1>(products);
-            // add the primary as the last element
-            secondaries.emplace_back(primary);
-            return secondaries;
-        }
-
-        bool _is_spontaneous_fission(double rtyp){
-            const std::vector<int> rtypes = expand_rtypes(rtyp);
-            return !rtypes.empty() && (rtypes.front() == SPONTANEOUS_FISSION_RTYP);
-        }
-
-        void _update_decay_matrix(const njoy::ENDFtk::tree::Material& material,
-                                  const std::map<int, int>& zai_map, Eigen::SparseMatrix<double>& decay_mat,
-                                  const FissionYieldData* sf_yields){
-
-            if(material.hasMF(file_number)){
+            void _read_material(const njoy::ENDFtk::tree::Material& material, data::DecayData& decay_data){
+                if(!material.hasMF(file_number)){
+                    return;
+                }
                 njoy::ENDFtk::tree::File file = material.file(file_number);
-                if(file.hasMT(mt_number)){
+                if(!file.hasMT(mt_number)){
+                    return;
+                }
+                const auto section = file.MT(mt_number).parse<file_number, mt_number>();
+                // if the same nuclide comes again, the last one is used
+                decay_data[_get_zai_from_section(section)] = _read_nuclide(section);
+            }
+        }
 
-                    njoy::ENDFtk::tree::Section decay_data = file.MT(mt_number);
-                    auto parsed_section = decay_data.parse<file_number, mt_number>();
-                    const int zai = _get_zai_from_section(parsed_section);
-
-                    if (zai_map.count(zai) == 1){
-                        const int za_index = zai_map.at(zai);
-                        const double half_life = parsed_section.halfLife()[0];
-
-                        if( (!parsed_section.isStable()) && (half_life > 0.) ){
-                            const double decay_const = physics::compute_decay_const(half_life);
-
-                            // the diagonal is the rate lost from the parent
-                            decay_mat.coeffRef(za_index, za_index) -= decay_const;
-
-                            // loop over decay states and compute the outgoing
-                            const auto decay_modes_collection = parsed_section.decayModes();
-                            for(auto decay_mode: decay_modes_collection.decayModes()){
-                                const double br = decay_mode.branchingRatio()[0];
-                                if((sf_yields != nullptr) && (sf_yields->count(zai) == 1)
-                                   && _is_spontaneous_fission(decay_mode.RTYP())){
-                                    // the yields at the first (lowest) energy, a spontaneous fission file has only one
-                                    const FissionYields& yields = sf_yields->at(zai);
-                                    for(const auto& [product, y]: yields_at_energy(yields, yields.energies.front())){
-                                        // if we don't track this isomer, the atoms go to the ground state
-                                        const int tracked = zai_map.count(product) == 1 ? product : (product/10)*10;
-                                        const int dza_index = zai_map.count(tracked) == 1 ? zai_map.at(tracked) : data::SINK_INDEX;
-                                        decay_mat.coeffRef(za_index, dza_index) += br*decay_const*y;
-                                    }
-                                    continue;
-                                }
-                                const auto secondaries = _get_secondaries(zai, decay_mode);
-                                for(auto daughter_zai: secondaries){
-                                    // the sink is the last row
-                                    int dza_index = zai_map.count(daughter_zai) == 1 ? zai_map.at(daughter_zai) : data::SINK_INDEX;
-                                    decay_mat.coeffRef(za_index, dza_index) += br*decay_const;
-                                }
-                            }
-                        }
-                    }
+        data::DecayData read_decay_data_from_tape(const njoy::ENDFtk::tree::Tape& tape){
+            data::DecayData decay_data;
+            // loop over all materials in the file. One MAT number can come more than once,
+            // i.e. at different temperatures, so loop over each instance too.
+            for(auto mat_number: tape.materialNumbers()){
+                for(auto material: tape.material(mat_number)){
+                    _read_material(material, decay_data);
                 }
             }
+            return decay_data;
+        }
+
+        data::DecayData read_decay_data_from_file(const std::string& filename){
+            return read_decay_data_from_tape(njoy::ENDFtk::tree::fromFile(filename));
         }
 
         Eigen::SparseMatrix<double> construct_decay_matrix_from_tape(const njoy::ENDFtk::tree::Tape& tape,
                                                                      const FissionYieldData* sf_yields){
-
-            // add 1 for the sink
-            const int mat_nr_rows = data::ZAI_SIZE;
-            const int mat_nr_cols = data::ZAI_SIZE;
-
-            Eigen::SparseMatrix<double> decay_mat(mat_nr_rows, mat_nr_cols);
-
-            // loop over all materials in the file, most likely just one
-            for(auto mat_number: tape.materialNumbers()){
-                // this can return multiple instances of the same MAT number
-                // due to different temperatures
-                // loop over temperatures for each MAT
-                //
-                // How do we account for multiple temperatures?
-                // We don't want to double count...
-                auto materials = tape.material(mat_number);
-                for(auto material: materials){
-                    _update_decay_matrix(material, data::ZAI_MAP, decay_mat, sf_yields);
-                }
-            }
-
-            decay_mat.makeCompressed();
-            return decay_mat;
+            return data::construct_decay_matrix(read_decay_data_from_tape(tape), sf_yields);
         }
 
         Eigen::SparseMatrix<double> construct_decay_matrix_from_file(std::string filename,
                                                                      const FissionYieldData* sf_yields){
-            auto tape = njoy::ENDFtk::tree::fromFile(filename);
-            return endf::construct_decay_matrix_from_tape(tape, sf_yields);
-        }
-
-        void _update_decay_energy_data(const njoy::ENDFtk::tree::Material& material,
-                                       const std::map<int, int>& zai_map,
-                                       core::DecayEnergyData<double>& energy_data){
-
-            if(!material.hasMF(file_number)){
-                return;
-            }
-            njoy::ENDFtk::tree::File file = material.file(file_number);
-            if(!file.hasMT(mt_number)){
-                return;
-            }
-
-            njoy::ENDFtk::tree::Section decay_data = file.MT(mt_number);
-            auto parsed_section = decay_data.parse<file_number, mt_number>();
-            const int zai = _get_zai_from_section(parsed_section);
-            if(zai_map.count(zai) == 0){
-                return;
-            }
-
-            const double half_life = parsed_section.halfLife()[0];
-            // same rule as the decay matrix, so both use the same nuclides
-            if(parsed_section.isStable() || (half_life <= 0.)){
-                return;
-            }
-
-            const int za_index = zai_map.at(zai);
-            const auto& energies = parsed_section.averageDecayEnergies();
-            energy_data.decay_constants(za_index) = physics::compute_decay_const(half_life);
-            energy_data.light_particle(za_index) = energies.ELP()[0];
-            energy_data.electromagnetic(za_index) = energies.EEM()[0];
-            energy_data.heavy_particle(za_index) = energies.EHP()[0];
+            return data::construct_decay_matrix(read_decay_data_from_file(filename), sf_yields);
         }
 
         core::DecayEnergyData<double> read_decay_energy_data_from_tape(const njoy::ENDFtk::tree::Tape& tape){
-            core::DecayEnergyData<double> energy_data;
-            for(auto mat_number: tape.materialNumbers()){
-                for(auto material: tape.material(mat_number)){
-                    _update_decay_energy_data(material, data::ZAI_MAP, energy_data);
-                }
-            }
-            return energy_data;
+            return data::construct_decay_energy_data(read_decay_data_from_tape(tape));
         }
 
         core::DecayEnergyData<double> read_decay_energy_data_from_file(std::string filename){
-            auto tape = njoy::ENDFtk::tree::fromFile(filename);
-            return endf::read_decay_energy_data_from_tape(tape);
+            return data::construct_decay_energy_data(read_decay_data_from_file(filename));
         }
-
 
     }
 }

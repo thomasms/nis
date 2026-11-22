@@ -1,7 +1,9 @@
 #ifndef MATHS_HPP
 #define MATHS_HPP
 
+#include <cassert>
 #include <cmath>
+#include <vector>
 
 namespace nis{
     namespace maths {

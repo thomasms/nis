@@ -1,0 +1,152 @@
+#ifndef DATA_REACTION_HPP
+#define DATA_REACTION_HPP
+
+#include <map>
+#include <tuple>
+#include <vector>
+
+#include <Eigen/Core>
+#include <Eigen/Sparse>
+
+#include "nis/spectrum.hpp"
+#include "nis/zai.hpp"
+#include "nis/data/fission_yields.hpp"
+
+// The neutron reaction data (cross sections), with no dependency on the file format.
+// You can read it from ENDF (nis/endf/reaction.hpp) or a cache (nis/endf/reaction_cache.hpp),
+// or make and change it by hand, then make the reaction matrix from it.
+// The reactions are given by their ENDF MT numbers.
+
+namespace nis {
+    namespace data {
+
+        // (primary, {secondaries}) - same layout as DecayProductT
+        // a primary of -1 means the parent goes to the sink
+        using ReactionProductT = std::tuple<int, std::vector<int>>;
+
+        constexpr int PROTON = 10010;
+        constexpr int DEUTERON = 10020;
+        constexpr int TRITON = 10030;
+        constexpr int HELION = 20030;
+
+        // 1 barn = 1e-24 cm^2, the flux is assumed to be in n/cm^2/s
+        constexpr double BARN_TO_CM2 = 1e-24;
+
+        // MT=18 (total fission). With fission yields, a fission makes the fission products,
+        // else (or for a nuclide with no yields) it goes to the sink.
+        constexpr int FISSION_MT = 18;
+
+        // (n,n') does not change the nuclide, so we only use its MF=10 data
+        // for the production of the isomers of the target
+        constexpr int INELASTIC_MT = 4;
+
+        // (n,anything), TENDL based libraries (as JEFF-4) put many reactions here.
+        // MF=10 gives the production of each product, so we only use MF=10.
+        constexpr int ANYTHING_MT = 5;
+
+        // n, p, d, t, He3 and alpha; for MT=5 these are emitted particles, not the residual
+        bool is_light_particle(int za);
+
+        // Change in Z and A from the target to the residual nucleus,
+        // for an incident neutron, plus the light charged particles emitted.
+        // Emitted neutrons and gammas are not tracked.
+        struct ReactionChange {
+            int dz;
+            int da;
+            std::vector<int> secondaries;
+        };
+
+        // We only include the partial reactions that change the nuclide.
+        // Sums (MT=1,3,4,5,27,101), elastic (MT=2), inelastic levels (MT=51-91)
+        // and fission chances (MT=19-21,38) are left out on purpose,
+        // otherwise we would double count or the nuclide does not change.
+        // The residual state comes from MF=10 when the data has it, else it is the ground state.
+        const std::map<int, ReactionChange> REACTION_MAP = {
+            {16,  {0,  -1, {}}},                                  // (n,2n)
+            {17,  {0,  -2, {}}},                                  // (n,3n)
+            {22,  {-2, -4, {zai::ALPHA}}},                        // (n,na)
+            {23,  {-6, -12, {zai::ALPHA, zai::ALPHA, zai::ALPHA}}}, // (n,n3a)
+            {24,  {-2, -5, {zai::ALPHA}}},                        // (n,2na)
+            {25,  {-2, -6, {zai::ALPHA}}},                        // (n,3na)
+            {28,  {-1, -1, {PROTON}}},                            // (n,np)
+            {29,  {-4, -8, {zai::ALPHA, zai::ALPHA}}},            // (n,n2a)
+            {32,  {-1, -2, {DEUTERON}}},                          // (n,nd)
+            {33,  {-1, -3, {TRITON}}},                            // (n,nt)
+            {34,  {-2, -3, {HELION}}},                            // (n,nHe3)
+            {37,  {0,  -3, {}}},                                  // (n,4n)
+            {41,  {-1, -2, {PROTON}}},                            // (n,2np)
+            {42,  {-1, -3, {PROTON}}},                            // (n,3np)
+            {44,  {-2, -2, {PROTON, PROTON}}},                    // (n,n2p)
+            {45,  {-3, -5, {PROTON, zai::ALPHA}}},                // (n,npa)
+            {102, {0,  1,  {}}},                                  // (n,g)
+            {103, {-1, 0,  {PROTON}}},                            // (n,p)
+            {104, {-1, -1, {DEUTERON}}},                          // (n,d)
+            {105, {-1, -2, {TRITON}}},                            // (n,t)
+            {106, {-2, -2, {HELION}}},                            // (n,He3)
+            {107, {-2, -3, {zai::ALPHA}}},                        // (n,a)
+            {108, {-4, -7, {zai::ALPHA, zai::ALPHA}}},            // (n,2a)
+            {111, {-2, -1, {PROTON, PROTON}}},                    // (n,2p)
+            {112, {-3, -4, {PROTON, zai::ALPHA}}},                // (n,pa)
+            {113, {-5, -10, {TRITON, zai::ALPHA, zai::ALPHA}}},   // (n,t2a)
+            {114, {-5, -9, {DEUTERON, zai::ALPHA, zai::ALPHA}}},  // (n,d2a)
+            {115, {-2, -2, {PROTON, DEUTERON}}},                  // (n,pd)
+            {116, {-2, -3, {PROTON, TRITON}}},                    // (n,pt)
+            {117, {-3, -5, {DEUTERON, zai::ALPHA}}},              // (n,da)
+        };
+
+        bool is_reaction_mt(int mt_number);
+
+        // final_state is the isomeric state of the residual nucleus
+        ReactionProductT compute_reaction_products(int parent_zai, int mt_number, int final_state=0);
+
+        // collapse a histogram (INT=1) cross section in barns with the flux spectrum
+        // returns the reaction rate per atom in 1/s
+        double collapse_cross_section(const core::Spectrum<double>& in_spectrum,
+                                      const std::vector<double>& xs_energies,
+                                      const std::vector<double>& xs_values);
+
+        // adds the rate for the parent going to the products
+        // uses the same layout as the decay matrix: (parent, daughter)
+        void add_reaction_rate(Eigen::SparseMatrix<double>& reaction_mat, const std::map<int, int>& zai_map,
+                               int parent_zai, int mt_number, double rate, int final_state=0);
+
+        // one group-wise (INT=1) cross section in barns, for one parent and one MT
+        // final_state of a total (MF=3) cross section, for all residual states together
+        constexpr int ALL_STATES = -1;
+
+        struct CrossSection {
+            int parent_zai = 0;
+            // the ENDF reaction number, i.e. 102 is (n,g). See REACTION_MAP, FISSION_MT,
+            // INELASTIC_MT and ANYTHING_MT for the ones we use, the others are not used.
+            int mt_number = 0;
+            // group bounds in eV, in order: values[g] is the cross section from energies[g] to energies[g+1]
+            std::vector<double> energies;
+            // in barns, one for each energy. The last value has no group, so it is not used.
+            std::vector<double> values;
+            // ALL_STATES for the total of the reaction (MF=3), else the isomeric state of the residual (MF=10)
+            int final_state = ALL_STATES;
+            // only for MT=5, the ZA of the product
+            int product_za = 0;
+        };
+
+        // Split the total rate of one reaction into the rates to each residual state.
+        // The total (MF=3) is kept, MF=10 only gives the split, so atoms are conserved
+        // even if MF=3 and MF=10 do not agree exactly.
+        // If there is no ground state in the MF=10 data, it gets the rest of the total.
+        std::map<int, double> split_rate_by_state(double total_rate, const std::map<int, double>& state_rates);
+
+        // all the cross sections, read them once, then collapse them with as many spectra as needed
+        using ReactionData = std::vector<CrossSection>;
+
+        // the matrix is sparse, (parent, daughter), with the sink as the last index.
+        // With fission_yields, each fission (MT=18) makes the fission products: the rate to each product is
+        // the fission rate times its independent yield, with the yields weighted by the fission rate in each
+        // energy group (see weighted_yields). Without yields, or for a nuclide with no yields, fission goes to the sink.
+        Eigen::SparseMatrix<double> construct_reaction_matrix(const ReactionData& reaction_data,
+                                                  const core::Spectrum<double>& in_spectrum,
+                                                  const FissionYieldData* fission_yields = nullptr);
+
+    }
+}
+
+#endif // DATA_REACTION_HPP

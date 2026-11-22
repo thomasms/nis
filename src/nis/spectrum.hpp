@@ -2,8 +2,10 @@
 #define SPECTRUM_HPP
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <functional>
+#include <vector>
 
 #include "nis/histogram.hpp"
 

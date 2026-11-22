@@ -9,6 +9,8 @@ set(CPP_UNIT_TESTS_SOURCES
   test_steps.cpp
   test_util.cpp
   test_zai.cpp
+  data/test_decay_data.cpp
+  data/test_reaction_data.cpp
   endf/test_decay.cpp
   endf/test_fission_yields.cpp
   endf/test_reaction.cpp
