@@ -20,6 +20,11 @@ from pathlib import Path
 
 from . import decks
 from .endf import Material, mat_mf_mt, read_material
+from .mt5 import add_residual_production
+
+# The version of the processing. Change it when a change to the steps changes the output, so that the files of
+# an older version are made again (process.py checks it). 1: the first version. 2: the products of MT=5 in MF10.
+VERSION = 2
 
 PREPRO_CODES = ("linear", "recent", "sigma1", "sixpak", "merger", "activate", "fixup", "dictin", "groupie")
 
@@ -188,7 +193,12 @@ def process_file(source: Path, output_dir: Path, tools: Tools, temperature: floa
                 ["MERGER.OUT3"], timings, "merger 3")
         _prepro(tools, "merger", decks.merger("MERGER.OUT4", ["MERGER.OUT3"], decks.MERGE_FINAL), work,
                 ["MERGER.OUT4"], timings, "merger 4")
-        _prepro(tools, "fixup", decks.fixup("MERGER.OUT4", "FIXUP.OUT"), work, ["FIXUP.OUT"], timings)
+        # the products of MT=5 from MF6 into MF10 (SIXPAK does not make them)
+        step_start = time.perf_counter()
+        products = add_residual_production(work / "MERGER.OUT4", work / "MT5.OUT", work / "SIGMA1.OUT")
+        timings["mt5"] = time.perf_counter() - step_start
+        _log(work, f"mt5: {products} products of MT=5 added to MF10")
+        _prepro(tools, "fixup", decks.fixup("MT5.OUT", "FIXUP.OUT"), work, ["FIXUP.OUT"], timings)
         _prepro(tools, "dictin", decks.dictin("FIXUP.OUT", "DICTIN.OUT"), work, ["DICTIN.OUT"], timings)
         _prepro(tools, "groupie", decks.groupie("DICTIN.OUT", "GROUPIE.OUT"), work, ["GROUPIE.OUT"], timings)
         check_output(work / "GROUPIE.OUT", material)

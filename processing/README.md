@@ -80,8 +80,9 @@ These are the steps of the UKAEA processing for FISPACT-II (the `dpp` prototype)
 | 3 | SIXPAK, LINEAR | isomer production (MF9) from the MF6 data, if the file has it |
 | 4 | MERGER, ACTIVATE | MF9 into MF10 (activation cross sections for each isomer) |
 | 5 | MERGER (4 times) | add the NJOY heating, damage and gas data, keep MF1-3, 8, 10, 33 and 40 |
-| 6 | FIXUP, DICTIN | make the data consistent (sums), make the index (MF1/MT451) again |
-| 7 | GROUPIE | average in the UKAEA 1102 groups |
+| 6 | (Python) | the products of MT=5 from MF6 into MF10: sigma_5(E) times the yield of each product (SIXPAK does not make them) |
+| 7 | FIXUP, DICTIN | make the data consistent (sums), make the index (MF1/MT451) again |
+| 8 | GROUPIE | average in the UKAEA 1102 groups |
 
 The program checks that the output has the material and the 1102 group total cross section.
 

@@ -469,3 +469,118 @@ class LibraryTests(unittest.TestCase):
         self.assertEqual(run.returncode, 0)
         for key in ("jeff311", "jeff4", "endfbvii1", "endfbviii0"):
             self.assertIn(key, run.stdout)
+
+
+def _numbers(values: list) -> list:
+    """Lines of 6 ENDF numbers (the MAT, MF, MT are added later)."""
+    from nisdata.mt5 import _number
+    return ["".join(v if isinstance(v, str) else _number(v) for v in values[k:k + 6])
+            for k in range(0, len(values), 6)]
+
+
+def _tab1(c1, c2, l1, l2, xs: list, ys: list, law: int = 2) -> list:
+    head = ["".join([*_numbers([c1, c2]), f"{l1:11d}{l2:11d}{1:11d}{len(xs):11d}"])]
+    pairs = []
+    for x, y in zip(xs, ys):
+        pairs += [x, y]
+    return head + [f"{len(xs):11d}{law:11d}"] + _numbers(pairs)
+
+
+def _section(mat: int, mf: int, mt: int, rows: list) -> str:
+    return "".join(_line(r, mat, mf, mt, i + 1) for i, r in enumerate(rows)) + _line("", mat, mf, 0, 99999)
+
+
+def _material_with_mt5(mat: int = 2525) -> str:
+    """Mn55 with MF3/MT5 and MF6/MT5: V52 (LAW=0), Cr54 in its 1st isomer (LAW=1, with angular data) and alpha."""
+    head = "".join([*_numbers([25055.0, 54.466]), f"{0:11d}{0:11d}{0:11d}{0:11d}"])
+    mf3 = _section(mat, 3, 5, [head] + _tab1(0.0, 0.0, 0, 0, [1e6, 1e7, 2e7], [0.0, 0.2, 0.4]))
+    mf6_head = "".join([*_numbers([25055.0, 54.466]), f"{0:11d}{1:11d}{3:11d}{0:11d}"])
+    v52 = _tab1(23052.0, 51.0, 0, 0, [1e6, 2e7], [1.0, 1.0])
+    # LAW=1: a TAB2 with 1 energy, then a LIST of 3 numbers
+    cr54 = _tab1(24054.0, 53.0, 1, 1, [1e6, 1e7, 2e7], [0.5, 0.5, 0.0])
+    cr54 += [f"{'':22s}{1:11d}{2:11d}{1:11d}{1:11d}", f"{1:11d}{2:11d}"]
+    cr54 += ["".join([*_numbers([0.0, 1e7]), f"{0:11d}{1:11d}{3:11d}{1:11d}"])] + _numbers([1.0, 2.0, 3.0])
+    alpha = _tab1(2004.0, 3.97, 0, 0, [1e6, 2e7], [2.0, 2.0])
+    mf6 = _section(mat, 6, 5, [mf6_head] + v52 + cr54 + alpha)
+    mf10_other = _section(mat, 10, 37, ["".join([*_numbers([25055.0, 54.466]), f"{0:11d}{0:11d}{1:11d}{0:11d}"])]
+                          + _tab1(0.0, 0.0, 25052, 0, [1e7, 2e7], [0.1, 0.1]))
+    start = "".join(_fake_endf(25055, mat, nsub=10).splitlines(keepends=True)[:4])
+    return (start + _line("", mat, 1, 0, 99999) + _line("", mat, 0, 0, 0) + mf3 + _line("", mat, 0, 0, 0)
+            + mf6 + _line("", mat, 0, 0, 0) + mf10_other + _line("", mat, 0, 0, 0)
+            + _line("", 0, 0, 0, 0) + _line("", -1, 0, 0, 0))
+
+
+class ResidualProductionTests(unittest.TestCase):
+    """The products of MT=5 from MF6 into MF10 (nisdata/mt5.py)."""
+
+    def products(self, text: str) -> dict:
+        from nisdata import mt5
+        lines = [l for l in text.splitlines(keepends=True) if endf.mat_mf_mt(l)[1:] == (10, 5)]
+        reader = mt5._Reader(lines)
+        out = {}
+        for _ in range(reader.cont()[4]):
+            head, x, y, _, _ = reader.tab1()
+            out[(head[2], head[3])] = dict(zip(x, y))
+        return out
+
+    def test_products(self) -> None:
+        from nisdata import mt5
+        folder = Path(tempfile.mkdtemp())
+        source = folder / "in.endf"
+        source.write_text(_material_with_mt5())
+        self.assertEqual(mt5.add_residual_production(source, folder / "out.endf"), 3)
+        out = (folder / "out.endf").read_text()
+        products = self.products(out)
+        self.assertEqual(set(products), {(23052, 0), (24054, 1), (2004, 0)})
+        # sigma_5 times the yield, on the energies of both
+        self.assertAlmostEqual(products[(23052, 0)][1e7], 0.2)
+        self.assertAlmostEqual(products[(24054, 1)][1e7], 0.1)
+        self.assertAlmostEqual(products[(24054, 1)][2e7], 0.0)
+        self.assertEqual(sorted(products[(23052, 0)]), [1e6, 1e7, 2e7])
+        self.assertAlmostEqual(products[(2004, 0)][2e7], 0.8)
+        # MF10/MT5 is before MF10/MT37, in the same file
+        keys = [endf.mat_mf_mt(l) for l in out.splitlines() if len(l) >= 75]
+        sections = [k for i, k in enumerate(keys) if k[2] > 0 and (i == 0 or keys[i - 1] != k)]
+        self.assertEqual([k for k in sections if k[1] == 10], [(2525, 10, 5), (2525, 10, 37)])
+        self.assertEqual(sum(1 for k in keys if k == (2525, 0, 0)), 4)
+        # nothing to add a second time
+        self.assertEqual(mt5.add_residual_production(folder / "out.endf", folder / "again.endf"), 0)
+
+    def test_new_mf10(self) -> None:
+        from nisdata import mt5
+        text = _material_with_mt5()
+        lines = [l for l in text.splitlines(keepends=True) if endf.mat_mf_mt(l)[1] != 10]
+        # one FEND line too many is left where MF10 was
+        fends = [i for i, l in enumerate(lines) if endf.mat_mf_mt(l) == (2525, 0, 0)]
+        del lines[fends[-1]]
+        folder = Path(tempfile.mkdtemp())
+        (folder / "in.endf").write_text("".join(lines))
+        self.assertEqual(mt5.add_residual_production(folder / "in.endf", folder / "out.endf"), 3)
+        out = (folder / "out.endf").read_text().splitlines()
+        keys = [endf.mat_mf_mt(l) for l in out if len(l) >= 75]
+        last10 = max(i for i, k in enumerate(keys) if k[1] == 10)
+        self.assertEqual(keys[last10 + 1], (2525, 0, 0))
+        self.assertEqual(keys[last10 + 2], (0, 0, 0))
+
+    def test_no_mt5(self) -> None:
+        from nisdata import mt5
+        folder = Path(tempfile.mkdtemp())
+        (folder / "in.endf").write_text(_fake_endf(26056, 2631))
+        self.assertEqual(mt5.add_residual_production(folder / "in.endf", folder / "out.endf"), 0)
+        self.assertEqual((folder / "out.endf").read_text(), _fake_endf(26056, 2631))
+
+
+class VersionTests(unittest.TestCase):
+    """Reaction data of an older version of the processing is made again."""
+
+    def test_up_to_date(self) -> None:
+        sys.path.insert(0, str(PROCESSING_DIR))
+        import importlib
+        process = importlib.import_module("process")
+        folder = Path(tempfile.mkdtemp())
+        new, old = folder / "new.reac", folder / "old.reac"
+        new.write_text(endf.tpid_line(process._title("JEFF-4.0 Incident Neutron File")) + "x" * 2000)
+        old.write_text(endf.tpid_line("JEFF-4.0 Incident Neutron File (1102 groups)") + "x" * 2000)
+        self.assertTrue(process._up_to_date(new))
+        self.assertFalse(process._up_to_date(old))
+        self.assertFalse(process._up_to_date(folder / "none.reac"))

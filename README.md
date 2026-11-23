@@ -113,6 +113,29 @@ python3 -c "import pynis"
 `-DBUILD_TOOLS=OFF` builds only the library and the python module, not the `nis` programs.
 
 
+## Quick start: the benchmarks in 4 steps
+
+The [Makefile](Makefile) does all of it: get the dependencies, build, get and process the nuclear data, run the
+benchmark for each library and compare the results.
+
+```bash
+make setup      # the C++ dependencies, NIS (CMake) and pynis (uv)
+make data       # the decay data, and the reaction data of each library (NJOY and PREPRO: hours the first time)
+make bench      # run the FNS benchmark for each reaction library, all with the same decay data
+make compare    # results/stats.txt and results/summary.png
+```
+
+Choose the data with `REACTIONS` (`jeff4`, `tendl<year>`) and `DECAY` (`jeff311`, `jeff4`, `endfbvii1`, `endfbviii0`):
+
+```bash
+make compare REACTIONS="jeff4 tendl2025" DECAY=jeff4     # the default
+make compare REACTIONS=jeff4 DECAY=jeff311
+```
+
+Each run is in `results/<benchmark>-<reactions>+<decay>.csv`, with the label `<reactions>+<decay>`, so the runs
+can not be mixed up. `make` does a run again only when its data changes. Other targets: `make test-data` (the
+files that the tests need), `make test`, `make clean-results`. `JOBS=8` sets the number of cores.
+
 ## Nuclear data
 
 The nuclear data is not in git. [processing/process.py](processing/process.py) downloads it from the
@@ -153,6 +176,10 @@ python3 processing/process.py tendl --year 2025        # data/tendl2025.reac
 | `endfbvii1` (ENDF/B-VII.1) | yes | | |
 | `endfbviii0` (ENDF/B-VIII.0) | yes | | |
 | TENDL (`tendl` command) | | | yes |
+
+The reaction data files have the version of the processing in their first line (`nisdata 2`). A file or a
+processed folder (`processing/out/<library>`) of an older version is made again: version 2 adds the products of
+MT=5 (n,anything), which the files of version 1 do not have.
 
 Some files need small changes before ENDFtk can read them. The program makes them, and they do not change the data that NIS uses:
 the JEFF-4.0 yield files get a first line (TPID), and one gamma line of the JEFF-4.0 decay data (`NT=8`) gets

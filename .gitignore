@@ -24,3 +24,6 @@ data/*.part
 processing/tools/
 processing/raw/
 processing/out/
+
+# benchmark results from the Makefile
+results/

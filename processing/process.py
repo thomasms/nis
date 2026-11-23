@@ -32,7 +32,7 @@ import sys
 from pathlib import Path
 
 from nisdata import endf, fetch, libraries, tools as build_tools
-from nisdata.pipeline import Tools
+from nisdata.pipeline import VERSION, Tools
 from nisdata.runner import is_archive, process_all, process_archive
 
 HERE = Path(__file__).resolve().parent
@@ -99,8 +99,34 @@ def cmd_fetch(args) -> int:
     return 0
 
 
+def _title(text: str) -> str:
+    """The first line of a reaction data file: it gives the version of the processing."""
+    return f"{text} (1102 groups, nisdata {VERSION})"
+
+
+def _up_to_date(reaction_file: Path) -> bool:
+    """True if the reaction data file is there and was made by this version of the processing."""
+    if not libraries.is_there(reaction_file):
+        return False
+    with open(reaction_file, errors="replace") as f:
+        return f"nisdata {VERSION})" in f.readline()
+
+
+def _check_version(output: Path, args) -> None:
+    """The processed files of an older version of the processing are made again."""
+    stamp = Path(output) / "VERSION"
+    done = stamp.read_text().strip() if stamp.is_file() else ("1" if any(Path(output).glob("*.asc")) else None)
+    if done is not None and done != str(VERSION) and not args.force:
+        print(f"the files in {output} are from version {done} of the processing, this is version {VERSION}: "
+              f"all are made again", file=sys.stderr)
+        args.force = True
+    Path(output).mkdir(parents=True, exist_ok=True)
+    stamp.write_text(f"{VERSION}\n")
+
+
 def _process(sources: list, output: Path, args) -> list:
     """Folders and files of ENDF files, or one tar archive of them."""
+    _check_version(output, args)
     if len(sources) == 1 and is_archive(sources[0]):
         return process_archive(sources[0], output, _tools(args), args.jobs, args.temperature, args.work_dir,
                                args.keep, args.force, only=tuple(args.only))
@@ -119,17 +145,26 @@ def cmd_run(args) -> int:
 
 
 def cmd_combine(args) -> int:
-    _combine(args.folder, args.output, args.title, args.nis_cache)
+    stamp = Path(args.folder) / "VERSION"
+    current = stamp.is_file() and stamp.read_text().strip() == str(VERSION)
+    title = args.title or (_title("Incident Neutron File") if current else "Incident Neutron File (1102 groups)")
+    _combine(args.folder, args.output, title, args.nis_cache)
     return 0
 
 
 def cmd_tendl(args) -> int:
+    output = args.output or ROOT / "data" / f"tendl{args.year}.reac"
+    if _up_to_date(output) and not args.force:
+        print(f"{output} is there, not made again (--force makes it again)", file=sys.stderr)
+        return 0
+    if libraries.is_there(output):
+        print(f"{output} is from an older version of the processing (not version {VERSION}), "
+              f"so it is made again", file=sys.stderr)
     # the files are read from the archive, so the 14 GB of TENDL are never all on the disk
     archive = fetch.fetch_tendl(args.year, args.raw, args.url, unpack=False)
     out = args.processed or DEFAULT_OUT / f"tendl{args.year}"
     status = _report(_process([archive], out, args), out)
-    output = args.output or ROOT / "data" / f"tendl{args.year}.reac"
-    _combine(out, output, f"TENDL-{args.year} Incident Neutron File (1102 groups)", args.nis_cache)
+    _combine(out, output, _title(f"TENDL-{args.year} Incident Neutron File"), args.nis_cache)
     return status
 
 
@@ -161,13 +196,16 @@ def cmd_yields(args) -> int:
 def _reactions(key: str, args) -> int:
     lib = libraries.get(key)
     output = args.output or Path(args.data) / f"{lib.key}.reac"
-    if libraries.is_there(output) and not args.force:
+    if _up_to_date(output) and not args.force:
         print(f"{output} is there, not made again (--force makes it again)", file=sys.stderr)
         return 0
+    if libraries.is_there(output):
+        print(f"{output} is from an older version of the processing (not version {VERSION}), "
+              f"so it is made again", file=sys.stderr)
     folder = libraries.fetch_neutron(lib, args.raw)
     out = args.processed or DEFAULT_OUT / lib.key
     status = _report(_process([folder], out, args), out)
-    _combine(out, output, f"{lib.title} Incident Neutron File (1102 groups)", args.nis_cache)
+    _combine(out, output, _title(f"{lib.title} Incident Neutron File"), args.nis_cache)
     return status
 
 
@@ -273,7 +311,7 @@ def main() -> int:
     p = commands.add_parser("combine", help="join the processed files into one file")
     p.add_argument("folder", type=Path)
     p.add_argument("--output", type=Path, required=True)
-    p.add_argument("--title", default="Incident Neutron File (1102 groups)", help="the first line of the file")
+    p.add_argument("--title", default=None, help="the first line of the file")
     p.add_argument("--nis-cache", type=Path, default=DEFAULT_NIS_CACHE, help="the nis_cache program")
     p.set_defaults(func=cmd_combine)
 
