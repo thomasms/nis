@@ -295,8 +295,10 @@ class ResultsTests(unittest.TestCase):
         self.assertEqual(rows[0]["Other code"], 3.3)
 
         text = stats.report(rows, calculations, worst=3, nis_name=nis_name)
-        self.assertIn("cases NIS-JEFF-4.0", text)
-        self.assertIn("NIS-JEFF-4.0/NIS-TENDL-2025 within 10%", text)
+        self.assertIn("│ A │ NIS-JEFF-4.0 ", text)
+        self.assertIn("│ B │ NIS-TENDL-2025 ", text)
+        self.assertIn("│ A / B │ NIS-JEFF-4.0 / NIS-TENDL-2025 │", text)
+        self.assertIn("A (NIS-JEFF-4.0) and B (NIS-TENDL-2025) differ most", text)
 
     def test_files_of_the_same_run_are_joined(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -366,7 +368,31 @@ class StatsTests(unittest.TestCase):
     def test_report(self) -> None:
         rows, calculations = results.read_results([FNS_REFERENCE])
         text = stats.report(rows, calculations, worst=3)
-        self.assertIn("fns, decay_heat: 132 cases", text)
+        self.assertIn("fns · decay heat · 132 cases", text)
+        self.assertNotIn("\033", text)
+        # all the lines of a table have the same width, also with colours
+        for colored in (False, True):
+            plain = stats.strip_colors(stats.report(rows, calculations, worst=3, color=colored))
+            table = []
+            for line in plain.splitlines():
+                if line and line[0] in "┌│├└":
+                    table.append(len(line))
+                elif table:
+                    self.assertEqual(len(set(table)), 1)
+                    table = []
+        self.assertIn("\033[", stats.report(rows, calculations, worst=3, color=True))
+        ascii_text = stats.report(rows, calculations, worst=3, unicode=False)
+        self.assertTrue(all(ord(ch) < 128 for ch in ascii_text.replace("·", "").replace("±", "")))
+
+    def test_uncertain_cases_are_marked(self) -> None:
+        rows = [{"benchmark": "b", "case": c, "quantity": "decay_heat", "experiment": 1.0, "uncertainty": u,
+                 "nis": n} for c, u, n in (("good", 0.05, 1.5), ("bad", 2.0, 3.0))]
+        self.assertEqual(stats.case_uncertainties(rows), {("b", "decay_heat", "good"): 0.05,
+                                                          ("b", "decay_heat", "bad"): 2.0})
+        text = stats.report(rows, [], worst=5)
+        self.assertIn("bad *", text)
+        self.assertNotIn("good *", text)
+        self.assertIn("±200%", text)
 
 
 class InterpolationTests(unittest.TestCase):

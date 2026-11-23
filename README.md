@@ -471,6 +471,12 @@ One program, [scripts/bench.py](scripts/bench.py), does all the work for all the
     uv run python scripts/bench.py stats results.csv
     ```
 
+    The report has tables: the runs (A, B, ...), how many cases and points are within 10, 20 and 50% of the
+    experiment, how well the runs agree with run A, and the cases where they differ most (`--worst 15`), with the
+    median uncertainty of the experiment of each case. A case with an uncertainty over 50% can not test the codes
+    well (it is yellow, or has a `*`). In a terminal the values have colours: green within 10%, yellow within 50%,
+    red for more (`--color always|never`, or set `NO_COLOR`). `--output stats.txt` also writes it with no colours.
+
 5. Make one plot of the C/E of all the cases, and one plot for each case:
 
     ```bash

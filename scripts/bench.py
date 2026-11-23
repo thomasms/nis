@@ -127,8 +127,14 @@ def cmd_run(args) -> int:
 def cmd_stats(args) -> int:
     from nisbench.results import read_runs
     from nisbench.stats import report
+    from nisbench.stats import strip_colors
     rows, calculations, nis_name = read_runs(args.results)
-    print(report(rows, calculations, args.worst, nis_name))
+    color = args.color == "always" or (args.color == "auto" and sys.stdout.isatty() and not os.environ.get("NO_COLOR"))
+    encoding = (sys.stdout.encoding or "").lower()
+    text = report(rows, calculations, args.worst, nis_name, color=color, unicode="utf" in encoding)
+    print(text)
+    if args.output:
+        args.output.write_text(strip_colors(report(rows, calculations, args.worst, nis_name)) + "\n")
     return 0
 
 
@@ -232,7 +238,10 @@ def main() -> int:
 
     p = commands.add_parser("stats", help="C/E statistics of results files")
     p.add_argument("results", nargs="+", type=Path)
-    p.add_argument("--worst", type=int, default=25, help="number of cases to list where NIS differs most")
+    p.add_argument("--worst", type=int, default=15, help="number of cases to list where the runs differ most")
+    p.add_argument("--color", choices=["auto", "always", "never"], default="auto",
+                   help="colours: auto is in a terminal only (and not if NO_COLOR is set)")
+    p.add_argument("--output", type=Path, default=None, help="also write the report (no colours) to this file")
     p.set_defaults(func=cmd_stats)
 
     p = commands.add_parser("plot", help="plots of results files")

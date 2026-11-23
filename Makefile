@@ -86,7 +86,7 @@ $(foreach r,$(REACTIONS),$(eval $(call RUN_RULE,$(r))))
 # ---- 4. compare ----
 
 compare: $(RUNS)
-	$(BENCH) stats $(RUNS) | tee $(RESULTS)/stats.txt
+	$(BENCH) stats $(RUNS) --output $(RESULTS)/stats.txt
 	$(BENCH) plot $(RUNS) --benchmark $(BENCHMARK) --summary $(RESULTS)/summary.png
 	@echo "results: $(RESULTS)/stats.txt and $(RESULTS)/summary.png"
 
