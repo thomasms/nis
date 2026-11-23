@@ -126,9 +126,28 @@ def _finish(out: Path, output: Path, text: str, status: int, nis_cache: Path) ->
     return status
 
 
-def _use_existing(output: Path, args) -> bool:
-    """True if the reaction data file can be used as it is: made by this version, or an older one with --allow-old."""
+def _failed(out: Path) -> int:
+    """The number of nuclides that failed in the last run of the processed folder (from its summary.json)."""
+    summary = Path(out) / "summary.json"
+    if not summary.is_file():
+        return 0
+    try:
+        import json
+        return int(json.loads(summary.read_text()).get("failed", 0))
+    except (ValueError, OSError):
+        return 0
+
+
+def _use_existing(output: Path, args, out: Path = None) -> bool:
+    """
+    True if the reaction data file can be used as it is: made by this version, or an older one with --allow-old.
+    out: the folder of the processed files; if nuclides failed in its last run, the file is not complete.
+    """
     if args.force:
+        return False
+    if out is not None and libraries.is_there(output) and _failed(out):
+        print(f"{output} does not have all the nuclides ({_failed(out)} failed in the last run, see "
+              f"{Path(out) / 'summary.json'}), so they are tried again", file=sys.stderr)
         return False
     if _up_to_date(output):
         print(f"{output} is there, not made again (--force makes it again)", file=sys.stderr)
@@ -207,9 +226,9 @@ def cmd_combine(args) -> int:
 
 def cmd_tendl(args) -> int:
     output = args.output or ROOT / "data" / f"tendl{args.year}.reac"
-    if _use_existing(output, args):
-        return 0
     out = args.processed or DEFAULT_OUT / f"tendl{args.year}"
+    if _use_existing(output, args, out):
+        return 0
     folder = Path(args.raw) / f"TENDL-{args.year}-n"
     archives = sorted(Path(args.raw).glob(f"TENDL-{args.year}-n.t*"))
     archives = [a for a in archives if not a.name.endswith(".part")]
@@ -218,6 +237,12 @@ def cmd_tendl(args) -> int:
         print(f"the TENDL-{args.year} files are in {folder}, they are not downloaded again", file=sys.stderr)
         source = folder
     else:
+        if not archives:
+            print(f"the raw TENDL-{args.year} files are not in {args.raw} (no TENDL-{args.year}-n.tgz and no folder "
+                  f"TENDL-{args.year}-n/), so they are downloaded. The processed files in {out} are not enough: "
+                  f"to make the data again, the raw files are processed again. To use the reaction data file that you "
+                  f"have, stop now (Ctrl-C) and give --allow-old (make: ALLOW_OLD=1), or give --raw if the raw files "
+                  f"are in another folder", file=sys.stderr, flush=True)
         # the files are read from the archive, so the 14 GB of TENDL are never all on the disk
         source = fetch.fetch_tendl(args.year, args.raw, args.url, unpack=False)
     status = _report(_process([source], out, args), out)
@@ -252,10 +277,10 @@ def cmd_yields(args) -> int:
 def _reactions(key: str, args) -> int:
     lib = libraries.get(key)
     output = args.output or Path(args.data) / f"{lib.key}.reac"
-    if _use_existing(output, args):
+    out = args.processed or DEFAULT_OUT / lib.key
+    if _use_existing(output, args, out):
         return 0
     folder = libraries.fetch_neutron(lib, args.raw)
-    out = args.processed or DEFAULT_OUT / lib.key
     status = _report(_process([folder], out, args), out)
     return _finish(out, output, f"{lib.title} Incident Neutron File", status, args.nis_cache)
 

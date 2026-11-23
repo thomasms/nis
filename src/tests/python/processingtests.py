@@ -643,4 +643,12 @@ class VersionTests(unittest.TestCase):
         incomplete = folder / "incomplete.reac"
         incomplete.write_text(endf.tpid_line("TENDL-2025 Incident Neutron File (1102 groups, INCOMPLETE)") + "x" * 2000)
         self.assertFalse(process._use_existing(incomplete, args))
+        # a file with a version, but nuclides failed in the last run of its folder (made by an older NIS)
+        new = folder / "new.reac"
+        new.write_text(endf.tpid_line(process._title("JEFF-4.0 Incident Neutron File")) + "x" * 2000)
+        out = folder / "out"
+        out.mkdir()
+        self.assertTrue(process._use_existing(new, args, out))
+        (out / "summary.json").write_text('{"files": 593, "failed": 1}')
+        self.assertFalse(process._use_existing(new, args, out))
         self.assertTrue(process._use_existing(old, args))
