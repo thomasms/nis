@@ -1,6 +1,6 @@
-# Builds NIS and runs the tests that do not need the nuclear data.
-# The nuclear data (git lfs, about 1 GB) is not downloaded, so the tests that need it skip.
-# Run those on your machine: uv run pytest src/tests/python/testsuite.py
+# Builds NIS and runs the tests. The Python tests get the decay data and the fission yields
+# (processing/process.py bootstrap --no-reactions). The reaction data takes hours to make, so the tests that
+# need it skip here. Run those on your machine: uv run pytest src/tests/python/testsuite.py
 name: tests
 
 on:
@@ -60,6 +60,18 @@ jobs:
 
       - name: Build and install pynis
         run: uv sync
+
+      - name: Cache the decay data and the fission yields
+        uses: actions/cache@v4
+        with:
+          path: |
+            data/*.dec
+            data/*.nfy
+            data/*.sfy
+          key: data-${{ hashFiles('processing/nisdata/libraries.py', 'processing/nisdata/endf.py') }}
+
+      - name: Get the decay data and the fission yields
+        run: python3 processing/process.py bootstrap --no-reactions
 
       - name: Python tests (fast)
         run: uv run pytest -v -m "not slow" src/tests/python/testsuite.py

@@ -266,7 +266,7 @@ class CommandLineTests(unittest.TestCase):
     def test_help(self) -> None:
         run = self.run_process("--help")
         self.assertEqual(run.returncode, 0)
-        for command in ("tools", "fetch", "run", "combine", "tendl"):
+        for command in ("bootstrap", "libraries", "decay", "yields", "reactions", "tools", "fetch", "run", "combine", "tendl"):
             self.assertIn(command, run.stdout)
 
     def test_duplicates_are_an_error(self) -> None:
@@ -327,3 +327,145 @@ class DownloadTests(unittest.TestCase):
         self.assertEqual(target.read_bytes(), content)
         self.assertEqual(calls, [0, len(content) // 3])
         self.assertFalse(target.with_suffix(".tgz.part").exists())
+
+
+def _serve(content: bytes, seen_headers: list = None):
+    """A local web server that gives the content. Returns its address and a function to stop it."""
+    import http.server
+    import threading
+
+    class Handler(http.server.BaseHTTPRequestHandler):
+        def do_GET(self):
+            if seen_headers is not None:
+                seen_headers.append(dict(self.headers))
+            self.send_response(200)
+            self.send_header("Content-Length", str(len(content)))
+            self.end_headers()
+            self.wfile.write(content)
+
+        def log_message(self, *args):
+            pass
+
+    server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    return f"http://127.0.0.1:{server.server_port}", server.shutdown
+
+
+class LibraryTests(unittest.TestCase):
+    """The downloads of nisdata/libraries.py, without the network."""
+
+    def test_the_list(self) -> None:
+        from nisdata import libraries
+        self.assertIn("jeff311", libraries.LIBRARIES)
+        self.assertEqual(libraries.get("jeff4").parts(), ["decay", "nfy", "sfy", "neutron"])
+        for lib in libraries.LIBRARIES.values():
+            for part in lib.parts():
+                source = getattr(lib, part)
+                self.assertRegex(source.md5, "^[0-9a-f]{32}$")
+                self.assertTrue(source.url.startswith("https://"))
+        with self.assertRaises(ValueError):
+            libraries.get("jeff5")
+
+    def test_the_first_line_is_added(self) -> None:
+        from nisdata import libraries
+        tape = _fake_endf(92235, 9228, nsub=5)
+        without = "".join(tape.splitlines(keepends=True)[1:])
+        fixed = libraries.fix_tape(without, "JEFF-4.0 yields")
+        self.assertTrue(fixed.startswith("JEFF-4.0 yields"))
+        self.assertEqual(fixed.splitlines()[1:], without.splitlines())
+        # a tape with its first line does not change
+        self.assertEqual(libraries.fix_tape(tape, "x"), tape)
+
+    def test_a_list_of_8_items_is_made_12(self) -> None:
+        from nisdata import libraries
+        head = _line(" 8.400000+4 3.000000+3          0          0          8          0", 128, 8, 457, 8)
+        first = _line(" 1.000000+0 0.000000+0 8.420000+1 1.500000+0 0.000000+0 0.000000+0", 128, 8, 457, 9)
+        second = _line(" 1.280000-1 2.100000-2", 128, 8, 457, 10)
+        # a decay mode list has N2 > 0 and does not change
+        modes = _line(" 0.000000+0 0.000000+0          0          0          8          1", 128, 8, 457, 5)
+        tape = _fake_endf(2004, 128, nsub=4)
+        fixed = libraries.fix_tape(tape + head + first + second, "x").splitlines(keepends=True)
+        self.assertEqual(fixed[-3][44:55], "         12")
+        self.assertEqual(fixed[-3][:44], head[:44])
+        self.assertEqual(fixed[-2], first)
+        self.assertEqual(fixed[-1], second[:22] + " 0.000000+0" * 4 + second[66:])
+        self.assertEqual(len(fixed[-1]), len(second))
+        # the same head with something in the second line after 2 items is an error
+        bad = _line(" 1.280000-1 2.100000-2 1.000000+0", 128, 8, 457, 10)
+        with self.assertRaises(ValueError):
+            libraries.fix_tape(tape + head + first + bad, "x")
+        self.assertEqual(libraries.fix_tape(modes, "x"), modes)
+
+    def test_one_tape_from_a_zip(self) -> None:
+        import zipfile
+        from nisdata import libraries
+        folder = Path(tempfile.mkdtemp())
+        archive = folder / "decay.zip"
+        with zipfile.ZipFile(archive, "w") as z:
+            z.writestr("decay/dec-027_Co_060.endf", _fake_endf(27060, 2725, nsub=4))
+            z.writestr("decay/dec-001_H_003.endf", _fake_endf(1003, 3, nsub=4))
+            z.writestr("decay/CHANGELOG.txt", "not ENDF\n")
+            z.writestr("decay/n-026_Fe_056.endf", _fake_endf(26056, 2631, nsub=10))
+        tape = libraries.tape_from(archive, libraries.DECAY_SUBLIBRARY, "Decay")
+        lines = tape.splitlines()
+        self.assertTrue(lines[0].startswith("Decay"))
+        mats = [endf.mat_mf_mt(line)[0] for line in lines if line[70:80] == " 1451    1"]
+        self.assertEqual(mats, [3, 2725])     # H3 then Co60, and not the neutron file
+        self.assertEqual(endf.mat_mf_mt(lines[-1])[0], -1)
+        self.assertEqual(sum(1 for line in lines if endf.mat_mf_mt(line)[0] == -1), 1)
+
+    def test_the_md5_is_checked(self) -> None:
+        import hashlib
+        from nisdata import libraries
+        content = b"some data\n" * 1000
+        headers = []
+        address, stop = _serve(content, headers)
+        self.addCleanup(stop)
+        folder = Path(tempfile.mkdtemp())
+
+        good = libraries.Source(f"{address}/a.txt", "a.txt", hashlib.md5(content).hexdigest())
+        self.assertEqual(libraries.download(good, folder).read_bytes(), content)
+        # the data bank refuses the default python name
+        self.assertTrue(headers[0]["User-Agent"].startswith("nisdata"))
+
+        bad = libraries.Source(f"{address}/b.txt", "b.txt", "0" * 32)
+        with self.assertRaises(ValueError):
+            libraries.download(bad, folder)
+        self.assertFalse((folder / "b.txt").exists())
+        self.assertTrue((folder / "b.txt.bad").exists())
+
+    def test_make_a_decay_file(self) -> None:
+        import hashlib
+        import zipfile
+        from nisdata import libraries
+        buffer = Path(tempfile.mkdtemp()) / "d.zip"
+        with zipfile.ZipFile(buffer, "w") as z:
+            z.writestr("dec-001_H_003.endf", _fake_endf(1003, 3, nsub=4))
+        content = buffer.read_bytes()
+        address, stop = _serve(content)
+        self.addCleanup(stop)
+        lib = libraries.Library("test", "Test-1.0", "none",
+                                decay=libraries.Source(f"{address}/d.zip", "d.zip", hashlib.md5(content).hexdigest()))
+        raw, data = Path(tempfile.mkdtemp()), Path(tempfile.mkdtemp())
+        path = libraries.make(lib, "decay", raw, data)
+        self.assertEqual(path, data / "test.dec")
+        self.assertTrue(path.read_text().startswith("Test-1.0 Radioactive Decay Data"))
+        # it is not made again
+        path.write_text("changed")
+        libraries.make(lib, "decay", raw, data)
+        self.assertEqual(path.read_text(), "changed")
+        libraries.make(lib, "decay", raw, data, force=True)
+        self.assertNotEqual(path.read_text(), "changed")
+        with self.assertRaises(ValueError):
+            libraries.make(lib, "nfy", raw, data)
+        # a git lfs pointer file is made again
+        path.write_text("version https://git-lfs.github.com/spec/v1\noid sha256:642e\nsize 67543551\n")
+        self.assertFalse(libraries.is_there(path))
+        libraries.make(lib, "decay", raw, data)
+        self.assertTrue(path.read_text().startswith("Test-1.0"))
+
+    def test_libraries_command(self) -> None:
+        run = subprocess.run([sys.executable, str(PROCESS), "libraries"], capture_output=True, text=True, cwd=ROOT)
+        self.assertEqual(run.returncode, 0)
+        for key in ("jeff311", "jeff4", "endfbvii1", "endfbviii0"):
+            self.assertIn(key, run.stdout)

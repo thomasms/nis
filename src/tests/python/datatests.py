@@ -2,7 +2,7 @@
 Checks of the decay matrix and the decay energy data made from each decay library. They find errors in
 the data and in how NIS reads it (a wrong daughter, a lost branch, a wrong isomer).
 
-Needs the decay data from git lfs (data/jeff311.dec and data/endfbvii1.dec), else the tests skip.
+Needs the decay data (data/jeff311.dec and data/endfbvii1.dec, from processing/process.py bootstrap), else the tests skip.
 """
 
 import math
@@ -180,7 +180,7 @@ class DecayDataChecks:
         self.assertNotIn("He5", branches)
 
 
-@unittest.skipUnless(has_data(JEFF311_DECAY), "needs data/jeff311.dec from git lfs")
+@unittest.skipUnless(has_data(JEFF311_DECAY), "needs data/jeff311.dec (processing/process.py bootstrap)")
 class Jeff311DecayDataTests(DecayDataChecks, unittest.TestCase):
     DATA = JEFF311_DECAY
     # errors in the JEFF-3.1.1 evaluations: the sums of the branching ratios are 1.01 (Ge81m, Er152),
@@ -203,13 +203,13 @@ class Jeff311DecayDataTests(DecayDataChecks, unittest.TestCase):
         self.assertNotIn("As75m", self.branches("Ge75"))
 
 
-@unittest.skipUnless(has_data(ENDFBVII_DECAY), "needs data/endfbvii1.dec from git lfs")
+@unittest.skipUnless(has_data(ENDFBVII_DECAY), "needs data/endfbvii1.dec (processing/process.py bootstrap)")
 class EndfbVII1DecayDataTests(DecayDataChecks, unittest.TestCase):
     DATA = ENDFBVII_DECAY
 
 
 @unittest.skipUnless(has_data(JEFF311_DECAY) and has_data(ENDFBVII_DECAY),
-                     "needs data/jeff311.dec and data/endfbvii1.dec from git lfs")
+                     "needs data/jeff311.dec and data/endfbvii1.dec (processing/process.py bootstrap)")
 class DecayLibrariesAgreeTests(unittest.TestCase):
     def test_half_lives_of_long_lived_nuclides(self) -> None:
         # the half-lives of nuclides that live longer than 1 hour are well measured, so the two libraries

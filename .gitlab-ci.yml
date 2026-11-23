@@ -71,11 +71,11 @@ test_ubuntu:
 test_python:
   stage: test
   image: ${DOCKER_BASE_REPO}:dev
-  variables:
-    GIT_LFS_SKIP_SMUDGE: 0
   needs:
   - job: build_python311
     artifacts: true
   script:
+    # the decay data and the fission yields (not the reaction data, it takes hours to make)
+    - python3 processing/process.py bootstrap --no-reactions
     - export PYTHONPATH=./build/bin/python3:./src/tests/python
     - pytest -v src/tests/python/testsuite.py

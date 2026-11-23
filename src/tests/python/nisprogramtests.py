@@ -3,7 +3,7 @@ Tests of the nis program (from the CMake build, or NIS_BIN). Some FNS decks are 
 must give the same decay heat as benchmarks/fns/results/nis_reference.csv (made with pynis). This tests the parts
 that only the program has: the input decks, the steps with a flux and the cooling steps, and the output.
 
-Needs the nuclear data from git lfs.
+Needs the nuclear data (processing/process.py bootstrap).
 """
 
 import csv
@@ -32,7 +32,7 @@ def _nis(*arguments) -> subprocess.CompletedProcess:
 @pytest.mark.slow
 @unittest.skipUnless(NIS_BIN.exists(), f"needs the nis program ({NIS_BIN}), build it with CMake or give NIS_BIN")
 @unittest.skipUnless(has_data(JEFF311_DECAY) and has_data(JEFF4_REACTION),
-                     "needs data/jeff311.dec and data/jeff4.reac from git lfs")
+                     "needs data/jeff311.dec and data/jeff4.reac (processing/process.py bootstrap)")
 class NisProgramTests(unittest.TestCase):
     def test_decks_same_as_reference(self) -> None:
         # nis_cache next to nis makes the cache, if it is not there yet

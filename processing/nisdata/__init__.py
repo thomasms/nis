@@ -1,4 +1,4 @@
-"""nisdata: make NIS reaction data from raw ENDF files with NJOY and PREPRO."""
+"""nisdata: download the nuclear data for NIS, and make reaction data from raw ENDF files with NJOY and PREPRO."""
 
 from .endf import Material, combine, find_endf_files, read_material
 from .pipeline import Result, Tools, process_file

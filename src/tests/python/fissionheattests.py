@@ -11,7 +11,7 @@ Fission decay heat benchmark (benchmarks/fission_decay_heat, from the IAEA CoNDE
 
     - the experiment: NIS must stay as close to the measured heat as it is now.
 
-The regression test needs data/jeff311.dec (git lfs) and data/jeff311.nfy (scripts/get_fission_yields.py).
+The regression test needs data/jeff311.dec and data/jeff311.nfy (processing/process.py bootstrap).
 """
 
 import math
@@ -72,7 +72,7 @@ class FissionDecayHeatCasesTests(unittest.TestCase):
 
 
 @unittest.skipUnless(has_data(JEFF311_DECAY) and has_data(JEFF311_NFY),
-                     "needs data/jeff311.dec (git lfs) and data/jeff311.nfy (scripts/get_fission_yields.py)")
+                     "needs data/jeff311.dec and data/jeff311.nfy (processing/process.py bootstrap)")
 class FissionDecayHeatRegressionTests(unittest.TestCase):
     rows = None
 

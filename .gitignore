@@ -13,14 +13,14 @@ venv/**
 uv.lock
 .pytest_cache/
 
-# fission yields, from scripts/get_fission_yields.py
+# the nuclear data, from processing/process.py (bootstrap, decay, yields, reactions, tendl)
+data/*.dec
 data/*.nfy
 data/*.sfy
+data/*.reac
+data/*.part
 
 # data processing: NJOY and PREPRO, the raw ENDF files and the processed files
 processing/tools/
 processing/raw/
 processing/out/
-
-# reaction data made with processing/process.py tendl (too large for git, make it again with the command)
-data/tendl*.reac

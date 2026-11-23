@@ -31,5 +31,5 @@ for _folder in (SCRIPTS_DIR, PROCESSING_DIR):
 
 
 def has_data(path: Path, min_size: int = 100_000) -> bool:
-    """True if the data file is there. Without git lfs, the file is a small text pointer file."""
+    """True if the data file is there (an old git lfs checkout can have a small text pointer file in its place)."""
     return path.exists() and path.stat().st_size > min_size

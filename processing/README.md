@@ -1,9 +1,24 @@
 # Data processing
 
-Make NIS reaction data from the raw ENDF neutron files of a library (for example TENDL), with
-[NJOY2016](https://github.com/njoy/NJOY2016) and [PREPRO](https://github.com/IAEA-NDS/PREPRO).
-The result is one file of 1102 group cross sections (INT=1), the same form as `data/jeff4.reac`, and the NIS
-cache of it (`.nisreac`).
+Get the nuclear data for NIS. The data is not in git: `process.py` downloads it and makes the NIS data files in `data/`.
+
+- **Decay data and fission yields:** downloaded from the NEA data bank and the NNDC, and joined into one ENDF tape
+  for each library (`data/<library>.dec`, `.nfy`, `.sfy`).
+- **Reaction data:** made from the raw ENDF neutron files of a library (JEFF-4.0, TENDL), with
+  [NJOY2016](https://github.com/njoy/NJOY2016) and [PREPRO](https://github.com/IAEA-NDS/PREPRO).
+  The result is one file of 1102 group cross sections (INT=1), `data/<library>.reac`, and the NIS cache of it (`.nisreac`).
+
+```bash
+python3 processing/process.py bootstrap      # all the data the tests and the examples need
+python3 processing/process.py libraries      # the libraries that can be downloaded
+python3 processing/process.py decay jeff4    # data/jeff4.dec
+python3 processing/process.py yields jeff4   # data/jeff4.nfy and data/jeff4.sfy
+python3 processing/process.py reactions jeff4   # data/jeff4.reac (download, run, combine)
+```
+
+The list of libraries, with the address and the MD5 of each file, is in [nisdata/libraries.py](nisdata/libraries.py).
+To add a library, add its files there. A download is in `processing/raw/<library>/`, and a file that is there is
+not downloaded again. If the MD5 is not correct, the file is renamed to `<name>.bad` and the command stops.
 
 ```
 processing/
@@ -14,7 +29,8 @@ processing/
         runner.py       many nuclides at the same time
         endf.py         read ENDF headers, join the processed files into one
         tools.py        get and build NJOY and PREPRO
-        fetch.py        download TENDL
+        fetch.py        download (with a progress bar, a stopped download continues), unpack
+        libraries.py    the libraries that can be downloaded, and how to make the NIS data files from them
         ukaea1102.txt   the 1102 group bounds (eV)
     tools/              NJOY and PREPRO, made by 'tools' (not in git)
     raw/                the raw ENDF files, from 'fetch' (not in git)

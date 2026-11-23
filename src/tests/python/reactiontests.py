@@ -30,7 +30,7 @@ from nisbench.engines import reaction_cache
 _jeff4_reaction_file = JEFF4_REACTION
 _jeff311_decay_file = JEFF311_DECAY
 
-# LFS pointer files are small text files, the real file is ~1 GB
+# an old git lfs pointer file is a small text file, the real file is ~1 GB
 _has_reaction_data = has_data(_jeff4_reaction_file)
 
 BARN = 1e-24
@@ -54,7 +54,7 @@ def one_group_spectrum(energy: float, flux: float = FLUX) -> nis.core.Spectrum:
     return nis.core.Spectrum([energy * 0.9999, energy * 1.0001], [flux])
 
 
-@unittest.skipUnless(_has_reaction_data, "needs data/jeff4.reac from git lfs")
+@unittest.skipUnless(_has_reaction_data, "needs data/jeff4.reac (processing/process.py bootstrap)")
 class ReactionBenchmarkBase(unittest.TestCase):
     # read the tape once, it is big
     reaction_data = None

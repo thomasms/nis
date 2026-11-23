@@ -72,10 +72,15 @@ def read_material(path: Path) -> Material:
     """The MAT, ZA, LISO and NSUB of the first material (MF1/MT451). ValueError if it is not ENDF."""
     with open(path, errors="replace") as f:
         lines = [f.readline() for _ in range(4)]
+    return material_from_lines(lines, str(path))
+
+
+def material_from_lines(lines: list, name: str = "the text") -> Material:
+    """The first material of a tape, from its first 4 lines."""
     # the first line is the tape identification (TPID)
-    head = lines[1:]
-    if any(len(line.rstrip("\n")) < 75 or mat_mf_mt(line)[1:] != (1, 451) for line in head):
-        raise ValueError(f"{path} is not an ENDF file (no MF1/MT451 at the start)")
+    head = lines[1:4]
+    if len(head) < 3 or any(len(line.rstrip("\n")) < 75 or mat_mf_mt(line)[1:] != (1, 451) for line in head):
+        raise ValueError(f"{name} is not an ENDF file (no MF1/MT451 at the start)")
     mat = mat_mf_mt(head[0])[0]
     za = round(endf_float(head[0][0:11]))
     liso = endf_int(head[1][33:44])
@@ -98,10 +103,16 @@ def find_endf_files(root: Path, sublibrary: int = NEUTRON_SUBLIBRARY) -> list:
 
 def materials_text(path: Path) -> str:
     """The materials of a tape without its first line (TPID) and its end line (TEND, MAT = -1)."""
-    lines = Path(path).read_text().splitlines(keepends=True)
-    body = lines[1:]
+    return tape_body(Path(path).read_text())
+
+
+def tape_body(text: str) -> str:
+    """The materials of the text of a tape, without the TPID line and the TEND line."""
+    body = text.splitlines(keepends=True)[1:]
     while body and (not body[-1].strip() or mat_mf_mt(body[-1])[0] == -1):
         body.pop()
+    if body and not body[-1].endswith("\n"):
+        body[-1] += "\n"
     return "".join(body)
 
 
@@ -122,3 +133,9 @@ def combine(files: list, output: Path, title: str) -> int:
             out.write(materials_text(path))
         out.write(tend_line())
     return len(ordered)
+
+
+def combine_texts(texts: list, title: str) -> str:
+    """The same as combine, for the texts of one material tapes. Returns the text of the tape."""
+    ordered = sorted(texts, key=lambda t: material_from_lines(t.splitlines(keepends=True)[:4]).zai)
+    return tpid_line(title) + "".join(tape_body(t) for t in ordered) + tend_line()

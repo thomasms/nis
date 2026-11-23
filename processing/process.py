@@ -1,7 +1,14 @@
 """
-Make NIS reaction data from raw ENDF neutron files, with NJOY and PREPRO (see processing/README.md).
+Get the nuclear data for NIS: download the decay data and the fission yields, and make the reaction data from
+raw ENDF neutron files with NJOY and PREPRO (see processing/README.md).
 
 Commands:
+    bootstrap  get all the data the tests and the examples need (data/jeff311.dec, endfbvii1.dec, jeff311.nfy,
+               jeff311.sfy and jeff4.reac). The reaction data takes a long time (--no-reactions: not it)
+    libraries  the libraries that can be downloaded, and their files
+    decay      download decay data: data/<library>.dec
+    yields     download fission yields: data/<library>.nfy and data/<library>.sfy
+    reactions  download the neutron files of a library and make data/<library>.reac (fetch, run, combine)
     tools      get and build NJOY2016 and PREPRO
     fetch      download the raw ENDF files of a library (TENDL)
     run        process ENDF files to 1102 group cross sections, one file for each nuclide (in parallel)
@@ -9,6 +16,9 @@ Commands:
     tendl      all of it for a TENDL release: fetch, run, combine
 
 Examples:
+    python3 processing/process.py bootstrap
+    python3 processing/process.py decay jeff4 endfbviii0
+    python3 processing/process.py yields jeff4
     uv run python processing/process.py tools
     uv run python processing/process.py tendl --year 2025 --output data/tendl2025.reac
     uv run python processing/process.py run path/to/endf --output processing/out/mylib -j 16
@@ -21,7 +31,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from nisdata import endf, fetch, tools as build_tools
+from nisdata import endf, fetch, libraries, tools as build_tools
 from nisdata.pipeline import Tools
 from nisdata.runner import is_archive, process_all, process_archive
 
@@ -31,6 +41,7 @@ DEFAULT_TOOLS = HERE / "tools"
 DEFAULT_RAW = HERE / "raw"
 DEFAULT_OUT = HERE / "out"
 DEFAULT_NIS_CACHE = ROOT / "build" / "bin" / "nis_cache"
+DEFAULT_DATA = ROOT / "data"
 
 
 def _tools(args) -> Tools:
@@ -122,6 +133,76 @@ def cmd_tendl(args) -> int:
     return status
 
 
+def cmd_libraries(args) -> int:
+    for lib in libraries.LIBRARIES.values():
+        print(f"{lib.key:12s} {lib.title:14s} {', '.join(lib.parts()):26s} licence: {lib.licence}")
+    return 0
+
+
+def _make(args, part: str) -> int:
+    for key in args.libraries:
+        libraries.make(libraries.get(key), part, args.raw, args.data, args.force)
+    return 0
+
+
+def cmd_decay(args) -> int:
+    return _make(args, "decay")
+
+
+def cmd_yields(args) -> int:
+    for key in args.libraries:
+        lib = libraries.get(key)
+        for part in ("nfy", "sfy"):
+            if getattr(lib, part):
+                libraries.make(lib, part, args.raw, args.data, args.force)
+    return 0
+
+
+def _reactions(key: str, args) -> int:
+    lib = libraries.get(key)
+    output = args.output or Path(args.data) / f"{lib.key}.reac"
+    if libraries.is_there(output) and not args.force:
+        print(f"{output} is there, not made again (--force makes it again)", file=sys.stderr)
+        return 0
+    folder = libraries.fetch_neutron(lib, args.raw)
+    out = args.processed or DEFAULT_OUT / lib.key
+    status = _report(_process([folder], out, args), out)
+    _combine(out, output, f"{lib.title} Incident Neutron File (1102 groups)", args.nis_cache)
+    return status
+
+
+def cmd_reactions(args) -> int:
+    return _reactions(args.library, args)
+
+
+def cmd_bootstrap(args) -> int:
+    for key in ("jeff311", "endfbvii1"):
+        libraries.make(libraries.get(key), "decay", args.raw, args.data, args.force)
+    for part in ("nfy", "sfy"):
+        libraries.make(libraries.get("jeff311"), part, args.raw, args.data, args.force)
+    if args.no_reactions:
+        return 0
+    if not (args.njoy or args.prepro_dir or os.environ.get("NJOY_EXE")):
+        tools = build_tools.default_tools(args.tools)
+        if not Path(tools.njoy).is_file():
+            print("no NJOY and PREPRO, so build them first", file=sys.stderr)
+            build_tools.build(args.tools, args.jobs, None, None, "gfortran", "-O2")
+    return _reactions("jeff4", args)
+
+
+def _add_data_options(p, force: bool = True) -> None:
+    p.add_argument("--data", type=Path, default=DEFAULT_DATA, help="where to put the NIS data files (default data/)")
+    p.add_argument("--raw", type=Path, default=DEFAULT_RAW, help="where to put the downloads")
+    if force:  # else --force of the run options
+        p.add_argument("--force", action="store_true", help="make the files again, also if they are there")
+
+
+def _add_reaction_options(p) -> None:
+    p.add_argument("--processed", type=Path, default=None, help="default processing/out/<library>")
+    p.add_argument("--output", type=Path, default=None, help="default data/<library>.reac")
+    p.add_argument("--nis-cache", type=Path, default=DEFAULT_NIS_CACHE)
+
+
 def _add_run_options(p) -> None:
     p.add_argument("-j", "--jobs", type=int, default=os.cpu_count() or 1,
                    help="nuclides at the same time (default: the number of cores)")
@@ -139,6 +220,32 @@ def _add_run_options(p) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     commands = parser.add_subparsers(dest="command", required=True)
+
+    p = commands.add_parser("libraries", help="the libraries that can be downloaded")
+    p.set_defaults(func=cmd_libraries)
+
+    for name, func, text in (("decay", cmd_decay, "download decay data: data/<library>.dec"),
+                             ("yields", cmd_yields, "download fission yields: data/<library>.nfy and .sfy")):
+        p = commands.add_parser(name, help=text)
+        p.add_argument("libraries", nargs="+", choices=list(libraries.LIBRARIES), metavar="library",
+                       help=f"one or more of: {', '.join(libraries.LIBRARIES)}")
+        _add_data_options(p)
+        p.set_defaults(func=func)
+
+    p = commands.add_parser("reactions", help="download the neutron files and make data/<library>.reac")
+    p.add_argument("library", choices=[k for k, v in libraries.LIBRARIES.items() if v.neutron])
+    _add_data_options(p, force=False)
+    _add_reaction_options(p)
+    _add_run_options(p)
+    p.set_defaults(func=cmd_reactions)
+
+    p = commands.add_parser("bootstrap", help="get all the data that the tests and the examples need")
+    p.add_argument("--no-reactions", action="store_true",
+                   help="only the decay data and the yields (minutes), not data/jeff4.reac (hours)")
+    _add_data_options(p, force=False)
+    _add_reaction_options(p)
+    _add_run_options(p)
+    p.set_defaults(func=cmd_bootstrap)
 
     p = commands.add_parser("tools", help="get and build NJOY2016 and PREPRO")
     p.add_argument("--tools", type=Path, default=DEFAULT_TOOLS, help="where to put them")

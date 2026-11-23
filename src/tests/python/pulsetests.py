@@ -8,7 +8,7 @@ experiment needed:
     - two decay libraries give about the same decay heat with the same yields
     - a short irradiation through the reaction matrix gives the same heat per fission as the pulse
 
-Needs data/jeff311.nfy (scripts/get_fission_yields.py) and the decay data from git lfs, else the tests skip.
+Needs data/jeff311.nfy and the decay data (processing/process.py bootstrap), else the tests skip.
 """
 
 import math

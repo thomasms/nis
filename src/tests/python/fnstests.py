@@ -9,7 +9,7 @@ FNS decay heat regression test: runs all the FNS cases in benchmarks/fns with py
 
     - the experiment: NIS must stay as close to the measured heat as it is now.
 
-Needs the nuclear data from git lfs. About 30 s on 4 cores.
+Needs the nuclear data (processing/process.py bootstrap). About 30 s on 4 cores.
 """
 
 import csv
@@ -36,7 +36,7 @@ MIN_CASES_WITHIN_50 = 0.78
 
 @pytest.mark.slow
 @unittest.skipUnless(has_data(JEFF311_DECAY) and has_data(JEFF4_REACTION),
-                     "needs data/jeff311.dec and data/jeff4.reac from git lfs")
+                     "needs data/jeff311.dec and data/jeff4.reac (processing/process.py bootstrap)")
 class FnsRegressionTests(unittest.TestCase):
     results = None
 

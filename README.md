@@ -113,6 +113,51 @@ python3 -c "import pynis"
 `-DBUILD_TOOLS=OFF` builds only the library and the python module, not the `nis` programs.
 
 
+## Nuclear data
+
+The nuclear data is not in git. [processing/process.py](processing/process.py) downloads it from the
+NEA data bank (data.oecd-nea.org) and the NNDC (www.nndc.bnl.gov), checks the MD5 of each file, and writes the
+NIS data files into `data/`. It needs only Python 3.9 or newer (no other packages).
+
+```bash
+python3 processing/process.py bootstrap --no-reactions   # the decay data and the fission yields, a few minutes
+python3 processing/process.py bootstrap                  # and data/jeff4.reac too, some hours (NJOY and PREPRO)
+```
+
+`bootstrap` gets the files that the tests and the examples use:
+
+| File | What | From |
+|---|---|---|
+| `data/jeff311.dec` | JEFF-3.1.1 decay data | NEA |
+| `data/endfbvii1.dec` | ENDF/B-VII.1 decay data | NNDC |
+| `data/jeff311.nfy`, `data/jeff311.sfy` | JEFF-3.1.1 neutron induced and spontaneous fission yields | NEA |
+| `data/jeff4.reac` | JEFF-4.0 neutron cross sections in 1102 groups, made from the raw ENDF files with NJOY and PREPRO | NEA |
+
+`bootstrap` builds NJOY and PREPRO first if they are not there (it needs git, cmake, make and gfortran, see
+[processing/README.md](processing/README.md)). A file that is already in `data/` is not made again (`--force` makes it again).
+
+You can get other libraries too:
+
+```bash
+python3 processing/process.py libraries            # the libraries and their files
+python3 processing/process.py decay jeff4 endfbviii0   # data/jeff4.dec and data/endfbviii0.dec
+python3 processing/process.py yields jeff4             # data/jeff4.nfy and data/jeff4.sfy
+python3 processing/process.py reactions jeff4          # data/jeff4.reac
+python3 processing/process.py tendl --year 2025        # data/tendl2025.reac
+```
+
+| Library | Decay | Fission yields | Neutron cross sections |
+|---|---|---|---|
+| `jeff311` (JEFF-3.1.1) | yes | yes | |
+| `jeff4` (JEFF-4.0) | yes | yes | yes |
+| `endfbvii1` (ENDF/B-VII.1) | yes | | |
+| `endfbviii0` (ENDF/B-VIII.0) | yes | | |
+| TENDL (`tendl` command) | | | yes |
+
+Some files need small changes before ENDFtk can read them. The program makes them, and they do not change the data that NIS uses:
+the JEFF-4.0 yield files get a first line (TPID), and one gamma line of the JEFF-4.0 decay data (`NT=8`) gets
+two empty conversion coefficients (`NT=12`).
+
 ## Example
 
 To test your build, after compiling as above, try the following:
@@ -173,7 +218,7 @@ A `dt` line with no flux uses the spectrum as it is given (or decay only if ther
 With more than one step, the output gives the nuclides, activity and decay heat after each step, under a
 `step <n>` line with the time since the start and the flux.
 
-Note, you will need to have pulled the decay data via LFS in the [./data](./data) subdirectory.
+Note, you need the nuclear data in `data/` first (see [Nuclear data](#nuclear-data)).
 
 ### Fission yields
 
@@ -181,8 +226,8 @@ Without fission yields, a fission (MT=18) goes to the sink: the fissile nuclide 
 Give a fission yield file (ENDF MF=8 MT=454, the independent yields) to make the fission products:
 
 ```bash
-# get the JEFF-3.1.1 yields from the NEA data bank: data/jeff311.nfy and data/jeff311.sfy (needs curl)
-python scripts/get_fission_yields.py
+# get the JEFF-3.1.1 yields from the NEA data bank: data/jeff311.nfy and data/jeff311.sfy
+python3 processing/process.py yields jeff311
 ./build/bin/nis -d data/jeff311.dec -r data/jeff4.nisreac -i run.inp \
     --fission-yields data/jeff311.nfy --sf-yields data/jeff311.sfy
 ```
@@ -329,8 +374,8 @@ The tests:
 | [fissionheattests.py](src/tests/python/fissionheattests.py) | the fission decay heat benchmark: the 44 cases load, the reference has all of them; regression against [nis_reference.csv](benchmarks/fission_decay_heat/results/nis_reference.csv) and C/E limits | the regression: decay data and the yield files |
 | [nisprogramtests.py](src/tests/python/nisprogramtests.py) (slow) | the `nis` program: 3 FNS decks give the same as the reference, decay only steps, errors for bad input | decay and reaction data, the `nis` program |
 
-"Decay data" and "reaction data" are the files in `data/` from git lfs. The yield files come from
-`python scripts/get_fission_yields.py`. A test that needs a file that is not there
+"Decay data", "reaction data" and "the yield files" are the files in `data/` from
+`python3 processing/process.py bootstrap` (see [Nuclear data](#nuclear-data)). A test that needs a file that is not there
 is skipped. The `nis` program test uses `build/bin/nis`, or give its path: `NIS_BIN=path/to/nis`.
 
 **When the FNS regression test fails:** a change to the code or to the data changed the decay heat (more than
@@ -348,9 +393,10 @@ uv run python scripts/bench.py run fns --decay-data data/jeff311.dec --reaction-
 and on each pull request:
 
 - it builds NIS and runs the C++ tests, on Linux and macOS,
-- it builds `pynis` with uv and runs the fast Python tests, on Linux.
+- it builds `pynis` with uv, gets the decay data and the fission yields (`bootstrap --no-reactions`, cached),
+  and runs the fast Python tests, on Linux.
 
-CI does not download the nuclear data (about 1 GB of git lfs), so the tests that need it are skipped there.
+CI does not make the reaction data (it takes hours), so the tests that need it are skipped there.
 Run them on your machine before you push a change to the physics.
 
 ## Benchmarks
@@ -366,7 +412,7 @@ the spectrum, the measured values and the results of other codes) and a NIS inpu
 | [fission_decay_heat](benchmarks/fission_decay_heat) | fission | 44 | beta, gamma and total decay heat after fission pulses and irradiations of U233, U235, U238, Pu239, Pu241 and Th232 (IAEA CoNDERC) |
 
 One program, [scripts/bench.py](scripts/bench.py), does all the work for all the benchmarks. These steps use uv
-(see [python bindings](#python-bindings)), and the nuclear data from LFS.
+(see [python bindings](#python-bindings)), and the nuclear data (see [Nuclear data](#nuclear-data)).
 
 1. Build and install `pynis` into `.venv`:
 

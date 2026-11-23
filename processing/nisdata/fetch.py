@@ -1,8 +1,9 @@
-"""Download and unpack the ENDF files of a library (for now: the TENDL neutron files)."""
+"""Download and unpack the ENDF files of a library."""
 
 import sys
 import tarfile
 import time
+import zipfile
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -11,6 +12,9 @@ from pathlib import Path
 # https://tendl.web.psi.ch before). If the site moves again, give the address with --url.
 TENDL_URL = "https://tendl.imperial.ac.uk/tendl_{year}/tar_files/TENDL-n.tgz"
 LATEST_TENDL = "2025"
+
+# some sites (the NEA data bank) refuse the default python name
+USER_AGENT = "nisdata/1.0"
 
 
 def _size(n: float) -> str:
@@ -90,7 +94,10 @@ def download(url: str, target: Path, tries: int = 50) -> Path:
     print(f"download {url}", file=sys.stderr, flush=True)
     for attempt in range(1, tries + 1):
         done = partial.stat().st_size if partial.is_file() else 0
-        request = urllib.request.Request(url, headers={"Range": f"bytes={done}-"} if done else {})
+        headers = {"User-Agent": USER_AGENT}
+        if done:
+            headers["Range"] = f"bytes={done}-"
+        request = urllib.request.Request(url, headers=headers)
         try:
             with urllib.request.urlopen(request, timeout=120) as response:
                 # 206: the server sends the rest. 200: it sends all of it again
@@ -137,6 +144,20 @@ def unpack_archive(archive: Path, folder: Path) -> Path:
                 if not (member.isfile() or member.isdir()) or root not in (path, *path.parents):
                     raise ValueError(f"unsafe member in {archive}: {member.name}")
             tar.extractall(folder)
+    return folder
+
+
+def unpack_zip(archive: Path, folder: Path) -> Path:
+    """Unpack a zip archive safely (no paths out of the folder)."""
+    folder = Path(folder)
+    folder.mkdir(parents=True, exist_ok=True)
+    root = folder.resolve()
+    with zipfile.ZipFile(archive) as z:
+        for member in z.infolist():
+            path = (folder / member.filename).resolve()
+            if root not in (path, *path.parents):
+                raise ValueError(f"unsafe member in {archive}: {member.filename}")
+        z.extractall(folder)
     return folder
 
 
