@@ -112,6 +112,20 @@ def _up_to_date(reaction_file: Path) -> bool:
         return f"nisdata {VERSION})" in f.readline()
 
 
+def _finish(out: Path, output: Path, text: str, status: int, nis_cache: Path) -> int:
+    """
+    Join the processed files. If some nuclides failed, the file has no version mark, so the next run tries the
+    failed nuclides again (the others are done, so they are not processed again).
+    """
+    if status == 0:
+        _combine(out, output, _title(text), nis_cache)
+        return 0
+    _combine(out, output, f"{text} (1102 groups, INCOMPLETE)", nis_cache)
+    print(f"WARNING: {output} does not have the nuclides that failed (see above). Run the same command again to "
+          f"try them again", file=sys.stderr)
+    return status
+
+
 def _use_existing(output: Path, args) -> bool:
     """True if the reaction data file can be used as it is: made by this version, or an older one with --allow-old."""
     if args.force:
@@ -123,6 +137,10 @@ def _use_existing(output: Path, args) -> bool:
         return False
     with open(output, errors="replace") as f:
         first = f.readline()
+    if "INCOMPLETE" in first:
+        print(f"{output} does not have all the nuclides (some failed before), so they are tried again",
+              file=sys.stderr)
+        return False
     bad = [v for v in BAD_VERSIONS if f"nisdata {v})" in first]
     if bad:
         print(f"{output} is from version {bad[0]} of the processing, which has an error in the products of MT=5: "
@@ -203,8 +221,7 @@ def cmd_tendl(args) -> int:
         # the files are read from the archive, so the 14 GB of TENDL are never all on the disk
         source = fetch.fetch_tendl(args.year, args.raw, args.url, unpack=False)
     status = _report(_process([source], out, args), out)
-    _combine(out, output, _title(f"TENDL-{args.year} Incident Neutron File"), args.nis_cache)
-    return status
+    return _finish(out, output, f"TENDL-{args.year} Incident Neutron File", status, args.nis_cache)
 
 
 def cmd_libraries(args) -> int:
@@ -240,8 +257,7 @@ def _reactions(key: str, args) -> int:
     folder = libraries.fetch_neutron(lib, args.raw)
     out = args.processed or DEFAULT_OUT / lib.key
     status = _report(_process([folder], out, args), out)
-    _combine(out, output, _title(f"{lib.title} Incident Neutron File"), args.nis_cache)
-    return status
+    return _finish(out, output, f"{lib.title} Incident Neutron File", status, args.nis_cache)
 
 
 def cmd_reactions(args) -> int:

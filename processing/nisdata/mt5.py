@@ -109,6 +109,8 @@ def _product(energies, sigma, xs_breaks, xs_laws, ye, yv, breaks, laws) -> tuple
     for e in sorted(set(e for e in energies + ye if ye[0] <= e <= ye[-1])):
         below = _value(energies, sigma, xs_breaks, xs_laws, e, "left") * _value(ye, yv, breaks, laws, e, "left")
         above = _value(energies, sigma, xs_breaks, xs_laws, e, "right") * _value(ye, yv, breaks, laws, e, "right")
+        # a cross section is not negative (a small negative value comes from rounding in the data)
+        below, above = max(below, 0.0), max(above, 0.0)
         if grid and below != above:
             grid.append(e)
             values.append(below)
@@ -118,11 +120,15 @@ def _product(energies, sigma, xs_breaks, xs_laws, ye, yv, breaks, laws) -> tuple
 
 
 def _number(v: float) -> str:
-    """An ENDF number in 11 characters, 1.234567+5."""
-    if v == 0.0:
+    """An ENDF number in 11 characters: 1.234567+5, 1.23456-10, -1.2345-10. Below 1e-99 it is 0."""
+    if v == 0.0 or abs(v) < 1e-99:
         return " 0.000000+0"
-    mantissa, exponent = f"{v:.6e}".split("e")
-    return f"{mantissa}{int(exponent):+d}".rjust(11)
+    for digits in (6, 5, 4, 3):
+        mantissa, exponent = f"{v:.{digits}e}".split("e")
+        text = f"{mantissa}{int(exponent):+d}"
+        if len(text) <= 11:
+            return text.rjust(11)
+    raise ValueError(f"{v} does not fit in an ENDF field")
 
 
 def _records(mat: int, rows: list, seq_start: int) -> list:

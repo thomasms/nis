@@ -558,6 +558,18 @@ class ResidualProductionTests(unittest.TestCase):
         self.assertEqual(list(zip(grid, values)), [(1e6, 0.5), (1e7, 0.5), (1e7, 1.0), (2e7, 1.0)])
         self.assertEqual(mt5._value([1e6, 1e7, 2e7], [1.0, 3.0, 3.0], [3], [1], 5e6), 1.0)
 
+    def test_numbers_fit_in_11_characters(self) -> None:
+        from nisdata import mt5
+        for v in (1.0, 1.18e7, 3.878602e-10, -5.536369e-26, 1.5e-120, -1.0e100, 2.0e-99, 123456789.0):
+            text = mt5._number(v)
+            self.assertEqual(len(text), 11, text)
+            if abs(v) >= 1e-99:
+                self.assertAlmostEqual(endf.endf_float(text) / v, 1.0, places=3)
+        self.assertEqual(mt5._number(1.5e-120), " 0.000000+0")
+        # no negative cross sections
+        _, values = mt5._product([1e6, 2e7], [-1e-26, 1.0], [2], [2], [1e6, 2e7], [1.0, 1.0], [2], [2])
+        self.assertEqual(values[0], 0.0)
+
     def test_new_mf10(self) -> None:
         from nisdata import mt5
         text = _material_with_mt5()
@@ -628,4 +640,7 @@ class VersionTests(unittest.TestCase):
         process = importlib.import_module("process")
         args = type("Args", (), {"force": False, "allow_old": True})()
         self.assertFalse(process._use_existing(bad, args))
+        incomplete = folder / "incomplete.reac"
+        incomplete.write_text(endf.tpid_line("TENDL-2025 Incident Neutron File (1102 groups, INCOMPLETE)") + "x" * 2000)
+        self.assertFalse(process._use_existing(incomplete, args))
         self.assertTrue(process._use_existing(old, args))
