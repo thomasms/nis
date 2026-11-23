@@ -15,17 +15,23 @@
 # <benchmark>-<reactions>+<decay>.csv for each run, and stats.txt and summary.png for the comparison.
 # A run is done again only when its data file changes. "make clean-results" removes the results.
 #
+# A reaction data file of an older version of the processing is made again (hours). ALLOW_OLD=1 uses it as it is:
+#   make bench ALLOW_OLD=1
+#
 # Other targets: make test-data (the files the tests need), make test (the Python and C++ tests).
 
 REACTIONS ?= jeff4 tendl2025
 DECAY ?= jeff4
 BENCHMARK ?= fns
 RESULTS ?= results
+# ALLOW_OLD=1: use a reaction data file of an older version of the processing as it is (see processing/README.md)
+ALLOW_OLD ?=
 JOBS ?= $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)
 
 PYTHON ?= python3
 UV ?= uv
 PROCESS := $(PYTHON) processing/process.py
+ALLOW_OLD_FLAG := $(if $(ALLOW_OLD),--allow-old,)
 BENCH := $(UV) run python scripts/bench.py
 NJOY := processing/tools/bin/njoy
 
@@ -65,10 +71,10 @@ $(NJOY):
 	$(PROCESS) tools -j $(JOBS)
 
 data/tendl%.reac: FORCE | $(NJOY)
-	$(PROCESS) tendl --year $* -j $(JOBS)
+	$(PROCESS) tendl --year $* -j $(JOBS) $(ALLOW_OLD_FLAG)
 
 data/%.reac: FORCE | $(NJOY)
-	$(PROCESS) reactions $* -j $(JOBS)
+	$(PROCESS) reactions $* -j $(JOBS) $(ALLOW_OLD_FLAG)
 
 # ---- 3. bench ----
 

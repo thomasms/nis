@@ -546,6 +546,18 @@ class ResidualProductionTests(unittest.TestCase):
         # nothing to add a second time
         self.assertEqual(mt5.add_residual_production(folder / "out.endf", folder / "again.endf"), 0)
 
+    def test_a_step_stays_a_step(self) -> None:
+        from nisdata import mt5
+        # as after SIGMA1: the cross section starts with a step at its threshold (two points at 1e7)
+        grid, values = mt5._product([1e7, 1e7, 2e7], [0.0, 0.2, 0.4], [3], [2], [1e-5, 2e7], [1.0, 1.0], [2], [2])
+        self.assertEqual(grid, [1e-5, 1e7, 1e7, 2e7])
+        self.assertEqual(values, [0.0, 0.0, 0.2, 0.4])
+        # a step in the yield, and a histogram (INT=1)
+        grid, values = mt5._product([1e6, 2e7], [1.0, 1.0], [2], [2], [1e6, 1e7, 1e7, 2e7], [0.5, 0.5, 1.0, 1.0],
+                                    [4], [2])
+        self.assertEqual(list(zip(grid, values)), [(1e6, 0.5), (1e7, 0.5), (1e7, 1.0), (2e7, 1.0)])
+        self.assertEqual(mt5._value([1e6, 1e7, 2e7], [1.0, 3.0, 3.0], [3], [1], 5e6), 1.0)
+
     def test_new_mf10(self) -> None:
         from nisdata import mt5
         text = _material_with_mt5()
@@ -584,3 +596,36 @@ class VersionTests(unittest.TestCase):
         self.assertTrue(process._up_to_date(new))
         self.assertFalse(process._up_to_date(old))
         self.assertFalse(process._up_to_date(folder / "none.reac"))
+
+    def test_old_processed_files_are_moved(self) -> None:
+        import importlib
+        sys.path.insert(0, str(PROCESSING_DIR))
+        process = importlib.import_module("process")
+        folder = Path(tempfile.mkdtemp())
+        (folder / "Fe56.asc").write_text("old")
+        process._check_version(folder)
+        self.assertFalse((folder / "Fe56.asc").exists())
+        self.assertEqual((folder / "version-1" / "Fe56.asc").read_text(), "old")
+        self.assertEqual((folder / "VERSION").read_text().strip(), str(process.VERSION))
+        # a file of this version stays (a stopped run continues)
+        (folder / "Co59.asc").write_text("new")
+        process._check_version(folder)
+        self.assertTrue((folder / "Co59.asc").exists())
+
+    def test_allow_old(self) -> None:
+        import importlib
+        sys.path.insert(0, str(PROCESSING_DIR))
+        folder = Path(tempfile.mkdtemp())
+        old = folder / "tendl2025.reac"
+        old.write_text(endf.tpid_line("TENDL-2025 Incident Neutron File (1102 groups)") + "x" * 2000)
+        run = subprocess.run([sys.executable, str(PROCESS), "tendl", "--output", old, "--allow-old"],
+                             capture_output=True, text=True, cwd=ROOT)
+        self.assertEqual(run.returncode, 0)
+        self.assertIn("it is used as it is", run.stderr)
+        # a file of a bad version is never used
+        bad = folder / "bad.reac"
+        bad.write_text(endf.tpid_line("TENDL-2025 Incident Neutron File (1102 groups, nisdata 2)") + "x" * 2000)
+        process = importlib.import_module("process")
+        args = type("Args", (), {"force": False, "allow_old": True})()
+        self.assertFalse(process._use_existing(bad, args))
+        self.assertTrue(process._use_existing(old, args))

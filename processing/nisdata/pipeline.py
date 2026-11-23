@@ -23,8 +23,12 @@ from .endf import Material, mat_mf_mt, read_material
 from .mt5 import add_residual_production
 
 # The version of the processing. Change it when a change to the steps changes the output, so that the files of
-# an older version are made again (process.py checks it). 1: the first version. 2: the products of MT=5 in MF10.
-VERSION = 2
+# an older version are made again (process.py checks it). 1: the first version. 2: the products of MT=5 in MF10
+# (wrong: a step in the MT=5 cross section was made a slope, so the products were not 0 below the threshold).
+# 3: the products of MT=5, with the steps kept.
+VERSION = 3
+# the versions that must not be used, also with --allow-old
+BAD_VERSIONS = (2,)
 
 PREPRO_CODES = ("linear", "recent", "sigma1", "sixpak", "merger", "activate", "fixup", "dictin", "groupie")
 

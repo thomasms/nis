@@ -32,7 +32,7 @@ import sys
 from pathlib import Path
 
 from nisdata import endf, fetch, libraries, tools as build_tools
-from nisdata.pipeline import VERSION, Tools
+from nisdata.pipeline import BAD_VERSIONS, VERSION, Tools
 from nisdata.runner import is_archive, process_all, process_archive
 
 HERE = Path(__file__).resolve().parent
@@ -112,21 +112,56 @@ def _up_to_date(reaction_file: Path) -> bool:
         return f"nisdata {VERSION})" in f.readline()
 
 
-def _check_version(output: Path, args) -> None:
-    """The processed files of an older version of the processing are made again."""
-    stamp = Path(output) / "VERSION"
-    done = stamp.read_text().strip() if stamp.is_file() else ("1" if any(Path(output).glob("*.asc")) else None)
-    if done is not None and done != str(VERSION) and not args.force:
-        print(f"the files in {output} are from version {done} of the processing, this is version {VERSION}: "
-              f"all are made again", file=sys.stderr)
-        args.force = True
-    Path(output).mkdir(parents=True, exist_ok=True)
+def _use_existing(output: Path, args) -> bool:
+    """True if the reaction data file can be used as it is: made by this version, or an older one with --allow-old."""
+    if args.force:
+        return False
+    if _up_to_date(output):
+        print(f"{output} is there, not made again (--force makes it again)", file=sys.stderr)
+        return True
+    if not libraries.is_there(output):
+        return False
+    with open(output, errors="replace") as f:
+        first = f.readline()
+    bad = [v for v in BAD_VERSIONS if f"nisdata {v})" in first]
+    if bad:
+        print(f"{output} is from version {bad[0]} of the processing, which has an error in the products of MT=5: "
+              f"it is made again (also with --allow-old)", file=sys.stderr)
+        return False
+    if args.allow_old:
+        print(f"{output} is from an older version of the processing (not {VERSION}), it is used as it is "
+              f"(--allow-old). It has no products of MT=5 (n,anything): for TENDL they start at 30 MeV, so this "
+              f"changes nothing for a spectrum below 30 MeV (FNS)", file=sys.stderr)
+        return True
+    print(f"{output} is from an older version of the processing (not {VERSION}), so it is made again. It has no "
+          f"products of MT=5 (n,anything). To use it as it is, stop now (Ctrl-C) and give --allow-old "
+          f"(make: ALLOW_OLD=1)", file=sys.stderr)
+    return False
+
+
+def _check_version(output: Path) -> None:
+    """
+    The processed files of an older version of the processing are moved to <output>/version-<n>/, so that
+    they are made again. A stopped run then continues with the files of this version only.
+    """
+    output = Path(output)
+    stamp = output / "VERSION"
+    old = list(output.glob("*.asc"))
+    done = stamp.read_text().strip() if stamp.is_file() else ("1" if old else None)
+    if done is not None and done != str(VERSION) and old:
+        keep = output / f"version-{done}"
+        keep.mkdir(exist_ok=True)
+        for path in old:
+            path.replace(keep / path.name)
+        print(f"the {len(old)} files in {output} are from version {done} of the processing, this is version "
+              f"{VERSION}: all are made again (the old files are in {keep}, you can delete them)", file=sys.stderr)
+    output.mkdir(parents=True, exist_ok=True)
     stamp.write_text(f"{VERSION}\n")
 
 
 def _process(sources: list, output: Path, args) -> list:
     """Folders and files of ENDF files, or one tar archive of them."""
-    _check_version(output, args)
+    _check_version(output)
     if len(sources) == 1 and is_archive(sources[0]):
         return process_archive(sources[0], output, _tools(args), args.jobs, args.temperature, args.work_dir,
                                args.keep, args.force, only=tuple(args.only))
@@ -154,16 +189,20 @@ def cmd_combine(args) -> int:
 
 def cmd_tendl(args) -> int:
     output = args.output or ROOT / "data" / f"tendl{args.year}.reac"
-    if _up_to_date(output) and not args.force:
-        print(f"{output} is there, not made again (--force makes it again)", file=sys.stderr)
+    if _use_existing(output, args):
         return 0
-    if libraries.is_there(output):
-        print(f"{output} is from an older version of the processing (not version {VERSION}), "
-              f"so it is made again", file=sys.stderr)
-    # the files are read from the archive, so the 14 GB of TENDL are never all on the disk
-    archive = fetch.fetch_tendl(args.year, args.raw, args.url, unpack=False)
     out = args.processed or DEFAULT_OUT / f"tendl{args.year}"
-    status = _report(_process([archive], out, args), out)
+    folder = Path(args.raw) / f"TENDL-{args.year}-n"
+    archives = sorted(Path(args.raw).glob(f"TENDL-{args.year}-n.t*"))
+    archives = [a for a in archives if not a.name.endswith(".part")]
+    if not archives and not args.url and folder.is_dir() and endf.find_endf_files(folder):
+        # unpacked before (process.py fetch), and the archive is not there: no new download
+        print(f"the TENDL-{args.year} files are in {folder}, they are not downloaded again", file=sys.stderr)
+        source = folder
+    else:
+        # the files are read from the archive, so the 14 GB of TENDL are never all on the disk
+        source = fetch.fetch_tendl(args.year, args.raw, args.url, unpack=False)
+    status = _report(_process([source], out, args), out)
     _combine(out, output, _title(f"TENDL-{args.year} Incident Neutron File"), args.nis_cache)
     return status
 
@@ -196,12 +235,8 @@ def cmd_yields(args) -> int:
 def _reactions(key: str, args) -> int:
     lib = libraries.get(key)
     output = args.output or Path(args.data) / f"{lib.key}.reac"
-    if _up_to_date(output) and not args.force:
-        print(f"{output} is there, not made again (--force makes it again)", file=sys.stderr)
+    if _use_existing(output, args):
         return 0
-    if libraries.is_there(output):
-        print(f"{output} is from an older version of the processing (not version {VERSION}), "
-              f"so it is made again", file=sys.stderr)
     folder = libraries.fetch_neutron(lib, args.raw)
     out = args.processed or DEFAULT_OUT / lib.key
     status = _report(_process([folder], out, args), out)
@@ -235,7 +270,13 @@ def _add_data_options(p, force: bool = True) -> None:
         p.add_argument("--force", action="store_true", help="make the files again, also if they are there")
 
 
+def _add_allow_old(p) -> None:
+    p.add_argument("--allow-old", action="store_true",
+                   help="use a reaction data file of an older version of the processing as it is (no MT=5 products)")
+
+
 def _add_reaction_options(p) -> None:
+    _add_allow_old(p)
     p.add_argument("--processed", type=Path, default=None, help="default processing/out/<library>")
     p.add_argument("--output", type=Path, default=None, help="default data/<library>.reac")
     p.add_argument("--nis-cache", type=Path, default=DEFAULT_NIS_CACHE)
@@ -322,6 +363,7 @@ def main() -> int:
     p.add_argument("--processed", type=Path, default=None, help="default processing/out/tendl<year>")
     p.add_argument("--output", type=Path, default=None, help="default data/tendl<year>.reac")
     p.add_argument("--nis-cache", type=Path, default=DEFAULT_NIS_CACHE)
+    _add_allow_old(p)
     _add_run_options(p)
     p.set_defaults(func=cmd_tendl)
 

@@ -177,9 +177,12 @@ python3 processing/process.py tendl --year 2025        # data/tendl2025.reac
 | `endfbviii0` (ENDF/B-VIII.0) | yes | | |
 | TENDL (`tendl` command) | | | yes |
 
-The reaction data files have the version of the processing in their first line (`nisdata 2`). A file or a
-processed folder (`processing/out/<library>`) of an older version is made again: version 2 adds the products of
-MT=5 (n,anything), which the files of version 1 do not have.
+The reaction data files have the version of the processing in their first line (`nisdata 3`). A file or a
+processed folder (`processing/out/<library>`) of an older version is made again. Version 3 adds the products of
+MT=5 (n,anything), which the files of version 1 do not have (version 2 had an error in them, and is never used).
+For TENDL, MT=5 starts at 30 MeV, so a version 1 file gives the same results for a spectrum below 30 MeV (FNS):
+`--allow-old` (or `make ... ALLOW_OLD=1`) uses it as it is. For JEFF-4.0, MT=5 starts lower (Mn55: 0.6 MeV).
+`tendl` uses the unpacked folder `processing/raw/TENDL-<year>-n/` if the archive is not there (no new download).
 
 Some files need small changes before ENDFtk can read them. The program makes them, and they do not change the data that NIS uses:
 the JEFF-4.0 yield files get a first line (TPID), and one gamma line of the JEFF-4.0 decay data (`NT=8`) gets

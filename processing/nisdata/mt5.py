@@ -81,17 +81,40 @@ def _skip_law(reader: _Reader, law: int) -> None:
         raise ValueError(f"MF6/MT5: LAW={law} is not known")
 
 
-def _value(x: list, y: list, breaks: list, laws: list, e: float) -> float:
-    """The TAB1 at e: 0 out of its range, histogram for INT=1, else linear."""
-    if not x or e < x[0] or e > x[-1]:
+def _value(x: list, y: list, breaks: list, laws: list, e: float, side: str = "right") -> float:
+    """
+    The TAB1 at e: 0 out of its range, histogram for INT=1, else linear. A step (two points at the same energy)
+    has two values: side="left" gives the value just below e, side="right" the value just above it.
+    """
+    if not x or e < x[0] or e > x[-1] or (side == "left" and e == x[0]):
         return 0.0
-    j = bisect.bisect_right(x, e) - 1
-    if j >= len(x) - 1:
-        return y[-1]
+    if side == "left":
+        # the interval (x[j], x[j+1]] with x[j+1] the first point at e or above
+        j = bisect.bisect_left(x, e) - 1
+    else:
+        j = bisect.bisect_right(x, e) - 1
+        if j >= len(x) - 1:
+            return y[-1]
     law = laws[bisect.bisect_left(breaks, j + 2)] if laws else 2
-    if law == 1 or x[j + 1] == x[j]:
+    if law == 1:
         return y[j]
+    if x[j + 1] == x[j]:
+        return y[j + 1]
     return y[j] + (y[j + 1] - y[j]) * (e - x[j]) / (x[j + 1] - x[j])
+
+
+def _product(energies, sigma, xs_breaks, xs_laws, ye, yv, breaks, laws) -> tuple:
+    """sigma(E) * y(E) on all the energies of both, in the range of the yield. A step is kept as a step."""
+    grid, values = [], []
+    for e in sorted(set(e for e in energies + ye if ye[0] <= e <= ye[-1])):
+        below = _value(energies, sigma, xs_breaks, xs_laws, e, "left") * _value(ye, yv, breaks, laws, e, "left")
+        above = _value(energies, sigma, xs_breaks, xs_laws, e, "right") * _value(ye, yv, breaks, laws, e, "right")
+        if grid and below != above:
+            grid.append(e)
+            values.append(below)
+        grid.append(e)
+        values.append(above)
+    return grid, values
 
 
 def _number(v: float) -> str:
@@ -140,9 +163,7 @@ def residual_production(text_lines: list) -> list:
         head, ye, yv, breaks, laws = reader.tab1()
         zap, lip, law = int(round(head[0])), head[2], head[3]
         _skip_law(reader, law)
-        # all the energies of the cross section and of the yield, in the range of the yield
-        grid = sorted(set(e for e in energies + ye if ye[0] <= e <= ye[-1]))
-        values = [_value(energies, sigma, xs_breaks, xs_laws, e) * _value(ye, yv, breaks, laws, e) for e in grid]
+        grid, values = _product(energies, sigma, xs_breaks, xs_laws, ye, yv, breaks, laws)
         if any(v > 0.0 for v in values):
             products.append((zap, lip, grid, values))
 
