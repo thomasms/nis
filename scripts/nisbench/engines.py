@@ -4,7 +4,11 @@ Run the cases of a benchmark with NIS. Two engines give the same results:
     pynis   the python bindings, in this process. The nuclear data is read one time for all the cases.
     nis     the nis program, one run of the deck (<case>.inp) for each case.
 
-Each run gives, at the end of each step, the decay heat (W, total and by type) and the activity (Bq).
+Each run gives, at the end of each step, the decay heat (W, total and by type) and the activity (Bq). For a
+case with cross sections, pynis also gives, for each step with a flux, the spectrum-averaged cross section (cm2) of
+each (target, product, all_states) of the case: the rate from the target to the product in the reaction matrix of the
+spectrum, over the total of the spectrum. This is the sum of all the reactions of the target that make the product
+(and with all_states, its isomers too).
 """
 
 import multiprocessing
@@ -102,6 +106,32 @@ def _with_source(mat, yields: dict, rate: float):
     return sp.vstack([sp.hstack([mat, sp.csr_matrix((size, 1))]), row]).tocsc()
 
 
+def _index(nis, nuclide: str) -> int:
+    """The index of a nuclide in the inventory vector."""
+    import numpy as np
+    vector = nis.core.vector_from_inventory({nuclide: 1.0})
+    if not vector.any():
+        raise RuntimeError(f"NIS does not track the nuclide {nuclide}")
+    return int(np.argmax(vector))
+
+
+def _states(nis, product: str, all_states: bool) -> list:
+    """The indices of the product: its ground state and the isomers that NIS tracks, or only the one named."""
+    if not all_states:
+        return [_index(nis, product)]
+    names = [product] + [product + s for s in "mn" if nis.core.vector_from_inventory({product + s: 1.0}).any()]
+    return [_index(nis, n) for n in names]
+
+
+def cross_sections(nis, reaction_mat, spectrum_total: float, reactions: list) -> dict:
+    """(target, product, all_states) -> the spectrum-averaged cross section in cm2. The reaction matrix has the
+    rate from each parent (row) to each product (column) for the spectrum as it is, so this is the rate over the
+    total of the spectrum."""
+    return {(target, product, all_states):
+            sum(float(reaction_mat[_index(nis, target), i]) for i in _states(nis, product, all_states)) / spectrum_total
+            for target, product, all_states in reactions}
+
+
 def _inventory_from_vector(nis, vector) -> dict:
     zais = nis.data.ALL_ZAIS()
     return {nis.zai.get_name_from(zais[i]): float(v) for i, v in enumerate(vector[:len(zais)]) if v > 0}
@@ -123,6 +153,9 @@ def _run_pynis(case: Case, d: _PynisData) -> list:
         bounds, values = case.spectrum
         reaction_mat = nis.core.reaction_mat(d.reaction_data, nis.core.Spectrum(bounds, values), d.fission_yields)
         spectrum_total = sum(values)
+    reactions = [(m.target, m.product, m.all_states) for m in case.measurements if m.quantity == "cross_section"]
+    # the same spectrum in all the steps, so the same cross sections
+    case_cross_sections = cross_sections(nis, reaction_mat, spectrum_total, reactions) if reactions else None
 
     matrices = {}
     nuclides = dict(case.atoms)
@@ -154,6 +187,8 @@ def _run_pynis(case: Case, d: _PynisData) -> list:
         heat = nis.core.compute_decay_heat(d.energy_data, inventory)
         result = {quantity: getattr(heat, part) for part, quantity in _HEAT_PARTS.items()}
         result["activity"] = nis.core.compute_activity(d.energy_data, inventory)
+        if case_cross_sections is not None and flux > 0:
+            result["cross_section"] = case_cross_sections
         results.append(result)
     return results
 
@@ -202,7 +237,8 @@ def parse_nis_output(output: str) -> list:
 
 def _run_program(case: Case, nis: Path, data: NuclearData) -> list:
     if not case.has_deck:
-        raise RuntimeError(f"{case.name}: a case with a fission source has no deck, run it with --engine pynis")
+        raise RuntimeError(f"{case.name}: a case with a fission source or a cross section has no deck, "
+                           f"run it with --engine pynis")
     if not case.deck_path.exists():
         raise RuntimeError(f"{case.name}: no deck {case.deck_path}, make it with scripts/bench.py decks")
     # a large threshold, so the output has no nuclide list

@@ -39,10 +39,13 @@ def _is_nis_column(column: str) -> bool:
     return column == "nis" or (column.startswith("nis (") and column.endswith(")"))
 
 
-def nis_value(case: Case, quantity: str, unit: str, step_result: dict, cooling_time: float) -> float:
-    """The NIS value (in the unit of the measurement) from the result of a step (W and Bq)."""
+def nis_value(case: Case, quantity: str, unit: str, step_result: dict, cooling_time: float,
+              reaction: tuple = None) -> float:
+    """The NIS value (in the unit of the measurement) from the result of a step (W, Bq, and cm2 for each
+    (target, product, all_states) of a cross section). reaction: (target, product, all_states), only for a cross
+    section."""
     factor, normalisation, times_time = units_for(quantity)[unit]
-    value = step_result[quantity] * factor
+    value = (step_result[quantity][reaction] if quantity == "cross_section" else step_result[quantity]) * factor
     if normalisation == "mass":
         value /= case.mass_kg
     elif normalisation == "fission":
@@ -61,7 +64,7 @@ def case_rows(case: Case, step_results: list, column: str = "nis") -> list:
         for i, (step, t) in enumerate(zip(m.steps, times)):
             row = {"benchmark": case.benchmark, "case": case.name, "quantity": m.quantity, "unit": m.unit,
                    "time_s": f"{t:.6g}", "experiment": f"{m.values[i]:.6g}", "uncertainty": f"{m.uncertainties[i]:.6g}",
-                   column: f"{nis_value(case, m.quantity, m.unit, step_results[step], t):.6e}"}
+                   column: f"{nis_value(case, m.quantity, m.unit, step_results[step], t, (m.target, m.product, m.all_states)):.6e}"}
             for name, values in m.calculations.items():
                 row[name] = "" if values[i] is None else f"{values[i]:.6e}"
             rows.append(row)

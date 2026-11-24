@@ -98,6 +98,8 @@ benchmarks/
 | `measurements[].steps` | the step (0 is the first) at the end of which each value is measured, going up |
 | `measurements[].values`, `uncertainties` | one for each of `steps`, in `unit`. The uncertainty is one standard deviation |
 | `measurements[].calculations` | optional: the results of other codes, one value (or `null`) for each of `steps` |
+| `measurements[].target`, `product` | only for a `cross_section`: the nuclide that is hit (it must be in `sample.atoms`) and the nuclide that is made, e.g. `Al27` and `Na24`, or `Nb93` and `Nb92m` |
+| `measurements[].all_states` | only for a `cross_section`, default `false`: `true` counts the product in all its states (ground and isomers), as when the isomers decay to the ground state before the activity is measured. Then `product` is the ground state name |
 
 The **cooling time** of a value is the time from the end of the last step with a flux to the end of its step
 (from the start, if no step has a flux).
@@ -111,6 +113,12 @@ The **cooling time** of a value is the time from the end of the last step with a
 | `gamma_heat` | decay heat of gamma and X rays | the same |
 | `alpha_heat` | decay heat of alpha particles | the same |
 | `activity` | total activity | `Bq`, `Bq/kg`, `Bq/g`, `Bq/fission` |
+| `cross_section` | spectrum-averaged production cross section of `product` from `target`, in the spectrum of the step | `b`, `mb` |
+
+A **cross section** comes from the reaction matrix of the spectrum: the rate from the target to the product (the sum
+of all the reactions of the target that make it) over the total of the spectrum. It does not depend on the length or
+the flux of the step, but the step must have a flux. Its cooling time is 0. Such a case has no deck (the `nis`
+program does not give cross sections), so run it with `pynis`, and `plot` shows it only in the summary.
 
 `MeV/fission` is the decay heat per fission times the cooling time, t·P(t), which is the usual way to give the decay
 heat after a fission pulse. `MeV/(fission/s)` is the decay heat over the fission rate of the last step with a

@@ -8,6 +8,7 @@ from .pulsetests import *
 from .reactiontests import *
 from .fissiontests import *
 from .scripttests import *
+from .crosssectiontests import *
 from .processingtests import *
 from .fnstests import *
 from .fissionheattests import *

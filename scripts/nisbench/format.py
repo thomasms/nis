@@ -24,6 +24,8 @@ QUANTITIES = {
     "gamma_heat": "decay heat of the electromagnetic radiation (gamma and X rays)",
     "alpha_heat": "decay heat of the heavy particles (alpha)",
     "activity": "total activity",
+    "cross_section": "spectrum-averaged production cross section of one product from one target (from the reaction "
+                     "matrix of the spectrum of the step)",
 }
 
 _MEV_TO_J = 1.602176634e-13
@@ -53,8 +55,19 @@ ACTIVITY_UNITS = {
 }
 
 
+# from cm2
+CROSS_SECTION_UNITS = {
+    "b": (1e24, None, False),
+    "mb": (1e27, None, False),
+}
+
+
 def units_for(quantity: str) -> dict:
-    return ACTIVITY_UNITS if quantity == "activity" else HEAT_UNITS
+    if quantity == "activity":
+        return ACTIVITY_UNITS
+    if quantity == "cross_section":
+        return CROSS_SECTION_UNITS
+    return HEAT_UNITS
 
 
 _NUCLIDE = re.compile(r"^[A-Z][a-z]?\d{1,3}[mn]?$")
@@ -75,6 +88,12 @@ class Measurement:
     uncertainties: list
     # calculation name -> values, None where there is no value
     calculations: dict = field(default_factory=dict)
+    # only for a cross_section: the nuclide that is hit and the nuclide that is made (e.g. Al27 and Na24, Nb92m).
+    # all_states: the product in all its states (ground and isomers), as when the isomers decay to the ground
+    # state before the activity is measured; else only the state of the product name
+    target: str = None
+    product: str = None
+    all_states: bool = False
 
 
 @dataclass
@@ -104,8 +123,9 @@ class Case:
 
     @property
     def has_deck(self) -> bool:
-        """A NIS input deck cannot give a fission source, so such a case has no deck (pynis runs it)."""
-        return self.fission_source is None
+        """A NIS input deck cannot give a fission source, and the nis program does not give cross sections, so
+        such a case has no deck (pynis runs it)."""
+        return self.fission_source is None and not any(m.quantity == "cross_section" for m in self.measurements)
 
     def step_fission_rates(self) -> list:
         return self.fission_rates or [0.0] * len(self.steps)
@@ -225,7 +245,21 @@ def _measurement(data, where: str, nsteps: int) -> Measurement:
         _require(isinstance(calc, list) and len(calc) == len(steps), where,
                  f'calculation {name!r} must be a list with one value (or null) for each step')
         checked[name] = [None if v is None else _number(v, where, f"a value of {name!r}") for v in calc]
-    return Measurement(quantity, unit, list(steps), values, uncertainties, checked)
+
+    reaction = {key: data.get(key) for key in ("target", "product", "all_states")}
+    if quantity == "cross_section":
+        for key in ("target", "product"):
+            _require(isinstance(reaction[key], str) and bool(_NUCLIDE.match(reaction[key])), where,
+                     f'a cross_section needs "{key}", a nuclide name such as Al27 or Nb92m')
+        reaction["all_states"] = reaction["all_states"] or False
+        _require(isinstance(reaction["all_states"], bool), where, '"all_states" must be true or false')
+        _require(not (reaction["all_states"] and reaction["product"][-1] in "mn"), where,
+                 '"all_states" needs the ground state name of the product, such as Co60, not Co60m')
+    else:
+        _require(all(v is None for v in reaction.values()), where,
+                 '"target", "product" and "all_states" are only for a cross_section')
+        reaction = {}
+    return Measurement(quantity, unit, list(steps), values, uncertainties, checked, **reaction)
 
 
 def parse_case(data: dict, where: str = "case") -> Case:
@@ -294,6 +328,10 @@ def parse_case(data: dict, where: str = "case") -> Case:
         _require(normalisation != "fission" or fissions is not None, where, f'the unit {m.unit} needs "fissions"')
         _require(normalisation != "fission_rate" or any(r > 0 for r in rates or []), where,
                  f"the unit {m.unit} needs a step with a fission rate")
+        if m.quantity == "cross_section":
+            _require(m.target in atoms, where, f"the target {m.target} of the cross section must be in sample.atoms")
+            _require(all(steps[s][1] > 0 for s in m.steps), where,
+                     "a cross section is measured at the end of a step with a flux (it comes from its spectrum)")
 
     return Case(benchmark=data["benchmark"], name=data["name"], title=data.get("title", data["name"]),
                 mass_kg=mass, atoms={k: float(v) for k, v in atoms.items()}, steps=steps,
@@ -390,14 +428,18 @@ def case_to_json(case: Case) -> dict:
         data["fission_source"] = {k: _compact(v) if isinstance(v, float) else v for k, v in case.fission_source.items()}
     elif case.fissions is not None:
         data["fissions"] = _compact(case.fissions)
-    data["measurements"] = [{
-        "quantity": m.quantity,
-        "unit": m.unit,
-        "steps": m.steps,
-        "values": [_compact(v) for v in m.values],
-        "uncertainties": [_compact(v) for v in m.uncertainties],
-        "calculations": {k: [None if v is None else _compact(v) for v in vs] for k, vs in m.calculations.items()},
-    } for m in case.measurements]
+    data["measurements"] = []
+    for m in case.measurements:
+        measurement = {"quantity": m.quantity, "unit": m.unit}
+        if m.quantity == "cross_section":
+            measurement.update(target=m.target, product=m.product, all_states=m.all_states)
+        measurement.update({
+            "steps": m.steps,
+            "values": [_compact(v) for v in m.values],
+            "uncertainties": [_compact(v) for v in m.uncertainties],
+            "calculations": {k: [None if v is None else _compact(v) for v in vs] for k, vs in m.calculations.items()},
+        })
+        data["measurements"].append(measurement)
     return data
 
 

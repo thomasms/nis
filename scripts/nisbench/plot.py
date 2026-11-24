@@ -24,7 +24,9 @@ SURFACE = "#fcfcfb"
 X_MIN, X_MAX = 0.1, 10.0
 
 _QUANTITY_LABELS = {"decay_heat": "Decay heat", "beta_heat": "Beta decay heat", "gamma_heat": "Gamma decay heat",
-                    "alpha_heat": "Alpha decay heat", "activity": "Activity"}
+                    "alpha_heat": "Alpha decay heat", "activity": "Activity", "cross_section": "Cross section"}
+# quantities that do not change with time: the summary shows them, a plot over the cooling time does not
+_NOT_IN_TIME = {"cross_section"}
 
 
 def _pyplot():
@@ -133,11 +135,13 @@ def _unit_for(times: list) -> tuple:
 
 def cases(rows: list, calculations: list, output_dir: Path, file_format: str = "png",
           nis_name: str = "NIS") -> list:
-    """One plot for each (benchmark, case, quantity). Returns the files."""
+    """One plot for each (benchmark, case, quantity) over the cooling time (not for a cross section, it has one
+    value). Returns the files."""
     plt = _pyplot()
     groups = collections.defaultdict(list)
     for r in rows:
-        groups[(r["benchmark"], r["case"], r["quantity"])].append(r)
+        if r["quantity"] not in _NOT_IN_TIME:
+            groups[(r["benchmark"], r["case"], r["quantity"])].append(r)
 
     files = []
     output_dir.mkdir(parents=True, exist_ok=True)
