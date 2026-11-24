@@ -7,12 +7,13 @@ tools reads it: [scripts/bench.py](../scripts/bench.py) (the code is in [scripts
 |---|---|---|---|
 | [fns](fns) | fusion | 132 | decay heat of foils after 14 MeV neutron irradiation (FNS, JAEA) |
 | [fission_decay_heat](fission_decay_heat) | fission | 44 | beta, gamma and total decay heat after the fission of U233, U235, U238, Pu239, Pu241 and Th232: pulses and irradiations of 10 s to 1e5 s (IAEA CoNDERC) |
+| [irdff2](irdff2) | other | 87 | spectrum-averaged cross sections of activation and gas production reactions in the Cf-252 spontaneous fission and U-235 thermal fission neutron spectra (IRDFF-II) |
 
 ## Folders
 
 ```
 benchmarks/
-    group_structures/<name>.txt     energy group bounds (eV, ascending), e.g. CCFE-709
+    group_structures/<name>.txt     energy group bounds (eV, ascending), e.g. CCFE-709, IRDFF-725
     <benchmark>/
         benchmark.json              what the benchmark is: title, type, references, where the files come from
         <case>.json                 one case: the source of truth (the case name can have folders, e.g. Co/2000exp_5min)

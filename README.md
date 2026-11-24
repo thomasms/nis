@@ -401,6 +401,7 @@ The tests:
 | [reactiontests.py](src/tests/python/reactiontests.py) | JEFF-4.0 reactions: thermal and 14.1 MeV cross sections against reference values, the spectrum (linear in flux, bin splitting), the matrix structure, burn-up and Co60 activation against the analytic Bateman solution | reaction data |
 | [fissiontests.py](src/tests/python/fissiontests.py) | JEFF-3.1.1 fission yields: 2 products per fission, thermal U235 gives the known Cs137 and Sr90 yields and fission to capture ratio, Cf252 spontaneous fission | decay and reaction data, the yield files |
 | [fnstests.py](src/tests/python/fnstests.py) (slow) | FNS regression: runs all 132 FNS cases and compares with [nis_reference.csv](benchmarks/fns/results/nis_reference.csv), and checks that NIS stays as close to the experiment as now | decay and reaction data |
+| [crosssectiontests.py](src/tests/python/crosssectiontests.py) | the `cross_section` quantity, the IRDFF-II converter, the 87 IRDFF-II cases load; regression against [nis_reference.csv](benchmarks/irdff2/results/nis_reference.csv) | the engine and regression tests: decay and reaction data |
 | [fissionheattests.py](src/tests/python/fissionheattests.py) | the fission decay heat benchmark: the 44 cases load, the reference has all of them; regression against [nis_reference.csv](benchmarks/fission_decay_heat/results/nis_reference.csv) and C/E limits | the regression: decay data and the yield files |
 | [nisprogramtests.py](src/tests/python/nisprogramtests.py) (slow) | the `nis` program: 3 FNS decks give the same as the reference, decay only steps, errors for bad input | decay and reaction data, the `nis` program |
 
@@ -440,6 +441,7 @@ the spectrum, the measured values and the results of other codes) and a NIS inpu
 |---|---|---|---|
 | [fns](benchmarks/fns) | fusion | 132 | decay heat of foils after 14 MeV neutron irradiation (FNS, JAEA) |
 | [fission_decay_heat](benchmarks/fission_decay_heat) | fission | 44 | beta, gamma and total decay heat after fission pulses and irradiations of U233, U235, U238, Pu239, Pu241 and Th232 (IAEA CoNDERC) |
+| [irdff2](benchmarks/irdff2) | other | 87 | spectrum-averaged cross sections of dosimetry reactions in the Cf-252 spontaneous fission and U-235 thermal fission neutron spectra (IRDFF-II) |
 
 One program, [scripts/bench.py](scripts/bench.py), does all the work for all the benchmarks. These steps use uv
 (see [python bindings](#python-bindings)), and the nuclear data (see [Nuclear data](#nuclear-data)).
@@ -543,6 +545,25 @@ uv run python scripts/bench.py run fission_decay_heat --decay-data data/jeff311.
 The C/E summary plots for the reference results (JEFF-3.1.1 decay data and fission yields) are in
 [benchmarks/fission_decay_heat/results](benchmarks/fission_decay_heat/results). With JEFF-3.1.1, all 18 cases of the total
 decay heat are within 10 % of the experiment. The beta heat of MacMahon (U235) is 19-28 % below NIS.
+
+For IRDFF-II, the original files are the Cf-252 and U-235 spectra of the IRDFF-II spectra page
+(nds.iaea.org/IRDFF/spectra.html: `irdff_sp_Cf252_ln.g` and `irdff_sp_U235_e80.g`, or the pointwise `.endf`) and,
+optionally, their `_RR_UNC.pdf` listings (the cross sections that IRDFF-II calculates). Download them with a web
+browser into one folder. The measured values are in
+[benchmarks/irdff2/measured.csv](benchmarks/irdff2/measured.csv), copied from Tables 18 and 20 of the IRDFF-II paper
+(A. Trkov et al., Nuclear Data Sheets 163 (2020) 1). Each case is one reaction in one spectrum, so it tests the
+reaction data of one reaction (and its isomer data). The cases have no deck: run them with pynis.
+
+```bash
+uv run python scripts/bench.py convert irdff2 --source path/to/irdff
+uv run python scripts/bench.py run irdff2 --decay-data data/jeff311.dec --reaction-data data/jeff4.reac \
+    --output results.csv
+```
+
+With JEFF-4.0, 79 % of the 87 cases are within 10 % of the experiment, and 89 % within 20 %
+([summary plot](benchmarks/irdff2/results/irdff2_summary.png)). The largest differences are the isomers Hg199m
+(C/E 0.4), In116m from In115(n,g) (0.7) and Pb204m (0.8), the He4 production of Li6 and B10 (0.7 and 0.8), and
+Si28(n,p) (1.2-1.3).
 
 **Change a case:** edit the case file `<case>.json`, then make the decks again (do not edit a deck):
 

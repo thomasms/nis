@@ -1,0 +1,142 @@
+# The measured spectrum-averaged cross sections (SACS) of the IRDFF-II paper:
+#   A. Trkov et al., IRDFF-II: A New Neutron Metrology Library, Nuclear Data Sheets 163 (2020) 1-108 (arXiv:1909.03336)
+#   Table 18: Cf-252(s.f.) neutron standard field. Table 20: U-235(nth,f) neutron benchmark field.
+# Copied from the tables as they are: value_mb, uncertainty_percent and reference (the reference numbers of the paper,
+# listed at the end). notation is the name of the reaction in the tables. target and product are the nuclides of
+# the reaction (product in all its states, or the isomer, e.g. In116m); H3 and He4 are the gas production.
+#
+# Not here:
+#   - the fission reactions (U235f, Pu239f, Np237f, U238f, Th232f): a fission does not make one product.
+#   - Table 18 BH3 (B10 tritium production, 11.0 mb +- 6.4 %, [151]): its calculated value in the paper
+#     (10.25 mb) is not the IRDFF-II tritium production of B10 in the Cf-252 spectrum (51.47 mb, MT 205 of the
+#     RR_UNC listing), so it is not clear which quantity was measured.
+#   - Table 19 (new Cf-252 measurements at Rez): most of its reactions are in Table 18 too, and a case has only one
+#     measured value.
+spectrum,table,notation,target,product,value_mb,uncertainty_percent,reference
+Cf252,18,Au197g,Au197,Au198,75.5000,1.3,[148]
+Cf252,18,Ta181g,Ta181,Ta182,87.3000,1.4,[148]
+Cf252,18,Th232g,Th232,Th233,87.0000,1.8,[148]
+Cf252,18,Cu63g,Cu63,Cu64,10.3000,2.9,[148]
+Cf252,18,In115gm,In115,In116m,125.6000,2.1,[149]
+Cf252,18,Rh103m,Rh103,Rh103m,734.3000,2.7,[146]
+Cf252,18,In115nm,In115,In115m,197.4000,1.4,[149]
+Cf252,18,Nb93nm,Nb93,Nb93m,147.5000,1.7,[87]
+Cf252,18,In113nm,In113,In113m,161.2000,2.0,[146]
+Cf252,18,Hg199nm,Hg199,Hg199m,298.4000,1.8,[149]
+Cf252,18,Ti47p,Ti47,Sc47,19.2700,1.7,[149]
+Cf252,18,S32p,S32,P32,72.5400,3.5,[149]
+Cf252,18,Zn64p,Zn64,Cu64,40.5900,1.6,[149]
+Cf252,18,Ni58p,Ni58,Co58,117.5000,1.3,[149]
+Cf252,18,Fe54p,Fe54,Mn54,86.8400,1.3,[149]
+Cf252,18,Pb204nm,Pb204,Pb204m,20.8700,3.5,[149]
+Cf252,18,Al27p,Al27,Mg27,4.8800,2.1,[149]
+Cf252,18,Co59p,Co59,Fe59,1.6900,2.5,[149]
+Cf252,18,Ti46p,Ti46,Sc46,14.0700,1.8,[149]
+Cf252,18,Si28p,Si28,Al28,6.9000,2.0,[152]
+Cf252,18,Cu63a,Cu63,Co60,0.6887,2.0,[149]
+Cf252,18,Fe56p,Fe56,Mn56,1.4650,1.8,[149]
+Cf252,18,U2382,U238,U237,19.2000,10.,[153]
+Cf252,18,Mg24p,Mg24,Na24,1.9960,2.4,[149]
+Cf252,18,Ti48p,Ti48,Sc48,0.4247,1.9,[149]
+Cf252,18,Co59a,Co59,Mn56,0.2218,1.9,[149]
+Cf252,18,Al27a,Al27,Na24,1.0160,1.5,[149]
+Cf252,18,V51a,V51,Sc48,0.0390,2.2,[149]
+Cf252,18,Tm1692,Tm169,Tm168,6.6900,6.3,[77]
+Cf252,18,Au1972,Au197,Au196,5.5060,1.9,[149]
+Cf252,18,Nb932m,Nb93,Nb92m,0.7910,5.1,[149]
+Cf252,18,I1272,I127,I126,2.0690,2.7,[149]
+Cf252,18,Cu652,Cu65,Cu64,0.6582,2.2,[149]
+Cf252,18,Co592,Co59,Co58,0.4051,2.5,[149]
+Cf252,18,Cu632,Cu63,Cu62,0.1844,4.0,[149]
+Cf252,18,F192,F19,F18,0.0161,3.4,[149]
+Cf252,18,Zr902,Zr90,Zr89,0.2210,2.9,[149]
+Cf252,18,Ni582,Ni58,Ni57,8.56E-3,3.6,[146]
+U235,20,Au197g,Au197,Au198,7.400E+01,4.05,[173]
+U235,20,U238g,U238,U239,8.500E+01,9.41,[173]
+U235,20,Cu63g,Cu63,Cu64,1.080E+01,23.15,[173]
+U235,20,In115gm,In115,In116m,1.245E+02,4.25,[81]
+U235,20,B10He4,B10,He4,5.410E+02,4.44,[130]
+U235,20,Li6He4,Li6,He4,4.560E+02,4.39,[130]
+U235,20,Rh103nm,Rh103,Rh103m,7.103E+02,3.38,"[74, 179, 180]"
+U235,20,Nb93n,Nb93,Nb93m,1.476E+02,4.74,[174]
+U235,20,In115nm,In115,In115m,1.878E+02,1.23,[146]
+U235,20,In113nm,In113,In113m,1.668E+02,5.13,[81]
+U235,20,Hg199nm,Hg199,Hg199m,2.787E+02,5.30,[79]
+U235,20,B10H3,B10,H3,3.023E+01,6.70,[160]
+U235,20,P31p,P31,Si31,3.586E+01,2.68,[152]
+U235,20,Ti47p,Ti47,Sc47,1.784E+01,1.99,[146]
+U235,20,S32p,S32,P32,6.908E+01,1.97,[146]
+U235,20,Zn64p,Zn64,Cu64,3.889E+01,7.25,[79]
+U235,20,Ni58p,Ni58,Co58,1.082E+02,1.30,[146]
+U235,20,Fe54p,Fe54,Mn54,7.809E+01,1.50,[81]
+U235,20,Zn67p,Zn67,Cu67,9.660E-01,5.59,[81]
+U235,20,Pb204nm,Pb204,Pb204m,1.946E+01,6.27,"[182, 183]"
+U235,20,Mo92pm,Mo92,Nb92m,6.687E+00,2.53,[81]
+U235,20,Al27p,Al27,Mg27,3.902E+00,1.77,[146]
+U235,20,Co59p,Co59,Fe59,1.396E+00,2.36,[146]
+U235,20,Ti46p,Ti46,Sc46,1.151E+01,1.99,[146]
+U235,20,Ni60p,Ni60,Co60,2.180E+00,4.77,[148]
+U235,20,Cu63a,Cu63,Co60,5.173E-01,2.74,"[146, 165]"
+U235,20,Si28p,Si28,Al28,5.470E+00,3.07,[152]
+U235,20,Fe54a,Fe54,Cr51,8.650E-01,4.02,"[74, 167, 168]"
+U235,20,Fe56p,Fe56,Mn56,1.079E+00,1.54,[146]
+U235,20,U2382,U238,U237,1.600E+01,4.34,[184-186]
+U235,20,Ti48p,Ti48,Sc48,3.014E-01,1.46,"[146, 165]"
+U235,20,Mg24p,Mg24,Na24,1.449E+00,1.43,"[146, 165]"
+U235,20,Co59a,Co59,Mn56,1.563E-01,2.25,[146]
+U235,20,Al27a,Al27,Na24,7.005E-01,1.19,"[146, 161]"
+U235,20,V51a,V51,Sc48,2.429E-02,2.29,[146]
+U235,20,Tm1692,Tm169,Tm168,3.735E+00,4.23,[87]
+U235,20,Au1972,Au197,Au196,3.387E+00,1.67,"[146, 165]"
+U235,20,Nb932,Nb93,Nb92m,4.348E-01,2.32,[81]
+U235,20,I1272,I127,I126,1.199E+00,2.79,"[79, 166]"
+U235,20,Mn552,Mn55,Mn54,2.356E-01,2.81,"[146, 166]"
+U235,20,As752,As75,As74,3.207E-01,3.47,"[165, 174, 175]"
+U235,20,Co592,Co59,Co58,2.028E-01,2.51,[146]
+U235,20,Cu632,Cu63,Cu62,1.160E-01,5.88,[172]
+U235,20,Y892,Y89,Y88,1.697E-01,2.34,"[165, 175-178]"
+U235,20,F192,F19,F18,8.056E-03,3.26,"[146, 161, 162]"
+U235,20,Zr902,Zr90,Zr89,1.041E-01,2.02,"[146, 161, 175]"
+U235,20,Ni582,Ni58,Ni57,4.076E-03,2.98,"[109, 169-171]"
+U235,20,Na232,Na23,Na22,3.860E-03,3.39,"[162, 163]"
+U235,20,Al272,Al27,Al26,3.760E-03,13.30,[84]
+#
+# References (the numbers of the paper):
+#   [74] O. Horibe et al., Proc. Conf. 50 Years with Nuclear Fission, Washington D.C. (1989), v.2, p. 923
+#   [77] W. Mannhart, Validation of Differential Cross Sections with Integral Data, INDC(NDS)-0435, p. 59 (2002)
+#   [79] K.I. Zolotarev, Re-evaluation of microscopic and integral cross section data for important dosimetry reactions, INDC(NDS)-0526 (2004)
+#   [81] K.I. Zolotarev and P.K. Zolotarev, Evaluation of some (n,n'), (n,g), (n,p), (n,2n) and (n,3n) reaction excitation functions for fission and fusion reactor dosimetry applications, INDC(NDS)-0657 (2013)
+#   [84] K.I. Zolotarev, Evaluation of 23Na(n,g)24Na, 23Na(n,2n)22Na and 27Al(n,2n)26Al reaction cross sections for the IRDFF library, INDC(NDS)-0705 (2017)
+#   [87] K.I. Zolotarev, Evaluation of cross section data from threshold to 40-60 MeV for specific neutron reactions important for neutron dosimetry applications. Part II, INDC(NDS)-0584 (2010)
+#   [109] W. Mannhart, Spectrum-averaged neutron cross sections measured in the U-235 fission neutron field in Mol, Proc. 5th ASTM-EURATOM Symp. on Reactor Dosimetry (1985), p. 813
+#   [130] B.M. Oliver, H. Farrar IV, E.P. Lippencott and A. Fabry, Spectrum-integrated helium generation cross sections for 6Li and 10B in the sigma-sigma and fission cavity standard neutron fields, 4th Symp. on Reactor Dosimetry (1982), Vol. 2
+#   [146] W. Mannhart, Status of the evaluation of the neutron spectrum of 252Cf(s.f.), INDC(NDS)-0540 (2008)
+#   [148] S. Manojlovic, A. Trkov, Nuclear Cross Section Measurement Analysis in the Californium-252 Spectrum with the Monte Carlo Method, Nuclear Energy for New Europe 2011, contribution 307
+#   [149] W. Mannhart, Response of Activation Reactions in the Neutron Field of 252Cf(s.f.), IAEA Technical Report Series No. 452 (2006), pp. 30-45
+#   [152] K.I. Zolotarev, Evaluation of excitation functions for 28Si(n,p)28Al, 31P(n,p)31Si, and 113In(n,g)114mIn reactions, INDC(NDS)-0668 (2014)
+#   [153] M.V. Blinov, E.A. Gromova, Kovalenko et al., Sov. At. En. 65, 761-764 (1988); EXFOR 40996.002
+#   [160] M.E. Wyman, E.M. Fryer and M.M. Thorpe, (n,t) Cross Sections for B10, B11 and Be9, Phys. Rev. 112, 1264 (1958); EXFOR 11231.005
+#   [161] M. Kostal et al., A reference neutron field for measurement of spectrum averaged cross sections, Ann. Nucl. Energy (2019)
+#   [162] M. Kostal, M. Svadlenkova, P. Baron et al., Measurement of 23Na(n,2n) cross section in well-defined reactor spectra, App. Rad. Isot. 111, 1-7 (2016)
+#   [163] M. Kostal, VVER-1000 physics experiments, LR0-RESR-004, IRPhE (2018)
+#   [165] M. Kostal et al., Validation of 14N(n,p) cross section in LR-0 reference field, App. Rad. Isot. (2019)
+#   [166] N. Burianova, M. Kostal, M. Schulc et al., Measurement of selected differential cross sections in 235U spectrum, ASME J. Nucl. Rad. Sc. 5, 030906 (2019)
+#   [167] P.M. Suarez, M.A. Arribere et al., Fission Neutron Spectrum Averaged Cross-Section of the 54Fe(n,a)51Cr Reaction, Rad. Acta 78, 11-13 (1997); EXFOR 31508.002
+#   [168] A.V. Bushuev, A.V. Zvonarev et al., Sov. J. of Atom Energy 63, p. 721 (1987); EXFOR 40956.012
+#   [169] K. Kobayashi and I. Kimura, INDC(JAP)-54, p. 42 (1980); EXFOR 21693.003
+#   [170] O. Horibe and H. Chantani, Conf. on Nucl. Data for Sci. and Technol., Julich 1991, p. 68; EXFOR 23223.004
+#   [171] T. Sekine and H. Baba, J. Inorg. Nucl. Chem. 43, 1427 (1981); EXFOR 21613.003
+#   [172] J.A. Grundl, Nucl. Sci. Tech. 31, 191 (1968); EXFOR 12193.008
+#   [173] A. Fabry, M. De Coster, Integral test of capture cross-sections in the energy range 0.1 to 2 MeV, Washington 1968, Vol. 2, pp. 1263-1267; EXFOR 20264
+#   [174] K.I. Zolotarev, A.V. Ignatyuk, V.N. Manokhin, A.B. Pashchenko, RRDF-98 Russian Reactor Dosimetry File, IAEA(NDS)-193 (1999)
+#   [175] M. Kostal, M. Schulc, J. Simon et al., Ann. Nucl. En. 112, 759-768 (2018)
+#   [176] G. Rau, Averaged Cross Section of the Reaction Y89(n,2n)Y-88, EANDC(E)-89, p. 41 (1968)
+#   [177] E. Steinnes, Cross-Sections of Some (n,2n) Reactions Induced by Reactor Fast Neutrons, Rad. Acta 13, 169 (1970)
+#   [178] A.A. Bojtcov, E.I. Grigoriev, V.S. Troshin, V.P. Yaryna, Voprosy Atomnoj Nauki i Tekhniki, Ser. Yadernye Konstanty 1 (1992)
+#   [179] K. Kobayashi and T. Kobayashi, KURRI-AR-26, p. 21 (1992); EXFOR 22216
+#   [180] E.I. Grigoriev, G.B. Tarnovskij, V.P. Jaryna, Proc. 6th All-Union Conf. on Neutron Physics, Kiev 1983, Vol. 3, p. 187; EXFOR 40848.002
+#   [182] I. Kimura, K. Kobayashi and T. Shibata, J. Nucl. Sc. Tech. 8, 59-69 (1971); EXFOR 20317.018
+#   [183] A.K. Brodskaya et al., Yad.-Fiz. Issled. 24, 15 (1977)
+#   [184] K. Kobayashi, I. Kimura et al., J. Nucl. Sc. Tech. 13, 531 (1976); EXFOR 20693
+#   [185] T. Hashimoto, T. Sotobayashi and K. Kobayashi, J. Nucl. Sc. Tech. 15, 626-628 (1978); EXFOR 20810.002
+#   [186] G. Shani, (n,2n) cross-section measurement of Nb-93, Au-197 and U-238 with fission-neutron spectrum, Ann. Nucl. En. 10, 473 (1983); EXFOR 30658.004

@@ -8,27 +8,35 @@ data: In115(n,n')In115m, Nb93(n,2n)Nb92m, ...).
 
 The original files, all in one folder (<source>):
 
-    irdff_sp_<name>.endf    (or .g)  a spectrum of the IRDFF-II spectra page (nds.iaea.org/IRDFF/spectra.html):
-                            MF3/MT261, pointwise (lin-lin) or 725 groups (histogram), in 1/eV. The MAT gives the
-                            spectrum: 9861 Cf-252(s.f.), 9228 U-235(nth,f). With both forms, the pointwise one is used.
+    irdff_sp_<name>.g       (or .endf)  a spectrum of the IRDFF-II spectra page (nds.iaea.org/IRDFF/spectra.html):
+                            MF3/MT261, 725 groups (histogram) or pointwise (lin-lin), in 1/eV. The MAT gives the
+                            spectrum: 9861 Cf-252(s.f.), 9228 U-235(nth,f). With both forms, the 725 groups are used:
+                            the case files then give only the group values (group structure IRDFF-725), and the
+                            cross sections are the same as with the pointwise form (to 4 digits).
     irdff_sp_<name>_RR_UNC.pdf (or .lst, .txt)  optional: the SACS that IRDFF-II calculates in the spectrum (the
                             calculation "IRDFF-II"). Read with pdftotext (poppler) for a .pdf.
-    measured.csv            the measured SACS: spectrum,target,product,value_mb,uncertainty_mb,reference
-                            spectrum is Cf252 or U235, target a nuclide (Al27), product a nuclide in all its states
-                            (Na24), or only its ground state (Al26g), or an isomer (Al26m). Lines that start with #
-                            are comments.
+
+The measured SACS are in measured.csv: <source>/measured.csv if it is there, else benchmarks/irdff2/measured.csv
+(the values of the IRDFF-II paper, in the repository). Its columns:
+
+    spectrum,table,notation,target,product,value_mb,uncertainty_percent,reference
+
+spectrum is Cf252 or U235, target a nuclide (Al27), product a nuclide in all its states (Na24), or only its ground
+state (Al26g), or an isomer (Al26m). table, notation (the IRDFF-II name of the reaction, Al27a) and reference are
+only to find the value in the paper. Lines that start with # are comments.
 
 Each case is one reaction in one spectrum: 1 atom of the target, one step with the spectrum, and the cross section
 of the product at the end of the step. The case name is <spectrum>/<target>-<product>, e.g. Cf252/Al27-Na24.
 """
 
 import csv
+import math
 import re
 import shutil
 import subprocess
 from pathlib import Path
 
-from ..format import Case, Measurement
+from ..format import BENCHMARKS_DIR, GROUP_STRUCTURES_DIR, Case, Measurement, read_group_structure
 
 NAME = "irdff2"
 METADATA = {
@@ -64,6 +72,11 @@ ELEMENTS = (
 # MT -> (change of Z, change of A) of the residual, for the reactions of the RR_UNC listings that make a nuclide
 _MT_RESIDUAL = {16: (0, -1), 17: (0, -2), 22: (-2, -4), 28: (-1, -1), 37: (0, -3), 102: (0, 1), 103: (-1, 0),
                 104: (-1, -1), 105: (-1, -2), 106: (-2, -2), 107: (-2, -3), 152: (0, -4)}
+# MT -> the light nuclide of a gas production (all the reactions that make it). A light residual of one reaction,
+# such as the He4 of Li6(n,t), is not used: it is only a part of the production.
+_GAS_PRODUCTION = {203: "H1", 204: "H2", 205: "H3", 206: "He3", 207: "He4"}
+
+MEASURED = BENCHMARKS_DIR / NAME / "measured.csv"
 
 # the time step: the cross section does not depend on the length or the flux, so 1 s and 1 n/m2/s
 _STEP = (1.0, 1.0)
@@ -161,14 +174,32 @@ def group_spectrum(energies: list, values: list, laws: list, breaks: list) -> tu
     return bounds, groups
 
 
+def _group_structure(bounds: list) -> str:
+    """The name of the group structure in benchmarks/group_structures with these bounds, or None."""
+    for path in sorted(GROUP_STRUCTURES_DIR.glob("*.txt")):
+        known = read_group_structure(path.stem)
+        if len(known) == len(bounds) and all(math.isclose(a, b, rel_tol=1e-6) for a, b in zip(known, bounds)):
+            return path.stem
+    return None
+
+
+def case_spectrum(energies: list, values: list, laws: list, breaks: list) -> tuple:
+    """(bounds, group values, group structure name) of a TAB1 spectrum. A histogram on the bounds of a known group
+    structure gives all its groups, with the name. Else the groups of group_spectrum, with no name."""
+    if laws == [1] and _group_structure(energies) is not None:
+        groups = [v * (high - low) for v, low, high in zip(values, energies, energies[1:])]
+        return energies, groups, _group_structure(energies)
+    return (*group_spectrum(energies, values, laws, breaks), None)
+
+
 def _spectrum_files(source: Path) -> dict:
-    """MAT -> the file of the spectrum (pointwise if there are both)."""
+    """MAT -> the file of the spectrum (the groups if there are both)."""
     found = {}
     for path in sorted(Path(source).glob("irdff_sp_*")):
         if path.suffix not in (".endf", ".g"):
             continue
         mat = read_spectrum(path)[0]
-        if mat not in found or path.suffix == ".endf":
+        if mat not in found or path.suffix == ".g":
             found[mat] = path
     return found
 
@@ -202,11 +233,16 @@ def read_rr_unc(path: Path) -> tuple:
         za, reaction, value = int(m.group(1)), m.group(2), float(m.group(3))
         if za % 1000 == 0:
             continue
-        if reaction.isdigit():
+        if reaction.isdigit() and int(reaction) in _GAS_PRODUCTION:
+            key = (nuclide_name(za), _GAS_PRODUCTION[int(reaction)], True)
+        elif reaction.isdigit():
             if int(reaction) not in _MT_RESIDUAL:
                 continue
             dz, da = _MT_RESIDUAL[int(reaction)]
-            key = (nuclide_name(za), nuclide_name(za + 1000 * dz + da), True)
+            residual = za + 1000 * dz + da
+            if residual // 1000 <= 2:
+                continue
+            key = (nuclide_name(za), nuclide_name(residual), True)
         else:
             product, all_states = product_state(nuclide_name(int(reaction[:-1])) + reaction[-1])
             key = (nuclide_name(za), product, all_states)
@@ -224,8 +260,9 @@ def read_measured(path: Path) -> list:
     for i, row in enumerate(csv.DictReader(lines), 2):
         try:
             product, all_states = product_state(row["product"].strip())
-            rows.append((row["spectrum"].strip(), row["target"].strip(), product, all_states,
-                         float(row["value_mb"]), float(row["uncertainty_mb"]), (row.get("reference") or "").strip()))
+            value = float(row["value_mb"])
+            rows.append((row["spectrum"].strip(), row["target"].strip(), product, all_states, value,
+                         value * float(row["uncertainty_percent"]) / 100.0, (row.get("reference") or "").strip()))
         except (KeyError, ValueError, TypeError) as e:
             raise ValueError(f"{path}, row {i}: {e}") from e
     return rows
@@ -234,14 +271,14 @@ def read_measured(path: Path) -> list:
 # ---------------------------------------------------------------- the cases
 
 def make_case(spectrum: str, title: str, bounds: list, groups: list, target: str, product: str, all_states: bool,
-              value: float, uncertainty: float, calculated: float = None) -> Case:
+              value: float, uncertainty: float, calculated: float = None, group_structure: str = None) -> Case:
     token = product_token(product, all_states)
     measurement = Measurement("cross_section", "mb", [0], [value], [uncertainty],
                               {CALCULATION: [calculated]} if calculated is not None else {},
                               target=target, product=product, all_states=all_states)
     return Case(benchmark=NAME, name=f"{spectrum}/{target}-{token}", title=f"{target} to {token} in the {title} spectrum",
                 mass_kg=None, atoms={target: 1.0}, steps=[_STEP], measurements=[measurement],
-                spectrum=(bounds, groups))
+                spectrum=(bounds, groups), group_structure=group_structure)
 
 
 def convert(source: Path, only: list = None) -> list:
@@ -251,7 +288,7 @@ def convert(source: Path, only: list = None) -> list:
     for mat, path in _spectrum_files(source).items():
         if mat in SPECTRA:
             _, energies, values, laws, breaks = read_spectrum(path)
-            spectra[SPECTRA[mat][0]] = (SPECTRA[mat][1], *group_spectrum(energies, values, laws, breaks))
+            spectra[SPECTRA[mat][0]] = (SPECTRA[mat][1], *case_spectrum(energies, values, laws, breaks))
     if not spectra:
         return []
 
@@ -261,16 +298,15 @@ def convert(source: Path, only: list = None) -> list:
         if mat in SPECTRA:
             calculated[SPECTRA[mat][0]] = values
 
-    measured_path = source / "measured.csv"
-    if not measured_path.exists():
-        raise FileNotFoundError(f"{measured_path} is needed: the measured cross sections (see the converter)")
+    measured_path = source / "measured.csv" if (source / "measured.csv").exists() else MEASURED
     cases = []
     for spectrum, target, product, all_states, value, uncertainty, _ in read_measured(measured_path):
         if spectrum not in spectra:
             raise ValueError(f"{measured_path}: no spectrum file for {spectrum}")
-        title, bounds, groups = spectra[spectrum]
+        title, bounds, groups, structure = spectra[spectrum]
         calc = calculated.get(spectrum, {}).get((target, product, all_states))
-        case = make_case(spectrum, title, bounds, groups, target, product, all_states, value, uncertainty, calc)
+        case = make_case(spectrum, title, bounds, groups, target, product, all_states, value, uncertainty, calc,
+                         structure)
         if not only or any(case.name == o or case.name.startswith(o.rstrip("/") + "/") for o in only):
             cases.append(case)
     return cases

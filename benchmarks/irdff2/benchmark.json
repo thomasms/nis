@@ -1,0 +1,13 @@
+{
+  "format": "nis-benchmark",
+  "version": 1,
+  "name": "irdff2",
+  "title": "IRDFF-II spectrum-averaged cross sections",
+  "category": "other",
+  "description": "Measured spectrum-averaged cross sections of activation (dosimetry) reactions in the Cf-252 spontaneous fission and U-235 thermal fission neutron spectra, with the IRDFF-II spectra. Each case is one reaction in one spectrum. It tests the reaction data of the reaction (and its isomer data) in a well known fast neutron spectrum.",
+  "references": [
+    "A. Trkov et al., IRDFF-II: A New Neutron Metrology Library, Nuclear Data Sheets 163 (2020) 1-108",
+    "W. Mannhart, Status of the Cf-252 fission neutron spectrum evaluation with regard to recent experiments, INDC(NDS)-220 (1989) 305"
+  ],
+  "source": "The IRDFF-II spectra (nds.iaea.org/IRDFF), the measured values of the IRDFF-II paper (measured.csv), converted with scripts/bench.py convert irdff2. IRDFF-II is the cross section that IRDFF-II calculates in the spectrum (its RR_UNC listing)."
+}

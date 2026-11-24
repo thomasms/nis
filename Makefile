@@ -18,6 +18,8 @@
 # A reaction data file of an older version of the processing is made again (hours). ALLOW_OLD=1 uses it as it is:
 #   make bench ALLOW_OLD=1
 #
+# BENCHMARK=irdff2 runs the IRDFF-II cross sections in place of FNS: make compare BENCHMARK=irdff2
+#
 # Other targets: make test-data (the files the tests need), make test (the Python and C++ tests).
 
 REACTIONS ?= jeff4 tendl2025

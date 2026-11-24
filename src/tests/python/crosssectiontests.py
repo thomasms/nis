@@ -6,17 +6,25 @@ The cross_section quantity of the benchmark format, and the IRDFF-II converter (
     - the converter: the spectrum files (pointwise or groups), the RR_UNC listings of IRDFF-II and measured.csv
     - the engine: the cross section of a case is the same as the collapsed cross sections of the reactions of the
       target that make the product (needs data/jeff4.reac and data/jeff311.dec, processing/process.py bootstrap)
+    - the IRDFF-II benchmark: the case files, and a regression test that runs all the cases with pynis and compares
+      with benchmarks/irdff2/results/nis_reference.csv. If a change of the results is intended, make the reference
+      again:
+
+        uv run python scripts/bench.py run irdff2 --decay-data data/jeff311.dec \\
+            --reaction-data data/jeff4.reac --output benchmarks/irdff2/results/nis_reference.csv
 """
 
 import copy
 import json
+import math
+import os
 import tempfile
 import unittest
 from pathlib import Path
 
-from .testdata import JEFF311_DECAY, JEFF4_REACTION, has_data
+from .testdata import BENCHMARKS_DIR, JEFF311_DECAY, JEFF4_REACTION, has_data
 
-from nisbench import FormatError, format, results
+from nisbench import FormatError, format, load_benchmark, results
 from nisbench.convert import irdff2
 
 
@@ -100,6 +108,9 @@ _LISTING = """
    63      42 13027      13026g 15.9694 6.8607E-03 +/- 6.958E-04      3.81   9.40 10.14
    64      43 13027      13026m 17.9578 8.6409E-04 +/- 2.211E-04      9.44  23.79 25.59
    22       1 3000            1 1.87387 1.8353E+03 +/- 2.084E+00      0.00   0.11   0.11
+   28        7 3006     105 0.65237 3.2063E+02 +/- 3.341E+00      0.89   0.55   1.04
+   29        8 3006     205 0.65237 3.2063E+02 +/- 3.341E+00      0.89   0.55   1.04
+   30        9 3006     207 1.70993 4.8215E+02 +/- 3.236E+01      6.70   0.40   6.71
 """
 
 
@@ -141,31 +152,46 @@ class Irdff2ConverterTests(unittest.TestCase):
             path.write_text(_LISTING)
             mat, values = irdff2.read_rr_unc(path)
         self.assertEqual(mat, 9861)
-        # the MT gives the product in all its states, g and m one state; elements (12000) are left out
+        # the MT gives the product in all its states, g and m one state; elements (12000) are left out. He4 is the
+        # gas production (MT 207), not the He4 of Li6(n,t) (MT 105)
         self.assertEqual(values, {("Al27", "Mg27", True): 4.7445, ("Al27", "Na24", True): 1.0167,
-                                  ("Al27", "Al26", False): 6.8607e-3, ("Al27", "Al26m", False): 8.6409e-4})
+                                  ("Al27", "Al26", False): 6.8607e-3, ("Al27", "Al26m", False): 8.6409e-4,
+                                  ("Li6", "H3", True): 320.63, ("Li6", "He4", True): 482.15})
+
+    def test_case_spectrum(self) -> None:
+        # a histogram on the IRDFF-725 bounds keeps all the groups, and gives the name
+        bounds = format.read_group_structure("IRDFF-725")
+        values = [1.0] * (len(bounds) - 2) + [0.0, 0.0]
+        result_bounds, groups, name = irdff2.case_spectrum(bounds, values, [1], [len(bounds)])
+        self.assertEqual(name, "IRDFF-725")
+        self.assertEqual(len(groups), len(bounds) - 1)
+        self.assertAlmostEqual(groups[0], bounds[1] - bounds[0])
+        self.assertEqual(groups[-1], 0.0)
+        # other bounds: the groups of group_spectrum
+        self.assertEqual(irdff2.case_spectrum([1.0, 2.0, 4.0], [3.0, 1.0, 0.0], [1], [3]), ([1.0, 2.0, 4.0], [3.0, 2.0], None))
 
     def test_convert(self) -> None:
         with tempfile.TemporaryDirectory() as folder:
             source = Path(folder)
-            (source / "irdff_sp_Cf252_ln.endf").write_text(_endf_lines(9861, [1e5, 1e6, 1e7, 2e7], [1.0] * 4, 2))
-            # the groups form is not used when there is a pointwise form
-            (source / "irdff_sp_Cf252_ln.g").write_text(_endf_lines(9861, [1e5, 2e7], [5.0, 0.0], 1))
+            # the pointwise form is not used when there is a groups form
+            (source / "irdff_sp_Cf252_ln.endf").write_text(_endf_lines(9861, [1e5, 2e7], [5.0, 0.0], 2))
+            (source / "irdff_sp_Cf252_ln.g").write_text(_endf_lines(9861, [1e5, 1e6, 1e7, 2e7], [1.0] * 4, 1))
             (source / "irdff_sp_Cf252_ln_RR_UNC.txt").write_text(_LISTING)
             (source / "measured.csv").write_text(
-                "# a comment\nspectrum,target,product,value_mb,uncertainty_mb,reference\n"
-                "Cf252,Al27,Na24,1.006,0.022,a paper\nCf252,Al27,Al26m,0.0009,0.0002,\n")
+                "# a comment\nspectrum,table,notation,target,product,value_mb,uncertainty_percent,reference\n"
+                'Cf252,18,Al27a,Al27,Na24,1.006,2.0,"[1, 2]"\nCf252,,,Al27,Al26m,0.0009,20,\n')
             cases = irdff2.convert(source)
             self.assertEqual([c.name for c in cases], ["Cf252/Al27-Na24", "Cf252/Al27-Al26m"])
             na24 = cases[0]
-            self.assertEqual(na24.spectrum[0], [1e5, 1e6, 1e7, 2e7])
+            self.assertEqual(na24.spectrum, ([1e5, 1e6, 1e7, 2e7], [9e5, 9e6, 1e7]))
             self.assertEqual(na24.measurements[0].values, [1.006])
+            self.assertAlmostEqual(na24.measurements[0].uncertainties[0], 0.02012)
             self.assertEqual(na24.measurements[0].calculations, {"IRDFF-II": [1.0167]})
             self.assertEqual([c.name for c in irdff2.convert(source, ["Cf252/Al27-Al26m"])], ["Cf252/Al27-Al26m"])
             # each case is a valid case file
             for case in cases:
                 format.write_case(case, source / "out" / f"{case.name}.json")
-            (source / "measured.csv").write_text("spectrum,target,product,value_mb,uncertainty_mb\nU235,Al27,Na24,1,1\n")
+            (source / "measured.csv").write_text("spectrum,target,product,value_mb,uncertainty_percent\nU235,Al27,Na24,1,1\n")
             with self.assertRaises(ValueError):
                 irdff2.convert(source)
 
@@ -204,3 +230,49 @@ class CrossSectionEngineTests(unittest.TestCase):
 def engines_cache() -> Path:
     from nisbench import engines
     return engines.reaction_cache(JEFF4_REACTION)
+
+
+IRDFF2_DIR = BENCHMARKS_DIR / "irdff2"
+IRDFF2_REFERENCE = IRDFF2_DIR / "results" / "nis_reference.csv"
+
+# the results on another machine or compiler are not the same to the last digit
+REFERENCE_REL_TOL = 1e-6
+
+
+class Irdff2CasesTests(unittest.TestCase):
+    def test_all_cases_load(self) -> None:
+        benchmark = load_benchmark(IRDFF2_DIR)
+        self.assertEqual(benchmark.category, "other")
+        rows = irdff2.read_measured(irdff2.MEASURED)
+        self.assertEqual(len(benchmark.cases), len(rows))
+        self.assertEqual(len(rows), 87)
+        for case in benchmark.cases:
+            with self.subTest(case=case.name):
+                self.assertFalse(case.has_deck)
+                self.assertEqual(case.group_structure, "IRDFF-725")
+                m, = case.measurements
+                self.assertEqual((m.quantity, m.unit, list(case.atoms)), ("cross_section", "mb", [m.target]))
+                # each reaction has the value that IRDFF-II calculates, so the product is the right one
+                self.assertIsNotNone(m.calculations.get("IRDFF-II", [None])[0])
+
+    def test_reference_has_all_cases(self) -> None:
+        rows, _ = results.read_results([IRDFF2_REFERENCE])
+        self.assertEqual({r["case"] for r in rows}, {c.name for c in load_benchmark(IRDFF2_DIR).cases})
+
+
+@unittest.skipUnless(has_data(JEFF4_REACTION) and has_data(JEFF311_DECAY),
+                     "needs data/jeff4.reac and data/jeff311.dec (processing/process.py bootstrap)")
+class Irdff2RegressionTests(unittest.TestCase):
+    def test_same_as_reference(self) -> None:
+        from nisbench import engines
+        cases = load_benchmark(IRDFF2_DIR).cases
+        data = engines.NuclearData(decay=JEFF311_DECAY, reaction=engines.reaction_cache(JEFF4_REACTION))
+        rows = []
+        for case, step_results in zip(cases, engines.run(cases, data, "pynis", jobs=os.cpu_count() or 1)):
+            rows += results.case_rows(case, step_results)
+        reference, _ = results.read_results([IRDFF2_REFERENCE])
+        expected = {r["case"]: float(r["nis"]) for r in reference}
+        self.assertEqual(set(expected), {r["case"] for r in rows})
+        changed = [f"{r['case']}: {float(r['nis']):.6e}, reference {expected[r['case']]:.6e}"
+                   for r in rows if not math.isclose(float(r["nis"]), expected[r["case"]], rel_tol=REFERENCE_REL_TOL)]
+        self.assertFalse(changed, f"{len(changed)} values are not the same as the reference:\n" + "\n".join(changed))

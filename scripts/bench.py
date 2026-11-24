@@ -58,7 +58,7 @@ def cmd_check(args) -> int:
         for c in stale:
             print(f"{c.deck_path}: missing or not made from {c.path.name}, run: scripts/bench.py decks {b.name}")
         errors += len(stale)
-        no_deck = f", {len(b.cases) - len(with_deck)} with a fission source (no deck)" if len(with_deck) < len(b.cases) else ""
+        no_deck = f", {len(b.cases) - len(with_deck)} with no deck (a fission source or a cross section)" if len(with_deck) < len(b.cases) else ""
         print(f"{b.name}: {len(b.cases)} cases, {len(with_deck) - len(stale)} decks up to date{no_deck}", file=sys.stderr)
     return 1 if errors else 0
 
