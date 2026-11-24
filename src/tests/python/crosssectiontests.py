@@ -220,6 +220,23 @@ class CrossSectionEngineTests(unittest.TestCase):
         self.assertGreater(expected, 1.0)
         self.assertAlmostEqual(self.run_case("Al27", "Na24", True) / expected, 1.0, places=10)
 
+    def test_fast_decays(self) -> None:
+        # B10 (n,t) makes Be8, which decays to 2 He4 at once: the He4 cross section counts them
+        import pynis as nis
+        from nisbench import engines
+        bounds, values = _cross_section_case()["spectrum"].values()
+        reaction_data = nis.core.reaction_data_from_file(str(engines_cache()))
+        mat = nis.core.reaction_mat(reaction_data, nis.core.Spectrum(bounds, values))
+        decay_mat = nis.core.decay_mat_from_file(str(JEFF311_DECAY), None)
+        b10, be8, he4 = (engines._index(nis, n) for n in ("B10", "Be8", "He4"))
+        direct = engines.production_rates(mat, b10)
+        followed = engines.production_rates(mat, b10, decay_mat)
+        self.assertGreater(direct[be8], 0.0)
+        self.assertNotIn(be8, followed)
+        self.assertAlmostEqual(followed[he4] / (direct[he4] + 2 * direct[be8]), 1.0, places=6)
+        self.assertAlmostEqual(self.run_case("B10", "He4", True) * 1e-27 * sum(values), followed[he4],
+                               delta=1e-9 * followed[he4])
+
     def test_all_states(self) -> None:
         ground = self.run_case("Nb93", "Nb92", False)
         isomer = self.run_case("Nb93", "Nb92m", False)

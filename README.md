@@ -234,6 +234,13 @@ of it one time, then give the cache to `nis` (or to the Python `reaction_data_fr
 
 `nis` finds from the file header if it is a cache or an ENDF file. Make the cache again when the ENDF file
 changes, or after an update of NIS that changes the cache version. The cache uses the byte order of the machine that made it.
+Cache version 2 adds the inelastic levels that break up (see below), so make a version 1 cache again.
+
+**Inelastic levels that break up.** NIS does not use the inelastic levels (MF=3, MT=51-91), because the nuclide does
+not change. But a level of a light nuclide can break up into particles, e.g. Li7 + n -> n + t + alpha. The ENDF-6
+flag LR of the level gives the reaction with the same products (LR=33: (n,nt)), and NIS adds the level to that
+reaction. In JEFF-4.0 these are the levels of Li6 (n,nd), Li7 (n,nt), B10 (n,na), (n,nd2a) and (n,np), C12 (n,n3a)
+and N14 (n,np). They give all the tritium of Li7 (0.30 b at 14.1 MeV) and most of the He4 of Li6 above 2 MeV.
 
 For more than one step, give one `dt` line for each step, in order, with the step length in seconds and the total flux in n/m^2/s:
 
@@ -398,10 +405,10 @@ The tests:
 | [solvertests.py](src/tests/python/solvertests.py) | CRAM48 against a 60 digit matrix exponential (mpmath) for random decay matrices, with and without loops | nothing (mpmath, a dev dependency) |
 | [datatests.py](src/tests/python/datatests.py) | the decay matrix and decay energies of JEFF-3.1.1 and ENDF/B-VII.1: signs, branching ratios, mass number, known half-lives, isomers, alpha and proton emission, the two libraries against each other | decay data |
 | [pulsetests.py](src/tests/python/pulsetests.py) | decay heat after a fission pulse: the integral is the delayed beta and gamma energy of ENDF MT=458 (U233, U235, Pu239, Pu241), the solver steps give the direct integral, JEFF-3.1.1 and ENDF/B-VII.1 decay data agree, a 1 ms irradiation is a pulse | decay data, the yield files (reaction data for one test) |
-| [reactiontests.py](src/tests/python/reactiontests.py) | JEFF-4.0 reactions: thermal and 14.1 MeV cross sections against reference values, the spectrum (linear in flux, bin splitting), the matrix structure, burn-up and Co60 activation against the analytic Bateman solution | reaction data |
+| [reactiontests.py](src/tests/python/reactiontests.py) | JEFF-4.0 reactions: thermal and 14.1 MeV cross sections against reference values, the inelastic levels that break up (Li7 tritium, Li6 deuterons, C12 3 alphas), the spectrum (linear in flux, bin splitting), the matrix structure, burn-up and Co60 activation against the analytic Bateman solution | reaction data |
 | [fissiontests.py](src/tests/python/fissiontests.py) | JEFF-3.1.1 fission yields: 2 products per fission, thermal U235 gives the known Cs137 and Sr90 yields and fission to capture ratio, Cf252 spontaneous fission | decay and reaction data, the yield files |
 | [fnstests.py](src/tests/python/fnstests.py) (slow) | FNS regression: runs all 132 FNS cases and compares with [nis_reference.csv](benchmarks/fns/results/nis_reference.csv), and checks that NIS stays as close to the experiment as now | decay and reaction data |
-| [crosssectiontests.py](src/tests/python/crosssectiontests.py) | the `cross_section` quantity, the IRDFF-II converter, the 87 IRDFF-II cases load; regression against [nis_reference.csv](benchmarks/irdff2/results/nis_reference.csv) | the engine and regression tests: decay and reaction data |
+| [crosssectiontests.py](src/tests/python/crosssectiontests.py) | the `cross_section` quantity (with the fast decays, B10 -> Be8 -> 2 He4), the IRDFF-II converter, the 87 IRDFF-II cases load; regression against [nis_reference.csv](benchmarks/irdff2/results/nis_reference.csv) | the engine and regression tests: decay and reaction data |
 | [fissionheattests.py](src/tests/python/fissionheattests.py) | the fission decay heat benchmark: the 44 cases load, the reference has all of them; regression against [nis_reference.csv](benchmarks/fission_decay_heat/results/nis_reference.csv) and C/E limits | the regression: decay data and the yield files |
 | [nisprogramtests.py](src/tests/python/nisprogramtests.py) (slow) | the `nis` program: 3 FNS decks give the same as the reference, decay only steps, errors for bad input | decay and reaction data, the `nis` program |
 
@@ -560,10 +567,11 @@ uv run python scripts/bench.py run irdff2 --decay-data data/jeff311.dec --reacti
     --output results.csv
 ```
 
-With JEFF-4.0, 79 % of the 87 cases are within 10 % of the experiment, and 89 % within 20 %
+With JEFF-4.0, 82 % of the 87 cases are within 10 % of the experiment, and 90 % within 20 %
 ([summary plot](benchmarks/irdff2/results/irdff2_summary.png)). The largest differences are the isomers Hg199m
-(C/E 0.4), In116m from In115(n,g) (0.7) and Pb204m (0.8), the He4 production of Li6 and B10 (0.7 and 0.8), and
-Si28(n,p) (1.2-1.3).
+(C/E 0.4), In116m from In115(n,g) (0.7) and Pb204m (0.8), and Si28(n,p) (1.2-1.3). The He4 production of Li6 and
+B10 agrees with the experiment within 5 %: it needs the inelastic levels that break up (Li6 -> d + alpha) and the
+decay of Be8 (B10 (n,t) -> Be8 -> 2 He4).
 
 **Change a case:** edit the case file `<case>.json`, then make the decks again (do not edit a deck):
 

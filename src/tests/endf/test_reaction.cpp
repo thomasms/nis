@@ -64,6 +64,27 @@ TEST_CASE( "compute_reaction_products unsupported MT" ) {
     REQUIRE_THROWS_AS( compute_reaction_products(260560, 2), std::invalid_argument );
 }
 
+TEST_CASE( "breakup_reaction_mt" ) {
+    // the LR of the levels of JEFF-4.0 that break up: Li6 (n,nd), Li7 (n,nt), B10 (n,na), (n,nd2a), (n,np),
+    // C12 (n,n3a), N14 (n,np)
+    for(int lr: {32, 33, 22, 35, 28, 23}){
+        REQUIRE ( data::breakup_reaction_mt(lr) == lr );
+    }
+    // LR=0: no breakup; LR=31: gamma emission, LR=39: internal conversion, LR=40: shape elastic
+    for(int lr: {0, 31, 39, 40}){
+        REQUIRE ( data::breakup_reaction_mt(lr) == 0 );
+    }
+}
+
+TEST_CASE( "compute_reaction_products breakup of light targets" ) {
+    check_products(30060, 32, 20040, {DEUTERON});
+    check_products(30070, 33, 20040, {TRITON});
+    check_products(50100, 22, 30060, {zai::ALPHA});
+    // no heavy residual: the last secondary is the residual
+    check_products(50100, 35, zai::ALPHA, {DEUTERON, zai::ALPHA});
+    check_products(60120, 23, zai::ALPHA, {zai::ALPHA, zai::ALPHA});
+}
+
 TEST_CASE( "collapse_cross_section same group structure" ) {
     const core::Spectrum<double> flux({1.0, 10.0, 100.0}, {2.0, 3.0});
     // last value is not used for INT=1
@@ -398,11 +419,11 @@ TEST_CASE( "reaction cache" ) {
         f.seekp(offset);
         f.write(reinterpret_cast<const char*>(&value), sizeof(value));
     };
-    // the header is 8 characters, the version (offset 8), then the byte order check (offset 12)
-    patch(8, 2);
+    // the header is 8 characters, the version (offset 8, now 2), then the byte order check (offset 12)
+    patch(8, 1);
     REQUIRE( is_reaction_cache(cache_file.string()) );
     REQUIRE_THROWS_WITH( read_reaction_cache(cache_file.string()), Catch::Matchers::ContainsSubstring("another version") );
-    patch(8, 1);
+    patch(8, 2);
     patch(12, 0x04030201);
     REQUIRE_THROWS_WITH( read_reaction_cache(cache_file.string()), Catch::Matchers::ContainsSubstring("byte order") );
     patch(12, 0x01020304);

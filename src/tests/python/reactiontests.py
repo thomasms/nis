@@ -160,6 +160,37 @@ class FusionCrossSectionTests(ReactionBenchmarkBase):
         self.assertEqual(mat[index("Nb93"), index("Nb92")], 0.0)
 
 
+class BreakupTests(ReactionBenchmarkBase):
+    """The inelastic levels that break up (MF=3 MT=51-91 with an LR flag) are read as the reaction LR gives."""
+
+    def rate(self, mat, parent: str, mt_number: int) -> float:
+        """The rate of the reaction from the data (all its sections, e.g. the levels it is made from)."""
+        spectrum = one_group_spectrum(FUSION_ENERGY)
+        return sum(nis.core.collapse_cross_section(spectrum, list(xs.energies), list(xs.values))
+                   for xs in self.reaction_data.find(nis.zai.get_from_name(parent), mt_number))
+
+    def test_li7_tritium(self) -> None:
+        # Li7 (n,n't)a: the levels with LR=33 in JEFF-4.0 (ENDF/B-VIII.0), about 0.3 b at 14 MeV
+        mat = self.matrix(one_group_spectrum(FUSION_ENERGY))
+        rate = self.rate(mat, "Li7", 33)
+        self.assertGreater(rate / FLUX / BARN, 0.2)
+        self.assertTrue(math.isclose(mat[index("Li7"), index("H3")], rate, rel_tol=1e-9))
+
+    def test_li6_deuteron(self) -> None:
+        # Li6 (n,n'd)a: the levels with LR=32, one deuteron and one alpha
+        mat = self.matrix(one_group_spectrum(FUSION_ENERGY))
+        rate = self.rate(mat, "Li6", 32)
+        self.assertGreater(rate / FLUX / BARN, 0.1)
+        self.assertTrue(math.isclose(mat[index("Li6"), index("H2")], rate, rel_tol=1e-9))
+
+    def test_c12_three_alphas(self) -> None:
+        # C12 (n,n'3a): the levels with LR=23 make 3 He4 and nothing else, so no rate goes to the sink
+        mat = self.matrix(one_group_spectrum(FUSION_ENERGY))
+        c12 = index("C12")
+        self.assertGreater(self.rate(mat, "C12", 23), 0.0)
+        self.assertEqual(mat[c12, nis.data.SINK_INDEX], 0.0)
+
+
 def assert_sparse_allclose(a: scipy.sparse.csc_matrix, b: scipy.sparse.csc_matrix, rtol: float) -> None:
     # same non-zero entries, and the same values within rtol
     a, b = a.tocsc(), b.tocsc()

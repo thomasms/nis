@@ -117,7 +117,9 @@ The **cooling time** of a value is the time from the end of the last step with a
 | `cross_section` | spectrum-averaged production cross section of `product` from `target`, in the spectrum of the step | `b`, `mb` |
 
 A **cross section** comes from the reaction matrix of the spectrum: the rate from the target to the product (the sum
-of all the reactions of the target that make it) over the total of the spectrum. It does not depend on the length or
+of all the reactions of the target that make it) over the total of the spectrum. A nuclide with a half-life below
+1 ns that the target makes is followed to its decay products, as no measurement can see it: B10 (n,t) makes Be8, so
+it counts as 2 He4. It does not depend on the length or
 the flux of the step, but the step must have a flux. Its cooling time is 0. Such a case has no deck (the `nis`
 program does not give cross sections), so run it with `pynis`, and `plot` shows it only in the summary.
 

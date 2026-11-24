@@ -8,7 +8,8 @@ Each run gives, at the end of each step, the decay heat (W, total and by type) a
 case with cross sections, pynis also gives, for each step with a flux, the spectrum-averaged cross section (cm2) of
 each (target, product, all_states) of the case: the rate from the target to the product in the reaction matrix of the
 spectrum, over the total of the spectrum. This is the sum of all the reactions of the target that make the product
-(and with all_states, its isomers too).
+(and with all_states, its isomers too). A product with a half-life below FAST_DECAY_S is followed to its decay
+products, as no measurement can see it: B10(n,t) makes Be8, and so 2 He4.
 """
 
 import multiprocessing
@@ -38,7 +39,7 @@ class NuclearData:
 
 # the header of a reaction cache, as src/nis/endf/reaction_cache.cpp writes it
 _CACHE_MAGIC = b"NISREAC\0"
-_CACHE_VERSION = 1
+_CACHE_VERSION = 2
 
 
 def _cache_version(path: Path):
@@ -123,13 +124,45 @@ def _states(nis, product: str, all_states: bool) -> list:
     return [_index(nis, n) for n in names]
 
 
-def cross_sections(nis, reaction_mat, spectrum_total: float, reactions: list) -> dict:
+# a product with a shorter half-life decays at once (Be8: 7e-17 s), so its decay products are made in its place
+FAST_DECAY_S = 1e-9
+
+
+def production_rates(reaction_mat, target: int, decay_mat=None) -> dict:
+    """index -> the rate at which the target makes it: the row of the target in the reaction matrix, without the
+    target itself and the sink. With the decay matrix, the rate to a nuclide with a half-life below FAST_DECAY_S
+    goes to its decay products (with their branching ratios and multiplicities)."""
+    import math
+    row = reaction_mat.getrow(target).tocoo()
+    size = min(reaction_mat.shape[0] - 1, decay_mat.shape[0] - 1 if decay_mat is not None else reaction_mat.shape[0])
+    rates = {int(i): float(v) for i, v in zip(row.col, row.data) if i != target and i < size and v > 0}
+    if decay_mat is None:
+        return rates
+    decay = decay_mat.tocsr()
+    fast = math.log(2) / FAST_DECAY_S
+    for _ in range(100):
+        pending = [i for i in rates if -decay[i, i] > fast]
+        if not pending:
+            return rates
+        for i in pending:
+            rate, constant = rates.pop(i), -decay[i, i]
+            daughters = decay.getrow(i).tocoo()
+            for k, v in zip(daughters.col, daughters.data):
+                if k != i and k < size and v > 0:
+                    rates[int(k)] = rates.get(int(k), 0.0) + rate * v / constant
+    raise RuntimeError("the fast decays do not end")
+
+
+def cross_sections(nis, reaction_mat, spectrum_total: float, reactions: list, decay_mat=None) -> dict:
     """(target, product, all_states) -> the spectrum-averaged cross section in cm2. The reaction matrix has the
     rate from each parent (row) to each product (column) for the spectrum as it is, so this is the rate over the
-    total of the spectrum."""
-    return {(target, product, all_states):
-            sum(float(reaction_mat[_index(nis, target), i]) for i in _states(nis, product, all_states)) / spectrum_total
-            for target, product, all_states in reactions}
+    total of the spectrum. With the decay matrix, the fast decays are followed (see production_rates)."""
+    results = {}
+    for target, product, all_states in reactions:
+        rates = production_rates(reaction_mat, _index(nis, target), decay_mat)
+        results[(target, product, all_states)] = sum(rates.get(i, 0.0)
+                                                     for i in _states(nis, product, all_states)) / spectrum_total
+    return results
 
 
 def _inventory_from_vector(nis, vector) -> dict:
@@ -155,7 +188,7 @@ def _run_pynis(case: Case, d: _PynisData) -> list:
         spectrum_total = sum(values)
     reactions = [(m.target, m.product, m.all_states) for m in case.measurements if m.quantity == "cross_section"]
     # the same spectrum in all the steps, so the same cross sections
-    case_cross_sections = cross_sections(nis, reaction_mat, spectrum_total, reactions) if reactions else None
+    case_cross_sections = cross_sections(nis, reaction_mat, spectrum_total, reactions, d.decay_mat) if reactions else None
 
     matrices = {}
     nuclides = dict(case.atoms)

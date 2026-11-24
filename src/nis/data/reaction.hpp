@@ -60,6 +60,8 @@ namespace nis {
         // Sums (MT=1,3,4,5,27,101), elastic (MT=2), inelastic levels (MT=51-91)
         // and fission chances (MT=19-21,38) are left out on purpose,
         // otherwise we would double count or the nuclide does not change.
+        // An inelastic level that breaks up is read as the reaction of its products (see breakup_reaction_mt).
+        // A reaction with no heavy residual, e.g. C12 (n,n3a), gives the last secondary as the residual.
         // The residual state comes from MF=10 when the data has it, else it is the ground state.
         const std::map<int, ReactionChange> REACTION_MAP = {
             {16,  {0,  -1, {}}},                                  // (n,2n)
@@ -73,6 +75,7 @@ namespace nis {
             {32,  {-1, -2, {DEUTERON}}},                          // (n,nd)
             {33,  {-1, -3, {TRITON}}},                            // (n,nt)
             {34,  {-2, -3, {HELION}}},                            // (n,nHe3)
+            {35,  {-5, -10, {DEUTERON, zai::ALPHA, zai::ALPHA}}}, // (n,nd2a)
             {37,  {0,  -3, {}}},                                  // (n,4n)
             {41,  {-1, -2, {PROTON}}},                            // (n,2np)
             {42,  {-1, -3, {PROTON}}},                            // (n,3np)
@@ -95,6 +98,15 @@ namespace nis {
         };
 
         bool is_reaction_mt(int mt_number);
+
+        // the inelastic levels (MF=3 MT=51-91)
+        constexpr int FIRST_LEVEL_MT = 51;
+        constexpr int LAST_LEVEL_MT = 91;
+
+        // An inelastic level can break up, e.g. Li7 + n -> n + Li7* -> n + t + alpha. In ENDF-6 the LR flag of the
+        // level (MF=3) gives the MT of the reaction with the same products, e.g. LR=33 (n,nt).
+        // Returns LR if it is a reaction of REACTION_MAP, else 0 (LR=0: the level does not break up).
+        int breakup_reaction_mt(int lr);
 
         // final_state is the isomeric state of the residual nucleus
         ReactionProductT compute_reaction_products(int parent_zai, int mt_number, int final_state=0);

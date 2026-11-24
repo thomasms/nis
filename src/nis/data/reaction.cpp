@@ -17,6 +17,10 @@ namespace nis {
             return (mt_number == FISSION_MT) || (REACTION_MAP.count(mt_number) == 1);
         }
 
+        int breakup_reaction_mt(int lr){
+            return (REACTION_MAP.count(lr) == 1) ? lr : 0;
+        }
+
         bool is_light_particle(int za){
             return (za == 1) || (za == 1001) || (za == 1002) || (za == 1003) || (za == 2003) || (za == 2004);
         }
@@ -35,6 +39,14 @@ namespace nis {
             const zai::triple parent_triple = zai::decompose(parent_zai);
             const int z = std::get<0>(parent_triple) + change.dz;
             const int a = std::get<1>(parent_triple) + change.da;
+
+            // no heavy residual, e.g. C12 (n,n3a): the last secondary is the residual
+            if((z == 0) && (a == 0) && !change.secondaries.empty()){
+                std::vector<int> secondaries = change.secondaries;
+                const int residual = secondaries.back();
+                secondaries.pop_back();
+                return ReactionProductT(residual, secondaries);
+            }
 
             // unphysical residual, i.e. (n,a) on a very light target
             if((z < 0) || (a < z) || (a <= 0)){

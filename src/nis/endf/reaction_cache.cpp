@@ -11,7 +11,7 @@ namespace nis {
 
         // the header: 8 characters, the version, then a number to check the byte order
         constexpr char CACHE_MAGIC[8] = {'N', 'I', 'S', 'R', 'E', 'A', 'C', '\0'};
-        constexpr std::uint32_t CACHE_VERSION = 1;
+        constexpr std::uint32_t CACHE_VERSION = 2;
         constexpr std::uint32_t CACHE_BYTE_ORDER = 0x01020304;
 
         template<typename T>

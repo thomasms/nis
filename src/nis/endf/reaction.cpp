@@ -174,7 +174,22 @@ namespace nis {
             const IsomerStates states = _isomer_states(sections);
             njoy::ENDFtk::tree::File file = material.file(file_number);
             for(auto mt_number: file.sectionNumbers()){
-                // we skip sums, elastic, inelastic levels and anything we can't map
+                // an inelastic level that breaks up is the reaction of its products, e.g. (n,n't) for Li7
+                if((mt_number >= data::FIRST_LEVEL_MT) && (mt_number <= data::LAST_LEVEL_MT)){
+                    auto level = file.MT(mt_number).parse<file_number>();
+                    const int breakup_mt = data::breakup_reaction_mt(level.LR());
+                    if(breakup_mt > 0){
+                        _check_histogram(level, parent_zai, file_number, mt_number);
+                        reaction_data.push_back(CrossSection{
+                            parent_zai,
+                            breakup_mt,
+                            {level.energies().begin(), level.energies().end()},
+                            {level.crossSections().begin(), level.crossSections().end()}
+                        });
+                    }
+                    continue;
+                }
+                // we skip sums, elastic, the other inelastic levels and anything we can't map
                 if(!is_reaction_mt(mt_number)){
                     continue;
                 }
@@ -250,10 +265,11 @@ namespace nis {
             return {std::stoi(line.substr(70, 2)), std::stoi(line.substr(72, 3))};
         }
 
-        // the sections we read: the ZA in MF=1 MT=451, the reactions in MF=3 and all of MF=10
+        // the sections we read: the ZA in MF=1 MT=451, the reactions and the inelastic levels in MF=3 and all of MF=10
         bool _is_used_section(int mf_number, int mt_number){
             return ((mf_number == 1) && (mt_number == 451))
-                || ((mf_number == file_number) && is_reaction_mt(mt_number))
+                || ((mf_number == file_number)
+                    && (is_reaction_mt(mt_number) || ((mt_number >= data::FIRST_LEVEL_MT) && (mt_number <= data::LAST_LEVEL_MT))))
                 || (mf_number == isomer_file_number);
         }
 
