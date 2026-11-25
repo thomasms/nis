@@ -122,7 +122,7 @@ benchmark for each library and compare the results.
 make setup      # the C++ dependencies, NIS (CMake) and pynis (uv)
 make data       # the decay data, and the reaction data of each library (NJOY and PREPRO: hours the first time)
 make bench      # run the FNS benchmark for each reaction library, all with the same decay data
-make compare    # results/stats.txt and results/summary.png
+make compare    # results/fns-stats.txt and results/fns-summary.png
 ```
 
 Choose the data with `REACTIONS` (`jeff4`, `tendl<year>`) and `DECAY` (`jeff311`, `jeff4`, `endfbvii1`, `endfbviii0`):
@@ -130,6 +130,15 @@ Choose the data with `REACTIONS` (`jeff4`, `tendl<year>`) and `DECAY` (`jeff311`
 ```bash
 make compare REACTIONS="jeff4 tendl2025" DECAY=jeff4     # the default
 make compare REACTIONS=jeff4 DECAY=jeff311
+```
+
+Choose the benchmark with `BENCHMARK` (`fns` if not given, or `irdff2`, `exfor14`, `fission_decay_heat`), or run
+all of them with `BENCHMARK=all`. The fission benchmark uses the fission yields of `YIELDS` (the same library as
+`DECAY` if not given):
+
+```bash
+make compare BENCHMARK=exfor14
+make compare BENCHMARK=all REACTIONS=jeff4       # results/<benchmark>-stats.txt and <benchmark>-summary.png
 ```
 
 Each run is in `results/<benchmark>-<reactions>+<decay>.csv`, with the label `<reactions>+<decay>`, so the runs
