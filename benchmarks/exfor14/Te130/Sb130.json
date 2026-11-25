@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Te130/Sb130",
+  "title": "Te130 to Sb130, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Te130": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te130",
+      "product": "Sb130",
+      "all_states": true,
+      "source": "EXFOR 20540-024-0, (N,P), W.Struwe 1974",
+      "energies_ev": [14600000],
+      "values": [1.69],
+      "uncertainties": [0.13],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te130",
+      "product": "Sb130",
+      "all_states": true,
+      "source": "EXFOR 30136-020-0, (N,P), J.Brzosko 1963",
+      "energies_ev": [14200000],
+      "values": [16.0],
+      "uncertainties": [5.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te130",
+      "product": "Sb130",
+      "all_states": true,
+      "source": "EXFOR 40029-016-3, (N,P), V.N.Levkovskii 1971",
+      "energies_ev": [14800000],
+      "values": [1.9],
+      "uncertainties": [0.6],
+      "calculations": {}
+    }
+  ]
+}

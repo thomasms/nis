@@ -1,0 +1,75 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sb123/Sb122m",
+  "title": "Sb123 to Sb122m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sb123": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb123",
+      "product": "Sb122m",
+      "all_states": false,
+      "source": "EXFOR 21106-019-0, (N,2N), B.Minetti 1968.0",
+      "energies_ev": [14700000],
+      "values": [686.0],
+      "uncertainties": [60.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb123",
+      "product": "Sb122m",
+      "all_states": false,
+      "source": "EXFOR 30060-002-0, (N,2N), S.K.Mangal 1963.0",
+      "energies_ev": [14800000],
+      "values": [1013.0],
+      "uncertainties": [12.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb123",
+      "product": "Sb122m",
+      "all_states": false,
+      "source": "EXFOR 30154-004-0, (N,2N), E.Rurarz 1970.0",
+      "energies_ev": [14500000],
+      "values": [731.0],
+      "uncertainties": [73.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb123",
+      "product": "Sb122m",
+      "all_states": false,
+      "source": "EXFOR 30517-004-M, (N,2N), N.Lakshmana Das nan",
+      "energies_ev": [14200000],
+      "values": [527.0],
+      "uncertainties": [40.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb123",
+      "product": "Sb122m",
+      "all_states": false,
+      "source": "EXFOR 32780-002-0, (N,2N), Junhua Luo 2018.0",
+      "energies_ev": [13500000, 13500000, 14100000, 14100000, 14800000, 14800000],
+      "values": [466.0, 528.0, 522.0, 594.0, 571.0, 611.0],
+      "uncertainties": [71.0, 75.0, 72.0, 82.0, 85.0, 90.0],
+      "calculations": {}
+    }
+  ]
+}

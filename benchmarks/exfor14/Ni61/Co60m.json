@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ni61/Co60m",
+  "title": "Ni61 to Co60m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ni61": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni61",
+      "product": "Co60m",
+      "all_states": false,
+      "source": "EXFOR 11740-011-0, (N,X), I.L.Preiss 1960",
+      "energies_ev": [14800000],
+      "values": [3.8],
+      "uncertainties": [0.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni61",
+      "product": "Co60m",
+      "all_states": false,
+      "source": "EXFOR 20721-035-0, (N,X), N.I.Molla 1977",
+      "energies_ev": [14700000],
+      "values": [13.0],
+      "uncertainties": [2.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni61",
+      "product": "Co60m",
+      "all_states": false,
+      "source": "EXFOR 30811-008-0, (N,X), I.Ribansky 1985",
+      "energies_ev": [14800000],
+      "values": [25.8],
+      "uncertainties": [0.9288],
+      "calculations": {}
+    }
+  ]
+}

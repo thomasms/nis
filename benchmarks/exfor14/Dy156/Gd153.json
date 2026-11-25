@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Dy156/Gd153",
+  "title": "Dy156 to Gd153, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Dy156": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Dy156",
+      "product": "Gd153",
+      "all_states": true,
+      "source": "EXFOR 32670-003-0, (N,A), Junhua Luo 2009",
+      "energies_ev": [14700000],
+      "values": [2.0],
+      "uncertainties": [0.1],
+      "calculations": {}
+    }
+  ]
+}

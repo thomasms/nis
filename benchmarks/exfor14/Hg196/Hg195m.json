@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Hg196/Hg195m",
+  "title": "Hg196 to Hg195m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Hg196": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hg196",
+      "product": "Hg195m",
+      "all_states": false,
+      "source": "EXFOR 10244-009-0, (N,2N), A.K.Hankla 1972",
+      "energies_ev": [14400000],
+      "values": [1617.0],
+      "uncertainties": [160.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hg196",
+      "product": "Hg195m",
+      "all_states": false,
+      "source": "EXFOR 12219-002-0, (N,2N), J.K.Temperley 1969",
+      "energies_ev": [14100000],
+      "values": [1060.0],
+      "uncertainties": [70.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hg196",
+      "product": "Hg195m",
+      "all_states": false,
+      "source": "EXFOR 23018-003-0, (N,2N), Y.Kasugai 2001",
+      "energies_ev": [13680000, 14020000, 14370000, 14680000, 14940000],
+      "values": [1400.0, 1420.0, 1390.0, 1190.0, 1310.0],
+      "uncertainties": [140.0, 140.0, 130.0, 110.0, 130.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hg196",
+      "product": "Hg195m",
+      "all_states": false,
+      "source": "EXFOR 32781-002-0, (N,2N), Junhua Luo 2018",
+      "energies_ev": [13500000, 13500000, 14100000, 14100000, 14800000, 14800000],
+      "values": [967.0, 988.0, 1041.0, 1024.0, 1064.0, 1164.0],
+      "uncertainties": [101.0, 109.0, 111.0, 104.0, 107.0, 117.0],
+      "calculations": {}
+    }
+  ]
+}

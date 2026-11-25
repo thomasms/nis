@@ -1,0 +1,147 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "P31/Si31",
+  "title": "P31 to Si31, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "P31": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "P31",
+      "product": "Si31",
+      "all_states": true,
+      "source": "EXFOR 10417-005-0, (N,P), J.A.Grundl 1967",
+      "energies_ev": [14100000],
+      "values": [93.0],
+      "uncertainties": [4.65],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "P31",
+      "product": "Si31",
+      "all_states": true,
+      "source": "EXFOR 11196-009-2, (N,P), J.Kantele 1962",
+      "energies_ev": [14700000],
+      "values": [82.0],
+      "uncertainties": [10.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "P31",
+      "product": "Si31",
+      "all_states": true,
+      "source": "EXFOR 11274-015-0, (N,P), E.B.Paul 1953",
+      "energies_ev": [14500000],
+      "values": [64.2],
+      "uncertainties": [8.346],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "P31",
+      "product": "Si31",
+      "all_states": true,
+      "source": "EXFOR 11474-004-0, (N,P), S.G.Forbes 1952",
+      "energies_ev": [14100000],
+      "values": [91.0],
+      "uncertainties": [9.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "P31",
+      "product": "Si31",
+      "all_states": true,
+      "source": "EXFOR 11481-005-0, (N,P), J.A.Grundl 1958",
+      "energies_ev": [14100000],
+      "values": [85.5],
+      "uncertainties": [7.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "P31",
+      "product": "Si31",
+      "all_states": true,
+      "source": "EXFOR 11492-009-0, (N,P), F.L.Hassler 1962",
+      "energies_ev": [14400000],
+      "values": [155.0],
+      "uncertainties": [16.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "P31",
+      "product": "Si31",
+      "all_states": true,
+      "source": "EXFOR 20799-009-0, (N,P), J.C.Robertson 1973",
+      "energies_ev": [14780000],
+      "values": [85.6],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "P31",
+      "product": "Si31",
+      "all_states": true,
+      "source": "EXFOR 20889-012-0, (N,P), A.Pasquarelli 1967",
+      "energies_ev": [14700000],
+      "values": [64.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "P31",
+      "product": "Si31",
+      "all_states": true,
+      "source": "EXFOR 21846-019-0, (N,P), W.Schantl 1970",
+      "energies_ev": [14700000],
+      "values": [82.0],
+      "uncertainties": [6.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "P31",
+      "product": "Si31",
+      "all_states": true,
+      "source": "EXFOR 30336-008-0, (N,P), R.Prasad 1971",
+      "energies_ev": [14800000],
+      "values": [40.0],
+      "uncertainties": [5.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "P31",
+      "product": "Si31",
+      "all_states": true,
+      "source": "EXFOR 40433-007-0, (N,P), D.V.Aleksandrov 1975",
+      "energies_ev": [14100000],
+      "values": [180.0],
+      "uncertainties": [50.0],
+      "calculations": {}
+    }
+  ]
+}

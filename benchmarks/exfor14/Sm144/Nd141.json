@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sm144/Nd141",
+  "title": "Sm144 to Nd141, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sm144": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sm144",
+      "product": "Nd141",
+      "all_states": true,
+      "source": "EXFOR 32730-008-0, (N,A), Junhua Luo 2016",
+      "energies_ev": [14800000],
+      "values": [13.0],
+      "uncertainties": [4.0],
+      "calculations": {}
+    }
+  ]
+}

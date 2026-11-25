@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cd110/Pd107m",
+  "title": "Cd110 to Pd107m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cd110": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd110",
+      "product": "Pd107m",
+      "all_states": false,
+      "source": "EXFOR 21976-049-0, (N,A), B.Anders 1985",
+      "energies_ev": [14700000],
+      "values": [99.0],
+      "uncertainties": [5.0],
+      "calculations": {}
+    }
+  ]
+}

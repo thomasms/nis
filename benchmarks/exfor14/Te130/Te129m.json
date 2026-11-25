@@ -1,0 +1,135 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Te130/Te129m",
+  "title": "Te130 to Te129m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Te130": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te130",
+      "product": "Te129m",
+      "all_states": false,
+      "source": "EXFOR 10497-032-0, (N,2N), W.D.Lu 1970",
+      "energies_ev": [14400000],
+      "values": [885.0],
+      "uncertainties": [45.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te130",
+      "product": "Te129m",
+      "all_states": false,
+      "source": "EXFOR 11999-021-0, (N,2N), L.Husain 1968",
+      "energies_ev": [14800000],
+      "values": [241.0],
+      "uncertainties": [30.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te130",
+      "product": "Te129m",
+      "all_states": false,
+      "source": "EXFOR 20830-012-0, (N,2N), M.Bormann 1970",
+      "energies_ev": [13530000, 14300000],
+      "values": [968.0, 1000.0],
+      "uncertainties": [55.0, 61.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te130",
+      "product": "Te129m",
+      "all_states": false,
+      "source": "EXFOR 21300-025-0, (N,2N), K.Kayashima 1979",
+      "energies_ev": [14600000],
+      "values": [1203.0],
+      "uncertainties": [97.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te130",
+      "product": "Te129m",
+      "all_states": false,
+      "source": "EXFOR 22675-011-0, (N,2N), C.Schnabel 2000",
+      "energies_ev": [14700000],
+      "values": [1101.0],
+      "uncertainties": [102.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te130",
+      "product": "Te129m",
+      "all_states": false,
+      "source": "EXFOR 30135-003-0, (N,2N), J.Brzosko 1965",
+      "energies_ev": [14200000],
+      "values": [247.0],
+      "uncertainties": [74.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te130",
+      "product": "Te129m",
+      "all_states": false,
+      "source": "EXFOR 31117-007-0, (N,2N), N.K.Majumdar 1963",
+      "energies_ev": [14800000],
+      "values": [528.0],
+      "uncertainties": [100.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te130",
+      "product": "Te129m",
+      "all_states": false,
+      "source": "EXFOR 32669-008-0, (N,2N), F.Zhou 2007",
+      "energies_ev": [13500000, 14600000],
+      "values": [995.0, 1014.0],
+      "uncertainties": [50.0, 56.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te130",
+      "product": "Te129m",
+      "all_states": false,
+      "source": "EXFOR 41240-093-0, (N,2N), A.A.Filatenkov 1999",
+      "energies_ev": [13670000, 14060000, 14280000, 14460000, 14670000, 14830000],
+      "values": [980.0, 1030.0, 1040.0, 1070.0, 1097.0, 1125.0],
+      "uncertainties": [59.0, 52.0, 50.0, 48.0, 47.0, 53.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te130",
+      "product": "Te129m",
+      "all_states": false,
+      "source": "EXFOR 41614-150-0, (N,2N), A.A.Filatenkov 2016",
+      "energies_ev": [13670000, 14060000, 14280000, 14460000, 14670000, 14830000],
+      "values": [984.0, 1035.0, 1042.0, 1069.0, 1097.0, 1132.0],
+      "uncertainties": [58.154, 50.818, 48.557, 46.181, 45.087, 51.506],
+      "calculations": {}
+    }
+  ]
+}

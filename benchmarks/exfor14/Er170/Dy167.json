@@ -1,0 +1,87 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Er170/Dy167",
+  "title": "Er170 to Dy167, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Er170": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er170",
+      "product": "Dy167",
+      "all_states": true,
+      "source": "EXFOR 12033-047-0, (N,A), R.G.Wille 1960",
+      "energies_ev": [14800000],
+      "values": [1.0],
+      "uncertainties": [0.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er170",
+      "product": "Dy167",
+      "all_states": true,
+      "source": "EXFOR 20860-011-0, (N,A), H.Liljavirta 1978",
+      "energies_ev": [14800000],
+      "values": [0.65],
+      "uncertainties": [0.05],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er170",
+      "product": "Dy167",
+      "all_states": true,
+      "source": "EXFOR 22348-007-0, (N,A), H.Sakane 1997",
+      "energies_ev": [13650000, 14280000, 14580000, 14870000],
+      "values": [0.426, 1.03, 1.18, 1.52],
+      "uncertainties": [0.20022, 0.3811, 0.2478, 0.2736],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er170",
+      "product": "Dy167",
+      "all_states": true,
+      "source": "EXFOR 22391-011-0, (N,A), H.Sakane 1997",
+      "energies_ev": [13650000, 14280000, 14580000, 14870000],
+      "values": [0.78, 1.11, 1.21, 1.54],
+      "uncertainties": [0.16, 0.32, 0.27, 0.31],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er170",
+      "product": "Dy167",
+      "all_states": true,
+      "source": "EXFOR 32233-026-0, (N,A), N.Dzysiuk 2012",
+      "energies_ev": [14700000],
+      "values": [0.7],
+      "uncertainties": [0.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er170",
+      "product": "Dy167",
+      "all_states": true,
+      "source": "EXFOR 32693-006-3, (N,A), Junhua Luo 2011",
+      "energies_ev": [13500000, 14800000],
+      "values": [0.84, 0.97],
+      "uncertainties": [0.08, 0.39],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Tl205/Tl204",
+  "title": "Tl205 to Tl204, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Tl205": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tl205",
+      "product": "Tl204",
+      "all_states": true,
+      "source": "EXFOR 20058-005-0, (N,2N), H.Spenke 1964",
+      "energies_ev": [14800000],
+      "values": [1990.0],
+      "uncertainties": [278.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tl205",
+      "product": "Tl204",
+      "all_states": true,
+      "source": "EXFOR 20347-011-0, (N,2N), D.G.Vallis 1966",
+      "energies_ev": [14700000],
+      "values": [2307.0],
+      "uncertainties": [86.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tl205",
+      "product": "Tl204",
+      "all_states": true,
+      "source": "EXFOR 20416-055-0, (N,2N), J.Frehaut 1980",
+      "energies_ev": [13800000, 14760000],
+      "values": [1878.0, 1841.0],
+      "uncertainties": [147.0, 148.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tl205",
+      "product": "Tl204",
+      "all_states": true,
+      "source": "EXFOR 20416-112-0, (N,2N), J.Frehaut 1980",
+      "energies_ev": [13800000, 14760000],
+      "values": [1955.0, 1895.0],
+      "uncertainties": [148.0, 143.0],
+      "calculations": {}
+    }
+  ]
+}

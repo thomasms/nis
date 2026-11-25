@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ba134/Ba133g",
+  "title": "Ba134 to Ba133g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ba134": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba134",
+      "product": "Ba133",
+      "all_states": false,
+      "source": "EXFOR 32769-003-2, (N,2N), Junhua Luo 2017",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [701.0, 729.0, 750.0],
+      "uncertainties": [56.0, 59.0, 60.0],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sm150/Nd147",
+  "title": "Sm150 to Nd147, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sm150": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sm150",
+      "product": "Nd147",
+      "all_states": true,
+      "source": "EXFOR 12872-014-0, (N,A), A.Bari 1982",
+      "energies_ev": [14800000],
+      "values": [3.5],
+      "uncertainties": [0.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sm150",
+      "product": "Nd147",
+      "all_states": true,
+      "source": "EXFOR 20933-004-0, (N,A), S.M.Qaim 1974",
+      "energies_ev": [14700000],
+      "values": [3.0],
+      "uncertainties": [0.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sm150",
+      "product": "Nd147",
+      "all_states": true,
+      "source": "EXFOR 21609-015-0, (N,A), H.Weigel 1975",
+      "energies_ev": [14300000],
+      "values": [4.3],
+      "uncertainties": [0.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sm150",
+      "product": "Nd147",
+      "all_states": true,
+      "source": "EXFOR 21997-005-0, (N,A), S.M.Qaim 1984",
+      "energies_ev": [14700000],
+      "values": [3.3],
+      "uncertainties": [0.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sm150",
+      "product": "Nd147",
+      "all_states": true,
+      "source": "EXFOR 31497-019-0, (N,A), Xiangzhong Kong 1998",
+      "energies_ev": [14700000],
+      "values": [3.4],
+      "uncertainties": [0.5],
+      "calculations": {}
+    }
+  ]
+}

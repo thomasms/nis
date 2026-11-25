@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Pb206/Tl206",
+  "title": "Pb206 to Tl206, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Pb206": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pb206",
+      "product": "Tl206",
+      "all_states": true,
+      "source": "EXFOR 40347-002-0, (N,P), G.E.Belovitskii 1976",
+      "energies_ev": [14500000],
+      "values": [2.0],
+      "uncertainties": [0.4],
+      "calculations": {}
+    }
+  ]
+}

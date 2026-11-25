@@ -1,0 +1,147 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Mg26/Ne23",
+  "title": "Mg26 to Ne23, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Mg26": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg26",
+      "product": "Ne23",
+      "all_states": true,
+      "source": "EXFOR 11463-003-0, (N,A), M.J.Nurmia 1958",
+      "energies_ev": [14800000],
+      "values": [89.0],
+      "uncertainties": [5.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg26",
+      "product": "Ne23",
+      "all_states": true,
+      "source": "EXFOR 20889-008-0, (N,A), A.Pasquarelli 1967",
+      "energies_ev": [14700000],
+      "values": [80.0],
+      "uncertainties": [3.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg26",
+      "product": "Ne23",
+      "all_states": true,
+      "source": "EXFOR 20898-011-0, (N,A), M.Bormann 1966",
+      "energies_ev": [13550000, 14000000, 14280000, 14740000],
+      "values": [88.5, 84.0, 77.0, 66.5],
+      "uncertainties": [8.9, 8.4, 7.7, 6.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg26",
+      "product": "Ne23",
+      "all_states": true,
+      "source": "EXFOR 21886-004-0, (N,A), M.Hyvoenen-Dabek 1978",
+      "energies_ev": [14700000],
+      "values": [55.0],
+      "uncertainties": [6.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg26",
+      "product": "Ne23",
+      "all_states": true,
+      "source": "EXFOR 22434-002-0, (N,A), Y.Kasugai 1998",
+      "energies_ev": [13700000, 14010000, 14350000, 14640000, 14870000],
+      "values": [59.8, 57.4, 56.4, 57.5, 55.4],
+      "uncertainties": [3.4086, 3.444, 3.2712, 3.2775, 3.1024],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg26",
+      "product": "Ne23",
+      "all_states": true,
+      "source": "EXFOR 23034-002-0, (N,A), A.Elmali 2008",
+      "energies_ev": [13600000, 13680000, 14100000, 14460000, 14720000, 14860000],
+      "values": [68.49, 65.7, 55.98, 63.01, 53.19, 49.14],
+      "uncertainties": [4.11, 3.94, 3.36, 3.78, 3.19, 2.95],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg26",
+      "product": "Ne23",
+      "all_states": true,
+      "source": "EXFOR 30007-011-0, (N,A), R.Prasad 1966",
+      "energies_ev": [14800000],
+      "values": [83.0],
+      "uncertainties": [7.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg26",
+      "product": "Ne23",
+      "all_states": true,
+      "source": "EXFOR 30774-002-2, (N,A), J.Janczyszyn 1982",
+      "energies_ev": [14900000],
+      "values": [59.0],
+      "uncertainties": [7.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg26",
+      "product": "Ne23",
+      "all_states": true,
+      "source": "EXFOR 41383-003-1, (N,A), P.M.Gopych 1987",
+      "energies_ev": [14600000],
+      "values": [50.7],
+      "uncertainties": [3.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg26",
+      "product": "Ne23",
+      "all_states": true,
+      "source": "EXFOR 41383-003-2, (N,A), P.M.Gopych 1987",
+      "energies_ev": [14600000],
+      "values": [52.0],
+      "uncertainties": [4.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg26",
+      "product": "Ne23",
+      "all_states": true,
+      "source": "EXFOR 41614-003-0, (N,A), A.A.Filatenkov 2016",
+      "energies_ev": [13720000, 13950000, 14230000, 14500000, 14720000, 14850000],
+      "values": [52.7, 53.0, 51.9, 49.1, 55.9, 51.3],
+      "uncertainties": [2.6772, 3.3814, 2.3459, 3.8003, 3.0633, 2.1187],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cl35/P32",
+  "title": "Cl35 to P32, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cl35": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "P32",
+      "all_states": true,
+      "source": "EXFOR 10022-007-0, (N,A), R.C.Barrall 1969",
+      "energies_ev": [14600000],
+      "values": [108.0],
+      "uncertainties": [90.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "P32",
+      "all_states": true,
+      "source": "EXFOR 11274-019-0, (N,A), E.B.Paul 1953",
+      "energies_ev": [14500000],
+      "values": [191.0],
+      "uncertainties": [30.56],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "P32",
+      "all_states": true,
+      "source": "EXFOR 11550-004-0, (N,A), R.S.Scalan 1958",
+      "energies_ev": [14800000],
+      "values": [122.0],
+      "uncertainties": [56.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "P32",
+      "all_states": true,
+      "source": "EXFOR 20198-008-0, (N,A), W.Nagel 1966",
+      "energies_ev": [14600000],
+      "values": [121.0],
+      "uncertainties": [20.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "P32",
+      "all_states": true,
+      "source": "EXFOR 20198-009-0, (N,A), W.Nagel 1966",
+      "energies_ev": [14600000],
+      "values": [117.0],
+      "uncertainties": [20.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "P32",
+      "all_states": true,
+      "source": "EXFOR 40016-002-0, (N,A), V.N.Levkovskii 1964",
+      "energies_ev": [14000000],
+      "values": [100.0],
+      "uncertainties": [20.0],
+      "calculations": {}
+    }
+  ]
+}

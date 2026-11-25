@@ -1,0 +1,87 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Dy158/Dy157",
+  "title": "Dy158 to Dy157, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Dy158": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Dy158",
+      "product": "Dy157",
+      "all_states": true,
+      "source": "EXFOR 10431-057-0, (N,2N), A.Bari 1972",
+      "energies_ev": [14800000],
+      "values": [2115.0],
+      "uncertainties": [190.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Dy158",
+      "product": "Dy157",
+      "all_states": true,
+      "source": "EXFOR 12131-003-0, (N,2N), L.A.Oms 1968",
+      "energies_ev": [14400000],
+      "values": [2047.0],
+      "uncertainties": [205.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Dy158",
+      "product": "Dy157",
+      "all_states": true,
+      "source": "EXFOR 20541-041-0, (N,2N), S.M.Qaim 1974",
+      "energies_ev": [14700000],
+      "values": [1990.0],
+      "uncertainties": [167.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Dy158",
+      "product": "Dy157",
+      "all_states": true,
+      "source": "EXFOR 31763-012-0, (N,2N), Xiangzhong Kong 1997",
+      "energies_ev": [14700000],
+      "values": [1940.0],
+      "uncertainties": [120.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Dy158",
+      "product": "Dy157",
+      "all_states": true,
+      "source": "EXFOR 32233-003-0, (N,2N), N.Dzysiuk 2012",
+      "energies_ev": [14700000],
+      "values": [2044.0],
+      "uncertainties": [108.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Dy158",
+      "product": "Dy157",
+      "all_states": true,
+      "source": "EXFOR 32733-003-0, (N,2N), Junhua Luo 2016",
+      "energies_ev": [13500000, 14800000],
+      "values": [1872.0, 1856.0],
+      "uncertainties": [131.0, 111.0],
+      "calculations": {}
+    }
+  ]
+}

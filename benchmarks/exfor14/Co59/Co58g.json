@@ -1,0 +1,75 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Co59/Co58g",
+  "title": "Co59 to Co58g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Co59": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Co59",
+      "product": "Co58",
+      "all_states": false,
+      "source": "EXFOR 10837-004-0, (N,2N), S.K.Ghorai 1980",
+      "energies_ev": [14000000],
+      "values": [264.0],
+      "uncertainties": [24.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Co59",
+      "product": "Co58",
+      "all_states": false,
+      "source": "EXFOR 11740-005-0, (N,2N), I.L.Preiss 1960",
+      "energies_ev": [14800000],
+      "values": [145.0],
+      "uncertainties": [5.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Co59",
+      "product": "Co58",
+      "all_states": false,
+      "source": "EXFOR 20836-010-0, (N,2N), M.Bormann 1966",
+      "energies_ev": [14100000],
+      "values": [195.0],
+      "uncertainties": [53.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Co59",
+      "product": "Co58",
+      "all_states": false,
+      "source": "EXFOR 21936-019-0, (N,2N), B.M.Bahal 1984",
+      "energies_ev": [14700000],
+      "values": [231.0],
+      "uncertainties": [10.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Co59",
+      "product": "Co58",
+      "all_states": false,
+      "source": "EXFOR 30698-002-2, (N,2N), A.Reggoug 1982",
+      "energies_ev": [14700000],
+      "values": [720.0],
+      "uncertainties": [50.0],
+      "calculations": {}
+    }
+  ]
+}

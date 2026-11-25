@@ -1,0 +1,123 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "In115/In114g",
+  "title": "In115 to In114g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "In115": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "In115",
+      "product": "In114",
+      "all_states": false,
+      "source": "EXFOR 20063-006-0, (N,2N), H.Roetzer 1968",
+      "energies_ev": [14700000],
+      "values": [340.0],
+      "uncertainties": [70.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "In115",
+      "product": "In114",
+      "all_states": false,
+      "source": "EXFOR 20198-017-0, (N,2N), W.Nagel 1966",
+      "energies_ev": [14200000],
+      "values": [350.0],
+      "uncertainties": [100.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "In115",
+      "product": "In114",
+      "all_states": false,
+      "source": "EXFOR 21106-009-0, (N,2N), B.Minetti 1968",
+      "energies_ev": [14700000],
+      "values": [269.0],
+      "uncertainties": [20.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "In115",
+      "product": "In114",
+      "all_states": false,
+      "source": "EXFOR 21503-007-0, (N,2N), M.Bormann 1967.0",
+      "energies_ev": [13500000, 13750000, 14250000, 14500000, 15000000],
+      "values": [59.2, 56.0, 52.4, 50.7, 42.1],
+      "uncertainties": [4.6, 4.5, 4.2, 4.0, 3.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "In115",
+      "product": "In114",
+      "all_states": false,
+      "source": "EXFOR 21918-005-0, (N,2N), T.B.Ryves 1983",
+      "energies_ev": [14300000],
+      "values": [269.0],
+      "uncertainties": [7.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "In115",
+      "product": "In114",
+      "all_states": false,
+      "source": "EXFOR 30014-010-0, (N,2N), R.Prasad 1967.0",
+      "energies_ev": [14800000],
+      "values": [360.0],
+      "uncertainties": [40.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "In115",
+      "product": "In114",
+      "all_states": false,
+      "source": "EXFOR 30285-002-0, (N,2N), T.Kozlowski 1968.0",
+      "energies_ev": [14700000],
+      "values": [164.0],
+      "uncertainties": [20.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "In115",
+      "product": "In114",
+      "all_states": false,
+      "source": "EXFOR 30966-002-0, (N,2N), J.Csikai 1990",
+      "energies_ev": [13640000, 13850000, 14100000, 14350000, 14660000, 14840000],
+      "values": [258.0, 259.0, 263.0, 263.0, 271.0, 268.0],
+      "uncertainties": [8.0, 8.0, 7.0, 7.0, 7.0, 6.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "In115",
+      "product": "In114",
+      "all_states": false,
+      "source": "EXFOR 32775-003-2, (N,2N), Junhua Luo 2017.0",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [231.0, 247.0, 244.0],
+      "uncertainties": [26.0, 27.0, 28.0],
+      "calculations": {}
+    }
+  ]
+}

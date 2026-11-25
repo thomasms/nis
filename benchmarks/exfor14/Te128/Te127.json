@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Te128/Te127",
+  "title": "Te128 to Te127, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Te128": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te128",
+      "product": "Te127",
+      "all_states": true,
+      "source": "EXFOR 32936-004-1, (N,2N), Junhua Luo 2024",
+      "energies_ev": [13590000, 13860000, 14130000, 14700000, 14940000],
+      "values": [1466.0, 1511.0, 1538.0, 1550.0, 1571.0],
+      "uncertainties": [119.0, 125.0, 132.0, 128.0, 130.0],
+      "calculations": {}
+    }
+  ]
+}

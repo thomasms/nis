@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ba130/Ba129m",
+  "title": "Ba130 to Ba129m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ba130": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba130",
+      "product": "Ba129m",
+      "all_states": false,
+      "source": "EXFOR 21999-044-0, (N,2N), R.Pepelnik 1985",
+      "energies_ev": [14700000],
+      "values": [728.0],
+      "uncertainties": [73.0],
+      "calculations": {}
+    }
+  ]
+}

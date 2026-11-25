@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ga71/Ga72",
+  "title": "Ga71 to Ga72, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ga71": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ga71",
+      "product": "Ga72",
+      "all_states": true,
+      "source": "EXFOR 20670-007-0, (N,G), O.Schwerer 1976",
+      "energies_ev": [14600000],
+      "values": [0.78],
+      "uncertainties": [0.08],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ga71",
+      "product": "Ga72",
+      "all_states": true,
+      "source": "EXFOR 30296-002-0, (N,G), Manjushree Majumder 1977",
+      "energies_ev": [14800000],
+      "values": [1.31],
+      "uncertainties": [0.1965],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ga71",
+      "product": "Ga72",
+      "all_states": true,
+      "source": "EXFOR 32706-002-0, (N,G), Junhua Luo 2012",
+      "energies_ev": [13500000, 13500000, 13500000, 13500000, 14100000, 14100000, 14100000, 14100000, 14800000, 14800000, 14800000, 14800000],
+      "values": [2.22, 1.92, 1.64, 1.7, 1.76, 1.51, 1.26, 1.39, 1.08, 0.94, 0.74, 0.89],
+      "uncertainties": [0.2, 0.21, 0.25, 0.29, 0.16, 0.16, 0.17, 0.22, 0.1, 0.09, 0.09, 0.14],
+      "calculations": {}
+    }
+  ]
+}

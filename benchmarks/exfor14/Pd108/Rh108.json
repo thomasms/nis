@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Pd108/Rh108",
+  "title": "Pd108 to Rh108, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Pd108": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd108",
+      "product": "Rh108",
+      "all_states": true,
+      "source": "EXFOR 31615-004-0, (N,P), Chang-Lin Lan 2008",
+      "energies_ev": [13500000, 14800000],
+      "values": [7.99, 13.5],
+      "uncertainties": [0.64, 1.34],
+      "calculations": {}
+    }
+  ]
+}

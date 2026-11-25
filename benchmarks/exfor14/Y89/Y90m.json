@@ -1,0 +1,99 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Y89/Y90m",
+  "title": "Y89 to Y90m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Y89": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Y89",
+      "product": "Y90m",
+      "all_states": false,
+      "source": "EXFOR 11590-035-0, (N,G), E.T.Bramlitt 1963",
+      "energies_ev": [14700000],
+      "values": [1.1],
+      "uncertainties": [0.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Y89",
+      "product": "Y90m",
+      "all_states": false,
+      "source": "EXFOR 11882-006-0, (N,G), H.A.Grench 1967",
+      "energies_ev": [14800000],
+      "values": [0.5],
+      "uncertainties": [0.07],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Y89",
+      "product": "Y90m",
+      "all_states": false,
+      "source": "EXFOR 20670-009-0, (N,G), O.Schwerer 1976",
+      "energies_ev": [14600000],
+      "values": [0.4],
+      "uncertainties": [0.06],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Y89",
+      "product": "Y90m",
+      "all_states": false,
+      "source": "EXFOR 21004-007-0, (N,G), G.Magnusson 1980",
+      "energies_ev": [14700000],
+      "values": [0.39],
+      "uncertainties": [0.04],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Y89",
+      "product": "Y90m",
+      "all_states": false,
+      "source": "EXFOR 32678-002-0, (N,G), Fengqun Zhou 2010",
+      "energies_ev": [13500000, 14100000, 14600000],
+      "values": [0.39, 0.43, 0.38],
+      "uncertainties": [0.02, 0.02, 0.02],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Y89",
+      "product": "Y90m",
+      "all_states": false,
+      "source": "EXFOR 33137-004-0, (N,G), I.Pasha 2019",
+      "energies_ev": [14540000],
+      "values": [0.54],
+      "uncertainties": [0.06],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Y89",
+      "product": "Y90m",
+      "all_states": false,
+      "source": "EXFOR 33196-010-0, (N,G), T.S.Ganesapandy 2023",
+      "energies_ev": [14770000],
+      "values": [0.44],
+      "uncertainties": [0.040146],
+      "calculations": {}
+    }
+  ]
+}

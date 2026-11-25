@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Pb204/Pb203m",
+  "title": "Pb204 to Pb203m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Pb204": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pb204",
+      "product": "Pb203m",
+      "all_states": false,
+      "source": "EXFOR 21999-041-0, (N,2N), R.Pepelnik 1985",
+      "energies_ev": [14700000],
+      "values": [1110.0],
+      "uncertainties": [60.0],
+      "calculations": {}
+    }
+  ]
+}

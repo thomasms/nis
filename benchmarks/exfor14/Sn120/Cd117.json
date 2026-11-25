@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sn120/Cd117",
+  "title": "Sn120 to Cd117, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sn120": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn120",
+      "product": "Cd117",
+      "all_states": true,
+      "source": "EXFOR 13030-002-0, (N,A), Yu-Wen Yu 1966",
+      "energies_ev": [14100000],
+      "values": [0.4],
+      "uncertainties": [0.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn120",
+      "product": "Cd117",
+      "all_states": true,
+      "source": "EXFOR 41614-134-0, (N,A), A.A.Filatenkov 2016",
+      "energies_ev": [13880000, 14050000],
+      "values": [0.295, 0.366],
+      "uncertainties": [0.038645, 0.062586],
+      "calculations": {}
+    }
+  ]
+}

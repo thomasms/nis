@@ -4,7 +4,13 @@ The standard results file: one CSV for all benchmarks, one row for each measured
     benchmark, case, quantity, unit, time_s, experiment, uncertainty, nis, <calculation>, ...
 
 time_s is the cooling time (after the end of the last irradiation step). The values are in the unit
-of the measurement. The calculations (for example FISPACT-II) come from the case file, a cell is
+of the measurement. A file with cross sections at given energies has two more columns after time_s:
+
+    energy_ev   the incident neutron energy of the value (time_s is then empty)
+    source      where the measured value comes from, e.g. an EXFOR subentry
+
+Two rows can have the same energy and source (a data set with two values at one energy): they are told apart by
+their order in the file. The calculations (for example FISPACT-II) come from the case file, a cell is
 empty where a calculation has no value.
 
 A run with a label (bench.py run --label TENDL-2025) has the column "nis (TENDL-2025)" in place of "nis".
@@ -19,6 +25,8 @@ from .format import Case, units_for
 
 BASE_COLUMNS = ["benchmark", "case", "quantity", "unit", "time_s", "experiment", "uncertainty"]
 FIXED_COLUMNS = BASE_COLUMNS + ["nis"]
+# only in a file with cross sections at given energies
+ENERGY_COLUMNS = ["energy_ev", "source"]
 
 
 def nis_column(label: str = None) -> str:
@@ -40,12 +48,14 @@ def _is_nis_column(column: str) -> bool:
 
 
 def nis_value(case: Case, quantity: str, unit: str, step_result: dict, cooling_time: float,
-              reaction: tuple = None) -> float:
+              reaction: tuple = None, value: float = None) -> float:
     """The NIS value (in the unit of the measurement) from the result of a step (W, Bq, and cm2 for each
     (target, product, all_states) of a cross section). reaction: (target, product, all_states), only for a cross
-    section."""
+    section. value: the SI value (cm2 for a cross section) in place of the step result."""
     factor, normalisation, times_time = units_for(quantity)[unit]
-    value = (step_result[quantity][reaction] if quantity == "cross_section" else step_result[quantity]) * factor
+    if value is None:
+        value = step_result[quantity][reaction] if quantity == "cross_section" else step_result[quantity]
+    value *= factor
     if normalisation == "mass":
         value /= case.mass_kg
     elif normalisation == "fission":
@@ -58,8 +68,12 @@ def nis_value(case: Case, quantity: str, unit: str, step_result: dict, cooling_t
 
 
 def case_rows(case: Case, step_results: list, column: str = "nis") -> list:
+    """step_results: the results of the engine for the case (with at_energy for the cross sections at energies)."""
     rows = []
     for m in case.measurements:
+        if m.energies_ev is not None:
+            rows += _energy_rows(case, m, step_results.at_energy, column)
+            continue
         times = case.cooling_times(m.steps)
         for i, (step, t) in enumerate(zip(m.steps, times)):
             row = {"benchmark": case.benchmark, "case": case.name, "quantity": m.quantity, "unit": m.unit,
@@ -68,6 +82,20 @@ def case_rows(case: Case, step_results: list, column: str = "nis") -> list:
             for name, values in m.calculations.items():
                 row[name] = "" if values[i] is None else f"{values[i]:.6e}"
             rows.append(row)
+    return rows
+
+
+def _energy_rows(case: Case, m, at_energy: dict, column: str) -> list:
+    rows = []
+    for i, energy in enumerate(m.energies_ev):
+        value = at_energy[(m.target, m.product, m.all_states, energy)]
+        row = {"benchmark": case.benchmark, "case": case.name, "quantity": m.quantity, "unit": m.unit, "time_s": "",
+               "energy_ev": f"{energy:.6g}", "source": m.source or "", "experiment": f"{m.values[i]:.6g}",
+               "uncertainty": f"{m.uncertainties[i]:.6g}",
+               column: f"{nis_value(case, m.quantity, m.unit, None, 0.0, value=value):.6e}"}
+        for name, values in m.calculations.items():
+            row[name] = "" if values[i] is None else f"{values[i]:.6e}"
+        rows.append(row)
     return rows
 
 
@@ -81,7 +109,10 @@ def calculation_names(cases: list) -> list:
 
 def write_results(path: Path, rows: list, calculations: list, column: str = "nis") -> None:
     with open(path, "w", newline="") as f:
-        writer = csv.DictWriter(f, BASE_COLUMNS + [column] + calculations, restval="")
+        base = BASE_COLUMNS
+        if any("energy_ev" in r for r in rows):
+            base = BASE_COLUMNS[:5] + ENERGY_COLUMNS + BASE_COLUMNS[5:]
+        writer = csv.DictWriter(f, base + [column] + calculations, restval="")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -95,8 +126,8 @@ def read_runs(paths: list) -> tuple:
 
     The NIS values of the first run are in row["nis"]. Each other run (another label) is a calculation, with
     its name (i.e. "NIS (TENDL-2025)"), in front of the calculations of the case files. Files of the same run (the
-    same label, or no label) are joined, and a later file replaces the same (benchmark, case, quantity, time) of an
-    earlier one. The values are floats, nan where empty."""
+    same label, or no label) are joined, and a later file replaces the same (benchmark, case, quantity, time, energy,
+    source) of an earlier one. The values are floats, nan where empty."""
     rows, runs, calculations = {}, [], []
     for path in paths:
         with open(path) as f:
@@ -111,17 +142,23 @@ def read_runs(paths: list) -> tuple:
             if name not in runs:
                 runs.append(name)
             key = "nis" if name == runs[0] else name
-            calculations += [c for c in fieldnames
-                             if c not in BASE_COLUMNS and c != nis_columns[0] and c not in calculations]
+            calculations += [c for c in fieldnames if c not in BASE_COLUMNS and c not in ENERGY_COLUMNS
+                             and c != nis_columns[0] and c not in calculations]
+            seen = {}
             for r in reader:
-                row = rows.setdefault((r["benchmark"], r["case"], r["quantity"], r["time_s"]), {})
+                point = (r["benchmark"], r["case"], r["quantity"], r["time_s"], r.get("energy_ev", ""),
+                         r.get("source", ""))
+                # the n-th row of the same point in this file
+                seen[point] = seen.get(point, -1) + 1
+                row = rows.setdefault(point + (seen[point],), {})
                 row.update({c: r[c] for c in BASE_COLUMNS})
+                row["energy_ev"], row["source"] = r.get("energy_ev", ""), r.get("source", "")
                 row[key] = r[nis_columns[0]]
                 row.update({c: r[c] for c in fieldnames if c in calculations})
 
     calculations = runs[1:] + calculations
     for row in rows.values():
-        for column in ["time_s", "experiment", "uncertainty", "nis"] + calculations:
+        for column in ["time_s", "energy_ev", "experiment", "uncertainty", "nis"] + calculations:
             row[column] = _float(row.get(column))
     return list(rows.values()), calculations, runs[0] if runs else "NIS"
 

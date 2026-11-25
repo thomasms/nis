@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Te126/Sb126m",
+  "title": "Te126 to Sb126m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Te126": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te126",
+      "product": "Sb126m",
+      "all_states": false,
+      "source": "EXFOR 20540-019-0, (N,P), W.Struwe 1974",
+      "energies_ev": [14600000],
+      "values": [2.71],
+      "uncertainties": [0.23],
+      "calculations": {}
+    }
+  ]
+}

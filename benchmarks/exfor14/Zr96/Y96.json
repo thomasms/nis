@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Zr96/Y96",
+  "title": "Zr96 to Y96, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Zr96": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr96",
+      "product": "Y96",
+      "all_states": true,
+      "source": "EXFOR 21407-002-0, (N,P), D.G.Vallis 1961",
+      "energies_ev": [14100000],
+      "values": [13.0],
+      "uncertainties": [4.0],
+      "calculations": {}
+    }
+  ]
+}

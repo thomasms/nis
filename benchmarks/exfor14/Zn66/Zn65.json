@@ -1,0 +1,171 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Zn66/Zn65",
+  "title": "Zn66 to Zn65, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Zn66": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn66",
+      "product": "Zn65",
+      "all_states": true,
+      "source": "EXFOR 11515-010-0, (N,2N), N.Ranakumar 1968",
+      "energies_ev": [14400000],
+      "values": [650.0],
+      "uncertainties": [150.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn66",
+      "product": "Zn65",
+      "all_states": true,
+      "source": "EXFOR 20486-003-0, (N,2N), A.Paulsen 1975",
+      "energies_ev": [13600000, 14000000, 14400000, 14800000],
+      "values": [527.0, 630.0, 685.0, 685.0],
+      "uncertainties": [29.0, 34.0, 44.0, 37.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn66",
+      "product": "Zn65",
+      "all_states": true,
+      "source": "EXFOR 20536-011-0, (N,2N), S.M.Qaim 1972",
+      "energies_ev": [14700000],
+      "values": [605.0],
+      "uncertainties": [55.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn66",
+      "product": "Zn65",
+      "all_states": true,
+      "source": "EXFOR 21300-014-0, (N,2N), K.Kayashima 1979",
+      "energies_ev": [14600000],
+      "values": [588.0],
+      "uncertainties": [65.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn66",
+      "product": "Zn65",
+      "all_states": true,
+      "source": "EXFOR 22338-019-0, (N,2N), A.Ercan 1991",
+      "energies_ev": [14600000],
+      "values": [786.0],
+      "uncertainties": [28.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn66",
+      "product": "Zn65",
+      "all_states": true,
+      "source": "EXFOR 22637-008-0, (N,2N), C.Konno 1993",
+      "energies_ev": [13760000, 14230000, 14680000, 14950000],
+      "values": [545.0, 647.0, 720.0, 764.0],
+      "uncertainties": [25.0, 30.0, 32.0, 38.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn66",
+      "product": "Zn65",
+      "all_states": true,
+      "source": "EXFOR 30033-010-0, (N,2N), J.Csikai 1967",
+      "energies_ev": [14210000],
+      "values": [550.0],
+      "uncertainties": [82.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn66",
+      "product": "Zn65",
+      "all_states": true,
+      "source": "EXFOR 30972-002-0, (N,2N), M.Wagner 1989",
+      "energies_ev": [13922000, 14283000, 14754000],
+      "values": [589.8, 663.4, 738.1],
+      "uncertainties": [16.1, 15.4, 16.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn66",
+      "product": "Zn65",
+      "all_states": true,
+      "source": "EXFOR 30972-006-0, (N,2N), M.Wagner 1989",
+      "energies_ev": [13922000, 14283000, 14754000],
+      "values": [590.6, 652.0, 734.5],
+      "uncertainties": [10.3, 11.9, 11.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn66",
+      "product": "Zn65",
+      "all_states": true,
+      "source": "EXFOR 31408-002-0, (N,2N), Lu Hanlin 1991",
+      "energies_ev": [14090000, 14470000, 14580000, 14780000, 14800000],
+      "values": [588.0, 618.0, 746.0, 739.0, 766.0],
+      "uncertainties": [13.0, 20.0, 16.0, 24.0, 17.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn66",
+      "product": "Zn65",
+      "all_states": true,
+      "source": "EXFOR 32747-003-0, (N,2N), Kong Xiangzhong 1992",
+      "energies_ev": [13500000, 13660000, 14290000, 14370000, 14700000, 14800000],
+      "values": [479.0, 523.0, 617.0, 632.0, 698.0, 711.0],
+      "uncertainties": [24.0, 25.0, 30.0, 31.0, 35.0, 36.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn66",
+      "product": "Zn65",
+      "all_states": true,
+      "source": "EXFOR 32884-004-0, (N,2N), B.Liu 2023",
+      "energies_ev": [14000000],
+      "values": [655.6],
+      "uncertainties": [33.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn66",
+      "product": "Zn65",
+      "all_states": true,
+      "source": "EXFOR 33196-007-0, (N,2N), T.S.Ganesapandy 2023",
+      "energies_ev": [14770000],
+      "values": [723.51],
+      "uncertainties": [85.092],
+      "calculations": {}
+    }
+  ]
+}

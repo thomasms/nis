@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Dy164/Tb163",
+  "title": "Dy164 to Tb163, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Dy164": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Dy164",
+      "product": "Tb163",
+      "all_states": true,
+      "source": "EXFOR 22809-007-0, (N,X), H.Sakane 2002",
+      "energies_ev": [14350000, 14640000, 14870000],
+      "values": [0.23, 0.3, 0.33],
+      "uncertainties": [0.0552, 0.066, 0.066],
+      "calculations": {}
+    }
+  ]
+}

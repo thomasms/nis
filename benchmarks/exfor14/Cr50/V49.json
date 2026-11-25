@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cr50/V49",
+  "title": "Cr50 to V49, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cr50": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr50",
+      "product": "V49",
+      "all_states": true,
+      "source": "EXFOR 10827-007-0, (N,D), S.M.Grimes 1979",
+      "energies_ev": [14800000],
+      "values": [12.0],
+      "uncertainties": [1.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr50",
+      "product": "V49",
+      "all_states": true,
+      "source": "EXFOR 21784-004-0, (N,X), S.M.Qaim 1982",
+      "energies_ev": [14700000],
+      "values": [405.0],
+      "uncertainties": [65.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr50",
+      "product": "V49",
+      "all_states": true,
+      "source": "EXFOR 22465-002-0, (N,X), A.Fessler 1999",
+      "energies_ev": [14250000],
+      "values": [350.5],
+      "uncertainties": [62.1],
+      "calculations": {}
+    }
+  ]
+}

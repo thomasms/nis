@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Hg200/Au200m",
+  "title": "Hg200 to Au200m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Hg200": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hg200",
+      "product": "Au200m",
+      "all_states": false,
+      "source": "EXFOR 23018-010-0, (N,P), Y.Kasugai 2001",
+      "energies_ev": [14600000],
+      "values": [1.8],
+      "uncertainties": [0.4],
+      "calculations": {}
+    }
+  ]
+}

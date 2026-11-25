@@ -1,0 +1,75 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cr54/V53",
+  "title": "Cr54 to V53, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cr54": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr54",
+      "product": "V53",
+      "all_states": true,
+      "source": "EXFOR 20721-018-0, (N,X), N.I.Molla 1977",
+      "energies_ev": [14700000],
+      "values": [3.0],
+      "uncertainties": [0.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr54",
+      "product": "V53",
+      "all_states": true,
+      "source": "EXFOR 22281-009-0, (N,X), K.Kawade 1992",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [0.7, 1.4, 1.5, 3.2, 3.3],
+      "uncertainties": [0.252, 0.336, 0.405, 0.48, 0.462],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr54",
+      "product": "V53",
+      "all_states": true,
+      "source": "EXFOR 22800-006-0, (N,X), H.Sakane 2002",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [0.7, 1.4, 1.5, 3.2, 3.3],
+      "uncertainties": [0.252, 0.336, 0.405, 0.48, 0.462],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr54",
+      "product": "V53",
+      "all_states": true,
+      "source": "EXFOR 30810-006-0, (N,X), Hoang Dac Luc 1986",
+      "energies_ev": [14800000],
+      "values": [6.5],
+      "uncertainties": [1.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr54",
+      "product": "V53",
+      "all_states": true,
+      "source": "EXFOR 30812-007-0, (N,X), I.Ribansky 1985",
+      "energies_ev": [14600000],
+      "values": [16.0],
+      "uncertainties": [0.2],
+      "calculations": {}
+    }
+  ]
+}

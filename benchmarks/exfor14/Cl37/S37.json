@@ -1,0 +1,183 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cl37/S37",
+  "title": "Cl37 to S37, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cl37": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl37",
+      "product": "S37",
+      "all_states": true,
+      "source": "EXFOR 11274-022-0, (N,P), E.B.Paul 1953",
+      "energies_ev": [14500000],
+      "values": [33.4],
+      "uncertainties": [6.68],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl37",
+      "product": "S37",
+      "all_states": true,
+      "source": "EXFOR 11550-006-0, (N,P), R.S.Scalan 1958",
+      "energies_ev": [14800000],
+      "values": [25.4],
+      "uncertainties": [2.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl37",
+      "product": "S37",
+      "all_states": true,
+      "source": "EXFOR 11556-002-0, (N,P), S.C.Mathur 1966",
+      "energies_ev": [14100000],
+      "values": [25.0],
+      "uncertainties": [2.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl37",
+      "product": "S37",
+      "all_states": true,
+      "source": "EXFOR 20889-019-0, (N,P), A.Pasquarelli 1967",
+      "energies_ev": [14700000],
+      "values": [25.5],
+      "uncertainties": [1.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl37",
+      "product": "S37",
+      "all_states": true,
+      "source": "EXFOR 21115-004-0, (N,P), A.V.Cohen 1956",
+      "energies_ev": [13900000, 14450000],
+      "values": [18.5, 38.0],
+      "uncertainties": [7.0, 8.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl37",
+      "product": "S37",
+      "all_states": true,
+      "source": "EXFOR 21846-024-0, (N,P), W.Schantl 1970",
+      "energies_ev": [14700000],
+      "values": [20.0],
+      "uncertainties": [3.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl37",
+      "product": "S37",
+      "all_states": true,
+      "source": "EXFOR 21886-005-0, (N,P), M.Hyvoenen-Dabek 1978",
+      "energies_ev": [14700000],
+      "values": [22.0],
+      "uncertainties": [3.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl37",
+      "product": "S37",
+      "all_states": true,
+      "source": "EXFOR 22433-005-0, (N,P), Y.Kasugai 1998",
+      "energies_ev": [13700000, 14010000, 14350000, 14640000, 14870000],
+      "values": [25.9, 24.9, 22.4, 22.3, 24.8],
+      "uncertainties": [2.849, 2.988, 1.904, 1.9624, 2.2072],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl37",
+      "product": "S37",
+      "all_states": true,
+      "source": "EXFOR 30062-002-0, (N,P), B.Mitra 1967",
+      "energies_ev": [14100000, 14800000],
+      "values": [21.0, 25.0],
+      "uncertainties": [3.0, 3.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl37",
+      "product": "S37",
+      "all_states": true,
+      "source": "EXFOR 30336-009-0, (N,P), R.Prasad 1971",
+      "energies_ev": [14800000],
+      "values": [42.0],
+      "uncertainties": [4.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl37",
+      "product": "S37",
+      "all_states": true,
+      "source": "EXFOR 30562-007-0, (N,P), P.N.Ngoc 1980",
+      "energies_ev": [14600000],
+      "values": [34.0],
+      "uncertainties": [3.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl37",
+      "product": "S37",
+      "all_states": true,
+      "source": "EXFOR 30707-006-0, (N,P), J.P.Gupta 1985",
+      "energies_ev": [14800000],
+      "values": [28.0],
+      "uncertainties": [5.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl37",
+      "product": "S37",
+      "all_states": true,
+      "source": "EXFOR 31316-019-0, (N,P), C.S.Khurana 1965",
+      "energies_ev": [14800000],
+      "values": [40.0],
+      "uncertainties": [4.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl37",
+      "product": "S37",
+      "all_states": true,
+      "source": "EXFOR 31524-006-0, (N,P), M.Belgaid 1992",
+      "energies_ev": [14730000],
+      "values": [28.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    }
+  ]
+}

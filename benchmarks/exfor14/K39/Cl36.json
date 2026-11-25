@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "K39/Cl36",
+  "title": "K39 to Cl36, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "K39": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "K39",
+      "product": "Cl36",
+      "all_states": true,
+      "source": "EXFOR 21048-002-0, (N,A), R.Bass 1964",
+      "energies_ev": [13700000],
+      "values": [166.0],
+      "uncertainties": [25.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "K39",
+      "product": "Cl36",
+      "all_states": true,
+      "source": "EXFOR 21081-003-0, (N,A), M.Bormann 1962",
+      "energies_ev": [14100000],
+      "values": [84.0],
+      "uncertainties": [12.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "K39",
+      "product": "Cl36",
+      "all_states": true,
+      "source": "EXFOR 21668-009-0, (N,A), M.Bormann 1960",
+      "energies_ev": [14100000],
+      "values": [110.0],
+      "uncertainties": [16.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "K39",
+      "product": "Cl36",
+      "all_states": true,
+      "source": "EXFOR 31531-007-0, (N,A), F.Sudbrock 2000",
+      "energies_ev": [14600000],
+      "values": [159.0],
+      "uncertainties": [8.0],
+      "calculations": {}
+    }
+  ]
+}

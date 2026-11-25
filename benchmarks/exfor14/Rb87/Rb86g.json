@@ -1,0 +1,75 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Rb87/Rb86g",
+  "title": "Rb87 to Rb86g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Rb87": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rb87",
+      "product": "Rb86",
+      "all_states": false,
+      "source": "EXFOR 10088-013-0, (N,2N), L.Husain 1970",
+      "energies_ev": [14800000],
+      "values": [833.0],
+      "uncertainties": [60.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rb87",
+      "product": "Rb86",
+      "all_states": false,
+      "source": "EXFOR 10835-009-1, (N,2N), S.Sothras 1977",
+      "energies_ev": [14800000],
+      "values": [821.0],
+      "uncertainties": [82.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rb87",
+      "product": "Rb86",
+      "all_states": false,
+      "source": "EXFOR 20891-006-0, (N,2N), B.Minetti 1968",
+      "energies_ev": [14700000],
+      "values": [1619.0],
+      "uncertainties": [250.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rb87",
+      "product": "Rb86",
+      "all_states": false,
+      "source": "EXFOR 31543-017-0, (N,2N), T.D.Thiep 2003",
+      "energies_ev": [14800000],
+      "values": [875.0],
+      "uncertainties": [105.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rb87",
+      "product": "Rb86",
+      "all_states": false,
+      "source": "EXFOR 32782-003-2, (N,2N), Junhua Luo 2018",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [830.0, 888.0, 906.0],
+      "uncertainties": [76.0, 67.0, 87.0],
+      "calculations": {}
+    }
+  ]
+}

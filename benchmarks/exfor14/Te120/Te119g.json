@@ -1,0 +1,87 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Te120/Te119g",
+  "title": "Te120 to Te119g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Te120": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te120",
+      "product": "Te119",
+      "all_states": false,
+      "source": "EXFOR 11999-004-0, (N,2N), L.Husain 1968",
+      "energies_ev": [14800000],
+      "values": [685.0],
+      "uncertainties": [100.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te120",
+      "product": "Te119",
+      "all_states": false,
+      "source": "EXFOR 21300-021-0, (N,2N), K.Kayashima 1979",
+      "energies_ev": [14600000],
+      "values": [679.0],
+      "uncertainties": [121.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te120",
+      "product": "Te119",
+      "all_states": false,
+      "source": "EXFOR 22675-003-0, (N,2N), C.Schnabel 2000",
+      "energies_ev": [14700000],
+      "values": [676.0],
+      "uncertainties": [60.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te120",
+      "product": "Te119",
+      "all_states": false,
+      "source": "EXFOR 32669-003-0, (N,2N), F.Zhou 2007",
+      "energies_ev": [13500000, 14600000],
+      "values": [535.0, 553.0],
+      "uncertainties": [26.0, 27.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te120",
+      "product": "Te119",
+      "all_states": false,
+      "source": "EXFOR 41240-085-0, (N,2N), A.A.Filatenkov 1999",
+      "energies_ev": [13670000, 14060000, 14280000, 14460000, 14670000, 14830000],
+      "values": [549.0, 601.0, 610.0, 630.0, 642.0, 656.0],
+      "uncertainties": [45.0, 46.0, 47.0, 49.0, 50.0, 50.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te120",
+      "product": "Te119",
+      "all_states": false,
+      "source": "EXFOR 41614-140-0, (N,2N), A.A.Filatenkov 2016",
+      "energies_ev": [13670000, 14060000, 14280000, 14460000, 14670000, 14830000],
+      "values": [551.0, 604.0, 611.0, 629.0, 642.0, 660.0],
+      "uncertainties": [44.686, 45.662, 46.497, 48.307, 49.37, 49.632],
+      "calculations": {}
+    }
+  ]
+}

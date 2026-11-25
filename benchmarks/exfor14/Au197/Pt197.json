@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Au197/Pt197",
+  "title": "Au197 to Pt197, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Au197": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Au197",
+      "product": "Pt197",
+      "all_states": true,
+      "source": "EXFOR 11462-019-0, (N,P), B.P.Bayhurst 1961",
+      "energies_ev": [13520000, 13690000, 13880000, 14010000, 14090000, 14310000, 14500000, 14680000, 14810000, 14930000],
+      "values": [1.4, 1.6, 1.7, 1.8, 2.0, 2.0, 2.2, 2.6, 2.4, 2.6],
+      "uncertainties": [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Au197",
+      "product": "Pt197",
+      "all_states": true,
+      "source": "EXFOR 11504-016-0, (N,P), H.A.Tewes 1960",
+      "energies_ev": [13850000],
+      "values": [0.26],
+      "uncertainties": [0.052],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Au197",
+      "product": "Pt197",
+      "all_states": true,
+      "source": "EXFOR 21440-036-0, (N,P), R.F.Coleman 1959",
+      "energies_ev": [14500000],
+      "values": [2.42],
+      "uncertainties": [0.242],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Au197",
+      "product": "Pt197",
+      "all_states": true,
+      "source": "EXFOR 41614-229-0, (N,P), A.A.Filatenkov 2016",
+      "energies_ev": [13640000, 13880000, 14280000, 14470000, 14680000, 14820000],
+      "values": [2.54, 2.95, 3.45, 3.94, 3.85, 4.28],
+      "uncertainties": [0.40132, 0.6018, 0.6003, 0.79982, 0.69685, 0.80464],
+      "calculations": {}
+    }
+  ]
+}

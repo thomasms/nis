@@ -408,6 +408,7 @@ The tests:
 | [reactiontests.py](src/tests/python/reactiontests.py) | JEFF-4.0 reactions: thermal and 14.1 MeV cross sections against reference values, the inelastic levels that break up (Li7 tritium, Li6 deuterons, C12 3 alphas), the spectrum (linear in flux, bin splitting), the matrix structure, burn-up and Co60 activation against the analytic Bateman solution | reaction data |
 | [fissiontests.py](src/tests/python/fissiontests.py) | JEFF-3.1.1 fission yields: 2 products per fission, thermal U235 gives the known Cs137 and Sr90 yields and fission to capture ratio, Cf252 spontaneous fission | decay and reaction data, the yield files |
 | [fnstests.py](src/tests/python/fnstests.py) (slow) | FNS regression: runs all 132 FNS cases and compares with [nis_reference.csv](benchmarks/fns/results/nis_reference.csv), and checks that NIS stays as close to the experiment as now | decay and reaction data |
+| [exfor14tests.py](src/tests/python/exfor14tests.py) | cross sections at given energies (format, results file, engine: the value of the group), the rules of the EXFOR converter, the 1162 EXFOR cases load; regression against [nis_reference.csv](benchmarks/exfor14/results/nis_reference.csv) | the engine and regression tests: decay and reaction data |
 | [crosssectiontests.py](src/tests/python/crosssectiontests.py) | the `cross_section` quantity (with the fast decays, B10 -> Be8 -> 2 He4), the IRDFF-II converter, the 87 IRDFF-II cases load; regression against [nis_reference.csv](benchmarks/irdff2/results/nis_reference.csv) | the engine and regression tests: decay and reaction data |
 | [fissionheattests.py](src/tests/python/fissionheattests.py) | the fission decay heat benchmark: the 44 cases load, the reference has all of them; regression against [nis_reference.csv](benchmarks/fission_decay_heat/results/nis_reference.csv) and C/E limits | the regression: decay data and the yield files |
 | [nisprogramtests.py](src/tests/python/nisprogramtests.py) (slow) | the `nis` program: 3 FNS decks give the same as the reference, decay only steps, errors for bad input | decay and reaction data, the `nis` program |
@@ -449,6 +450,7 @@ the spectrum, the measured values and the results of other codes) and a NIS inpu
 | [fns](benchmarks/fns) | fusion | 132 | decay heat of foils after 14 MeV neutron irradiation (FNS, JAEA) |
 | [fission_decay_heat](benchmarks/fission_decay_heat) | fission | 44 | beta, gamma and total decay heat after fission pulses and irradiations of U233, U235, U238, Pu239, Pu241 and Th232 (IAEA CoNDERC) |
 | [irdff2](benchmarks/irdff2) | other | 87 | spectrum-averaged cross sections of dosimetry reactions in the Cf-252 spontaneous fission and U-235 thermal fission neutron spectra (IRDFF-II) |
+| [exfor14](benchmarks/exfor14) | fusion | 1162 | cross sections of the reactions of the FNS foil nuclides at 13.5 to 15 MeV, 6800 data sets of EXFOR |
 
 One program, [scripts/bench.py](scripts/bench.py), does all the work for all the benchmarks. These steps use uv
 (see [python bindings](#python-bindings)), and the nuclear data (see [Nuclear data](#nuclear-data)).
@@ -572,6 +574,30 @@ With JEFF-4.0, 82 % of the 87 cases are within 10 % of the experiment, and 90 % 
 (C/E 0.4), In116m from In115(n,g) (0.7) and Pb204m (0.8), and Si28(n,p) (1.2-1.3). The He4 production of Li6 and
 B10 agrees with the experiment within 5 %: it needs the inelastic levels that break up (Li6 -> d + alpha) and the
 decay of Be8 (B10 (n,t) -> Be8 -> 2 He4).
+
+For EXFOR at 14 MeV, the original files are the EXFOR tables of the IAEA (github.com/IAEA-NDS/exfortables_py). Each
+case is one reaction of a nuclide of the FNS foils (e.g. `Fe56/Mn56`), with all its EXFOR data sets from 13.5 to
+15 MeV: 1162 reactions, 6800 data sets, 14800 values. The values are used as EXFOR gives them; the rules to select
+the data sets, and how to get the files, are in [benchmarks/README.md](benchmarks/README.md#exfor14). NIS gives the
+cross section at the energy of each value (the value of its group). The cases have no deck: run them with pynis.
+
+```bash
+uv run python scripts/bench.py convert exfor14 --source path/to/exfortables_py --decay-data data/jeff311.dec
+uv run python scripts/bench.py run exfor14 --decay-data data/jeff311.dec --reaction-data data/jeff4.reac \
+    --jobs 4 --output results.csv
+uv run python scripts/bench.py plot results.csv --cases-dir plots     # one plot for each reaction, over the energy
+```
+
+With JEFF-4.0, the main reactions agree well, e.g. Fe56(n,p)Mn56 (C/E 0.99), Al27(n,a)Na24 (0.98) and
+Nb93(n,2n)Nb92m (0.98) ([plots](benchmarks/exfor14/results)). For the 335 reactions above 100 mb, 45 % are within
+10 % of the experiment and 65 % within 20 %. JEFF-4.0 has no data for 35 reactions (small ones, such as
+Zr94(n,He3)Sr92). Two limits of the data make the largest differences:
+
+- isomers that JEFF-4.0 does not split, as it has no MF=9 or MF=10 for the reaction: Co59(n,2n) gives all its Co58 in
+  the ground state (Co58g C/E 2.8, Co58m 0), also Au197(n,2n)Au196n and Au197(n,n')Au197m.
+- the gas production where JEFF-4.0 gives a reaction only in MT=5 (n,anything): the NIS data has the residual
+  nucleus of MT=5 (from MF=10), but not the light particles. Fe56 gives Cr53 in MT=5, so its He4 production is 6 %
+  of the experiment.
 
 **Change a case:** edit the case file `<case>.json`, then make the decks again (do not edit a deck):
 

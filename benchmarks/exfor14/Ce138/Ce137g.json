@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ce138/Ce137g",
+  "title": "Ce138 to Ce137g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ce138": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce138",
+      "product": "Ce137",
+      "all_states": false,
+      "source": "EXFOR 20541-004-0, (N,2N), S.M.Qaim 1974",
+      "energies_ev": [14700000],
+      "values": [942.0],
+      "uncertainties": [100.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce138",
+      "product": "Ce137",
+      "all_states": false,
+      "source": "EXFOR 32738-002-2, (N,2N), Junhua Luo 2015",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [546.0, 564.0, 604.0],
+      "uncertainties": [66.0, 51.0, 84.0],
+      "calculations": {}
+    }
+  ]
+}

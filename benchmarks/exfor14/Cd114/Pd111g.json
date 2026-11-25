@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cd114/Pd111g",
+  "title": "Cd114 to Pd111g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cd114": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd114",
+      "product": "Pd111",
+      "all_states": false,
+      "source": "EXFOR 11583-015-0, (N,A), Yu-Wen Yu 1967",
+      "energies_ev": [14100000],
+      "values": [0.5],
+      "uncertainties": [0.075],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd114",
+      "product": "Pd111",
+      "all_states": false,
+      "source": "EXFOR 40710-004-0, (N,A), B.G.Dzantijev 1957",
+      "energies_ev": [14000000],
+      "values": [0.51],
+      "uncertainties": [0.13],
+      "calculations": {}
+    }
+  ]
+}

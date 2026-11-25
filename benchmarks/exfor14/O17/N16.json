@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "O17/N16",
+  "title": "O17 to N16, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "O17": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "O17",
+      "product": "N16",
+      "all_states": true,
+      "source": "EXFOR 13693-003-0, (N,D), E.B.Norman 1998",
+      "energies_ev": [14000000],
+      "values": [5.6],
+      "uncertainties": [1.9],
+      "calculations": {}
+    }
+  ]
+}

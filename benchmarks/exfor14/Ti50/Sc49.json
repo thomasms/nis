@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ti50/Sc49",
+  "title": "Ti50 to Sc49, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ti50": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti50",
+      "product": "Sc49",
+      "all_states": true,
+      "source": "EXFOR 20721-010-0, (N,X), N.I.Molla 1977",
+      "energies_ev": [14700000],
+      "values": [3.0],
+      "uncertainties": [0.8],
+      "calculations": {}
+    }
+  ]
+}

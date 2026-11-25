@@ -1,0 +1,159 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Zn70/Zn69m",
+  "title": "Zn70 to Zn69m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Zn70": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn70",
+      "product": "Zn69m",
+      "all_states": false,
+      "source": "EXFOR 10224-007-0, (N,2N), D.C.Santry 1972",
+      "energies_ev": [13580000, 13890000, 14240000, 14500000, 14740000],
+      "values": [508.0, 536.0, 572.0, 547.0, 548.0],
+      "uncertainties": [30.0, 32.0, 25.0, 22.0, 22.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn70",
+      "product": "Zn69m",
+      "all_states": false,
+      "source": "EXFOR 11515-013-0, (N,2N), N.Ranakumar 1968",
+      "energies_ev": [14400000],
+      "values": [600.0],
+      "uncertainties": [40.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn70",
+      "product": "Zn69m",
+      "all_states": false,
+      "source": "EXFOR 20536-012-0, (N,2N), S.M.Qaim 1972",
+      "energies_ev": [14700000],
+      "values": [754.0],
+      "uncertainties": [96.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn70",
+      "product": "Zn69m",
+      "all_states": false,
+      "source": "EXFOR 22338-025-0, (N,2N), A.Ercan 1991",
+      "energies_ev": [14600000],
+      "values": [698.0],
+      "uncertainties": [48.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn70",
+      "product": "Zn69m",
+      "all_states": false,
+      "source": "EXFOR 22976-030-0, (N,2N), W.Mannhart 2007",
+      "energies_ev": [13531000, 13699000, 13984000, 14327000],
+      "values": [554.3, 550.5, 596.9, 600.3],
+      "uncertainties": [30.154, 30.167, 33.546, 36.078],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn70",
+      "product": "Zn69m",
+      "all_states": false,
+      "source": "EXFOR 30101-018-0, (N,2N), J.Karolyi 1968",
+      "energies_ev": [14700000],
+      "values": [574.0],
+      "uncertainties": [60.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn70",
+      "product": "Zn69m",
+      "all_states": false,
+      "source": "EXFOR 30286-002-0, (N,2N), S.Hlavac 1976",
+      "energies_ev": [14700000],
+      "values": [702.0],
+      "uncertainties": [46.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn70",
+      "product": "Zn69m",
+      "all_states": false,
+      "source": "EXFOR 31408-004-0, (N,2N), Lu Hanlin 1991",
+      "energies_ev": [14090000, 14580000],
+      "values": [564.0, 671.0],
+      "uncertainties": [13.0, 16.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn70",
+      "product": "Zn69m",
+      "all_states": false,
+      "source": "EXFOR 31449-013-0, (N,2N), N.I.Molla 1994",
+      "energies_ev": [13900000, 14100000, 14510000, 14710000],
+      "values": [606.0, 652.0, 731.0, 758.0],
+      "uncertainties": [41.0, 52.0, 57.0, 59.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn70",
+      "product": "Zn69m",
+      "all_states": false,
+      "source": "EXFOR 31846-002-0, (N,2N), M.S.Uddin 2022",
+      "energies_ev": [13820000, 14100000, 14410000, 14630000, 14710000],
+      "values": [606.0, 642.0, 667.0, 681.0, 687.0],
+      "uncertainties": [65.0, 69.0, 71.0, 73.0, 71.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn70",
+      "product": "Zn69m",
+      "all_states": false,
+      "source": "EXFOR 32884-005-0, (N,2N), B.Liu 2023",
+      "energies_ev": [14000000],
+      "values": [644.2],
+      "uncertainties": [38.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn70",
+      "product": "Zn69m",
+      "all_states": false,
+      "source": "EXFOR 33196-002-0, (N,2N), T.S.Ganesapandy 2023",
+      "energies_ev": [14770000],
+      "values": [627.65],
+      "uncertainties": [105.48],
+      "calculations": {}
+    }
+  ]
+}

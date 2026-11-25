@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Pd104/Rh104",
+  "title": "Pd104 to Rh104, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Pd104": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd104",
+      "product": "Rh104",
+      "all_states": true,
+      "source": "EXFOR 11274-073-0, (N,P), E.B.Paul 1953",
+      "energies_ev": [14500000],
+      "values": [132.0],
+      "uncertainties": [66.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd104",
+      "product": "Rh104",
+      "all_states": true,
+      "source": "EXFOR 40029-002-3, (N,P), V.N.Levkovskii 1971",
+      "energies_ev": [14800000],
+      "values": [58.0],
+      "uncertainties": [14.0],
+      "calculations": {}
+    }
+  ]
+}

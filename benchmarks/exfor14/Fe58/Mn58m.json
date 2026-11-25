@@ -1,0 +1,99 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Fe58/Mn58m",
+  "title": "Fe58 to Mn58m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Fe58": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Fe58",
+      "product": "Mn58m",
+      "all_states": false,
+      "source": "EXFOR 10289-003-0, (N,P), N.C.Dyer 1972",
+      "energies_ev": [14400000],
+      "values": [10.8],
+      "uncertainties": [1.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Fe58",
+      "product": "Mn58m",
+      "all_states": false,
+      "source": "EXFOR 10309-006-0, (N,P), J.J.Singh 1972",
+      "energies_ev": [14500000],
+      "values": [35.0],
+      "uncertainties": [25.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Fe58",
+      "product": "Mn58m",
+      "all_states": false,
+      "source": "EXFOR 11718-009-0, (N,P), D.M.Chittenden Ii 1961",
+      "energies_ev": [14800000],
+      "values": [23.0],
+      "uncertainties": [3.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Fe58",
+      "product": "Mn58m",
+      "all_states": false,
+      "source": "EXFOR 20721-025-0, (N,P), N.I.Molla 1977",
+      "energies_ev": [14700000],
+      "values": [7.0],
+      "uncertainties": [1.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Fe58",
+      "product": "Mn58m",
+      "all_states": false,
+      "source": "EXFOR 21936-014-0, (N,P), B.M.Bahal 1984",
+      "energies_ev": [14700000],
+      "values": [13.6],
+      "uncertainties": [0.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Fe58",
+      "product": "Mn58m",
+      "all_states": false,
+      "source": "EXFOR 30823-003-0, (N,P), F.Habbani 1988",
+      "energies_ev": [14500000],
+      "values": [26.0],
+      "uncertainties": [4.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Fe58",
+      "product": "Mn58m",
+      "all_states": false,
+      "source": "EXFOR 30978-007-0, (N,P), M.Viennot 1991",
+      "energies_ev": [14730000],
+      "values": [11.0],
+      "uncertainties": [2.5],
+      "calculations": {}
+    }
+  ]
+}

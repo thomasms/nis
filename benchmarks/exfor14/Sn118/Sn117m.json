@@ -1,0 +1,111 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sn118/Sn117m",
+  "title": "Sn118 to Sn117m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sn118": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn118",
+      "product": "Sn117m",
+      "all_states": false,
+      "source": "EXFOR 22089-094-0, (N,2N), Y.Ikeda 1988",
+      "energies_ev": [13570000, 13750000, 13980000, 14220000, 14430000, 14670000, 14930000],
+      "values": [725.0, 744.0, 747.0, 790.0, 787.0, 807.0, 823.0],
+      "uncertainties": [38.0, 41.0, 40.0, 44.0, 43.0, 45.0, 44.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn118",
+      "product": "Sn117m",
+      "all_states": false,
+      "source": "EXFOR 30105-012-0, (N,2N), J.Brzosko 1965",
+      "energies_ev": [14900000],
+      "values": [1230.0],
+      "uncertainties": [340.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn118",
+      "product": "Sn117m",
+      "all_states": false,
+      "source": "EXFOR 30155-012-0, (N,2N), P.Decowski 1971",
+      "energies_ev": [13900000, 14470000],
+      "values": [808.0, 745.0],
+      "uncertainties": [28.0, 59.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn118",
+      "product": "Sn117m",
+      "all_states": false,
+      "source": "EXFOR 30202-004-0, (N,2N), S.Lulic 1968",
+      "energies_ev": [14400000],
+      "values": [976.0],
+      "uncertainties": [120.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn118",
+      "product": "Sn117m",
+      "all_states": false,
+      "source": "EXFOR 30287-013-0, (N,2N), W.Grochulski 1975",
+      "energies_ev": [13900000, 14500000],
+      "values": [808.0, 794.0],
+      "uncertainties": [87.0, 109.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn118",
+      "product": "Sn117m",
+      "all_states": false,
+      "source": "EXFOR 31551-013-0, (N,2N), E.Betak 2005",
+      "energies_ev": [14400000],
+      "values": [816.0],
+      "uncertainties": [70.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn118",
+      "product": "Sn117m",
+      "all_states": false,
+      "source": "EXFOR 31639-003-0, (N,2N), Pu Zhong-Sheng 2008",
+      "energies_ev": [13500000, 14100000, 14400000, 14600000],
+      "values": [726.0, 780.0, 813.0, 853.0],
+      "uncertainties": [98.0, 88.0, 101.0, 110.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn118",
+      "product": "Sn117m",
+      "all_states": false,
+      "source": "EXFOR 41614-130-0, (N,2N), A.A.Filatenkov 2016",
+      "energies_ev": [14050000, 14280000, 14690000, 14810000, 14880000],
+      "values": [838.0, 880.0, 897.0, 908.0, 893.0],
+      "uncertainties": [48.436, 40.92, 36.508, 59.383, 29.469],
+      "calculations": {}
+    }
+  ]
+}

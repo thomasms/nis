@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Mn55/V53",
+  "title": "Mn55 to V53, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Mn55": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mn55",
+      "product": "V53",
+      "all_states": true,
+      "source": "EXFOR 30152-004-0, (N,HE3), M.Diksic 1974",
+      "energies_ev": [14600000],
+      "values": [0.8],
+      "uncertainties": [0.32],
+      "calculations": {}
+    }
+  ]
+}

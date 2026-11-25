@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ge76/Zn73",
+  "title": "Ge76 to Zn73, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ge76": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge76",
+      "product": "Zn73",
+      "all_states": true,
+      "source": "EXFOR 31481-007-0, (N,A), A.D.Majdeddin 1997",
+      "energies_ev": [14700000],
+      "values": [2.6],
+      "uncertainties": [0.3],
+      "calculations": {}
+    }
+  ]
+}

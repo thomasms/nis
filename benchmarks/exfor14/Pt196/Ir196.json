@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Pt196/Ir196",
+  "title": "Pt196 to Ir196, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Pt196": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pt196",
+      "product": "Ir196",
+      "all_states": true,
+      "source": "EXFOR 41614-224-0, (N,P), A.A.Filatenkov 2016",
+      "energies_ev": [14770000],
+      "values": [1.44],
+      "uncertainties": [0.59904],
+      "calculations": {}
+    }
+  ]
+}

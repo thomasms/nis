@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "W186/W187",
+  "title": "W186 to W187, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "W186": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W186",
+      "product": "W187",
+      "all_states": true,
+      "source": "EXFOR 20670-016-0, (N,G), O.Schwerer 1976",
+      "energies_ev": [14600000],
+      "values": [2.2],
+      "uncertainties": [0.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W186",
+      "product": "W187",
+      "all_states": true,
+      "source": "EXFOR 20673-035-0, (N,G), M.Valkonen 1976.0",
+      "energies_ev": [14700000],
+      "values": [1.1],
+      "uncertainties": [0.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W186",
+      "product": "W187",
+      "all_states": true,
+      "source": "EXFOR 21004-004-0, (N,G), G.Magnusson 1980",
+      "energies_ev": [14700000],
+      "values": [0.83],
+      "uncertainties": [0.2],
+      "calculations": {}
+    }
+  ]
+}

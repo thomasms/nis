@@ -1,0 +1,123 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ta181/Hf180m",
+  "title": "Ta181 to Hf180m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ta181": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Hf180m",
+      "all_states": false,
+      "source": "EXFOR 14235-004-0, (N,X), Junhua Luo 2009",
+      "energies_ev": [13500000, 14100000, 14700000],
+      "values": [0.111, 0.143, 0.169],
+      "uncertainties": [0.008, 0.008, 0.01],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Hf180m",
+      "all_states": false,
+      "source": "EXFOR 22351-004-0, (N,X), Y.Kasugai 1993",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [0.042, 0.066, 0.091, 0.134, 0.151],
+      "uncertainties": [0.005, 0.005, 0.011, 0.011, 0.011],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Hf180m",
+      "all_states": false,
+      "source": "EXFOR 22877-009-0, (N,X), V.Semkova 2007",
+      "energies_ev": [14010000],
+      "values": [0.09],
+      "uncertainties": [0.01],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Hf180m",
+      "all_states": false,
+      "source": "EXFOR 23011-003-0, (N,X), Y.Kasugai 1994",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [0.053, 0.079, 0.113, 0.187, 0.232],
+      "uncertainties": [0.00636, 0.006636, 0.0113, 0.015895, 0.016704],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Hf180m",
+      "all_states": false,
+      "source": "EXFOR 32204-012-0, (N,X), S.V.Begun 2000",
+      "energies_ev": [14600000],
+      "values": [0.122],
+      "uncertainties": [0.006],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Hf180m",
+      "all_states": false,
+      "source": "EXFOR 32205-011-0, (N,X), S.V.Begun 2002",
+      "energies_ev": [14500000],
+      "values": [0.152],
+      "uncertainties": [0.005],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Hf180m",
+      "all_states": false,
+      "source": "EXFOR 32205-021-0, (N,X), S.V.Begun 2002",
+      "energies_ev": [13560000, 13690000, 13950000, 14210000, 14470000, 14530000],
+      "values": [0.056, 0.072, 0.105, 0.128, 0.156, 0.16],
+      "uncertainties": [0.005, 0.012, 0.012, 0.007, 0.009, 0.007],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Hf180m",
+      "all_states": false,
+      "source": "EXFOR 41424-054-0, (N,X), A.A.Filatenkov 2001",
+      "energies_ev": [13680000, 13880000, 14260000, 14440000, 14640000, 14710000],
+      "values": [0.067, 0.084, 0.124, 0.145, 0.144, 0.147],
+      "uncertainties": [0.01, 0.01, 0.01, 0.03, 0.015, 0.02],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Hf180m",
+      "all_states": false,
+      "source": "EXFOR 41614-177-0, (N,X), A.A.Filatenkov 2016",
+      "energies_ev": [13680000, 13880000, 14260000, 14440000, 14640000, 14710000],
+      "values": [0.067, 0.084, 0.124, 0.145, 0.144, 0.147],
+      "uncertainties": [0.009983, 0.009996, 0.0099944, 0.030015, 0.014976, 0.019992],
+      "calculations": {}
+    }
+  ]
+}

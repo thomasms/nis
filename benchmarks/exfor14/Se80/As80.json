@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Se80/As80",
+  "title": "Se80 to As80, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Se80": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se80",
+      "product": "As80",
+      "all_states": true,
+      "source": "EXFOR 21107-021-0, (N,P), B.Minetti 1967",
+      "energies_ev": [14700000],
+      "values": [16.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se80",
+      "product": "As80",
+      "all_states": true,
+      "source": "EXFOR 33080-003-0, (N,P), F.M.D.Attar 2014",
+      "energies_ev": [13730000, 14070000, 14420000, 14680000, 14770000],
+      "values": [4.8, 7.1, 8.6, 9.6, 11.0],
+      "uncertainties": [0.63, 0.95, 1.1, 1.4, 1.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se80",
+      "product": "As80",
+      "all_states": true,
+      "source": "EXFOR 41614-046-0, (N,P), A.A.Filatenkov 2016",
+      "energies_ev": [13580000, 13680000, 13750000, 13950000, 14230000, 14500000, 14720000, 14800000],
+      "values": [8.4, 8.45, 10.4, 9.03, 9.28, 11.1, 12.1, 11.2],
+      "uncertainties": [1.1004, 1.4027, 1.612, 1.7067, 1.2899, 1.4097, 2.0086, 3.2928],
+      "calculations": {}
+    }
+  ]
+}

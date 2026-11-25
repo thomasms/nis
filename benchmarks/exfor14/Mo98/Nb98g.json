@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Mo98/Nb98g",
+  "title": "Mo98 to Nb98g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Mo98": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo98",
+      "product": "Nb98",
+      "all_states": false,
+      "source": "EXFOR 31281-002-0, (N,P), S.C.Gujrathi 1966",
+      "energies_ev": [14800000],
+      "values": [2.0],
+      "uncertainties": [1.0],
+      "calculations": {}
+    }
+  ]
+}

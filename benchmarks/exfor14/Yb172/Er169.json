@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Yb172/Er169",
+  "title": "Yb172 to Er169, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Yb172": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb172",
+      "product": "Er169",
+      "all_states": true,
+      "source": "EXFOR 21997-013-0, (N,A), S.M.Qaim 1984",
+      "energies_ev": [14700000],
+      "values": [1.8],
+      "uncertainties": [0.35],
+      "calculations": {}
+    }
+  ]
+}

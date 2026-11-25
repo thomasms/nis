@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ag107/Rh104g",
+  "title": "Ag107 to Rh104g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ag107": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ag107",
+      "product": "Rh104",
+      "all_states": false,
+      "source": "EXFOR 20471-018-0, (N,A), M.Bormann 1972",
+      "energies_ev": [14200000],
+      "values": [6.2],
+      "uncertainties": [0.9],
+      "calculations": {}
+    }
+  ]
+}

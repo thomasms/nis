@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ru104/Ru105",
+  "title": "Ru104 to Ru105, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ru104": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ru104",
+      "product": "Ru105",
+      "all_states": true,
+      "source": "EXFOR 11923-007-0, (N,G), P.R.Gray 1966",
+      "energies_ev": [14700000],
+      "values": [2.5],
+      "uncertainties": [0.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ru104",
+      "product": "Ru105",
+      "all_states": true,
+      "source": "EXFOR 20718-007-0, (N,G), M.Wagner 1980",
+      "energies_ev": [14600000],
+      "values": [0.86],
+      "uncertainties": [0.0086],
+      "calculations": {}
+    }
+  ]
+}

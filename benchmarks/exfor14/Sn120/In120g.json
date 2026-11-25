@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sn120/In120g",
+  "title": "Sn120 to In120g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sn120": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn120",
+      "product": "In120",
+      "all_states": false,
+      "source": "EXFOR 20540-013-0, (N,P), W.Struwe 1974",
+      "energies_ev": [14600000],
+      "values": [1.38],
+      "uncertainties": [0.17],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn120",
+      "product": "In120",
+      "all_states": false,
+      "source": "EXFOR 20540-014-0, (N,P), W.Struwe 1974",
+      "energies_ev": [14600000],
+      "values": [3.14],
+      "uncertainties": [0.28],
+      "calculations": {}
+    }
+  ]
+}

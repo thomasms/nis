@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Mo100/Mo101",
+  "title": "Mo100 to Mo101, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Mo100": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo100",
+      "product": "Mo101",
+      "all_states": true,
+      "source": "EXFOR 20718-006-0, (N,G), M.Wagner 1980",
+      "energies_ev": [14600000],
+      "values": [1.01],
+      "uncertainties": [0.0101],
+      "calculations": {}
+    }
+  ]
+}

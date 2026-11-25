@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cr54/He4",
+  "title": "Cr54 to He4, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cr54": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr54",
+      "product": "He4",
+      "all_states": true,
+      "source": "EXFOR 40416-005-0, (N,X), G.P.Dolya 1973",
+      "energies_ev": [14700000],
+      "values": [37.2],
+      "uncertainties": [3.0],
+      "calculations": {}
+    }
+  ]
+}

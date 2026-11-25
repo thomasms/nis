@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Te130/Te131m",
+  "title": "Te130 to Te131m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Te130": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te130",
+      "product": "Te131m",
+      "all_states": false,
+      "source": "EXFOR 14583-005-0, (N,G), W.Tornow 2017",
+      "energies_ev": [14800000],
+      "values": [0.89],
+      "uncertainties": [0.07],
+      "calculations": {}
+    }
+  ]
+}

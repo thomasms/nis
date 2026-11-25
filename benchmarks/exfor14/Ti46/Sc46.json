@@ -1,0 +1,207 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ti46/Sc46",
+  "title": "Ti46 to Sc46, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ti46": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti46",
+      "product": "Sc46",
+      "all_states": true,
+      "source": "EXFOR 11630-002-0, (N,P), H.L.Pai 1966",
+      "energies_ev": [13600000, 14800000],
+      "values": [277.0, 253.0],
+      "uncertainties": [39.0, 24.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti46",
+      "product": "Sc46",
+      "all_states": true,
+      "source": "EXFOR 11631-002-0, (N,P), W.G.Cross 1963",
+      "energies_ev": [14500000],
+      "values": [268.0],
+      "uncertainties": [30.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti46",
+      "product": "Sc46",
+      "all_states": true,
+      "source": "EXFOR 11633-002-1, (N,P), D.R.Koehler 1964",
+      "energies_ev": [14700000],
+      "values": [324.0],
+      "uncertainties": [97.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti46",
+      "product": "Sc46",
+      "all_states": true,
+      "source": "EXFOR 20721-003-0, (N,P), N.I.Molla 1977",
+      "energies_ev": [14700000],
+      "values": [166.0],
+      "uncertainties": [15.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti46",
+      "product": "Sc46",
+      "all_states": true,
+      "source": "EXFOR 20887-010-0, (N,P), M.Bormann 1965",
+      "energies_ev": [14100000, 15000000],
+      "values": [257.0, 247.0],
+      "uncertainties": [17.0, 30.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti46",
+      "product": "Sc46",
+      "all_states": true,
+      "source": "EXFOR 20926-002-0, (N,P), H.Liskien 1965",
+      "energies_ev": [13540000, 13880000, 14050000, 14420000, 14610000, 14990000],
+      "values": [303.0, 305.0, 299.0, 295.0, 293.0, 285.0],
+      "uncertainties": [21.0, 21.0, 21.0, 21.0, 21.0, 20.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti46",
+      "product": "Sc46",
+      "all_states": true,
+      "source": "EXFOR 21300-002-0, (N,P), K.Kayashima 1979",
+      "energies_ev": [14600000],
+      "values": [230.0],
+      "uncertainties": [50.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti46",
+      "product": "Sc46",
+      "all_states": true,
+      "source": "EXFOR 22089-026-0, (N,P), Y.Ikeda 1988",
+      "energies_ev": [13560000, 13980000, 14420000, 14650000, 14910000],
+      "values": [264.0, 253.0, 240.0, 234.0, 210.0],
+      "uncertainties": [14.0, 13.0, 12.0, 13.0, 14.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti46",
+      "product": "Sc46",
+      "all_states": true,
+      "source": "EXFOR 22093-005-0, (N,P), I.Kimura 1990",
+      "energies_ev": [14050000],
+      "values": [267.8],
+      "uncertainties": [9.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti46",
+      "product": "Sc46",
+      "all_states": true,
+      "source": "EXFOR 30523-004-0, (N,P), Lu Han-Lin 1989",
+      "energies_ev": [13680000, 14580000],
+      "values": [282.0, 284.7],
+      "uncertainties": [13.9, 14.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti46",
+      "product": "Sc46",
+      "all_states": true,
+      "source": "EXFOR 30660-002-S, (N,P), I.Ribansky 1983",
+      "energies_ev": [14800000],
+      "values": [266.7],
+      "uncertainties": [8.5344],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti46",
+      "product": "Sc46",
+      "all_states": true,
+      "source": "EXFOR 30825-003-0, (N,P), N.I.Molla 1986",
+      "energies_ev": [14800000],
+      "values": [226.2],
+      "uncertainties": [22.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti46",
+      "product": "Sc46",
+      "all_states": true,
+      "source": "EXFOR 31464-005-1, (N,P), K.T.Osman 1996",
+      "energies_ev": [14700000],
+      "values": [261.0],
+      "uncertainties": [27.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti46",
+      "product": "Sc46",
+      "all_states": true,
+      "source": "EXFOR 31464-005-2, (N,P), K.T.Osman 1996",
+      "energies_ev": [14700000],
+      "values": [264.0],
+      "uncertainties": [27.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti46",
+      "product": "Sc46",
+      "all_states": true,
+      "source": "EXFOR 31858-018-0, (N,P), M.Kostal 2023",
+      "energies_ev": [14050000],
+      "values": [271.0],
+      "uncertainties": [15.718],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti46",
+      "product": "Sc46",
+      "all_states": true,
+      "source": "EXFOR 40226-002-0, (N,P), V.N.Levkovskii 1970",
+      "energies_ev": [14800000],
+      "values": [230.0],
+      "uncertainties": [50.0],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Pd106/Rh106",
+  "title": "Pd106 to Rh106, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Pd106": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd106",
+      "product": "Rh106",
+      "all_states": true,
+      "source": "EXFOR 40029-004-3, (N,P), V.N.Levkovskii 1971",
+      "energies_ev": [14800000],
+      "values": [23.0],
+      "uncertainties": [6.0],
+      "calculations": {}
+    }
+  ]
+}

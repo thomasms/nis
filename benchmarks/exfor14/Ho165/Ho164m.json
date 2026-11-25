@@ -1,0 +1,147 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ho165/Ho164m",
+  "title": "Ho165 to Ho164m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ho165": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ho165",
+      "product": "Ho164m",
+      "all_states": false,
+      "source": "EXFOR 11421-008-0, (N,2N), H.O.Menlove 1967",
+      "energies_ev": [13500000, 14960000],
+      "values": [1005.0, 1050.0],
+      "uncertainties": [142.0, 117.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ho165",
+      "product": "Ho164m",
+      "all_states": false,
+      "source": "EXFOR 20514-004-0, (N,2N), E.Steiner 1970",
+      "energies_ev": [14700000],
+      "values": [1100.0],
+      "uncertainties": [220.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ho165",
+      "product": "Ho164m",
+      "all_states": false,
+      "source": "EXFOR 20541-045-0, (N,2N), S.M.Qaim 1974",
+      "energies_ev": [14700000],
+      "values": [1211.0],
+      "uncertainties": [180.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ho165",
+      "product": "Ho164m",
+      "all_states": false,
+      "source": "EXFOR 20802-007-0, (N,2N), W.Dilg 1968",
+      "energies_ev": [14700000],
+      "values": [1180.0],
+      "uncertainties": [170.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ho165",
+      "product": "Ho164m",
+      "all_states": false,
+      "source": "EXFOR 20834-017-0, (N,2N), M.Bormann 1968",
+      "energies_ev": [14100000],
+      "values": [1782.0],
+      "uncertainties": [204.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ho165",
+      "product": "Ho164m",
+      "all_states": false,
+      "source": "EXFOR 22340-006-0, (N,2N), H.Sakane 1997",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [947.14, 949.89, 981.43, 1051.0, 1129.7],
+      "uncertainties": [132.6, 132.03, 142.31, 146.09, 158.16],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ho165",
+      "product": "Ho164m",
+      "all_states": false,
+      "source": "EXFOR 22662-018-0, (N,2N), H.Sakane 2001",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [785.0, 771.0, 785.0, 705.0, 797.0],
+      "uncertainties": [133.45, 123.36, 133.45, 119.85, 127.52],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ho165",
+      "product": "Ho164m",
+      "all_states": false,
+      "source": "EXFOR 30698-003-1, (N,2N), A.Reggoug 1982",
+      "energies_ev": [14700000],
+      "values": [1211.0],
+      "uncertainties": [180.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ho165",
+      "product": "Ho164m",
+      "all_states": false,
+      "source": "EXFOR 31280-002-0, (N,2N), B.Sethi 1966",
+      "energies_ev": [14000000],
+      "values": [1050.0],
+      "uncertainties": [100.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ho165",
+      "product": "Ho164m",
+      "all_states": false,
+      "source": "EXFOR 31616-004-0, (N,2N), Kaihong Fang 2008",
+      "energies_ev": [14100000, 14600000],
+      "values": [852.0, 978.0],
+      "uncertainties": [114.0, 137.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ho165",
+      "product": "Ho164m",
+      "all_states": false,
+      "source": "EXFOR 32717-002-1, (N,2N), Junhua Luo 2014",
+      "energies_ev": [13500000, 14800000],
+      "values": [774.0, 838.0],
+      "uncertainties": [163.0, 151.0],
+      "calculations": {}
+    }
+  ]
+}

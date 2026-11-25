@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ru102/Tc102",
+  "title": "Ru102 to Tc102, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ru102": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ru102",
+      "product": "Tc102",
+      "all_states": true,
+      "source": "EXFOR 30007-009-0, (N,P), R.Prasad 1966",
+      "energies_ev": [14800000],
+      "values": [2.0],
+      "uncertainties": [0.5],
+      "calculations": {}
+    }
+  ]
+}

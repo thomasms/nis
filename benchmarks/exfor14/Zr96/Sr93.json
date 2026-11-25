@@ -1,0 +1,99 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Zr96/Sr93",
+  "title": "Zr96 to Sr93, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Zr96": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr96",
+      "product": "Sr93",
+      "all_states": true,
+      "source": "EXFOR 11590-044-0, (N,A), E.T.Bramlitt 1963",
+      "energies_ev": [14700000],
+      "values": [5.0],
+      "uncertainties": [4.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr96",
+      "product": "Sr93",
+      "all_states": true,
+      "source": "EXFOR 11896-014-0, (N,A), C.H.Reed 1960",
+      "energies_ev": [14100000],
+      "values": [4.8],
+      "uncertainties": [0.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr96",
+      "product": "Sr93",
+      "all_states": true,
+      "source": "EXFOR 20850-012-0, (N,A), Y.Fujino 1977",
+      "energies_ev": [14600000],
+      "values": [2.4],
+      "uncertainties": [0.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr96",
+      "product": "Sr93",
+      "all_states": true,
+      "source": "EXFOR 22089-064-0, (N,A), Y.Ikeda 1988",
+      "energies_ev": [14040000, 14660000, 14930000],
+      "values": [0.96, 1.15, 1.27],
+      "uncertainties": [0.19, 0.2, 0.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr96",
+      "product": "Sr93",
+      "all_states": true,
+      "source": "EXFOR 31464-026-0, (N,A), K.T.Osman 1996",
+      "energies_ev": [14700000],
+      "values": [3.0],
+      "uncertainties": [0.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr96",
+      "product": "Sr93",
+      "all_states": true,
+      "source": "EXFOR 40016-016-0, (N,A), V.N.Levkovskii 1964",
+      "energies_ev": [14000000],
+      "values": [2.3],
+      "uncertainties": [0.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr96",
+      "product": "Sr93",
+      "all_states": true,
+      "source": "EXFOR 40226-024-0, (N,A), V.N.Levkovskii 1970",
+      "energies_ev": [14800000],
+      "values": [2.6],
+      "uncertainties": [0.8],
+      "calculations": {}
+    }
+  ]
+}

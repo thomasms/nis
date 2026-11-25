@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cs133/I132",
+  "title": "Cs133 to I132, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cs133": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cs133",
+      "product": "I132",
+      "all_states": true,
+      "source": "EXFOR 30106-011-0, (N,2P), S.Lulic 1970",
+      "energies_ev": [14600000],
+      "values": [0.025],
+      "uncertainties": [0.02],
+      "calculations": {}
+    }
+  ]
+}

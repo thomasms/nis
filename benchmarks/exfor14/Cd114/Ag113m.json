@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cd114/Ag113m",
+  "title": "Cd114 to Ag113m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cd114": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd114",
+      "product": "Ag113m",
+      "all_states": false,
+      "source": "EXFOR 41141-002-0, (N,X), P.M.Gopych 1993",
+      "energies_ev": [14600000],
+      "values": [0.4],
+      "uncertainties": [0.1],
+      "calculations": {}
+    }
+  ]
+}

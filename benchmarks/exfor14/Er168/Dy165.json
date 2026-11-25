@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Er168/Dy165",
+  "title": "Er168 to Dy165, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Er168": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er168",
+      "product": "Dy165",
+      "all_states": true,
+      "source": "EXFOR 21997-011-0, (N,A), S.M.Qaim 1984",
+      "energies_ev": [14700000],
+      "values": [2.3],
+      "uncertainties": [0.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er168",
+      "product": "Dy165",
+      "all_states": true,
+      "source": "EXFOR 31497-026-0, (N,A), Xiangzhong Kong 1998",
+      "energies_ev": [14700000],
+      "values": [2.2],
+      "uncertainties": [0.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er168",
+      "product": "Dy165",
+      "all_states": true,
+      "source": "EXFOR 32233-025-0, (N,A), N.Dzysiuk 2012",
+      "energies_ev": [14700000],
+      "values": [2.1],
+      "uncertainties": [0.4],
+      "calculations": {}
+    }
+  ]
+}

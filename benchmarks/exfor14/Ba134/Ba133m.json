@@ -1,0 +1,147 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ba134/Ba133m",
+  "title": "Ba134 to Ba133m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ba134": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba134",
+      "product": "Ba133m",
+      "all_states": false,
+      "source": "EXFOR 10497-038-0, (N,2N), W.D.Lu 1970",
+      "energies_ev": [14400000],
+      "values": [783.0],
+      "uncertainties": [56.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba134",
+      "product": "Ba133m",
+      "all_states": false,
+      "source": "EXFOR 12033-002-0, (N,2N), R.G.Wille 1960",
+      "energies_ev": [14800000],
+      "values": [940.0],
+      "uncertainties": [80.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba134",
+      "product": "Ba133m",
+      "all_states": false,
+      "source": "EXFOR 21999-036-0, (N,2N), R.Pepelnik 1985",
+      "energies_ev": [14700000],
+      "values": [788.0],
+      "uncertainties": [41.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba134",
+      "product": "Ba133m",
+      "all_states": false,
+      "source": "EXFOR 22089-098-0, (N,2N), Y.Ikeda 1988",
+      "energies_ev": [13570000, 13750000, 13990000, 14230000, 14430000, 14670000, 14930000],
+      "values": [736.0, 764.0, 754.0, 766.0, 834.0, 795.0, 829.0],
+      "uncertainties": [56.0, 58.0, 56.0, 59.0, 64.0, 62.0, 63.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba134",
+      "product": "Ba133m",
+      "all_states": false,
+      "source": "EXFOR 22637-062-0, (N,2N), C.Konno 1993",
+      "energies_ev": [13570000, 13750000, 13980000, 14220000, 14430000, 14670000, 14940000],
+      "values": [719.0, 783.0, 791.0, 775.0, 834.0, 849.0, 859.0],
+      "uncertainties": [49.0, 53.0, 54.0, 53.0, 57.0, 58.0, 58.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba134",
+      "product": "Ba133m",
+      "all_states": false,
+      "source": "EXFOR 30183-003-0, (N,2N), E.Rurarz 1972",
+      "energies_ev": [14800000],
+      "values": [827.0],
+      "uncertainties": [80.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba134",
+      "product": "Ba133m",
+      "all_states": false,
+      "source": "EXFOR 30348-015-0, (N,2N), E.Holub 1976",
+      "energies_ev": [14600000],
+      "values": [728.0],
+      "uncertainties": [40.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba134",
+      "product": "Ba133m",
+      "all_states": false,
+      "source": "EXFOR 30682-002-0, (N,2N), An Jong Do 1984",
+      "energies_ev": [13900000, 14500000, 15000000],
+      "values": [688.0, 732.0, 732.0],
+      "uncertainties": [44.0, 43.0, 45.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba134",
+      "product": "Ba133m",
+      "all_states": false,
+      "source": "EXFOR 31421-004-0, (N,2N), Lu Hanlin 1992",
+      "energies_ev": [14210000, 14820000],
+      "values": [741.0, 736.0],
+      "uncertainties": [33.0, 33.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba134",
+      "product": "Ba133m",
+      "all_states": false,
+      "source": "EXFOR 32502-002-0, (N,2N), Fan Yangmei 1988",
+      "energies_ev": [14700000],
+      "values": [837.0],
+      "uncertainties": [30.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba134",
+      "product": "Ba133m",
+      "all_states": false,
+      "source": "EXFOR 32769-003-1, (N,2N), Junhua Luo 2017",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [656.0, 698.0, 743.0],
+      "uncertainties": [33.0, 35.0, 35.0],
+      "calculations": {}
+    }
+  ]
+}

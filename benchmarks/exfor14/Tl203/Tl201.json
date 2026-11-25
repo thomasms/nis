@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Tl203/Tl201",
+  "title": "Tl203 to Tl201, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Tl203": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tl203",
+      "product": "Tl201",
+      "all_states": true,
+      "source": "EXFOR 10536-066-0, (N,3N), B.P.Bayhurst 1975",
+      "energies_ev": [15000000],
+      "values": [10.0],
+      "uncertainties": [6.0],
+      "calculations": {}
+    }
+  ]
+}

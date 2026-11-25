@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "S32/He4",
+  "title": "S32 to He4, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "S32": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "S32",
+      "product": "He4",
+      "all_states": true,
+      "source": "EXFOR 20283-004-0, (N,X), I.Kumabe 1958",
+      "energies_ev": [14800000],
+      "values": [109.0],
+      "uncertainties": [16.0],
+      "calculations": {}
+    }
+  ]
+}

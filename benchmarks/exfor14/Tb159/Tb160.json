@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Tb159/Tb160",
+  "title": "Tb159 to Tb160, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Tb159": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tb159",
+      "product": "Tb160",
+      "all_states": true,
+      "source": "EXFOR 20533-005-0, (N,G), F.Rigaud 1971",
+      "energies_ev": [14060000],
+      "values": [1.75],
+      "uncertainties": [0.45],
+      "calculations": {}
+    }
+  ]
+}

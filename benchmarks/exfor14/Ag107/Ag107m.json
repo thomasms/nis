@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ag107/Ag107m",
+  "title": "Ag107 to Ag107m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ag107": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ag107",
+      "product": "Ag107m",
+      "all_states": false,
+      "source": "EXFOR 21426-010-0, (N,INL), I.Wagner 1971",
+      "energies_ev": [14700000],
+      "values": [304.0],
+      "uncertainties": [116.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ag107",
+      "product": "Ag107m",
+      "all_states": false,
+      "source": "EXFOR 23031-007-0, (N,INL), H.M.Agrawal 2008",
+      "energies_ev": [14600000],
+      "values": [294.0],
+      "uncertainties": [12.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ag107",
+      "product": "Ag107m",
+      "all_states": false,
+      "source": "EXFOR 30316-002-0, (N,INL), W.Augustyniak 1975",
+      "energies_ev": [13870000, 14480000],
+      "values": [273.0, 312.0],
+      "uncertainties": [51.0, 77.0],
+      "calculations": {}
+    }
+  ]
+}

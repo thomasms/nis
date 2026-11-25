@@ -1,0 +1,99 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ni64/Fe61",
+  "title": "Ni64 to Fe61, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ni64": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni64",
+      "product": "Fe61",
+      "all_states": true,
+      "source": "EXFOR 21936-032-0, (N,A), B.M.Bahal 1984",
+      "energies_ev": [14700000],
+      "values": [3.7],
+      "uncertainties": [0.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni64",
+      "product": "Fe61",
+      "all_states": true,
+      "source": "EXFOR 22281-011-0, (N,A), K.Kawade 1992",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [3.7, 4.5, 5.1, 5.5, 6.0],
+      "uncertainties": [0.555, 0.63, 0.816, 0.77, 0.84],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni64",
+      "product": "Fe61",
+      "all_states": true,
+      "source": "EXFOR 22338-011-0, (N,A), A.Ercan 1991",
+      "energies_ev": [14600000],
+      "values": [6.0],
+      "uncertainties": [1.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni64",
+      "product": "Fe61",
+      "all_states": true,
+      "source": "EXFOR 22434-007-0, (N,A), Y.Kasugai 1998",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [3.7, 4.5, 5.1, 5.5, 6.0],
+      "uncertainties": [15.0, 14.0, 16.0, 14.0, 14.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni64",
+      "product": "Fe61",
+      "all_states": true,
+      "source": "EXFOR 30811-010-0, (N,A), I.Ribansky 1985",
+      "energies_ev": [14800000],
+      "values": [4.28],
+      "uncertainties": [0.15836],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni64",
+      "product": "Fe61",
+      "all_states": true,
+      "source": "EXFOR 31616-005-0, (N,A), Kaihong Fang 2008",
+      "energies_ev": [13500000, 14600000],
+      "values": [3.0, 5.0],
+      "uncertainties": [0.51, 0.64],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni64",
+      "product": "Fe61",
+      "all_states": true,
+      "source": "EXFOR 40223-013-1, (N,A), V.N.Levkovskii 1969",
+      "energies_ev": [14800000],
+      "values": [5.2],
+      "uncertainties": [1.2],
+      "calculations": {}
+    }
+  ]
+}

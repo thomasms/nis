@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ti46/Sc44m",
+  "title": "Ti46 to Sc44m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ti46": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti46",
+      "product": "Sc44m",
+      "all_states": false,
+      "source": "EXFOR 10764-002-0, (N,T), T.W.Woo 1978",
+      "energies_ev": [14600000],
+      "values": [0.009],
+      "uncertainties": [0.003],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti46",
+      "product": "Sc44m",
+      "all_states": false,
+      "source": "EXFOR 32515-009-0, (N,T), Xiangzhong Kong 1998",
+      "energies_ev": [14700000],
+      "values": [0.011],
+      "uncertainties": [0.004],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti46",
+      "product": "Sc44m",
+      "all_states": false,
+      "source": "EXFOR 32744-002-1, (N,T), Yueli Song 2018",
+      "energies_ev": [14100000, 14400000, 14800000],
+      "values": [0.514, 0.555, 0.618],
+      "uncertainties": [0.055, 0.095, 0.108],
+      "calculations": {}
+    }
+  ]
+}

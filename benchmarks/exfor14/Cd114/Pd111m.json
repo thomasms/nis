@@ -1,0 +1,75 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cd114/Pd111m",
+  "title": "Cd114 to Pd111m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cd114": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd114",
+      "product": "Pd111m",
+      "all_states": false,
+      "source": "EXFOR 11583-014-0, (N,A), Yu-Wen Yu 1967",
+      "energies_ev": [14100000],
+      "values": [0.2],
+      "uncertainties": [0.03],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd114",
+      "product": "Pd111m",
+      "all_states": false,
+      "source": "EXFOR 31496-020-0, (N,A), A.Grallert 1993",
+      "energies_ev": [14600000],
+      "values": [0.3],
+      "uncertainties": [0.03],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd114",
+      "product": "Pd111m",
+      "all_states": false,
+      "source": "EXFOR 40710-005-0, (N,A), B.G.Dzantijev 1957",
+      "energies_ev": [14000000],
+      "values": [0.13],
+      "uncertainties": [0.04],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd114",
+      "product": "Pd111m",
+      "all_states": false,
+      "source": "EXFOR 41424-049-0, (N,A), A.A.Filatenkov 2001",
+      "energies_ev": [14440000, 14640000, 14810000],
+      "values": [0.32, 0.39, 0.3],
+      "uncertainties": [0.11, 0.06, 0.12],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd114",
+      "product": "Pd111m",
+      "all_states": false,
+      "source": "EXFOR 41614-112-0, (N,A), A.A.Filatenkov 2016",
+      "energies_ev": [13880000, 14440000, 14640000, 14810000, 14880000],
+      "values": [0.156, 0.237, 0.288, 0.222, 0.298],
+      "uncertainties": [0.02886, 0.080817, 0.042048, 0.088356, 0.073308],
+      "calculations": {}
+    }
+  ]
+}

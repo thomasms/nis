@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ca40/Ca41",
+  "title": "Ca40 to Ca41, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ca40": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca40",
+      "product": "Ca41",
+      "all_states": true,
+      "source": "EXFOR 10826-003-0, (N,G), I.Bergqvist 1974",
+      "energies_ev": [14200000],
+      "values": [0.454],
+      "uncertainties": [0.068],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca40",
+      "product": "Ca41",
+      "all_states": true,
+      "source": "EXFOR 30404-003-0, (N,G), A.Hudoklin-Bozic 1968",
+      "energies_ev": [14100000],
+      "values": [0.5],
+      "uncertainties": [0.1],
+      "calculations": {}
+    }
+  ]
+}

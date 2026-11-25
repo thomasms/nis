@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sb123/Sb124",
+  "title": "Sb123 to Sb124, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sb123": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb123",
+      "product": "Sb124",
+      "all_states": true,
+      "source": "EXFOR 30067-013-0, (N,G), J.Csikai 1967",
+      "energies_ev": [14700000],
+      "values": [15.0],
+      "uncertainties": [3.0],
+      "calculations": {}
+    }
+  ]
+}

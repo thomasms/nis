@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "W180/W179g",
+  "title": "W180 to W179g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "W180": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W180",
+      "product": "W179",
+      "all_states": false,
+      "source": "EXFOR 31665-003-0, (N,2N), Kaihong Fang 2009",
+      "energies_ev": [13500000, 14100000],
+      "values": [1239.0, 1361.0],
+      "uncertainties": [368.0, 357.0],
+      "calculations": {}
+    }
+  ]
+}

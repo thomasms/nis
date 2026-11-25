@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Fe56/H1",
+  "title": "Fe56 to H1, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Fe56": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Fe56",
+      "product": "H1",
+      "all_states": true,
+      "source": "EXFOR 10827-027-0, (N,X), S.M.Grimes 1979",
+      "energies_ev": [14800000],
+      "values": [190.0],
+      "uncertainties": [13.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Fe56",
+      "product": "H1",
+      "all_states": true,
+      "source": "EXFOR 41118-014-0, (N,X), L.I.Klochkova 1992",
+      "energies_ev": [14100000],
+      "values": [144.0],
+      "uncertainties": [25.0],
+      "calculations": {}
+    }
+  ]
+}

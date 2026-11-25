@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ga69/Zn69g",
+  "title": "Ga69 to Zn69g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ga69": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ga69",
+      "product": "Zn69",
+      "all_states": false,
+      "source": "EXFOR 21291-007-0, (N,P), F.Demechelis 1968",
+      "energies_ev": [14500000],
+      "values": [17.0],
+      "uncertainties": [4.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ga69",
+      "product": "Zn69",
+      "all_states": false,
+      "source": "EXFOR 40009-008-1, (N,P), G.P.Vinitskaya 1968",
+      "energies_ev": [14800000],
+      "values": [10.0],
+      "uncertainties": [1.5],
+      "calculations": {}
+    }
+  ]
+}

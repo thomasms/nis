@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sb123/Sb122g",
+  "title": "Sb123 to Sb122g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sb123": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb123",
+      "product": "Sb122",
+      "all_states": false,
+      "source": "EXFOR 21106-020-0, (N,2N), B.Minetti 1968.0",
+      "energies_ev": [14700000],
+      "values": [1594.0],
+      "uncertainties": [260.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb123",
+      "product": "Sb122",
+      "all_states": false,
+      "source": "EXFOR 31247-025-0, (N,2N), C.S.Khurana 1961.0",
+      "energies_ev": [14800000],
+      "values": [1950.0],
+      "uncertainties": [195.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb123",
+      "product": "Sb122",
+      "all_states": false,
+      "source": "EXFOR 32780-003-0, (N,2N), Junhua Luo 2018.0",
+      "energies_ev": [13500000, 13500000, 14100000, 14100000, 14800000, 14800000],
+      "values": [1198.0, 1109.0, 1251.0, 1108.0, 1259.0, 1266.0],
+      "uncertainties": [188.0, 169.0, 180.0, 160.0, 194.0, 194.0],
+      "calculations": {}
+    }
+  ]
+}

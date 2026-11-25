@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Zr90/Y88",
+  "title": "Zr90 to Y88, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Zr90": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr90",
+      "product": "Y88",
+      "all_states": true,
+      "source": "EXFOR 20669-008-0, (N,T), S.M.Qaim 1976",
+      "energies_ev": [14600000],
+      "values": [0.041],
+      "uncertainties": [0.011],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr90",
+      "product": "Y88",
+      "all_states": true,
+      "source": "EXFOR 32515-011-0, (N,T), Xiangzhong Kong 1998",
+      "energies_ev": [14700000],
+      "values": [0.043],
+      "uncertainties": [0.005],
+      "calculations": {}
+    }
+  ]
+}

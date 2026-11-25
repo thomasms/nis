@@ -1,0 +1,159 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Mg25/Na25",
+  "title": "Mg25 to Na25, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Mg25": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg25",
+      "product": "Na25",
+      "all_states": true,
+      "source": "EXFOR 11274-008-0, (N,P), E.B.Paul 1953",
+      "energies_ev": [14500000],
+      "values": [44.9],
+      "uncertainties": [17.96],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg25",
+      "product": "Na25",
+      "all_states": true,
+      "source": "EXFOR 11463-002-0, (N,P), M.J.Nurmia 1958",
+      "energies_ev": [14800000],
+      "values": [60.0],
+      "uncertainties": [10.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg25",
+      "product": "Na25",
+      "all_states": true,
+      "source": "EXFOR 20889-007-0, (N,P), A.Pasquarelli 1967",
+      "energies_ev": [14700000],
+      "values": [66.0],
+      "uncertainties": [3.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg25",
+      "product": "Na25",
+      "all_states": true,
+      "source": "EXFOR 20898-003-0, (N,P), M.Bormann 1966",
+      "energies_ev": [13550000, 14000000, 14280000, 14740000],
+      "values": [53.0, 49.0, 43.0, 40.0],
+      "uncertainties": [5.3, 4.9, 4.3, 4.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg25",
+      "product": "Na25",
+      "all_states": true,
+      "source": "EXFOR 21886-003-0, (N,P), M.Hyvoenen-Dabek 1978",
+      "energies_ev": [14700000],
+      "values": [74.0],
+      "uncertainties": [9.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg25",
+      "product": "Na25",
+      "all_states": true,
+      "source": "EXFOR 21999-004-1, (N,P), R.Pepelnik 1985",
+      "energies_ev": [14700000],
+      "values": [63.0],
+      "uncertainties": [4.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg25",
+      "product": "Na25",
+      "all_states": true,
+      "source": "EXFOR 22089-005-0, (N,P), Y.Ikeda 1988",
+      "energies_ev": [13520000, 14040000, 14430000, 14660000, 14930000],
+      "values": [69.0, 75.5, 66.0, 76.4, 72.8],
+      "uncertainties": [14.0, 9.0, 13.0, 8.7, 8.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg25",
+      "product": "Na25",
+      "all_states": true,
+      "source": "EXFOR 22281-003-0, (N,P), K.Kawade 1992",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [63.4, 63.3, 67.3, 63.7, 62.6],
+      "uncertainties": [4.8818, 4.8741, 5.384, 4.9686, 4.9454],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg25",
+      "product": "Na25",
+      "all_states": true,
+      "source": "EXFOR 22338-029-0, (N,P), A.Ercan 1991",
+      "energies_ev": [14600000],
+      "values": [72.0],
+      "uncertainties": [13.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg25",
+      "product": "Na25",
+      "all_states": true,
+      "source": "EXFOR 30007-006-0, (N,P), R.Prasad 1966",
+      "energies_ev": [14800000],
+      "values": [54.0],
+      "uncertainties": [10.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg25",
+      "product": "Na25",
+      "all_states": true,
+      "source": "EXFOR 30707-003-0, (N,P), J.P.Gupta 1985",
+      "energies_ev": [14800000],
+      "values": [45.0],
+      "uncertainties": [8.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg25",
+      "product": "Na25",
+      "all_states": true,
+      "source": "EXFOR 41383-002-0, (N,P), P.M.Gopych 1987",
+      "energies_ev": [14600000],
+      "values": [56.3],
+      "uncertainties": [3.5],
+      "calculations": {}
+    }
+  ]
+}

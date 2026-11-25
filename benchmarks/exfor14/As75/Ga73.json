@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "As75/Ga73",
+  "title": "As75 to Ga73, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "As75": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "As75",
+      "product": "Ga73",
+      "all_states": true,
+      "source": "EXFOR 30152-008-0, (N,HE3), M.Diksic 1974",
+      "energies_ev": [14600000],
+      "values": [0.578],
+      "uncertainties": [0.2],
+      "calculations": {}
+    }
+  ]
+}

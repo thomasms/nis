@@ -1,0 +1,171 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "I127/I126",
+  "title": "I127 to I126, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "I127": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "I127",
+      "product": "I126",
+      "all_states": true,
+      "source": "EXFOR 10022-019-0, (N,2N), R.C.Barrall 1969",
+      "energies_ev": [14600000],
+      "values": [1670.0],
+      "uncertainties": [90.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "I127",
+      "product": "I126",
+      "all_states": true,
+      "source": "EXFOR 10031-012-0, (N,2N), R.C.Barrall 1969",
+      "energies_ev": [14800000],
+      "values": [1660.0],
+      "uncertainties": [140.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "I127",
+      "product": "I126",
+      "all_states": true,
+      "source": "EXFOR 10424-003-0, (N,2N), D.C.Santry 1979",
+      "energies_ev": [13580000, 13890000, 14240000, 14500000, 14760000],
+      "values": [1690.0, 1720.0, 1780.0, 1782.0, 1766.0],
+      "uncertainties": [101.0, 103.0, 107.0, 107.0, 106.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "I127",
+      "product": "I126",
+      "all_states": true,
+      "source": "EXFOR 10497-034-0, (N,2N), W.D.Lu 1970",
+      "energies_ev": [14400000],
+      "values": [1649.0],
+      "uncertainties": [80.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "I127",
+      "product": "I126",
+      "all_states": true,
+      "source": "EXFOR 11274-085-0, (N,2N), E.B.Paul 1953",
+      "energies_ev": [14500000],
+      "values": [1120.0],
+      "uncertainties": [392.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "I127",
+      "product": "I126",
+      "all_states": true,
+      "source": "EXFOR 12028-002-0, (N,2N), H.C.Martin 1953",
+      "energies_ev": [14100000],
+      "values": [1310.0],
+      "uncertainties": [78.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "I127",
+      "product": "I126",
+      "all_states": true,
+      "source": "EXFOR 20509-002-0, (N,2N), E.Havlik 1971",
+      "energies_ev": [14700000],
+      "values": [1640.0],
+      "uncertainties": [145.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "I127",
+      "product": "I126",
+      "all_states": true,
+      "source": "EXFOR 21339-010-0, (N,2N), M.Bormann 1962",
+      "energies_ev": [14100000],
+      "values": [1320.0],
+      "uncertainties": [132.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "I127",
+      "product": "I126",
+      "all_states": true,
+      "source": "EXFOR 21976-040-0, (N,2N), B.Anders 1985",
+      "energies_ev": [14700000],
+      "values": [1655.0],
+      "uncertainties": [173.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "I127",
+      "product": "I126",
+      "all_states": true,
+      "source": "EXFOR 30523-007-0, (N,2N), Lu Han-Lin 1989",
+      "energies_ev": [13680000, 14360000, 14580000, 14770000],
+      "values": [1594.0, 1619.0, 1632.0, 1637.0],
+      "uncertainties": [66.0, 67.0, 68.0, 68.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "I127",
+      "product": "I126",
+      "all_states": true,
+      "source": "EXFOR 31080-004-0, (N,2N), S.M.Qaim 1968",
+      "energies_ev": [14700000],
+      "values": [1128.0],
+      "uncertainties": [120.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "I127",
+      "product": "I126",
+      "all_states": true,
+      "source": "EXFOR 32796-002-0, (N,2N), Changlin Lan 2023",
+      "energies_ev": [13830000, 14330000, 14790000],
+      "values": [1418.9, 1546.8, 1591.9],
+      "uncertainties": [69.4, 82.4, 87.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "I127",
+      "product": "I126",
+      "all_states": true,
+      "source": "EXFOR 33150-005-0, (N,2N), A.Gandhi 2020",
+      "energies_ev": [14920000],
+      "values": [1518.5],
+      "uncertainties": [76.328],
+      "calculations": {}
+    }
+  ]
+}

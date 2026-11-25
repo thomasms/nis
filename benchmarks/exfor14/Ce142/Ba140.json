@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ce142/Ba140",
+  "title": "Ce142 to Ba140, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ce142": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce142",
+      "product": "Ba140",
+      "all_states": true,
+      "source": "EXFOR 21010-006-0, (N,HE3), S.M.Qaim 1978",
+      "energies_ev": [14600000],
+      "values": [0.0033],
+      "uncertainties": [0.0013],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ir191/Ir191m",
+  "title": "Ir191 to Ir191m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ir191": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ir191",
+      "product": "Ir191m",
+      "all_states": false,
+      "source": "EXFOR 21818-010-0, (N,INL), B.Anders 1982",
+      "energies_ev": [14600000],
+      "values": [221.0],
+      "uncertainties": [22.0],
+      "calculations": {}
+    }
+  ]
+}

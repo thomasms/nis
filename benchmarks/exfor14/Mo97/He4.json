@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Mo97/He4",
+  "title": "Mo97 to He4, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Mo97": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo97",
+      "product": "He4",
+      "all_states": true,
+      "source": "EXFOR 10933-039-0, (N,X), D.W.Kneff 1986",
+      "energies_ev": [14800000],
+      "values": [10.0],
+      "uncertainties": [1.0],
+      "calculations": {}
+    }
+  ]
+}

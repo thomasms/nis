@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sm148/Pm148g",
+  "title": "Sm148 to Pm148g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sm148": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sm148",
+      "product": "Pm148",
+      "all_states": false,
+      "source": "EXFOR 20716-008-0, (N,P), S.M.Qaim 1976",
+      "energies_ev": [14700000],
+      "values": [3.9],
+      "uncertainties": [0.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sm148",
+      "product": "Pm148",
+      "all_states": false,
+      "source": "EXFOR 30051-019-0, (N,P), P.Rama Prasad 1969",
+      "energies_ev": [14200000],
+      "values": [14.3],
+      "uncertainties": [2.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sm148",
+      "product": "Pm148",
+      "all_states": false,
+      "source": "EXFOR 31497-010-0, (N,P), Xiangzhong Kong 1998",
+      "energies_ev": [14700000],
+      "values": [9.0],
+      "uncertainties": [0.3],
+      "calculations": {}
+    }
+  ]
+}

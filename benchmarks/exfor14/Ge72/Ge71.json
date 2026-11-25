@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ge72/Ge71",
+  "title": "Ge72 to Ge71, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ge72": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge72",
+      "product": "Ge71",
+      "all_states": true,
+      "source": "EXFOR 32218-004-0, (N,2N), N.R.Dzysiuk 2007",
+      "energies_ev": [13690000, 14360000, 14740000],
+      "values": [717.0, 740.0, 917.0],
+      "uncertainties": [51.0, 45.0, 77.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge72",
+      "product": "Ge71",
+      "all_states": true,
+      "source": "EXFOR 32231-003-0, (N,2N), S.V.Begun 2007",
+      "energies_ev": [13960000],
+      "values": [780.0],
+      "uncertainties": [60.0],
+      "calculations": {}
+    }
+  ]
+}

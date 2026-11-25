@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Tm169/Ho167",
+  "title": "Tm169 to Ho167, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Tm169": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tm169",
+      "product": "Ho167",
+      "all_states": true,
+      "source": "EXFOR 21010-008-0, (N,HE3), S.M.Qaim 1978",
+      "energies_ev": [14600000],
+      "values": [0.004],
+      "uncertainties": [0.002],
+      "calculations": {}
+    }
+  ]
+}

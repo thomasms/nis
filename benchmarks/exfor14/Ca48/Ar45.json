@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ca48/Ar45",
+  "title": "Ca48 to Ar45, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ca48": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca48",
+      "product": "Ar45",
+      "all_states": true,
+      "source": "EXFOR 31481-003-0, (N,A), A.D.Majdeddin 1997",
+      "energies_ev": [14700000],
+      "values": [1.5],
+      "uncertainties": [0.4],
+      "calculations": {}
+    }
+  ]
+}

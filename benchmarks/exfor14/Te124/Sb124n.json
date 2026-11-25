@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Te124/Sb124n",
+  "title": "Te124 to Sb124n, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Te124": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te124",
+      "product": "Sb124n",
+      "all_states": false,
+      "source": "EXFOR 41163-004-0, (N,P), P.M.Gopych 1994",
+      "energies_ev": [14600000],
+      "values": [0.11],
+      "uncertainties": [0.03],
+      "calculations": {}
+    }
+  ]
+}

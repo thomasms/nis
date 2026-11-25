@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Hg196/Hg195",
+  "title": "Hg196 to Hg195, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Hg196": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hg196",
+      "product": "Hg195",
+      "all_states": true,
+      "source": "EXFOR 23018-002-0, (N,2N), Y.Kasugai 2001",
+      "energies_ev": [13680000, 14020000, 14370000, 14680000, 14940000],
+      "values": [2390.0, 2370.0, 2260.0, 2220.0, 2270.0],
+      "uncertainties": [210.0, 190.0, 170.0, 170.0, 210.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hg196",
+      "product": "Hg195",
+      "all_states": true,
+      "source": "EXFOR 32781-004-3, (N,2N), Junhua Luo 2018",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [1665.0, 1765.0, 1796.0],
+      "uncertainties": [131.0, 135.0, 134.0],
+      "calculations": {}
+    }
+  ]
+}

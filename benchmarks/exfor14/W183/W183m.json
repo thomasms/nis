@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "W183/W183m",
+  "title": "W183 to W183m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "W183": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W183",
+      "product": "W183m",
+      "all_states": false,
+      "source": "EXFOR 21818-007-0, (N,INL), B.Anders 1982",
+      "energies_ev": [14600000],
+      "values": [127.0],
+      "uncertainties": [14.0],
+      "calculations": {}
+    }
+  ]
+}

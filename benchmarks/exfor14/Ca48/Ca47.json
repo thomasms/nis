@@ -1,0 +1,111 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ca48/Ca47",
+  "title": "Ca48 to Ca47, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ca48": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca48",
+      "product": "Ca47",
+      "all_states": true,
+      "source": "EXFOR 11610-002-0, (N,2N), M.Hillman 1962",
+      "energies_ev": [14500000],
+      "values": [920.0],
+      "uncertainties": [184.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca48",
+      "product": "Ca47",
+      "all_states": true,
+      "source": "EXFOR 20090-005-0, (N,2N), P.Hille 1961",
+      "energies_ev": [14900000],
+      "values": [1070.0],
+      "uncertainties": [360.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca48",
+      "product": "Ca47",
+      "all_states": true,
+      "source": "EXFOR 21288-007-0, (N,2N), B.Minetti 1966",
+      "energies_ev": [14700000],
+      "values": [611.0],
+      "uncertainties": [34.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca48",
+      "product": "Ca47",
+      "all_states": true,
+      "source": "EXFOR 21608-007-0, (N,2N), P.Holmberg 1978",
+      "energies_ev": [14700000],
+      "values": [616.0],
+      "uncertainties": [54.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca48",
+      "product": "Ca47",
+      "all_states": true,
+      "source": "EXFOR 21976-009-0, (N,2N), B.Anders 1985",
+      "energies_ev": [14700000],
+      "values": [850.0],
+      "uncertainties": [35.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca48",
+      "product": "Ca47",
+      "all_states": true,
+      "source": "EXFOR 22089-021-0, (N,2N), Y.Ikeda 1988",
+      "energies_ev": [13570000, 13750000, 13990000, 14220000, 14430000, 14670000, 14940000],
+      "values": [679.0, 711.0, 759.0, 745.0, 764.0, 805.0, 806.0],
+      "uncertainties": [56.0, 70.0, 50.0, 50.0, 48.0, 67.0, 78.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca48",
+      "product": "Ca47",
+      "all_states": true,
+      "source": "EXFOR 30011-009-0, (N,2N), P.N.Tiwari 1968",
+      "energies_ev": [14200000],
+      "values": [900.0],
+      "uncertainties": [108.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca48",
+      "product": "Ca47",
+      "all_states": true,
+      "source": "EXFOR 31545-007-0, (N,2N), E.Betak 1999",
+      "energies_ev": [14700000],
+      "values": [613.0],
+      "uncertainties": [60.0],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Fe54/Mn52m",
+  "title": "Fe54 to Mn52m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Fe54": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Fe54",
+      "product": "Mn52m",
+      "all_states": false,
+      "source": "EXFOR 10806-003-1, (N,T), T.W.Woo 1979",
+      "energies_ev": [14600000],
+      "values": [0.105],
+      "uncertainties": [0.042],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Fe54",
+      "product": "Mn52m",
+      "all_states": false,
+      "source": "EXFOR 11718-002-0, (N,T), D.M.Chittenden Ii 1961",
+      "energies_ev": [14800000],
+      "values": [0.6],
+      "uncertainties": [0.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Fe54",
+      "product": "Mn52m",
+      "all_states": false,
+      "source": "EXFOR 20522-006-0, (N,T), S.M.Qaim 1973",
+      "energies_ev": [14600000],
+      "values": [0.095],
+      "uncertainties": [0.03],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Fe54",
+      "product": "Mn52m",
+      "all_states": false,
+      "source": "EXFOR 30169-004-0, (N,T), M.Diksic 1974",
+      "energies_ev": [14600000],
+      "values": [0.351],
+      "uncertainties": [0.15],
+      "calculations": {}
+    }
+  ]
+}

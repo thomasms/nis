@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Se77/Se77m",
+  "title": "Se77 to Se77m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Se77": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se77",
+      "product": "Se77m",
+      "all_states": false,
+      "source": "EXFOR 30154-003-0, (N,INL), E.Rurarz 1970",
+      "energies_ev": [14500000],
+      "values": [593.0],
+      "uncertainties": [60.0],
+      "calculations": {}
+    }
+  ]
+}

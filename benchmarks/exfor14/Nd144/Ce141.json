@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Nd144/Ce141",
+  "title": "Nd144 to Ce141, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Nd144": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nd144",
+      "product": "Ce141",
+      "all_states": true,
+      "source": "EXFOR 21997-018-0, (N,A), S.M.Qaim 1984",
+      "energies_ev": [14700000],
+      "values": [6.5],
+      "uncertainties": [1.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nd144",
+      "product": "Ce141",
+      "all_states": true,
+      "source": "EXFOR 30051-013-0, (N,A), P.Rama Prasad 1969",
+      "energies_ev": [14200000],
+      "values": [9.0],
+      "uncertainties": [1.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nd144",
+      "product": "Ce141",
+      "all_states": true,
+      "source": "EXFOR 30649-011-0, (N,A), S.Gmuca 1983",
+      "energies_ev": [14800000],
+      "values": [4.5],
+      "uncertainties": [0.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nd144",
+      "product": "Ce141",
+      "all_states": true,
+      "source": "EXFOR 31496-026-0, (N,A), A.Grallert 1993",
+      "energies_ev": [14600000],
+      "values": [4.0],
+      "uncertainties": [0.3],
+      "calculations": {}
+    }
+  ]
+}

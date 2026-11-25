@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Re187/Re186",
+  "title": "Re187 to Re186, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Re187": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Re187",
+      "product": "Re186",
+      "all_states": true,
+      "source": "EXFOR 31247-021-0, (N,2N), C.S.Khurana 1961",
+      "energies_ev": [14800000],
+      "values": [1675.0],
+      "uncertainties": [167.5],
+      "calculations": {}
+    }
+  ]
+}

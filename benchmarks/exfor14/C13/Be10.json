@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "C13/Be10",
+  "title": "C13 to Be10, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "C13": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "C13",
+      "product": "Be10",
+      "all_states": true,
+      "source": "EXFOR 31531-003-0, (N,A), F.Sudbrock 2000",
+      "energies_ev": [14600000],
+      "values": [22.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    }
+  ]
+}

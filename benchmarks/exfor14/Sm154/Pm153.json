@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sm154/Pm153",
+  "title": "Sm154 to Pm153, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sm154": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sm154",
+      "product": "Pm153",
+      "all_states": true,
+      "source": "EXFOR 31439-005-0, (N,X), A.Kirov 1993",
+      "energies_ev": [14540000],
+      "values": [0.43],
+      "uncertainties": [0.08],
+      "calculations": {}
+    }
+  ]
+}

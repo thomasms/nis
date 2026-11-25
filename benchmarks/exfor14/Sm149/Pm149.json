@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sm149/Pm149",
+  "title": "Sm149 to Pm149, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sm149": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sm149",
+      "product": "Pm149",
+      "all_states": true,
+      "source": "EXFOR 32730-004-0, (N,P), Junhua Luo 2016",
+      "energies_ev": [13500000, 14800000],
+      "values": [6.3, 7.7],
+      "uncertainties": [0.5, 0.8],
+      "calculations": {}
+    }
+  ]
+}

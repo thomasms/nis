@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Zn64/Cu62",
+  "title": "Zn64 to Cu62, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Zn64": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn64",
+      "product": "Cu62",
+      "all_states": true,
+      "source": "EXFOR 20522-008-0, (N,T), S.M.Qaim 1973",
+      "energies_ev": [14600000],
+      "values": [0.086],
+      "uncertainties": [0.023],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn64",
+      "product": "Cu62",
+      "all_states": true,
+      "source": "EXFOR 30108-002-2, (N,T), J.Csikai 1968",
+      "energies_ev": [14700000],
+      "values": [0.15],
+      "uncertainties": [0.01],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn64",
+      "product": "Cu62",
+      "all_states": true,
+      "source": "EXFOR 30169-005-0, (N,T), M.Diksic 1974",
+      "energies_ev": [14600000],
+      "values": [0.0337],
+      "uncertainties": [0.01],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Nb93/Nb94m",
+  "title": "Nb93 to Nb94m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Nb93": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nb93",
+      "product": "Nb94m",
+      "all_states": false,
+      "source": "EXFOR 11590-051-0, (N,G), E.T.Bramlitt 1963.0",
+      "energies_ev": [14700000],
+      "values": [0.44],
+      "uncertainties": [0.26],
+      "calculations": {}
+    }
+  ]
+}

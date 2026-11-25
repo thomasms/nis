@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Rh103/Tc99m",
+  "title": "Rh103 to Tc99m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Rh103": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Tc99m",
+      "all_states": false,
+      "source": "EXFOR 11919-002-0, (N,N+A), L.Husain 1968",
+      "energies_ev": [14800000],
+      "values": [0.065],
+      "uncertainties": [0.015],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Tc99m",
+      "all_states": false,
+      "source": "EXFOR 11923-011-0, (N,N+A), P.R.Gray 1966",
+      "energies_ev": [14700000],
+      "values": [0.15],
+      "uncertainties": [0.03],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Tc99m",
+      "all_states": false,
+      "source": "EXFOR 41424-033-0, (N,N+A), A.A.Filatenkov 2001",
+      "energies_ev": [13680000, 13880000, 14050000, 14470000, 14860000],
+      "values": [0.05, 0.068, 0.108, 0.147, 0.235],
+      "uncertainties": [0.004, 0.005, 0.01, 0.008, 0.01],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Tc99m",
+      "all_states": false,
+      "source": "EXFOR 41614-084-0, (N,N+A), A.A.Filatenkov 2016",
+      "energies_ev": [13680000, 13880000, 14050000, 14470000, 14860000],
+      "values": [0.05, 0.068, 0.109, 0.147, 0.238],
+      "uncertainties": [0.004545, 0.0057936, 0.011118, 0.010172, 0.014399],
+      "calculations": {}
+    }
+  ]
+}

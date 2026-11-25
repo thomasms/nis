@@ -1,0 +1,195 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ni58/Co58m",
+  "title": "Ni58 to Co58m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ni58": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "Co58m",
+      "all_states": false,
+      "source": "EXFOR 10836-005-1, (N,P), C.G.Hudson 1978",
+      "energies_ev": [14100000],
+      "values": [188.0],
+      "uncertainties": [15.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "Co58m",
+      "all_states": false,
+      "source": "EXFOR 11696-012-0, (N,P), W.G.Cross 1963",
+      "energies_ev": [14500000],
+      "values": [164.0],
+      "uncertainties": [16.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "Co58m",
+      "all_states": false,
+      "source": "EXFOR 11740-006-0, (N,P), I.L.Preiss 1960",
+      "energies_ev": [14800000],
+      "values": [40.0],
+      "uncertainties": [15.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "Co58m",
+      "all_states": false,
+      "source": "EXFOR 20899-004-0, (N,P), M.Bormann 1966",
+      "energies_ev": [14100000],
+      "values": [305.0],
+      "uncertainties": [26.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "Co58m",
+      "all_states": false,
+      "source": "EXFOR 21936-031-0, (N,P), B.M.Bahal 1984",
+      "energies_ev": [14700000],
+      "values": [169.0],
+      "uncertainties": [10.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "Co58m",
+      "all_states": false,
+      "source": "EXFOR 22338-004-0, (N,P), A.Ercan 1991",
+      "energies_ev": [14600000],
+      "values": [218.0],
+      "uncertainties": [60.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "Co58m",
+      "all_states": false,
+      "source": "EXFOR 30644-013-0, (N,P), M.Viennot 1982",
+      "energies_ev": [13770000, 13930000, 14110000, 14300000, 14470000, 14730000, 14830000],
+      "values": [238.0, 229.0, 239.0, 261.0, 237.0, 222.0, 178.0],
+      "uncertainties": [12.0, 12.0, 12.0, 13.0, 12.0, 11.0, 11.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "Co58m",
+      "all_states": false,
+      "source": "EXFOR 30811-003-M, (N,P), I.Ribansky 1985",
+      "energies_ev": [14800000],
+      "values": [134.2],
+      "uncertainties": [6.1732],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "Co58m",
+      "all_states": false,
+      "source": "EXFOR 31455-007-0, (N,P), Cs.M.Buczko 1995",
+      "energies_ev": [14840000],
+      "values": [145.0],
+      "uncertainties": [10.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "Co58m",
+      "all_states": false,
+      "source": "EXFOR 31584-003-0, (N,P), V.Avrigeanu 1999",
+      "energies_ev": [13560000, 13740000, 13960000, 14190000, 14420000, 14610000, 14780000],
+      "values": [234.0, 218.0, 197.0, 182.0, 170.0, 173.0, 150.0],
+      "uncertainties": [9.0, 9.0, 8.0, 8.0, 7.0, 11.0, 6.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "Co58m",
+      "all_states": false,
+      "source": "EXFOR 31646-005-0, (N,P), Li Guozheng 1990",
+      "energies_ev": [14100000, 14620000],
+      "values": [196.2, 196.8],
+      "uncertainties": [8.0442, 7.6752],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "Co58m",
+      "all_states": false,
+      "source": "EXFOR 31646-006-0, (N,P), Li Guozheng 1990",
+      "energies_ev": [14100000],
+      "values": [195.1],
+      "uncertainties": [7.6089],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "Co58m",
+      "all_states": false,
+      "source": "EXFOR 40226-012-0, (N,P), V.N.Levkovskii 1970",
+      "energies_ev": [14800000],
+      "values": [170.0],
+      "uncertainties": [40.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "Co58m",
+      "all_states": false,
+      "source": "EXFOR 41240-019-0, (N,P), A.A.Filatenkov 1999",
+      "energies_ev": [13560000, 13740000, 13960000, 14190000, 14420000, 14610000, 14780000],
+      "values": [234.0, 218.0, 197.0, 182.0, 170.0, 173.0, 150.0],
+      "uncertainties": [9.0, 9.0, 8.0, 8.0, 7.0, 11.0, 6.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "Co58m",
+      "all_states": false,
+      "source": "EXFOR 41614-027-0, (N,P), A.A.Filatenkov 2016",
+      "energies_ev": [13560000, 13640000, 13740000, 13880000, 13960000, 14050000, 14190000, 14280000, 14420000, 14470000, 14610000, 14680000, 14780000, 14860000],
+      "values": [226.0, 216.0, 211.0, 207.0, 199.0, 195.0, 184.0, 189.0, 176.0, 177.0, 165.0, 166.0, 157.0, 157.0],
+      "uncertainties": [7.5484, 10.843, 8.7565, 13.724, 9.353, 9.828, 7.728, 11.0, 7.7792, 8.8323, 7.8705, 10.076, 6.7981, 9.7183],
+      "calculations": {}
+    }
+  ]
+}

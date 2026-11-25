@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sm144/Pm144",
+  "title": "Sm144 to Pm144, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sm144": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sm144",
+      "product": "Pm144",
+      "all_states": true,
+      "source": "EXFOR 20716-006-0, (N,P), S.M.Qaim 1976",
+      "energies_ev": [14700000],
+      "values": [19.0],
+      "uncertainties": [4.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sm144",
+      "product": "Pm144",
+      "all_states": true,
+      "source": "EXFOR 21609-014-0, (N,P), H.Weigel 1975",
+      "energies_ev": [14300000],
+      "values": [29.4],
+      "uncertainties": [3.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sm144",
+      "product": "Pm144",
+      "all_states": true,
+      "source": "EXFOR 31497-008-0, (N,P), Xiangzhong Kong 1998",
+      "energies_ev": [14700000],
+      "values": [18.5],
+      "uncertainties": [4.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sm144",
+      "product": "Pm144",
+      "all_states": true,
+      "source": "EXFOR 32730-005-0, (N,P), Junhua Luo 2016",
+      "energies_ev": [13500000, 14800000],
+      "values": [20.3, 23.5],
+      "uncertainties": [4.7, 5.1],
+      "calculations": {}
+    }
+  ]
+}

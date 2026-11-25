@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Os188/Re188m",
+  "title": "Os188 to Re188m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Os188": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Os188",
+      "product": "Re188m",
+      "all_states": false,
+      "source": "EXFOR 22365-013-0, (N,P), Y.Satoh 1995",
+      "energies_ev": [14870000],
+      "values": [0.61],
+      "uncertainties": [0.06405],
+      "calculations": {}
+    }
+  ]
+}

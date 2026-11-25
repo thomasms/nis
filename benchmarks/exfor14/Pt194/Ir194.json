@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Pt194/Ir194",
+  "title": "Pt194 to Ir194, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Pt194": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pt194",
+      "product": "Ir194",
+      "all_states": true,
+      "source": "EXFOR 41614-219-0, (N,P), A.A.Filatenkov 2016",
+      "energies_ev": [13880000, 14050000, 14820000],
+      "values": [2.88, 3.35, 4.65],
+      "uncertainties": [0.43776, 0.4489, 0.5952],
+      "calculations": {}
+    }
+  ]
+}

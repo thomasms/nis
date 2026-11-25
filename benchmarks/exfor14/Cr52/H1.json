@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cr52/H1",
+  "title": "Cr52 to H1, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cr52": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr52",
+      "product": "H1",
+      "all_states": true,
+      "source": "EXFOR 10827-009-0, (N,X), S.M.Grimes 1979",
+      "energies_ev": [14800000],
+      "values": [180.0],
+      "uncertainties": [12.6],
+      "calculations": {}
+    }
+  ]
+}

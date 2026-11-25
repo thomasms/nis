@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ir191/Re188",
+  "title": "Ir191 to Re188, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ir191": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ir191",
+      "product": "Re188",
+      "all_states": true,
+      "source": "EXFOR 21440-029-0, (N,A), R.F.Coleman 1959",
+      "energies_ev": [14500000],
+      "values": [2.43],
+      "uncertainties": [0.3645],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ir191",
+      "product": "Re188",
+      "all_states": true,
+      "source": "EXFOR 41428-023-0, (N,A), A.A.Filatenkov 2003",
+      "energies_ev": [13640000, 13880000, 14100000, 14280000, 14470000, 14680000, 14820000],
+      "values": [0.56, 0.42, 0.68, 0.64, 0.63, 0.77, 0.98],
+      "uncertainties": [0.15, 0.07, 0.14, 0.1, 0.2, 0.12, 0.22],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ir191",
+      "product": "Re188",
+      "all_states": true,
+      "source": "EXFOR 41614-207-0, (N,A), A.A.Filatenkov 2016",
+      "energies_ev": [13640000, 13880000, 14100000, 14280000, 14470000, 14680000, 14820000],
+      "values": [0.562, 0.423, 0.684, 0.641, 0.629, 0.77, 0.986],
+      "uncertainties": [0.15062, 0.070218, 0.1409, 0.099996, 0.19939, 0.11935, 0.22086],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "I127/Te125m",
+  "title": "I127 to Te125m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "I127": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "I127",
+      "product": "Te125m",
+      "all_states": false,
+      "source": "EXFOR 21994-005-0, (N,X), S.M.Qaim 1985",
+      "energies_ev": [14600000],
+      "values": [0.035],
+      "uncertainties": [0.01],
+      "calculations": {}
+    }
+  ]
+}

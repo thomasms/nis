@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "W184/W183",
+  "title": "W184 to W183, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "W184": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W184",
+      "product": "W183",
+      "all_states": true,
+      "source": "EXFOR 20416-052-0, (N,2N), J.Frehaut 1980",
+      "energies_ev": [13800000, 14280000, 14760000],
+      "values": [1921.0, 1950.0, 1851.0],
+      "uncertainties": [135.0, 158.0, 152.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W184",
+      "product": "W183",
+      "all_states": true,
+      "source": "EXFOR 20416-109-0, (N,2N), J.Frehaut 1980",
+      "energies_ev": [13800000, 14280000, 14760000],
+      "values": [2000.0, 2009.0, 1910.0],
+      "uncertainties": [136.0, 154.0, 147.0],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "I127/Te127g",
+  "title": "I127 to Te127g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "I127": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "I127",
+      "product": "Te127",
+      "all_states": false,
+      "source": "EXFOR 11274-084-0, (N,P), E.B.Paul 1953",
+      "energies_ev": [14500000],
+      "values": [231.0],
+      "uncertainties": [138.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "I127",
+      "product": "Te127",
+      "all_states": false,
+      "source": "EXFOR 13025-008-0, (N,P), T.Mavaddat 1974",
+      "energies_ev": [14800000],
+      "values": [4.9],
+      "uncertainties": [1.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "I127",
+      "product": "Te127",
+      "all_states": false,
+      "source": "EXFOR 21668-002-0, (N,P), M.Bormann 1960",
+      "energies_ev": [14100000],
+      "values": [25.0],
+      "uncertainties": [15.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "I127",
+      "product": "Te127",
+      "all_states": false,
+      "source": "EXFOR 31080-003-0, (N,P), S.M.Qaim 1968",
+      "energies_ev": [14700000],
+      "values": [8.9],
+      "uncertainties": [1.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "I127",
+      "product": "Te127",
+      "all_states": false,
+      "source": "EXFOR 40226-033-0, (N,P), V.N.Levkovskii 1970",
+      "energies_ev": [14800000],
+      "values": [3.8],
+      "uncertainties": [0.4],
+      "calculations": {}
+    }
+  ]
+}

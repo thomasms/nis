@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Hf178/Lu178m",
+  "title": "Hf178 to Lu178m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Hf178": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hf178",
+      "product": "Lu178m",
+      "all_states": false,
+      "source": "EXFOR 13039-003-1, (N,P), J.L.Meason 1966",
+      "energies_ev": [14800000],
+      "values": [1.02],
+      "uncertainties": [0.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hf178",
+      "product": "Lu178m",
+      "all_states": false,
+      "source": "EXFOR 22311-011-0, (N,P), S.Murahira 1996",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [0.21, 0.37, 0.44, 0.61, 0.63],
+      "uncertainties": [0.1302, 0.11359, 0.19976, 0.14152, 0.15813],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hf178",
+      "product": "Lu178m",
+      "all_states": false,
+      "source": "EXFOR 31439-006-2, (N,P), A.Kirov 1993",
+      "energies_ev": [14540000],
+      "values": [0.98],
+      "uncertainties": [0.08],
+      "calculations": {}
+    }
+  ]
+}

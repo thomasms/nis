@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Os192/Os192m",
+  "title": "Os192 to Os192m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Os192": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Os192",
+      "product": "Os192m",
+      "all_states": false,
+      "source": "EXFOR 21818-011-0, (N,INL), B.Anders 1982",
+      "energies_ev": [14600000],
+      "values": [2.6],
+      "uncertainties": [0.27],
+      "calculations": {}
+    }
+  ]
+}

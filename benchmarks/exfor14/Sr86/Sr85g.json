@@ -1,0 +1,123 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sr86/Sr85g",
+  "title": "Sr86 to Sr85g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sr86": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sr86",
+      "product": "Sr85",
+      "all_states": false,
+      "source": "EXFOR 10493-006-0, (N,2N), P.K.Eapen 1975",
+      "energies_ev": [14800000],
+      "values": [1550.0],
+      "uncertainties": [124.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sr86",
+      "product": "Sr85",
+      "all_states": false,
+      "source": "EXFOR 20614-009-1, (N,2N), M.Bormann 1976",
+      "energies_ev": [14060000],
+      "values": [547.0],
+      "uncertainties": [48.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sr86",
+      "product": "Sr85",
+      "all_states": false,
+      "source": "EXFOR 20891-009-0, (N,2N), B.Minetti 1968",
+      "energies_ev": [14700000],
+      "values": [910.0],
+      "uncertainties": [80.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sr86",
+      "product": "Sr85",
+      "all_states": false,
+      "source": "EXFOR 30008-009-0, (N,2N), P.Strohal 1962",
+      "energies_ev": [14600000],
+      "values": [280.0],
+      "uncertainties": [10.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sr86",
+      "product": "Sr85",
+      "all_states": false,
+      "source": "EXFOR 30348-004-0, (N,2N), E.Holub 1976",
+      "energies_ev": [14600000],
+      "values": [676.0],
+      "uncertainties": [40.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sr86",
+      "product": "Sr85",
+      "all_states": false,
+      "source": "EXFOR 30665-003-G, (N,2N), Ma Hui-Fang 1983",
+      "energies_ev": [14800000],
+      "values": [909.4],
+      "uncertainties": [56.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sr86",
+      "product": "Sr85",
+      "all_states": false,
+      "source": "EXFOR 31664-007-0, (N,2N), Junhua Luo 2009",
+      "energies_ev": [14100000, 14600000],
+      "values": [665.0, 702.0],
+      "uncertainties": [65.0, 79.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sr86",
+      "product": "Sr85",
+      "all_states": false,
+      "source": "EXFOR 31867-002-2, (N,2N), F.R.Egamova 2021",
+      "energies_ev": [14100000],
+      "values": [884.0],
+      "uncertainties": [62.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sr86",
+      "product": "Sr85",
+      "all_states": false,
+      "source": "EXFOR 33180-006-0, (N,2N), T.S.Ganesapandy 2022",
+      "energies_ev": [14770000],
+      "values": [742.7],
+      "uncertainties": [27.4],
+      "calculations": {}
+    }
+  ]
+}

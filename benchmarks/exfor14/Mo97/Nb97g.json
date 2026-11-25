@@ -1,0 +1,87 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Mo97/Nb97g",
+  "title": "Mo97 to Nb97g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Mo97": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo97",
+      "product": "Nb97",
+      "all_states": false,
+      "source": "EXFOR 10145-008-0, (N,P), W.D.Lu 1970",
+      "energies_ev": [14400000],
+      "values": [8.5],
+      "uncertainties": [1.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo97",
+      "product": "Nb97",
+      "all_states": false,
+      "source": "EXFOR 20850-008-0, (N,P), Y.Fujino 1977",
+      "energies_ev": [14600000],
+      "values": [19.2],
+      "uncertainties": [1.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo97",
+      "product": "Nb97",
+      "all_states": false,
+      "source": "EXFOR 21141-007-0, (N,P), P.Cuzzocrea 1967",
+      "energies_ev": [14100000],
+      "values": [17.7],
+      "uncertainties": [1.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo97",
+      "product": "Nb97",
+      "all_states": false,
+      "source": "EXFOR 21840-008-1, (N,P), S.Amemiya 1982",
+      "energies_ev": [14800000],
+      "values": [11.5],
+      "uncertainties": [2.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo97",
+      "product": "Nb97",
+      "all_states": false,
+      "source": "EXFOR 30556-003-0, (N,P), L.Chaturverdi 1977",
+      "energies_ev": [14000000],
+      "values": [8.5],
+      "uncertainties": [1.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo97",
+      "product": "Nb97",
+      "all_states": false,
+      "source": "EXFOR 31464-031-0, (N,P), K.T.Osman 1996",
+      "energies_ev": [14700000],
+      "values": [17.0],
+      "uncertainties": [0.4],
+      "calculations": {}
+    }
+  ]
+}

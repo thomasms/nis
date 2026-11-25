@@ -1,0 +1,135 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Pb208/Tl208",
+  "title": "Pb208 to Tl208, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Pb208": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pb208",
+      "product": "Tl208",
+      "all_states": true,
+      "source": "EXFOR 10244-025-0, (N,P), A.K.Hankla 1972",
+      "energies_ev": [14400000],
+      "values": [0.46],
+      "uncertainties": [0.06],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pb208",
+      "product": "Tl208",
+      "all_states": true,
+      "source": "EXFOR 11274-097-0, (N,P), E.B.Paul 1953",
+      "energies_ev": [14500000],
+      "values": [0.96],
+      "uncertainties": [0.96],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pb208",
+      "product": "Tl208",
+      "all_states": true,
+      "source": "EXFOR 21504-003-0, (N,P), R.Bass 1968",
+      "energies_ev": [14500000],
+      "values": [0.94],
+      "uncertainties": [0.188],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pb208",
+      "product": "Tl208",
+      "all_states": true,
+      "source": "EXFOR 22148-006-0, (N,P), T.B.Ryves 1990",
+      "energies_ev": [14300000],
+      "values": [0.78],
+      "uncertainties": [0.03588],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pb208",
+      "product": "Tl208",
+      "all_states": true,
+      "source": "EXFOR 22680-002-0, (N,P), V.Semkova 2009",
+      "energies_ev": [14810000],
+      "values": [0.95],
+      "uncertainties": [0.22],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pb208",
+      "product": "Tl208",
+      "all_states": true,
+      "source": "EXFOR 23127-004-0, (N,P), M.Pillon 2002",
+      "energies_ev": [14900000],
+      "values": [1.021],
+      "uncertainties": [0.102],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pb208",
+      "product": "Tl208",
+      "all_states": true,
+      "source": "EXFOR 30605-006-0, (N,P), N.Lakshmana Das 1981",
+      "energies_ev": [14200000],
+      "values": [0.5],
+      "uncertainties": [0.07],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pb208",
+      "product": "Tl208",
+      "all_states": true,
+      "source": "EXFOR 32205-005-0, (N,P), S.V.Begun 2002",
+      "energies_ev": [14500000],
+      "values": [1.07],
+      "uncertainties": [0.05],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pb208",
+      "product": "Tl208",
+      "all_states": true,
+      "source": "EXFOR 32205-026-0, (N,P), S.V.Begun 2002",
+      "energies_ev": [13560000, 13690000, 13950000, 14210000, 14470000, 14530000],
+      "values": [0.44, 0.61, 0.7, 0.84, 1.03, 1.19],
+      "uncertainties": [0.05, 0.06, 0.07, 0.05, 0.07, 0.07],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pb208",
+      "product": "Tl208",
+      "all_states": true,
+      "source": "EXFOR 40347-004-0, (N,P), G.E.Belovitskii 1976",
+      "energies_ev": [14500000],
+      "values": [0.5],
+      "uncertainties": [0.1],
+      "calculations": {}
+    }
+  ]
+}

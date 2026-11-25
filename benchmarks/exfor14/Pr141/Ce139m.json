@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Pr141/Ce139m",
+  "title": "Pr141 to Ce139m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Pr141": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pr141",
+      "product": "Ce139m",
+      "all_states": false,
+      "source": "EXFOR 21994-006-0, (N,X), S.M.Qaim 1985",
+      "energies_ev": [14600000],
+      "values": [0.026],
+      "uncertainties": [0.01],
+      "calculations": {}
+    }
+  ]
+}

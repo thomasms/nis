@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sb123/Sn123g",
+  "title": "Sb123 to Sn123g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sb123": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb123",
+      "product": "Sn123",
+      "all_states": false,
+      "source": "EXFOR 40029-007-2, (N,P), V.N.Levkovskii 1971.0",
+      "energies_ev": [14800000],
+      "values": [2.8],
+      "uncertainties": [0.9],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Rb87/Br84",
+  "title": "Rb87 to Br84, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Rb87": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rb87",
+      "product": "Br84",
+      "all_states": true,
+      "source": "EXFOR 30008-032-0, (N,A), P.Strohal 1962",
+      "energies_ev": [14600000],
+      "values": [59.0],
+      "uncertainties": [12.0],
+      "calculations": {}
+    }
+  ]
+}

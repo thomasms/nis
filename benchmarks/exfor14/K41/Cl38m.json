@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "K41/Cl38m",
+  "title": "K41 to Cl38m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "K41": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "K41",
+      "product": "Cl38m",
+      "all_states": false,
+      "source": "EXFOR 30322-007-0, (N,A), J.Janczyszyn 1973",
+      "energies_ev": [14000000],
+      "values": [11.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    }
+  ]
+}

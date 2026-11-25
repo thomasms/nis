@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Nd148/Pr147",
+  "title": "Nd148 to Pr147, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Nd148": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nd148",
+      "product": "Pr147",
+      "all_states": true,
+      "source": "EXFOR 22468-003-0, (N,X), H.Sakane 2000",
+      "energies_ev": [14020000, 14350000, 14640000, 14870000],
+      "values": [0.06, 0.1, 0.16, 0.2],
+      "uncertainties": [0.0324, 0.037, 0.0416, 0.042],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nd148",
+      "product": "Pr147",
+      "all_states": true,
+      "source": "EXFOR 22809-003-0, (N,X), H.Sakane 2002",
+      "energies_ev": [14020000, 14350000, 14640000, 14870000],
+      "values": [0.19, 0.27, 0.43, 0.55],
+      "uncertainties": [0.0437, 0.0378, 0.0516, 0.066],
+      "calculations": {}
+    }
+  ]
+}

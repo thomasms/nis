@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Co59/H1",
+  "title": "Co59 to H1, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Co59": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Co59",
+      "product": "H1",
+      "all_states": true,
+      "source": "EXFOR 22467-017-0, (N,X), Kokooo 1999",
+      "energies_ev": [14100000],
+      "values": [115.6],
+      "uncertainties": [1.4],
+      "calculations": {}
+    }
+  ]
+}

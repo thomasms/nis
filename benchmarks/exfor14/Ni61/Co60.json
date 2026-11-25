@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ni61/Co60",
+  "title": "Ni61 to Co60, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ni61": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni61",
+      "product": "Co60",
+      "all_states": true,
+      "source": "EXFOR 22658-003-0, (N,X), Y.Ikeda 1996",
+      "energies_ev": [14800000],
+      "values": [50.5],
+      "uncertainties": [8.2],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Zr90/Zr89g",
+  "title": "Zr90 to Zr89g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Zr90": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr90",
+      "product": "Zr89",
+      "all_states": false,
+      "source": "EXFOR 10088-018-0, (N,2N), L.Husain 1970",
+      "energies_ev": [14800000],
+      "values": [342.0],
+      "uncertainties": [25.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr90",
+      "product": "Zr89",
+      "all_states": false,
+      "source": "EXFOR 10477-008-0, (N,2N), R.A.Sigg 1975",
+      "energies_ev": [14800000],
+      "values": [638.0],
+      "uncertainties": [47.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr90",
+      "product": "Zr89",
+      "all_states": false,
+      "source": "EXFOR 10493-013-0, (N,2N), P.K.Eapen 1975",
+      "energies_ev": [14800000],
+      "values": [932.0],
+      "uncertainties": [75.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr90",
+      "product": "Zr89",
+      "all_states": false,
+      "source": "EXFOR 10497-003-0, (N,2N), W.D.Lu 1970",
+      "energies_ev": [14400000],
+      "values": [572.0],
+      "uncertainties": [30.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr90",
+      "product": "Zr89",
+      "all_states": false,
+      "source": "EXFOR 10835-010-1, (N,2N), S.Sothras 1977",
+      "energies_ev": [14800000],
+      "values": [387.0],
+      "uncertainties": [35.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr90",
+      "product": "Zr89",
+      "all_states": false,
+      "source": "EXFOR 11896-003-0, (N,2N), C.H.Reed 1960",
+      "energies_ev": [14100000],
+      "values": [470.0],
+      "uncertainties": [22.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr90",
+      "product": "Zr89",
+      "all_states": false,
+      "source": "EXFOR 20850-016-0, (N,2N), Y.Fujino 1977",
+      "energies_ev": [14600000],
+      "values": [805.0],
+      "uncertainties": [58.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr90",
+      "product": "Zr89",
+      "all_states": false,
+      "source": "EXFOR 20891-013-0, (N,2N), B.Minetti 1968",
+      "energies_ev": [14700000],
+      "values": [762.0],
+      "uncertainties": [82.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr90",
+      "product": "Zr89",
+      "all_states": false,
+      "source": "EXFOR 31464-027-0, (N,2N), K.T.Osman 1996",
+      "energies_ev": [14700000],
+      "values": [612.0],
+      "uncertainties": [16.0],
+      "calculations": {}
+    }
+  ]
+}

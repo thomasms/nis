@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Se78/As78g",
+  "title": "Se78 to As78g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Se78": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se78",
+      "product": "As78",
+      "all_states": false,
+      "source": "EXFOR 21107-017-0, (N,P), B.Minetti 1967",
+      "energies_ev": [14700000],
+      "values": [21.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    }
+  ]
+}

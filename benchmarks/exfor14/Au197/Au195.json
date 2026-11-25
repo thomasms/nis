@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Au197/Au195",
+  "title": "Au197 to Au195, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Au197": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Au197",
+      "product": "Au195",
+      "all_states": true,
+      "source": "EXFOR 10244-020-0, (N,3N), A.K.Hankla 1972",
+      "energies_ev": [14400000],
+      "values": [61.0],
+      "uncertainties": [20.0],
+      "calculations": {}
+    }
+  ]
+}

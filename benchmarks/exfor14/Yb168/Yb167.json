@@ -1,0 +1,99 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Yb168/Yb167",
+  "title": "Yb168 to Yb167, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Yb168": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb168",
+      "product": "Yb167",
+      "all_states": true,
+      "source": "EXFOR 10431-060-0, (N,2N), A.Bari 1972",
+      "energies_ev": [14800000],
+      "values": [1873.0],
+      "uncertainties": [201.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb168",
+      "product": "Yb167",
+      "all_states": true,
+      "source": "EXFOR 20541-051-0, (N,2N), S.M.Qaim 1974",
+      "energies_ev": [14700000],
+      "values": [1913.0],
+      "uncertainties": [217.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb168",
+      "product": "Yb167",
+      "all_states": true,
+      "source": "EXFOR 30491-008-0, (N,2N), N.Lakshmana Das 1974",
+      "energies_ev": [14200000],
+      "values": [1948.0],
+      "uncertainties": [195.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb168",
+      "product": "Yb167",
+      "all_states": true,
+      "source": "EXFOR 31497-004-0, (N,2N), Xiangzhong Kong 1998",
+      "energies_ev": [14700000],
+      "values": [1912.0],
+      "uncertainties": [120.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb168",
+      "product": "Yb167",
+      "all_states": true,
+      "source": "EXFOR 32233-014-0, (N,2N), N.Dzysiuk 2012",
+      "energies_ev": [14700000],
+      "values": [1875.0],
+      "uncertainties": [179.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb168",
+      "product": "Yb167",
+      "all_states": true,
+      "source": "EXFOR 32727-002-0, (N,2N), Junhua Luo 2013",
+      "energies_ev": [13500000, 14800000],
+      "values": [1664.0, 1914.0],
+      "uncertainties": [148.0, 169.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb168",
+      "product": "Yb167",
+      "all_states": true,
+      "source": "EXFOR 33175-002-0, (N,2N), G.T.Bholane 2022",
+      "energies_ev": [14770000],
+      "values": [1908.4],
+      "uncertainties": [141.79],
+      "calculations": {}
+    }
+  ]
+}

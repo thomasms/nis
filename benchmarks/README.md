@@ -8,6 +8,7 @@ tools reads it: [scripts/bench.py](../scripts/bench.py) (the code is in [scripts
 | [fns](fns) | fusion | 132 | decay heat of foils after 14 MeV neutron irradiation (FNS, JAEA) |
 | [fission_decay_heat](fission_decay_heat) | fission | 44 | beta, gamma and total decay heat after the fission of U233, U235, U238, Pu239, Pu241 and Th232: pulses and irradiations of 10 s to 1e5 s (IAEA CoNDERC) |
 | [irdff2](irdff2) | other | 87 | spectrum-averaged cross sections of activation and gas production reactions in the Cf-252 spontaneous fission and U-235 thermal fission neutron spectra (IRDFF-II) |
+| [exfor14](exfor14) | fusion | 1162 | cross sections of the reactions of the nuclides of the FNS foils at 13.5 to 15 MeV, 6800 EXFOR data sets (see [exfor14](#exfor14)) |
 
 ## Folders
 
@@ -101,6 +102,8 @@ benchmarks/
 | `measurements[].calculations` | optional: the results of other codes, one value (or `null`) for each of `steps` |
 | `measurements[].target`, `product` | only for a `cross_section`: the nuclide that is hit (it must be in `sample.atoms`) and the nuclide that is made, e.g. `Al27` and `Na24`, or `Nb93` and `Nb92m` |
 | `measurements[].all_states` | only for a `cross_section`, default `false`: `true` counts the product in all its states (ground and isomers), as when the isomers decay to the ground state before the activity is measured. Then `product` is the ground state name |
+| `measurements[].energies_ev` | only for a `cross_section`, in place of `steps`: the incident neutron energy (eV) of each value, not going down (two values can have the same energy). Each value is then the cross section at its energy, not in a spectrum. A case with only such measurements has no `steps` and its `spectrum` is `null` |
+| `measurements[].source` | optional: where the values come from, e.g. `EXFOR 41240-012-0, (N,P), A.A.Filatenkov 1999` |
 
 The **cooling time** of a value is the time from the end of the last step with a flux to the end of its step
 (from the start, if no step has a flux).
@@ -122,6 +125,11 @@ of all the reactions of the target that make it) over the total of the spectrum.
 it counts as 2 He4. It does not depend on the length or
 the flux of the step, but the step must have a flux. Its cooling time is 0. Such a case has no deck (the `nis`
 program does not give cross sections), so run it with `pynis`, and `plot` shows it only in the summary.
+
+A cross section **at an energy** E (`energies_ev`) is the same, with the spectrum of one narrow group, E ± 0.01%.
+The reaction data has group-wise (histogram) cross sections, so this is the value of the group that has E: the
+1102 groups of the NIS data are 0.2 MeV wide at 14 MeV. `plot --cases-dir` shows these cases against the
+energy.
 
 `MeV/fission` is the decay heat per fission times the cooling time, t·P(t), which is the usual way to give the decay
 heat after a fission pulse. `MeV/(fission/s)` is the decay heat over the fission rate of the last step with a
@@ -151,6 +159,9 @@ fns,Co/2000exp_5min,decay_heat,uW/g,49.98,0.03019,0.001793,2.829702e-02,3.285241
 `time_s` is the cooling time. The columns after `nis` are the `calculations` of the cases (empty where a case has
 no value). `stats` and `plot` read this file.
 
+A file with cross sections at given energies has two more columns after `time_s`: `energy_ev` (then `time_s` is
+empty) and `source`. Two rows of one data set at the same energy are told apart by their order in the file.
+
 ## The commands
 
 ```bash
@@ -177,3 +188,30 @@ of `pynis` (the results are the same). `--fission-yields` and `--sf-yields` give
    case file when they write it.
 3. Run it, and keep the reference results and the summary plot in `<name>/results/`.
 4. Add it to the table at the top of this file.
+
+A converter that needs the decay data (to know which nuclides NIS tracks) sets `NEEDS_DECAY_DATA = True`; then
+`convert(source, only, decay_data)` gets `--decay-data` (by default `data/jeff311.dec`).
+
+## exfor14
+
+The measured cross sections of the reactions of the FNS foil nuclides (all the nuclides of the samples of
+[fns](fns)) at 13.5 to 15 MeV, from EXFOR. The original files are the EXFOR tables of the IAEA
+([IAEA-NDS/exfortables_py](https://github.com/IAEA-NDS/exfortables_py)), one file for each data set. Only the
+folders of the FNS nuclides are needed:
+
+```bash
+git clone --depth 1 --filter=blob:none --sparse https://github.com/IAEA-NDS/exfortables_py.git
+git -C exfortables_py sparse-checkout set n/Al-27 n/Fe-56 ...     # or all of n/
+uv run python scripts/bench.py convert exfor14 --source exfortables_py --decay-data data/jeff311.dec
+```
+
+The data is used as EXFOR gives it: nothing is changed or added. A data set is used when it is a cross section at
+an energy (`,,SIG`: no spectrum averages, ratios, partial, derived or evaluated values), the state of the product is
+clear (no code or `-T`: all states, `-G`, `-M`/`-M1`, `-M2`), NIS tracks the product and it is not the target, and the
+value is the production of the product by all the reactions: the process is `X`, or the product is radioactive (it
+is measured by its activity). Only the values from 13.5 to 15 MeV with an uncertainty are used. The full rules are
+in [convert/exfor14.py](../scripts/nisbench/convert/exfor14.py).
+
+Each case is one reaction, `<target>/<product>` (`Fe56/Mn56`, `Nb93/Nb92m`, `Co59/Co58g` for the ground state only),
+with one measurement for each EXFOR data set. The C/E of a case is the geometric mean of all its points, so old
+data sets with large errors count too: look at the plot of a case (`plot --cases-dir`) before a conclusion.

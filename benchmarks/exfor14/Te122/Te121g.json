@@ -1,0 +1,111 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Te122/Te121g",
+  "title": "Te122 to Te121g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Te122": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te122",
+      "product": "Te121",
+      "all_states": false,
+      "source": "EXFOR 10497-028-0, (N,2N), W.D.Lu 1970",
+      "energies_ev": [14400000],
+      "values": [725.0],
+      "uncertainties": [40.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te122",
+      "product": "Te121",
+      "all_states": false,
+      "source": "EXFOR 11999-008-0, (N,2N), L.Husain 1968",
+      "energies_ev": [14800000],
+      "values": [750.0],
+      "uncertainties": [100.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te122",
+      "product": "Te121",
+      "all_states": false,
+      "source": "EXFOR 21300-023-0, (N,2N), K.Kayashima 1979",
+      "energies_ev": [14600000],
+      "values": [721.0],
+      "uncertainties": [60.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te122",
+      "product": "Te121",
+      "all_states": false,
+      "source": "EXFOR 22675-005-0, (N,2N), C.Schnabel 2000",
+      "energies_ev": [14700000],
+      "values": [558.0],
+      "uncertainties": [56.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te122",
+      "product": "Te121",
+      "all_states": false,
+      "source": "EXFOR 32669-005-0, (N,2N), F.Zhou 2007",
+      "energies_ev": [13500000, 14600000],
+      "values": [649.0, 694.0],
+      "uncertainties": [32.0, 35.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te122",
+      "product": "Te121",
+      "all_states": false,
+      "source": "EXFOR 32803-002-2, (N,2N), Junhua Luo 2020",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [514.0, 527.0, 569.0],
+      "uncertainties": [45.0, 50.0, 52.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te122",
+      "product": "Te121",
+      "all_states": false,
+      "source": "EXFOR 41240-088-0, (N,2N), A.A.Filatenkov 1999",
+      "energies_ev": [13670000, 14060000, 14280000, 14460000, 14670000, 14830000],
+      "values": [647.0, 746.0, 667.0, 756.0, 720.0, 674.0],
+      "uncertainties": [60.0, 60.0, 65.0, 66.0, 65.0, 60.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te122",
+      "product": "Te121",
+      "all_states": false,
+      "source": "EXFOR 41614-144-0, (N,2N), A.A.Filatenkov 2016",
+      "energies_ev": [13670000, 14060000, 14280000, 14460000, 14670000, 14830000],
+      "values": [649.8, 749.9, 668.0, 755.2, 719.8, 678.1],
+      "uncertainties": [59.782, 59.617, 64.596, 65.325, 64.422, 59.808],
+      "calculations": {}
+    }
+  ]
+}

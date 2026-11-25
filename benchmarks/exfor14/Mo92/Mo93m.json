@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Mo92/Mo93m",
+  "title": "Mo92 to Mo93m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Mo92": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Mo93m",
+      "all_states": false,
+      "source": "EXFOR 41327-003-0, (N,G), Yu.P.Gangrskii 1971",
+      "energies_ev": [14700000],
+      "values": [0.12],
+      "uncertainties": [0.03],
+      "calculations": {}
+    }
+  ]
+}

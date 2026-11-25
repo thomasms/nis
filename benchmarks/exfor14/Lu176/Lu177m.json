@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Lu176/Lu177m",
+  "title": "Lu176 to Lu177m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Lu176": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Lu176",
+      "product": "Lu177m",
+      "all_states": false,
+      "source": "EXFOR 32254-003-0, (N,G), A.M.Savrasov 2024",
+      "energies_ev": [14600000],
+      "values": [8.74],
+      "uncertainties": [1.41],
+      "calculations": {}
+    }
+  ]
+}

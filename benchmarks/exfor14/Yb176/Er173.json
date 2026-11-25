@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Yb176/Er173",
+  "title": "Yb176 to Er173, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Yb176": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb176",
+      "product": "Er173",
+      "all_states": true,
+      "source": "EXFOR 22635-007-0, (N,A), H.Sakane 1999",
+      "energies_ev": [14020000, 14350000, 14640000, 14870000],
+      "values": [0.48, 0.41, 0.52, 0.76],
+      "uncertainties": [0.2256, 0.1927, 0.2392, 0.3268],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb176",
+      "product": "Er173",
+      "all_states": true,
+      "source": "EXFOR 23221-005-0, (N,A), B.Pandey 2014",
+      "energies_ev": [14600000],
+      "values": [0.56],
+      "uncertainties": [0.05],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb176",
+      "product": "Er173",
+      "all_states": true,
+      "source": "EXFOR 30674-005-0, (N,A), A.Antov 1983",
+      "energies_ev": [14540000],
+      "values": [0.7],
+      "uncertainties": [0.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb176",
+      "product": "Er173",
+      "all_states": true,
+      "source": "EXFOR 32233-012-0, (N,A), N.Dzysiuk 2012",
+      "energies_ev": [14700000],
+      "values": [0.69],
+      "uncertainties": [0.1],
+      "calculations": {}
+    }
+  ]
+}

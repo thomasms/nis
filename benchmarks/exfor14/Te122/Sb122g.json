@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Te122/Sb122g",
+  "title": "Te122 to Sb122g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Te122": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te122",
+      "product": "Sb122",
+      "all_states": false,
+      "source": "EXFOR 41163-003-0, (N,P), P.M.Gopych 1994",
+      "energies_ev": [14600000],
+      "values": [16.0],
+      "uncertainties": [4.0],
+      "calculations": {}
+    }
+  ]
+}

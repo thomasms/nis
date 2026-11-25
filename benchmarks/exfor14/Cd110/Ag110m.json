@@ -1,0 +1,75 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cd110/Ag110m",
+  "title": "Cd110 to Ag110m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cd110": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd110",
+      "product": "Ag110m",
+      "all_states": false,
+      "source": "EXFOR 21300-005-0, (N,P), K.Kayashima 1979",
+      "energies_ev": [14600000],
+      "values": [27.1],
+      "uncertainties": [4.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd110",
+      "product": "Ag110m",
+      "all_states": false,
+      "source": "EXFOR 22637-050-0, (N,P), C.Konno 1993",
+      "energies_ev": [13580000, 13760000, 13990000, 14230000, 14440000, 14680000, 14950000],
+      "values": [7.43, 7.6, 6.56, 7.39, 8.57, 8.65, 9.82],
+      "uncertainties": [0.84, 0.98, 0.48, 0.62, 0.65, 0.55, 0.78],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd110",
+      "product": "Ag110m",
+      "all_states": false,
+      "source": "EXFOR 31496-045-0, (N,P), A.Grallert 1993",
+      "energies_ev": [14600000],
+      "values": [10.8],
+      "uncertainties": [1.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd110",
+      "product": "Ag110m",
+      "all_states": false,
+      "source": "EXFOR 41424-043-0, (N,P), A.A.Filatenkov 2001",
+      "energies_ev": [14440000, 14640000],
+      "values": [8.41, 8.65],
+      "uncertainties": [0.4, 0.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd110",
+      "product": "Ag110m",
+      "all_states": false,
+      "source": "EXFOR 41614-105-0, (N,P), A.A.Filatenkov 2016",
+      "energies_ev": [13880000, 14440000, 14640000, 14880000],
+      "values": [6.63, 8.27, 8.52, 9.52],
+      "uncertainties": [0.25194, 0.38869, 0.38851, 0.67306],
+      "calculations": {}
+    }
+  ]
+}

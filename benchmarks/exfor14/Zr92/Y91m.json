@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Zr92/Y91m",
+  "title": "Zr92 to Y91m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Zr92": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr92",
+      "product": "Y91m",
+      "all_states": false,
+      "source": "EXFOR 21784-007-0, (N,X), S.M.Qaim 1982",
+      "energies_ev": [14700000],
+      "values": [1.6],
+      "uncertainties": [0.04],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr92",
+      "product": "Y91m",
+      "all_states": false,
+      "source": "EXFOR 22089-059-0, (N,X), Y.Ikeda 1988",
+      "energies_ev": [13570000, 14450000, 14700000, 14990000],
+      "values": [0.367, 1.0, 1.29, 1.65],
+      "uncertainties": [0.074, 0.37, 0.11, 0.13],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr92",
+      "product": "Y91m",
+      "all_states": false,
+      "source": "EXFOR 22822-007-0, (N,X), V.Semkova 2010",
+      "energies_ev": [14800000],
+      "values": [1.3],
+      "uncertainties": [0.1],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Hf180/Hf180m",
+  "title": "Hf180 to Hf180m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Hf180": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hf180",
+      "product": "Hf180m",
+      "all_states": false,
+      "source": "EXFOR 12092-004-0, (N,INL), M.Hillman 1969",
+      "energies_ev": [14500000],
+      "values": [12.4],
+      "uncertainties": [0.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hf180",
+      "product": "Hf180m",
+      "all_states": false,
+      "source": "EXFOR 22192-013-0, (N,INL), C.Konno 1990",
+      "energies_ev": [13560000, 13980000, 14430000, 14660000, 14930000],
+      "values": [13.3, 12.35, 12.22, 11.96, 11.9],
+      "uncertainties": [0.73, 0.69, 0.68, 0.66, 0.66],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hf180",
+      "product": "Hf180m",
+      "all_states": false,
+      "source": "EXFOR 22637-078-0, (N,INL), C.Konno 1993",
+      "energies_ev": [13560000, 13980000, 14420000, 14660000, 14920000],
+      "values": [13.03, 12.1, 11.97, 11.72, 11.65],
+      "uncertainties": [0.72, 0.67, 0.66, 0.65, 0.65],
+      "calculations": {}
+    }
+  ]
+}

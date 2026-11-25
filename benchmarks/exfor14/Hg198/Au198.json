@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Hg198/Au198",
+  "title": "Hg198 to Au198, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Hg198": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hg198",
+      "product": "Au198",
+      "all_states": true,
+      "source": "EXFOR 12219-006-0, (N,P), J.K.Temperley 1969",
+      "energies_ev": [14100000],
+      "values": [4.7],
+      "uncertainties": [0.3],
+      "calculations": {}
+    }
+  ]
+}

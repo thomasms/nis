@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Gd155/Eu154m",
+  "title": "Gd155 to Eu154m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Gd155": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Gd155",
+      "product": "Eu154m",
+      "all_states": false,
+      "source": "EXFOR 22809-005-0, (N,X), H.Sakane 2002",
+      "energies_ev": [14640000, 14870000],
+      "values": [0.048, 0.079],
+      "uncertainties": [0.012, 0.01896],
+      "calculations": {}
+    }
+  ]
+}

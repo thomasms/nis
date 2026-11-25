@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Y89/Sr87m",
+  "title": "Y89 to Sr87m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Y89": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Y89",
+      "product": "Sr87m",
+      "all_states": false,
+      "source": "EXFOR 10806-007-0, (N,T), T.W.Woo 1979",
+      "energies_ev": [14600000],
+      "values": [0.002],
+      "uncertainties": [0.0006],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Y89",
+      "product": "Sr87m",
+      "all_states": false,
+      "source": "EXFOR 20522-010-0, (N,T), S.M.Qaim 1973",
+      "energies_ev": [14700000],
+      "values": [0.0038],
+      "uncertainties": [0.001],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Y89",
+      "product": "Sr87m",
+      "all_states": false,
+      "source": "EXFOR 30169-006-0, (N,T), M.Diksic 1974",
+      "energies_ev": [14600000],
+      "values": [0.0154],
+      "uncertainties": [0.01],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Y89",
+      "product": "Sr87m",
+      "all_states": false,
+      "source": "EXFOR 32729-005-0, (N,T), Luo Junhua 2016",
+      "energies_ev": [14800000],
+      "values": [0.011],
+      "uncertainties": [0.002],
+      "calculations": {}
+    }
+  ]
+}

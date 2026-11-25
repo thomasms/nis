@@ -1,0 +1,87 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Hg198/Hg197m",
+  "title": "Hg198 to Hg197m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Hg198": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hg198",
+      "product": "Hg197m",
+      "all_states": false,
+      "source": "EXFOR 10244-011-0, (N,2N), A.K.Hankla 1972",
+      "energies_ev": [14400000],
+      "values": [885.0],
+      "uncertainties": [80.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hg198",
+      "product": "Hg197m",
+      "all_states": false,
+      "source": "EXFOR 12219-004-0, (N,2N), J.K.Temperley 1969",
+      "energies_ev": [14100000],
+      "values": [900.0],
+      "uncertainties": [70.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hg198",
+      "product": "Hg197m",
+      "all_states": false,
+      "source": "EXFOR 20536-034-0, (N,2N), S.M.Qaim 1972",
+      "energies_ev": [14700000],
+      "values": [910.0],
+      "uncertainties": [85.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hg198",
+      "product": "Hg197m",
+      "all_states": false,
+      "source": "EXFOR 23018-006-0, (N,2N), Y.Kasugai 2001",
+      "energies_ev": [13680000, 14020000, 14370000, 14680000, 14940000],
+      "values": [910.0, 930.0, 930.0, 960.0, 960.0],
+      "uncertainties": [60.0, 60.0, 60.0, 70.0, 70.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hg198",
+      "product": "Hg197m",
+      "all_states": false,
+      "source": "EXFOR 31865-002-1, (N,2N), S.R.Palvanov 2023",
+      "energies_ev": [14100000],
+      "values": [900.0],
+      "uncertainties": [70.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hg198",
+      "product": "Hg197m",
+      "all_states": false,
+      "source": "EXFOR 32781-005-1, (N,2N), Junhua Luo 2018",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [987.0, 1053.0, 1169.0],
+      "uncertainties": [52.0, 55.0, 60.0],
+      "calculations": {}
+    }
+  ]
+}

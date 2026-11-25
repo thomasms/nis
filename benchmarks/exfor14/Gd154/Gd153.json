@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Gd154/Gd153",
+  "title": "Gd154 to Gd153, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Gd154": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Gd154",
+      "product": "Gd153",
+      "all_states": true,
+      "source": "EXFOR 20541-034-0, (N,2N), S.M.Qaim 1974",
+      "energies_ev": [14700000],
+      "values": [1995.0],
+      "uncertainties": [280.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Gd154",
+      "product": "Gd153",
+      "all_states": true,
+      "source": "EXFOR 20802-005-0, (N,2N), W.Dilg 1968",
+      "energies_ev": [14700000],
+      "values": [1855.0],
+      "uncertainties": [140.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Gd154",
+      "product": "Gd153",
+      "all_states": true,
+      "source": "EXFOR 21609-019-0, (N,2N), H.Weigel 1975",
+      "energies_ev": [14300000],
+      "values": [750.0],
+      "uncertainties": [63.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Gd154",
+      "product": "Gd153",
+      "all_states": true,
+      "source": "EXFOR 32680-003-0, (N,2N), Junhua Luo 2010",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [1850.0, 1910.0, 2001.0],
+      "uncertainties": [155.0, 165.0, 108.0],
+      "calculations": {}
+    }
+  ]
+}

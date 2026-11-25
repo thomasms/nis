@@ -1,0 +1,195 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ce140/La140",
+  "title": "Ce140 to La140, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ce140": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "La140",
+      "all_states": true,
+      "source": "EXFOR 10145-021-0, (N,P), W.D.Lu 1970",
+      "energies_ev": [14400000],
+      "values": [6.3],
+      "uncertainties": [0.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "La140",
+      "all_states": true,
+      "source": "EXFOR 12033-012-0, (N,P), R.G.Wille 1960",
+      "energies_ev": [14800000],
+      "values": [10.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "La140",
+      "all_states": true,
+      "source": "EXFOR 12872-003-0, (N,P), A.Bari 1982",
+      "energies_ev": [14800000],
+      "values": [8.1],
+      "uncertainties": [0.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "La140",
+      "all_states": true,
+      "source": "EXFOR 20509-008-0, (N,P), E.Havlik 1971",
+      "energies_ev": [14700000],
+      "values": [6.45],
+      "uncertainties": [1.15],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "La140",
+      "all_states": true,
+      "source": "EXFOR 20716-002-0, (N,P), S.M.Qaim 1976",
+      "energies_ev": [14700000],
+      "values": [6.5],
+      "uncertainties": [0.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "La140",
+      "all_states": true,
+      "source": "EXFOR 21289-008-0, (N,P), P.Cuzzocrea 1967",
+      "energies_ev": [14000000],
+      "values": [7.71],
+      "uncertainties": [0.85],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "La140",
+      "all_states": true,
+      "source": "EXFOR 21440-012-0, (N,P), R.F.Coleman 1959",
+      "energies_ev": [14500000],
+      "values": [12.1],
+      "uncertainties": [1.21],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "La140",
+      "all_states": true,
+      "source": "EXFOR 22393-007-0, (N,P), Y.Kasugai 1997",
+      "energies_ev": [13700000, 14030000, 14360000, 14660000, 14950000],
+      "values": [5.5, 6.5, 6.5, 7.5, 8.2],
+      "uncertainties": [0.3, 0.3, 0.4, 0.4, 0.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "La140",
+      "all_states": true,
+      "source": "EXFOR 30777-006-1, (N,P), Teng Dan 1985",
+      "energies_ev": [13500000, 13770000, 14010000, 14300000, 14500000, 14680000, 14820000],
+      "values": [5.28, 5.83, 6.05, 6.74, 7.05, 7.47, 7.62],
+      "uncertainties": [0.35, 0.34, 0.34, 0.34, 0.43, 0.49, 0.54],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "La140",
+      "all_states": true,
+      "source": "EXFOR 30777-006-2, (N,P), Teng Dan 1985",
+      "energies_ev": [14070000],
+      "values": [6.28],
+      "uncertainties": [0.30772],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "La140",
+      "all_states": true,
+      "source": "EXFOR 31763-002-0, (N,P), Xiangzhong Kong 1997",
+      "energies_ev": [14700000],
+      "values": [7.8],
+      "uncertainties": [0.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "La140",
+      "all_states": true,
+      "source": "EXFOR 32752-005-0, (N,P), Junhua Luo 2015",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [5.8, 7.0, 8.6],
+      "uncertainties": [0.5, 0.6, 0.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "La140",
+      "all_states": true,
+      "source": "EXFOR 32768-006-0, (N,P), Qiang Wang 2019",
+      "energies_ev": [14200000, 14900000],
+      "values": [6.71, 8.17],
+      "uncertainties": [0.37, 0.42],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "La140",
+      "all_states": true,
+      "source": "EXFOR 41240-097-0, (N,P), A.A.Filatenkov 1999",
+      "energies_ev": [13640000, 13880000, 14050000, 14280000, 14470000, 14680000, 14860000],
+      "values": [5.8, 6.31, 6.74, 6.99, 7.45, 7.75, 7.93],
+      "uncertainties": [0.22, 0.22, 0.23, 0.23, 0.24, 0.25, 0.25],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "La140",
+      "all_states": true,
+      "source": "EXFOR 41614-160-0, (N,P), A.A.Filatenkov 2016",
+      "energies_ev": [13640000, 13880000, 14050000, 14280000, 14470000, 14680000, 14860000],
+      "values": [5.82, 6.35, 6.78, 7.0, 7.44, 7.75, 7.98],
+      "uncertainties": [0.2101, 0.20828, 0.21696, 0.2149, 0.22246, 0.23173, 0.23222],
+      "calculations": {}
+    }
+  ]
+}

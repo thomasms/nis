@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Fe58/He4",
+  "title": "Fe58 to He4, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Fe58": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Fe58",
+      "product": "He4",
+      "all_states": true,
+      "source": "EXFOR 10933-029-0, (N,X), D.W.Kneff 1986",
+      "energies_ev": [14800000],
+      "values": [20.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Fe58",
+      "product": "He4",
+      "all_states": true,
+      "source": "EXFOR 40514-009-0, (N,X), G.P.Dolya 1975",
+      "energies_ev": [14700000],
+      "values": [29.0],
+      "uncertainties": [4.4],
+      "calculations": {}
+    }
+  ]
+}

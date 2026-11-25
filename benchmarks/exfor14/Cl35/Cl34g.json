@@ -1,0 +1,87 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cl35/Cl34g",
+  "title": "Cl35 to Cl34g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cl35": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "Cl34",
+      "all_states": false,
+      "source": "EXFOR 11520-006-0, (N,2N), D.M.Arnold 1965",
+      "energies_ev": [13940000, 14350000, 14910000],
+      "values": [21.5, 26.0, 25.0],
+      "uncertainties": [3.4, 4.4, 4.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "Cl34",
+      "all_states": false,
+      "source": "EXFOR 11550-003-0, (N,2N), R.S.Scalan 1958",
+      "energies_ev": [14800000],
+      "values": [2.8],
+      "uncertainties": [0.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "Cl34",
+      "all_states": false,
+      "source": "EXFOR 21503-002-0, (N,2N), M.Bormann 1967",
+      "energies_ev": [14890000],
+      "values": [5.1],
+      "uncertainties": [0.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "Cl34",
+      "all_states": false,
+      "source": "EXFOR 30014-003-0, (N,2N), R.Prasad 1967",
+      "energies_ev": [14800000],
+      "values": [7.3],
+      "uncertainties": [1.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "Cl34",
+      "all_states": false,
+      "source": "EXFOR 30100-003-0, (N,2N), G.Peto 1968",
+      "energies_ev": [15000000],
+      "values": [1.7],
+      "uncertainties": [0.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "Cl34",
+      "all_states": false,
+      "source": "EXFOR 30322-005-0, (N,2N), J.Janczyszyn 1973",
+      "energies_ev": [14000000],
+      "values": [12.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sn124/Sn123g",
+  "title": "Sn124 to Sn123g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sn124": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn124",
+      "product": "Sn123",
+      "all_states": false,
+      "source": "EXFOR 32867-005-0, (N,2N), B.Liu 2022",
+      "energies_ev": [13600000],
+      "values": [1218.9],
+      "uncertainties": [120.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn124",
+      "product": "Sn123",
+      "all_states": false,
+      "source": "EXFOR 41614-136-0, (N,2N), A.A.Filatenkov 2016",
+      "energies_ev": [13880000, 14050000, 14280000, 14490000, 14700000, 14880000],
+      "values": [1256.0, 1331.0, 1299.0, 1253.0, 1228.0, 1315.0],
+      "uncertainties": [234.87, 258.21, 249.41, 229.3, 208.76, 251.17],
+      "calculations": {}
+    }
+  ]
+}

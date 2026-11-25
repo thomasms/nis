@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "H2/H3",
+  "title": "H2 to H3, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "H2": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "H2",
+      "product": "H3",
+      "all_states": true,
+      "source": "EXFOR 30005-003-0, (N,G), M.Cerineo 1961",
+      "energies_ev": [14400000],
+      "values": [0.0294],
+      "uncertainties": [0.0058],
+      "calculations": {}
+    }
+  ]
+}

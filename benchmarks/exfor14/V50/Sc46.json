@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "V50/Sc46",
+  "title": "V50 to Sc46, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "V50": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "V50",
+      "product": "Sc46",
+      "all_states": true,
+      "source": "EXFOR 41424-005-0, (N,N+A), A.A.Filatenkov 2001",
+      "energies_ev": [14820000],
+      "values": [0.26],
+      "uncertainties": [0.06],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "V50",
+      "product": "Sc46",
+      "all_states": true,
+      "source": "EXFOR 41614-012-0, (N,N+A), A.A.Filatenkov 2016",
+      "energies_ev": [13650000, 14820000],
+      "values": [0.026, 0.262],
+      "uncertainties": [0.019994, 0.06026],
+      "calculations": {}
+    }
+  ]
+}

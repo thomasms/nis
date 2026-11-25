@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Mo94/Nb94",
+  "title": "Mo94 to Nb94, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Mo94": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo94",
+      "product": "Nb94",
+      "all_states": true,
+      "source": "EXFOR 12976-002-0, (N,P), L.R.Greenwood 1987",
+      "energies_ev": [14550000, 14780000],
+      "values": [57.2, 53.1],
+      "uncertainties": [5.72, 5.31],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo94",
+      "product": "Nb94",
+      "all_states": true,
+      "source": "EXFOR 13166-011-0, (N,P), L.R.Greenwood 1990",
+      "energies_ev": [14800000],
+      "values": [55.0],
+      "uncertainties": [6.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo94",
+      "product": "Nb94",
+      "all_states": true,
+      "source": "EXFOR 22658-006-0, (N,P), Y.Ikeda 1996",
+      "energies_ev": [14100000, 14800000],
+      "values": [58.0, 54.0],
+      "uncertainties": [9.0, 12.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo94",
+      "product": "Nb94",
+      "all_states": true,
+      "source": "EXFOR 31521-003-0, (N,P), Xiangzhong Kong 1998",
+      "energies_ev": [14700000],
+      "values": [54.3],
+      "uncertainties": [5.4],
+      "calculations": {}
+    }
+  ]
+}

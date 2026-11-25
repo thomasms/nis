@@ -9,6 +9,7 @@ from .reactiontests import *
 from .fissiontests import *
 from .scripttests import *
 from .crosssectiontests import *
+from .exfor14tests import *
 from .processingtests import *
 from .fnstests import *
 from .fissionheattests import *

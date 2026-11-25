@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ca48/Ca49",
+  "title": "Ca48 to Ca49, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ca48": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca48",
+      "product": "Ca49",
+      "all_states": true,
+      "source": "EXFOR 30067-007-0, (N,G), J.Csikai 1967",
+      "energies_ev": [14700000],
+      "values": [0.26],
+      "uncertainties": [0.08],
+      "calculations": {}
+    }
+  ]
+}

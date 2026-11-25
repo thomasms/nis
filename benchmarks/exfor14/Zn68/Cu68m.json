@@ -1,0 +1,207 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Zn68/Cu68m",
+  "title": "Zn68 to Cu68m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Zn68": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Cu68m",
+      "all_states": false,
+      "source": "EXFOR 10776-008-0, (N,P), R.A.Sigg 1976",
+      "energies_ev": [14600000],
+      "values": [6.5],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Cu68m",
+      "all_states": false,
+      "source": "EXFOR 13597-006-0, (N,P), S.K.Ghorai 1995",
+      "energies_ev": [14200000],
+      "values": [5.0],
+      "uncertainties": [0.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Cu68m",
+      "all_states": false,
+      "source": "EXFOR 21902-004-0, (N,P), J.L.Barreira Filho 1982",
+      "energies_ev": [14400000],
+      "values": [3.6],
+      "uncertainties": [0.18],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Cu68m",
+      "all_states": false,
+      "source": "EXFOR 21976-020-0, (N,P), B.Anders 1985",
+      "energies_ev": [14700000],
+      "values": [6.1],
+      "uncertainties": [0.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Cu68m",
+      "all_states": false,
+      "source": "EXFOR 22187-014-0, (N,P), K.Kawade 1990",
+      "energies_ev": [13700000, 14010000, 14350000, 14640000, 14870000],
+      "values": [4.2, 4.2, 4.9, 4.6, 5.5],
+      "uncertainties": [0.924, 0.924, 1.078, 1.012, 1.32],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Cu68m",
+      "all_states": false,
+      "source": "EXFOR 22338-023-0, (N,P), A.Ercan 1991",
+      "energies_ev": [14600000],
+      "values": [5.0],
+      "uncertainties": [0.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Cu68m",
+      "all_states": false,
+      "source": "EXFOR 22433-014-0, (N,P), Y.Kasugai 1998",
+      "energies_ev": [13700000, 14010000, 14350000, 14640000, 14870000],
+      "values": [4.2, 4.2, 4.9, 4.6, 5.5],
+      "uncertainties": [0.924, 0.924, 1.078, 1.012, 1.32],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Cu68m",
+      "all_states": false,
+      "source": "EXFOR 30394-005-0, (N,P), V.K.Tikku 1973",
+      "energies_ev": [14700000],
+      "values": [4.5],
+      "uncertainties": [0.08],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Cu68m",
+      "all_states": false,
+      "source": "EXFOR 30642-004-0, (N,P), C.V.Srinivasa Rao 1982",
+      "energies_ev": [14200000],
+      "values": [7.3],
+      "uncertainties": [1.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Cu68m",
+      "all_states": false,
+      "source": "EXFOR 30644-021-0, (N,P), M.Viennot 1982",
+      "energies_ev": [13770000, 14110000, 14470000, 14730000, 14830000],
+      "values": [2.0, 1.6, 2.0, 1.3, 2.2],
+      "uncertainties": [0.2, 0.1, 0.2, 0.1, 0.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Cu68m",
+      "all_states": false,
+      "source": "EXFOR 30978-012-0, (N,P), M.Viennot 1991",
+      "energies_ev": [13770000, 14110000, 14470000, 14830000],
+      "values": [3.4, 3.3, 3.8, 4.8],
+      "uncertainties": [0.1, 0.1, 0.1, 0.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Cu68m",
+      "all_states": false,
+      "source": "EXFOR 31460-005-0, (N,P), D.Kielan 1995",
+      "energies_ev": [13900000, 14500000, 15000000],
+      "values": [3.1, 3.2, 3.5],
+      "uncertainties": [0.6, 0.6, 0.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Cu68m",
+      "all_states": false,
+      "source": "EXFOR 33034-005-0, (N,P), B.Lalremruata 2012",
+      "energies_ev": [14800000],
+      "values": [4.05],
+      "uncertainties": [0.48],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Cu68m",
+      "all_states": false,
+      "source": "EXFOR 33196-003-0, (N,P), T.S.Ganesapandy 2023",
+      "energies_ev": [14770000],
+      "values": [4.51],
+      "uncertainties": [0.36071],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Cu68m",
+      "all_states": false,
+      "source": "EXFOR 41240-078-0, (N,P), A.A.Filatenkov 1999",
+      "energies_ev": [13660000, 13880000, 14040000, 14260000, 14440000, 14630000, 14810000],
+      "values": [3.68, 3.87, 4.47, 4.75, 4.66, 4.71, 4.52],
+      "uncertainties": [0.23, 0.29, 0.26, 0.47, 0.3, 0.34, 0.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Cu68m",
+      "all_states": false,
+      "source": "EXFOR 41614-034-0, (N,P), A.A.Filatenkov 2016",
+      "energies_ev": [13660000, 13880000, 14040000, 14260000, 14440000, 14630000, 14810000],
+      "values": [3.58, 3.77, 4.32, 4.59, 4.54, 4.6, 4.38],
+      "uncertainties": [0.21194, 0.27257, 0.2363, 0.44477, 0.27739, 0.31878, 0.27594],
+      "calculations": {}
+    }
+  ]
+}

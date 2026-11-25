@@ -1,0 +1,99 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ba138/Xe135g",
+  "title": "Ba138 to Xe135g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ba138": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba138",
+      "product": "Xe135",
+      "all_states": false,
+      "source": "EXFOR 10145-033-0, (N,A), W.D.Lu 1970",
+      "energies_ev": [14400000],
+      "values": [2.0],
+      "uncertainties": [0.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba138",
+      "product": "Xe135",
+      "all_states": false,
+      "source": "EXFOR 20289-007-0, (N,A), F.Fukuzawa 1961",
+      "energies_ev": [14100000],
+      "values": [13.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba138",
+      "product": "Xe135",
+      "all_states": false,
+      "source": "EXFOR 20811-014-0, (N,A), O.Schwerer 1976",
+      "energies_ev": [14600000],
+      "values": [0.94],
+      "uncertainties": [0.15],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba138",
+      "product": "Xe135",
+      "all_states": false,
+      "source": "EXFOR 21289-002-0, (N,A), P.Cuzzocrea 1967",
+      "energies_ev": [14000000],
+      "values": [3.6],
+      "uncertainties": [0.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba138",
+      "product": "Xe135",
+      "all_states": false,
+      "source": "EXFOR 30557-003-0, (N,A), N.Lakshmana Das 1980",
+      "energies_ev": [14200000],
+      "values": [2.36],
+      "uncertainties": [0.31],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba138",
+      "product": "Xe135",
+      "all_states": false,
+      "source": "EXFOR 30938-006-0, (N,A), J.Rama Rao 1986",
+      "energies_ev": [14000000],
+      "values": [2.21],
+      "uncertainties": [0.25],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba138",
+      "product": "Xe135",
+      "all_states": false,
+      "source": "EXFOR 32502-004-0, (N,A), Fan Yangmei 1988",
+      "energies_ev": [14700000],
+      "values": [1.5],
+      "uncertainties": [0.1],
+      "calculations": {}
+    }
+  ]
+}

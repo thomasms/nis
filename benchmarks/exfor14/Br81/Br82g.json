@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Br81/Br82g",
+  "title": "Br81 to Br82g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Br81": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Br81",
+      "product": "Br82",
+      "all_states": false,
+      "source": "EXFOR 20673-024-0, (N,G), M.Valkonen 1976",
+      "energies_ev": [14700000],
+      "values": [0.9],
+      "uncertainties": [0.3],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Mo96/H1",
+  "title": "Mo96 to H1, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Mo96": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo96",
+      "product": "H1",
+      "all_states": true,
+      "source": "EXFOR 10960-017-0, (N,X), R.C.Haight 1981",
+      "energies_ev": [14800000],
+      "values": [64.0],
+      "uncertainties": [8.0],
+      "calculations": {}
+    }
+  ]
+}

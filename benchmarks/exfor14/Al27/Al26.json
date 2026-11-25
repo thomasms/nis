@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Al27/Al26",
+  "title": "Al27 to Al26, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Al27": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Al27",
+      "product": "Al26",
+      "all_states": true,
+      "source": "EXFOR 32935-002-0, (N,2N), Xianlin Yang 2024",
+      "energies_ev": [13610000, 13680000, 13700000, 13860000, 13950000, 13990000, 14100000, 14170000, 14370000, 14510000, 14800000, 14910000],
+      "values": [0.29, 0.36, 0.8, 2.26, 3.1, 5.11, 7.27, 10.13, 13.79, 19.0, 30.6, 37.2],
+      "uncertainties": [0.15, 0.15, 0.24, 0.55, 0.63, 0.97, 1.2, 1.1, 1.42, 1.92, 2.72, 2.8],
+      "calculations": {}
+    }
+  ]
+}

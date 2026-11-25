@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ce142/Ce143",
+  "title": "Ce142 to Ce143, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ce142": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce142",
+      "product": "Ce143",
+      "all_states": true,
+      "source": "EXFOR 20670-015-0, (N,G), O.Schwerer 1976.0",
+      "energies_ev": [14600000],
+      "values": [1.11],
+      "uncertainties": [0.17],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce142",
+      "product": "Ce143",
+      "all_states": true,
+      "source": "EXFOR 32768-010-0, (N,G), Qiang Wang 2019.0",
+      "energies_ev": [14200000, 14900000],
+      "values": [1.3, 1.36],
+      "uncertainties": [0.13, 0.14],
+      "calculations": {}
+    }
+  ]
+}

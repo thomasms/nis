@@ -1,0 +1,207 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ge70/Ge69",
+  "title": "Ge70 to Ge69, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ge70": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge70",
+      "product": "Ge69",
+      "all_states": true,
+      "source": "EXFOR 11274-045-0, (N,2N), E.B.Paul 1953",
+      "energies_ev": [14500000],
+      "values": [666.0],
+      "uncertainties": [233.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge70",
+      "product": "Ge69",
+      "all_states": true,
+      "source": "EXFOR 11328-016-0, (N,2N), L.A.Rayburn 1961",
+      "energies_ev": [14400000],
+      "values": [598.0],
+      "uncertainties": [44.85],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge70",
+      "product": "Ge69",
+      "all_states": true,
+      "source": "EXFOR 11645-008-0, (N,2N), R.J.Prestwood 1961",
+      "energies_ev": [13690000, 13880000, 14010000, 14310000, 14500000, 14680000, 14810000, 14930000],
+      "values": [461.0, 509.0, 508.0, 607.0, 621.0, 664.0, 716.0, 681.0],
+      "uncertainties": [14.0, 15.0, 15.0, 18.0, 19.0, 20.0, 21.0, 20.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge70",
+      "product": "Ge69",
+      "all_states": true,
+      "source": "EXFOR 11825-002-0, (N,2N), R.E.Wood 1967",
+      "energies_ev": [14400000],
+      "values": [648.0],
+      "uncertainties": [100.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge70",
+      "product": "Ge69",
+      "all_states": true,
+      "source": "EXFOR 20536-013-0, (N,2N), S.M.Qaim 1972",
+      "energies_ev": [14700000],
+      "values": [588.0],
+      "uncertainties": [75.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge70",
+      "product": "Ge69",
+      "all_states": true,
+      "source": "EXFOR 20770-002-0, (N,2N), R.Rieppo 1976",
+      "energies_ev": [14700000],
+      "values": [575.0],
+      "uncertainties": [13.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge70",
+      "product": "Ge69",
+      "all_states": true,
+      "source": "EXFOR 21609-006-0, (N,2N), H.Weigel 1975",
+      "energies_ev": [14300000],
+      "values": [569.0],
+      "uncertainties": [60.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge70",
+      "product": "Ge69",
+      "all_states": true,
+      "source": "EXFOR 22637-012-0, (N,2N), C.Konno 1993",
+      "energies_ev": [13990000, 14450000, 14960000],
+      "values": [407.0, 499.0, 587.0],
+      "uncertainties": [49.0, 60.0, 71.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge70",
+      "product": "Ge69",
+      "all_states": true,
+      "source": "EXFOR 30577-014-0, (N,2N), N.I.Molla 1983",
+      "energies_ev": [14800000],
+      "values": [608.0],
+      "uncertainties": [92.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge70",
+      "product": "Ge69",
+      "all_states": true,
+      "source": "EXFOR 30755-009-0, (N,2N), Zhou Muyao 1987",
+      "energies_ev": [14600000],
+      "values": [550.0],
+      "uncertainties": [16.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge70",
+      "product": "Ge69",
+      "all_states": true,
+      "source": "EXFOR 31247-007-0, (N,2N), C.S.Khurana 1961",
+      "energies_ev": [14800000],
+      "values": [1600.0],
+      "uncertainties": [240.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge70",
+      "product": "Ge69",
+      "all_states": true,
+      "source": "EXFOR 31434-006-0, (N,2N), H.M.Hoang 1992",
+      "energies_ev": [13900000, 14500000, 15000000],
+      "values": [392.0, 489.0, 521.0],
+      "uncertainties": [61.0, 76.0, 82.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge70",
+      "product": "Ge69",
+      "all_states": true,
+      "source": "EXFOR 31628-003-0, (N,2N), Pu Zhong-Sheng 2006",
+      "energies_ev": [13500000, 14100000, 14600000],
+      "values": [273.0, 340.0, 401.0],
+      "uncertainties": [47.0, 52.0, 60.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge70",
+      "product": "Ge69",
+      "all_states": true,
+      "source": "EXFOR 31654-002-0, (N,2N), Changlin Lan 2008",
+      "energies_ev": [13600000, 14100000],
+      "values": [350.9, 456.8],
+      "uncertainties": [32.2, 47.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge70",
+      "product": "Ge69",
+      "all_states": true,
+      "source": "EXFOR 32218-007-0, (N,2N), N.R.Dzysiuk 2007",
+      "energies_ev": [14530000],
+      "values": [470.0],
+      "uncertainties": [80.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge70",
+      "product": "Ge69",
+      "all_states": true,
+      "source": "EXFOR 32231-002-0, (N,2N), S.V.Begun 2007",
+      "energies_ev": [13960000],
+      "values": [420.0],
+      "uncertainties": [30.0],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Lu176/Tm173",
+  "title": "Lu176 to Tm173, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Lu176": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Lu176",
+      "product": "Tm173",
+      "all_states": true,
+      "source": "EXFOR 20595-008-0, (N,A), T.Sato 1975",
+      "energies_ev": [14600000],
+      "values": [2.3],
+      "uncertainties": [0.57],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Lu176",
+      "product": "Tm173",
+      "all_states": true,
+      "source": "EXFOR 21997-025-0, (N,A), S.M.Qaim 1984",
+      "energies_ev": [14700000],
+      "values": [1.1],
+      "uncertainties": [0.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Lu176",
+      "product": "Tm173",
+      "all_states": true,
+      "source": "EXFOR 32219-009-0, (N,A), N.Dzysiuk 2010",
+      "energies_ev": [14600000],
+      "values": [1.6],
+      "uncertainties": [0.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Lu176",
+      "product": "Tm173",
+      "all_states": true,
+      "source": "EXFOR 32254-006-0, (N,A), A.M.Savrasov 2024",
+      "energies_ev": [14600000],
+      "values": [2.78],
+      "uncertainties": [0.38],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Lu176",
+      "product": "Tm173",
+      "all_states": true,
+      "source": "EXFOR 32690-003-0, (N,A), Junhua Luo 2011",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [0.704, 0.876, 0.919],
+      "uncertainties": [0.049, 0.07, 0.046],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Lu176",
+      "product": "Tm173",
+      "all_states": true,
+      "source": "EXFOR 32934-004-0, (N,A), Yueli Song 2024",
+      "energies_ev": [13570000, 14030000, 14620000, 14860000],
+      "values": [0.61, 0.79, 0.96, 1.0],
+      "uncertainties": [0.04, 0.05, 0.06, 0.06],
+      "calculations": {}
+    }
+  ]
+}

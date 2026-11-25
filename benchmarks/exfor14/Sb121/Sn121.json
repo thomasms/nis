@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sb121/Sn121",
+  "title": "Sb121 to Sn121, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sb121": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb121",
+      "product": "Sn121",
+      "all_states": true,
+      "source": "EXFOR 40029-006-0, (N,P), V.N.Levkovskii 1971",
+      "energies_ev": [14800000],
+      "values": [2.2],
+      "uncertainties": [0.4],
+      "calculations": {}
+    }
+  ]
+}

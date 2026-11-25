@@ -1,0 +1,135 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ce136/Ce135",
+  "title": "Ce136 to Ce135, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ce136": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce136",
+      "product": "Ce135",
+      "all_states": true,
+      "source": "EXFOR 10431-041-0, (N,2N), A.Bari 1972",
+      "energies_ev": [14800000],
+      "values": [1623.0],
+      "uncertainties": [154.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce136",
+      "product": "Ce135",
+      "all_states": true,
+      "source": "EXFOR 10497-040-0, (N,2N), W.D.Lu 1970",
+      "energies_ev": [14400000],
+      "values": [1318.0],
+      "uncertainties": [90.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce136",
+      "product": "Ce135",
+      "all_states": true,
+      "source": "EXFOR 20541-002-0, (N,2N), S.M.Qaim 1974",
+      "energies_ev": [14700000],
+      "values": [1604.0],
+      "uncertainties": [148.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce136",
+      "product": "Ce135",
+      "all_states": true,
+      "source": "EXFOR 30777-005-1, (N,2N), Teng Dan 1985",
+      "energies_ev": [13500000, 13770000, 14010000, 14300000, 14500000, 14680000, 14820000],
+      "values": [1138.0, 1202.0, 1210.0, 1303.0, 1330.0, 1315.0, 1361.0],
+      "uncertainties": [56.0, 48.0, 45.0, 48.0, 57.0, 64.0, 74.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce136",
+      "product": "Ce135",
+      "all_states": true,
+      "source": "EXFOR 30777-005-2, (N,2N), Teng Dan 1985",
+      "energies_ev": [14070000],
+      "values": [1244.0],
+      "uncertainties": [39.808],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce136",
+      "product": "Ce135",
+      "all_states": true,
+      "source": "EXFOR 31763-009-0, (N,2N), Xiangzhong Kong 1997",
+      "energies_ev": [14700000],
+      "values": [1625.0],
+      "uncertainties": [90.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce136",
+      "product": "Ce135",
+      "all_states": true,
+      "source": "EXFOR 32752-002-0, (N,2N), Junhua Luo 2015",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [1253.0, 1358.0, 1456.0],
+      "uncertainties": [76.0, 81.0, 73.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce136",
+      "product": "Ce135",
+      "all_states": true,
+      "source": "EXFOR 32768-002-0, (N,2N), Qiang Wang 2019",
+      "energies_ev": [14200000, 14900000],
+      "values": [1423.0, 1533.0],
+      "uncertainties": [83.0, 81.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce136",
+      "product": "Ce135",
+      "all_states": true,
+      "source": "EXFOR 41240-095-0, (N,2N), A.A.Filatenkov 1999",
+      "energies_ev": [13640000, 13880000, 14050000, 14280000, 14470000, 14680000, 14860000],
+      "values": [1318.0, 1340.0, 1399.0, 1450.0, 1480.0, 1500.0, 1532.0],
+      "uncertainties": [95.0, 98.0, 100.0, 106.0, 108.0, 109.0, 109.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce136",
+      "product": "Ce135",
+      "all_states": true,
+      "source": "EXFOR 41614-158-0, (N,2N), A.A.Filatenkov 2016",
+      "energies_ev": [13640000, 13880000, 14050000, 14280000, 14470000, 14680000, 14860000],
+      "values": [1324.0, 1349.0, 1406.0, 1452.0, 1478.0, 1500.0, 1542.0],
+      "uncertainties": [94.136, 97.398, 99.123, 104.69, 106.42, 107.55, 108.09],
+      "calculations": {}
+    }
+  ]
+}

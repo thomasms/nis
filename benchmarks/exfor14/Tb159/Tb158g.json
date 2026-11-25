@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Tb159/Tb158g",
+  "title": "Tb159 to Tb158g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Tb159": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tb159",
+      "product": "Tb158",
+      "all_states": false,
+      "source": "EXFOR 20541-037-0, (N,2N), S.M.Qaim 1974",
+      "energies_ev": [14700000],
+      "values": [1350.0],
+      "uncertainties": [185.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tb159",
+      "product": "Tb158",
+      "all_states": false,
+      "source": "EXFOR 31406-005-0, (N,2N), Lu Hanlin 1991",
+      "energies_ev": [14190000, 14770000],
+      "values": [1980.0, 1968.0],
+      "uncertainties": [56.0, 58.0],
+      "calculations": {}
+    }
+  ]
+}

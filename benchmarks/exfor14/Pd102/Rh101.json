@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Pd102/Rh101",
+  "title": "Pd102 to Rh101, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Pd102": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd102",
+      "product": "Rh101",
+      "all_states": true,
+      "source": "EXFOR 41614-092-0, (N,X), A.A.Filatenkov 2016",
+      "energies_ev": [14050000, 14490000],
+      "values": [293.0, 339.0],
+      "uncertainties": [70.906, 82.377],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ge74/Ga73",
+  "title": "Ge74 to Ga73, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ge74": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge74",
+      "product": "Ga73",
+      "all_states": true,
+      "source": "EXFOR 11651-004-0, (N,X), L.D.Webber 1968",
+      "energies_ev": [14700000],
+      "values": [0.67],
+      "uncertainties": [0.07],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge74",
+      "product": "Ga73",
+      "all_states": true,
+      "source": "EXFOR 22637-017-0, (N,X), C.Konno 1993",
+      "energies_ev": [13510000, 13990000, 14460000, 14980000],
+      "values": [0.791, 1.6, 2.63, 4.2],
+      "uncertainties": [0.08, 0.12, 0.19, 0.29],
+      "calculations": {}
+    }
+  ]
+}

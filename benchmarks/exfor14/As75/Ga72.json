@@ -1,0 +1,219 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "As75/Ga72",
+  "title": "As75 to Ga72, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "As75": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "As75",
+      "product": "Ga72",
+      "all_states": true,
+      "source": "EXFOR 10157-017-0, (N,A), P.Venugopala Rao 1971",
+      "energies_ev": [14400000],
+      "values": [13.5],
+      "uncertainties": [1.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "As75",
+      "product": "Ga72",
+      "all_states": true,
+      "source": "EXFOR 10776-012-0, (N,A), R.A.Sigg 1976",
+      "energies_ev": [14600000],
+      "values": [11.0],
+      "uncertainties": [0.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "As75",
+      "product": "Ga72",
+      "all_states": true,
+      "source": "EXFOR 11274-050-0, (N,A), E.B.Paul 1953",
+      "energies_ev": [14500000],
+      "values": [12.3],
+      "uncertainties": [2.214],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "As75",
+      "product": "Ga72",
+      "all_states": true,
+      "source": "EXFOR 11462-005-0, (N,A), B.P.Bayhurst 1961",
+      "energies_ev": [13690000, 14010000, 14310000, 14680000, 14930000],
+      "values": [9.2, 9.8, 10.4, 10.2, 10.0],
+      "uncertainties": [0.6, 0.7, 0.7, 0.7, 0.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "As75",
+      "product": "Ga72",
+      "all_states": true,
+      "source": "EXFOR 11590-030-0, (N,A), E.T.Bramlitt 1963",
+      "energies_ev": [14700000],
+      "values": [9.3],
+      "uncertainties": [3.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "As75",
+      "product": "Ga72",
+      "all_states": true,
+      "source": "EXFOR 20554-008-0, (N,A), S.M.Qaim 1971",
+      "energies_ev": [14700000],
+      "values": [9.5],
+      "uncertainties": [1.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "As75",
+      "product": "Ga72",
+      "all_states": true,
+      "source": "EXFOR 20898-012-0, (N,A), M.Bormann 1966",
+      "energies_ev": [14100000, 14880000],
+      "values": [12.5, 13.2],
+      "uncertainties": [1.0, 1.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "As75",
+      "product": "Ga72",
+      "all_states": true,
+      "source": "EXFOR 20899-007-0, (N,A), M.Bormann 1966",
+      "energies_ev": [14100000],
+      "values": [12.5],
+      "uncertainties": [1.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "As75",
+      "product": "Ga72",
+      "all_states": true,
+      "source": "EXFOR 22637-021-0, (N,A), C.Konno 1993",
+      "energies_ev": [13570000, 13750000, 13980000, 14230000, 14430000, 14670000, 14930000],
+      "values": [9.58, 9.73, 10.07, 10.51, 10.37, 10.24, 10.55],
+      "uncertainties": [0.49, 0.46, 0.49, 0.49, 0.49, 0.5, 0.51],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "As75",
+      "product": "Ga72",
+      "all_states": true,
+      "source": "EXFOR 30088-003-0, (N,A), P.Rama Prasad 1969",
+      "energies_ev": [14200000],
+      "values": [13.6],
+      "uncertainties": [1.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "As75",
+      "product": "Ga72",
+      "all_states": true,
+      "source": "EXFOR 30479-008-0, (N,A), U.Garuska 1978",
+      "energies_ev": [14600000],
+      "values": [12.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "As75",
+      "product": "Ga72",
+      "all_states": true,
+      "source": "EXFOR 30581-006-0, (N,A), E.Zupranska 1980",
+      "energies_ev": [13900000, 14500000],
+      "values": [10.1, 11.0],
+      "uncertainties": [0.6, 0.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "As75",
+      "product": "Ga72",
+      "all_states": true,
+      "source": "EXFOR 30938-003-0, (N,A), J.Rama Rao 1986",
+      "energies_ev": [14000000],
+      "values": [10.0],
+      "uncertainties": [0.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "As75",
+      "product": "Ga72",
+      "all_states": true,
+      "source": "EXFOR 31610-004-0, (N,A), Fei Tuo 2007",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [6.49, 9.58, 10.11],
+      "uncertainties": [0.29, 0.43, 0.46],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "As75",
+      "product": "Ga72",
+      "all_states": true,
+      "source": "EXFOR 33073-004-0, (N,A), O.N.Koul 1962",
+      "energies_ev": [14000000],
+      "values": [29.0],
+      "uncertainties": [2.9],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "As75",
+      "product": "Ga72",
+      "all_states": true,
+      "source": "EXFOR 33073-005-0, (N,A), O.N.Koul 1962",
+      "energies_ev": [14000000],
+      "values": [26.0],
+      "uncertainties": [2.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "As75",
+      "product": "Ga72",
+      "all_states": true,
+      "source": "EXFOR 40009-021-1, (N,A), G.P.Vinitskaya 1968",
+      "energies_ev": [14800000],
+      "values": [9.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    }
+  ]
+}

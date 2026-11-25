@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Hf178/Hf178n",
+  "title": "Hf178 to Hf178n, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Hf178": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hf178",
+      "product": "Hf178n",
+      "all_states": false,
+      "source": "EXFOR 22658-013-0, (N,INL), Y.Ikeda 1996",
+      "energies_ev": [14100000, 14800000],
+      "values": [0.11, 0.082],
+      "uncertainties": [0.03, 0.011],
+      "calculations": {}
+    }
+  ]
+}

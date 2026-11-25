@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ru102/Mo99",
+  "title": "Ru102 to Mo99, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ru102": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ru102",
+      "product": "Mo99",
+      "all_states": true,
+      "source": "EXFOR 10214-031-0, (N,A), J.K.Temperley 1970",
+      "energies_ev": [14100000],
+      "values": [3.4],
+      "uncertainties": [0.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ru102",
+      "product": "Mo99",
+      "all_states": true,
+      "source": "EXFOR 20513-034-0, (N,A), S.M.Qaim 1974",
+      "energies_ev": [14700000],
+      "values": [6.2],
+      "uncertainties": [0.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ru102",
+      "product": "Mo99",
+      "all_states": true,
+      "source": "EXFOR 31437-006-0, (N,A), D.Kielan 1993",
+      "energies_ev": [13900000, 14500000, 15000000],
+      "values": [6.0, 7.1, 7.6],
+      "uncertainties": [0.3, 0.3, 0.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ru102",
+      "product": "Mo99",
+      "all_states": true,
+      "source": "EXFOR 31632-011-0, (N,A), Junhua Luo 2007",
+      "energies_ev": [13500000, 14800000],
+      "values": [4.6, 6.4],
+      "uncertainties": [0.5, 0.2],
+      "calculations": {}
+    }
+  ]
+}

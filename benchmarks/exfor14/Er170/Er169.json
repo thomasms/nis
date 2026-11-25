@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Er170/Er169",
+  "title": "Er170 to Er169, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Er170": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er170",
+      "product": "Er169",
+      "all_states": true,
+      "source": "EXFOR 12033-049-0, (N,2N), R.G.Wille 1960",
+      "energies_ev": [14800000],
+      "values": [1200.0],
+      "uncertainties": [500.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er170",
+      "product": "Er169",
+      "all_states": true,
+      "source": "EXFOR 20058-003-0, (N,2N), H.Spenke 1964",
+      "energies_ev": [14800000],
+      "values": [1895.0],
+      "uncertainties": [265.3],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ba134/Cs134",
+  "title": "Ba134 to Cs134, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ba134": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba134",
+      "product": "Cs134",
+      "all_states": true,
+      "source": "EXFOR 22205-006-0, (N,P), J.Csikai 1991",
+      "energies_ev": [14500000],
+      "values": [6.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba134",
+      "product": "Cs134",
+      "all_states": true,
+      "source": "EXFOR 32845-003-0, (N,P), Yuan Junqian 1994",
+      "energies_ev": [14200000],
+      "values": [16.4],
+      "uncertainties": [1.4],
+      "calculations": {}
+    }
+  ]
+}

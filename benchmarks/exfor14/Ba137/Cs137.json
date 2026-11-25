@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ba137/Cs137",
+  "title": "Ba137 to Cs137, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ba137": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba137",
+      "product": "Cs137",
+      "all_states": true,
+      "source": "EXFOR 22205-008-0, (N,P), J.Csikai 1991",
+      "energies_ev": [14500000],
+      "values": [5.0],
+      "uncertainties": [1.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba137",
+      "product": "Cs137",
+      "all_states": true,
+      "source": "EXFOR 31451-002-0, (N,P), Lu Han-Lin 1994",
+      "energies_ev": [14800000],
+      "values": [8.8],
+      "uncertainties": [1.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba137",
+      "product": "Cs137",
+      "all_states": true,
+      "source": "EXFOR 31521-004-0, (N,P), Xiangzhong Kong 1998",
+      "energies_ev": [14200000],
+      "values": [10.6],
+      "uncertainties": [0.9],
+      "calculations": {}
+    }
+  ]
+}

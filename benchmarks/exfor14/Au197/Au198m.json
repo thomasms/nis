@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Au197/Au198m",
+  "title": "Au197 to Au198m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Au197": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Au197",
+      "product": "Au198m",
+      "all_states": false,
+      "source": "EXFOR 41000-002-0, (N,G), V.K.Maydanyuk 1987.0",
+      "energies_ev": [14600000],
+      "values": [0.5],
+      "uncertainties": [0.2],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cd111/Cd111m",
+  "title": "Cd111 to Cd111m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cd111": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd111",
+      "product": "Cd111m",
+      "all_states": false,
+      "source": "EXFOR 11761-006-0, (N,INL), J.K.Temperley 1968.0",
+      "energies_ev": [13840000, 13960000, 14070000, 14190000, 14320000, 14420000, 14600000, 14780000],
+      "values": [177.0, 166.0, 163.0, 162.0, 159.0, 145.0, 153.0, 154.0],
+      "uncertainties": [21.0, 20.0, 19.0, 19.0, 19.0, 17.0, 18.0, 18.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd111",
+      "product": "Cd111m",
+      "all_states": false,
+      "source": "EXFOR 21976-036-0, (N,INL), B.Anders 1985.0",
+      "energies_ev": [14700000],
+      "values": [134.0],
+      "uncertainties": [10.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd111",
+      "product": "Cd111m",
+      "all_states": false,
+      "source": "EXFOR 30156-008-0, (N,INL), E.Rurarz 1971.0",
+      "energies_ev": [14800000],
+      "values": [167.0],
+      "uncertainties": [17.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd111",
+      "product": "Cd111m",
+      "all_states": false,
+      "source": "EXFOR 30443-003-0, (N,INL), M.Herman nan",
+      "energies_ev": [13900000, 14500000, 15000000],
+      "values": [145.0, 149.0, 149.0],
+      "uncertainties": [20.0, 27.0, 14.0],
+      "calculations": {}
+    }
+  ]
+}

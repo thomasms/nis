@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sm152/Pm152g",
+  "title": "Sm152 to Pm152g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sm152": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sm152",
+      "product": "Pm152",
+      "all_states": false,
+      "source": "EXFOR 23183-002-1, (N,P), I.A.Reyhancan 2012",
+      "energies_ev": [13570000, 13750000, 14150000, 14520000, 14750000, 14830000],
+      "values": [2.85, 2.66, 2.81, 3.75, 4.83, 5.82],
+      "uncertainties": [0.77, 0.72, 0.76, 0.96, 1.21, 1.45],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sm152",
+      "product": "Pm152",
+      "all_states": false,
+      "source": "EXFOR 31439-002-1, (N,P), A.Kirov 1993",
+      "energies_ev": [14540000],
+      "values": [4.1],
+      "uncertainties": [0.4],
+      "calculations": {}
+    }
+  ]
+}

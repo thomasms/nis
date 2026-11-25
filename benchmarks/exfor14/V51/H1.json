@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "V51/H1",
+  "title": "V51 to H1, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "V51": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "V51",
+      "product": "H1",
+      "all_states": true,
+      "source": "EXFOR 10732-002-0, (N,X), S.M.Grimes 1978",
+      "energies_ev": [15000000],
+      "values": [91.0],
+      "uncertainties": [14.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "V51",
+      "product": "H1",
+      "all_states": true,
+      "source": "EXFOR 22467-012-0, (N,X), Kokooo 1999",
+      "energies_ev": [14100000],
+      "values": [84.3],
+      "uncertainties": [1.6],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Bi209/Tl206",
+  "title": "Bi209 to Tl206, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Bi209": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Bi209",
+      "product": "Tl206",
+      "all_states": true,
+      "source": "EXFOR 11274-098-0, (N,A), E.B.Paul 1953",
+      "energies_ev": [14500000],
+      "values": [1.2],
+      "uncertainties": [1.02],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Bi209",
+      "product": "Tl206",
+      "all_states": true,
+      "source": "EXFOR 21440-044-0, (N,A), R.F.Coleman 1959",
+      "energies_ev": [14500000],
+      "values": [0.52],
+      "uncertainties": [0.078],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Bi209",
+      "product": "Tl206",
+      "all_states": true,
+      "source": "EXFOR 22148-008-0, (N,A), T.B.Ryves 1990",
+      "energies_ev": [14300000],
+      "values": [0.57],
+      "uncertainties": [0.03078],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Bi209",
+      "product": "Tl206",
+      "all_states": true,
+      "source": "EXFOR 30127-009-0, (N,A), P.Kulisic 1965",
+      "energies_ev": [14600000],
+      "values": [1.0],
+      "uncertainties": [0.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Bi209",
+      "product": "Tl206",
+      "all_states": true,
+      "source": "EXFOR 31161-017-0, (N,A), S.K.Mukherjee 1961",
+      "energies_ev": [14800000],
+      "values": [0.6],
+      "uncertainties": [0.09],
+      "calculations": {}
+    }
+  ]
+}

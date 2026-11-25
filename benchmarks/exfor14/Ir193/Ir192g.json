@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ir193/Ir192g",
+  "title": "Ir193 to Ir192g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ir193": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ir193",
+      "product": "Ir192",
+      "all_states": false,
+      "source": "EXFOR 20536-025-0, (N,2N), S.M.Qaim 1972",
+      "energies_ev": [14700000],
+      "values": [2062.0],
+      "uncertainties": [121.0],
+      "calculations": {}
+    }
+  ]
+}

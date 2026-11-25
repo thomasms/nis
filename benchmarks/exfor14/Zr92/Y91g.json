@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Zr92/Y91g",
+  "title": "Zr92 to Y91g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Zr92": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr92",
+      "product": "Y91",
+      "all_states": false,
+      "source": "EXFOR 21784-008-0, (N,X), S.M.Qaim 1982",
+      "energies_ev": [14700000],
+      "values": [3.0],
+      "uncertainties": [1.2],
+      "calculations": {}
+    }
+  ]
+}

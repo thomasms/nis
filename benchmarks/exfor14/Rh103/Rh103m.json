@@ -1,0 +1,147 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Rh103/Rh103m",
+  "title": "Rh103 to Rh103m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Rh103": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Rh103m",
+      "all_states": false,
+      "source": "EXFOR 10386-005-0, (N,INL), D.C.Santry 1974",
+      "energies_ev": [13580000],
+      "values": [373.0],
+      "uncertainties": [92.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Rh103m",
+      "all_states": false,
+      "source": "EXFOR 10386-006-0, (N,INL), D.C.Santry 1974",
+      "energies_ev": [13580000, 13890000, 14240000, 14500000, 14740000],
+      "values": [359.0, 325.0, 297.0, 281.0, 272.0],
+      "uncertainties": [16.0, 15.0, 13.0, 13.0, 12.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Rh103m",
+      "all_states": false,
+      "source": "EXFOR 11697-002-0, (N,INL), W.G.Cross 1963",
+      "energies_ev": [14000000],
+      "values": [300.0],
+      "uncertainties": [40.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Rh103m",
+      "all_states": false,
+      "source": "EXFOR 11941-002-0, (N,INL), J.P.Butler 1968",
+      "energies_ev": [13580000, 13890000, 14240000, 14500000, 14760000],
+      "values": [351.0, 328.0, 290.0, 255.0, 262.0],
+      "uncertainties": [16.0, 15.0, 13.0, 13.0, 12.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Rh103m",
+      "all_states": false,
+      "source": "EXFOR 11941-004-0, (N,INL), J.P.Butler 1968",
+      "energies_ev": [13580000],
+      "values": [370.0],
+      "uncertainties": [92.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Rh103m",
+      "all_states": false,
+      "source": "EXFOR 14461-010-0, (N,INL), N.Fotiades 2016",
+      "energies_ev": [14040000],
+      "values": [163.7],
+      "uncertainties": [7.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Rh103m",
+      "all_states": false,
+      "source": "EXFOR 20198-014-0, (N,INL), W.Nagel 1966",
+      "energies_ev": [14200000],
+      "values": [507.0],
+      "uncertainties": [37.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Rh103m",
+      "all_states": false,
+      "source": "EXFOR 20198-015-0, (N,INL), W.Nagel 1966",
+      "energies_ev": [14200000],
+      "values": [445.0],
+      "uncertainties": [33.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Rh103m",
+      "all_states": false,
+      "source": "EXFOR 20864-002-0, (N,INL), A.Paulsen 1980",
+      "energies_ev": [14000000, 15000000],
+      "values": [286.0, 244.0],
+      "uncertainties": [27.17, 23.18],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Rh103m",
+      "all_states": false,
+      "source": "EXFOR 30116-003-0, (N,INL), A.Pazsit 1972",
+      "energies_ev": [14700000],
+      "values": [211.0],
+      "uncertainties": [19.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Rh103m",
+      "all_states": false,
+      "source": "EXFOR 30266-003-0, (N,INL), A.Pazsit 1975",
+      "energies_ev": [14800000],
+      "values": [216.0],
+      "uncertainties": [26.0],
+      "calculations": {}
+    }
+  ]
+}

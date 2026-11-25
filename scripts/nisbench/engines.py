@@ -10,6 +10,10 @@ each (target, product, all_states) of the case: the rate from the target to the 
 spectrum, over the total of the spectrum. This is the sum of all the reactions of the target that make the product
 (and with all_states, its isomers too). A product with a half-life below FAST_DECAY_S is followed to its decay
 products, as no measurement can see it: B10(n,t) makes Be8, and so 2 He4.
+
+A cross section at an incident energy E (a measurement with energies_ev) is the same, with the spectrum of one narrow
+group around E (E * (1 -/+ ENERGY_WIDTH)). The reaction data has group-wise (histogram) cross sections, so this is
+the value of the group that has E. These values are in the attribute at_energy of the results of the case.
 """
 
 import multiprocessing
@@ -94,6 +98,8 @@ class _PynisData:
         self.decay_mat = nis.core.decay_mat_from_file(str(data.decay), sf_yields)
         self.energy_data = nis.core.decay_energy_data_from_file(str(data.decay))
         self.reaction_data = nis.core.reaction_data_from_file(str(data.reaction)) if data.reaction else None
+        # energy (eV) -> the reaction matrix of a narrow group at that energy (see energy_cross_sections)
+        self.energy_mats = {}
 
 
 def _with_source(mat, yields: dict, rate: float):
@@ -165,6 +171,46 @@ def cross_sections(nis, reaction_mat, spectrum_total: float, reactions: list, de
     return results
 
 
+# the relative half width of the narrow group for a cross section at an energy
+ENERGY_WIDTH = 1e-4
+
+
+class CaseResults(list):
+    """The results at the end of each step (a list), and at_energy: (target, product, all_states, energy in eV) ->
+    the cross section (cm2) at that incident energy, for the measurements with energies_ev."""
+
+    def __init__(self, steps=(), at_energy: dict = None):
+        super().__init__(steps)
+        self.at_energy = at_energy or {}
+
+    def __reduce__(self):
+        # so it can come back from a worker process
+        return CaseResults, (list(self), self.at_energy)
+
+
+def energy_cross_sections(case: Case, d: "_PynisData") -> dict:
+    """(target, product, all_states, energy) -> the cross section (cm2) at each energy of the measurements with
+    energies_ev. One reaction matrix for each energy, kept for the next cases (the same energies come again)."""
+    nis = d.nis
+    out = {}
+    for m in case.measurements:
+        if m.energies_ev is None:
+            continue
+        if d.reaction_data is None:
+            raise RuntimeError(f"{case.name}: the case has cross sections, so it needs reaction data")
+        for energy in m.energies_ev:
+            if energy not in d.energy_mats:
+                if len(d.energy_mats) >= 256:
+                    d.energy_mats.pop(next(iter(d.energy_mats)))
+                bounds = [energy * (1 - ENERGY_WIDTH), energy * (1 + ENERGY_WIDTH)]
+                d.energy_mats[energy] = nis.core.reaction_mat(d.reaction_data, nis.core.Spectrum(bounds, [1.0]),
+                                                              d.fission_yields)
+            reaction = (m.target, m.product, m.all_states)
+            out[reaction + (energy,)] = cross_sections(nis, d.energy_mats[energy], 1.0, [reaction],
+                                                      d.decay_mat)[reaction]
+    return out
+
+
 def _inventory_from_vector(nis, vector) -> dict:
     zais = nis.data.ALL_ZAIS()
     return {nis.zai.get_name_from(zais[i]): float(v) for i, v in enumerate(vector[:len(zais)]) if v > 0}
@@ -186,7 +232,8 @@ def _run_pynis(case: Case, d: _PynisData) -> list:
         bounds, values = case.spectrum
         reaction_mat = nis.core.reaction_mat(d.reaction_data, nis.core.Spectrum(bounds, values), d.fission_yields)
         spectrum_total = sum(values)
-    reactions = [(m.target, m.product, m.all_states) for m in case.measurements if m.quantity == "cross_section"]
+    reactions = [(m.target, m.product, m.all_states) for m in case.measurements
+                 if m.quantity == "cross_section" and m.energies_ev is None]
     # the same spectrum in all the steps, so the same cross sections
     case_cross_sections = cross_sections(nis, reaction_mat, spectrum_total, reactions, d.decay_mat) if reactions else None
 
@@ -223,7 +270,7 @@ def _run_pynis(case: Case, d: _PynisData) -> list:
         if case_cross_sections is not None and flux > 0:
             result["cross_section"] = case_cross_sections
         results.append(result)
-    return results
+    return CaseResults(results, energy_cross_sections(case, d))
 
 
 # set before the worker processes are forked, so they share the data and do not read it again

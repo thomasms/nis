@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Fe54/Mn52g",
+  "title": "Fe54 to Mn52g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Fe54": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Fe54",
+      "product": "Mn52",
+      "all_states": false,
+      "source": "EXFOR 10806-003-2, (N,T), T.W.Woo 1979",
+      "energies_ev": [14600000],
+      "values": [0.017],
+      "uncertainties": [0.006],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Fe54",
+      "product": "Mn52",
+      "all_states": false,
+      "source": "EXFOR 20522-005-0, (N,T), S.M.Qaim 1973",
+      "energies_ev": [14600000],
+      "values": [0.01],
+      "uncertainties": [0.005],
+      "calculations": {}
+    }
+  ]
+}

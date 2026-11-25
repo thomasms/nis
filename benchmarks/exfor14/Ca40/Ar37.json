@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ca40/Ar37",
+  "title": "Ca40 to Ar37, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ca40": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca40",
+      "product": "Ar37",
+      "all_states": true,
+      "source": "EXFOR 10476-004-0, (N,A), J.W.Barnes 1975",
+      "energies_ev": [14100000, 14700000],
+      "values": [138.0, 126.0],
+      "uncertainties": [8.28, 7.56],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca40",
+      "product": "Ar37",
+      "all_states": true,
+      "source": "EXFOR 20827-002-0, (N,A), S.M.Qaim 1977",
+      "energies_ev": [14600000],
+      "values": [141.0],
+      "uncertainties": [21.0],
+      "calculations": {}
+    }
+  ]
+}

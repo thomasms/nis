@@ -1,0 +1,99 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Pd108/Pd107m",
+  "title": "Pd108 to Pd107m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Pd108": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd108",
+      "product": "Pd107m",
+      "all_states": false,
+      "source": "EXFOR 10835-012-0, (N,2N), S.Sothras 1977",
+      "energies_ev": [14800000],
+      "values": [441.0],
+      "uncertainties": [40.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd108",
+      "product": "Pd107m",
+      "all_states": false,
+      "source": "EXFOR 13031-002-0, (N,2N), W.D.Lu 1968",
+      "energies_ev": [14400000],
+      "values": [448.0],
+      "uncertainties": [32.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd108",
+      "product": "Pd107m",
+      "all_states": false,
+      "source": "EXFOR 20891-018-0, (N,2N), B.Minetti 1968",
+      "energies_ev": [14700000],
+      "values": [517.0],
+      "uncertainties": [80.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd108",
+      "product": "Pd107m",
+      "all_states": false,
+      "source": "EXFOR 22415-013-0, (N,2N), Y.Kasugai 1992",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [388.0, 356.0, 373.0, 389.0, 387.0],
+      "uncertainties": [22.0, 18.0, 20.0, 20.0, 20.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd108",
+      "product": "Pd107m",
+      "all_states": false,
+      "source": "EXFOR 22662-009-0, (N,2N), H.Sakane 2001",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [473.0, 435.0, 455.0, 474.0, 472.0],
+      "uncertainties": [30.272, 25.665, 27.3, 28.44, 28.32],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd108",
+      "product": "Pd107m",
+      "all_states": false,
+      "source": "EXFOR 30156-005-0, (N,2N), E.Rurarz 1971",
+      "energies_ev": [14800000],
+      "values": [590.0],
+      "uncertainties": [60.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd108",
+      "product": "Pd107m",
+      "all_states": false,
+      "source": "EXFOR 30740-010-0, (N,2N), I.F.Goncalves 1987",
+      "energies_ev": [14800000],
+      "values": [527.0],
+      "uncertainties": [100.0],
+      "calculations": {}
+    }
+  ]
+}

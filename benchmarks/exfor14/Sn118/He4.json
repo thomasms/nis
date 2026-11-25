@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sn118/He4",
+  "title": "Sn118 to He4, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sn118": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn118",
+      "product": "He4",
+      "all_states": true,
+      "source": "EXFOR 13498-004-0, (N,X), D.W.Kneff 1985",
+      "energies_ev": [14800000],
+      "values": [1.4],
+      "uncertainties": [0.1],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Os192/W189",
+  "title": "Os192 to W189, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Os192": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Os192",
+      "product": "W189",
+      "all_states": true,
+      "source": "EXFOR 30290-008-0, (N,A), P.Kovacs 1976",
+      "energies_ev": [14700000],
+      "values": [0.15],
+      "uncertainties": [0.03],
+      "calculations": {}
+    }
+  ]
+}

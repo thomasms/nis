@@ -1,0 +1,135 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cd116/Cd115g",
+  "title": "Cd116 to Cd115g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cd116": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd116",
+      "product": "Cd115",
+      "all_states": false,
+      "source": "EXFOR 10497-020-0, (N,2N), W.D.Lu 1970",
+      "energies_ev": [14400000],
+      "values": [820.0],
+      "uncertainties": [50.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd116",
+      "product": "Cd115",
+      "all_states": false,
+      "source": "EXFOR 11583-018-0, (N,2N), Yu-Wen Yu 1967",
+      "energies_ev": [14100000],
+      "values": [857.0],
+      "uncertainties": [68.56],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd116",
+      "product": "Cd115",
+      "all_states": false,
+      "source": "EXFOR 11645-018-0, (N,2N), R.J.Prestwood 1961",
+      "energies_ev": [13690000, 14010000, 14090000, 14310000, 14500000, 14680000, 14810000, 14930000],
+      "values": [830.0, 850.0, 835.0, 863.0, 826.0, 817.0, 781.0, 798.0],
+      "uncertainties": [83.0, 85.0, 84.0, 86.0, 83.0, 82.0, 78.0, 80.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd116",
+      "product": "Cd115",
+      "all_states": false,
+      "source": "EXFOR 21300-018-0, (N,2N), K.Kayashima 1979",
+      "energies_ev": [14600000],
+      "values": [842.0],
+      "uncertainties": [70.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd116",
+      "product": "Cd115",
+      "all_states": false,
+      "source": "EXFOR 30740-015-0, (N,2N), I.F.Goncalves 1987",
+      "energies_ev": [14800000],
+      "values": [679.0],
+      "uncertainties": [10.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd116",
+      "product": "Cd115",
+      "all_states": false,
+      "source": "EXFOR 31247-014-0, (N,2N), C.S.Khurana 1961",
+      "energies_ev": [14800000],
+      "values": [690.0],
+      "uncertainties": [103.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd116",
+      "product": "Cd115",
+      "all_states": false,
+      "source": "EXFOR 32760-005-2, (N,2N), Kong Xiangzhong 1995",
+      "energies_ev": [13700000, 14250000, 14500000, 14800000],
+      "values": [828.0, 822.0, 784.0, 784.0],
+      "uncertainties": [45.0, 45.0, 44.0, 44.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd116",
+      "product": "Cd115",
+      "all_states": false,
+      "source": "EXFOR 41240-051-0, (N,2N), A.A.Filatenkov 1999",
+      "energies_ev": [13560000, 13740000, 13960000, 14190000, 14420000, 14610000, 14780000],
+      "values": [851.0, 834.0, 825.0, 830.0, 815.0, 802.0, 806.0],
+      "uncertainties": [27.0, 25.0, 45.0, 26.0, 26.0, 54.0, 56.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd116",
+      "product": "Cd115",
+      "all_states": false,
+      "source": "EXFOR 41424-051-0, (N,2N), A.A.Filatenkov 2001",
+      "energies_ev": [14440000, 14640000, 14800000, 14810000],
+      "values": [756.0, 810.0, 757.0, 819.0],
+      "uncertainties": [60.0, 30.0, 30.0, 30.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd116",
+      "product": "Cd115",
+      "all_states": false,
+      "source": "EXFOR 41614-113-0, (N,2N), A.A.Filatenkov 2016",
+      "energies_ev": [13560000, 13740000, 13880000, 13960000, 14190000, 14430000, 14630000, 14800000, 14880000],
+      "values": [851.0, 837.0, 814.0, 828.0, 829.0, 809.0, 807.0, 794.0, 818.0],
+      "uncertainties": [29.445, 27.705, 28.978, 46.616, 28.435, 27.911, 31.07, 28.266, 33.947],
+      "calculations": {}
+    }
+  ]
+}

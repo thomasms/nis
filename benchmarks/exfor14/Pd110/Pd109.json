@@ -1,0 +1,135 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Pd110/Pd109",
+  "title": "Pd110 to Pd109, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Pd110": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd110",
+      "product": "Pd109",
+      "all_states": true,
+      "source": "EXFOR 11274-076-0, (N,2N), E.B.Paul 1953.0",
+      "energies_ev": [14500000],
+      "values": [1948.0],
+      "uncertainties": [974.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd110",
+      "product": "Pd109",
+      "all_states": true,
+      "source": "EXFOR 20830-007-0, (N,2N), M.Bormann 1970.0",
+      "energies_ev": [13530000, 14300000],
+      "values": [1430.0, 1539.0],
+      "uncertainties": [101.0, 107.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd110",
+      "product": "Pd109",
+      "all_states": true,
+      "source": "EXFOR 20888-007-0, (N,2N), C.G.Bonazzola 1964.0",
+      "energies_ev": [14700000],
+      "values": [2570.0],
+      "uncertainties": [160.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd110",
+      "product": "Pd109",
+      "all_states": true,
+      "source": "EXFOR 21348-003-0, (N,2N), B.Minetti 1967.0",
+      "energies_ev": [14700000],
+      "values": [1590.0],
+      "uncertainties": [80.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd110",
+      "product": "Pd109",
+      "all_states": true,
+      "source": "EXFOR 30444-003-0, (N,2N), W.Augustyniak nan",
+      "energies_ev": [13900000, 14500000, 15000000],
+      "values": [1855.0, 1884.0, 1786.0],
+      "uncertainties": [134.0, 136.0, 138.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd110",
+      "product": "Pd109",
+      "all_states": true,
+      "source": "EXFOR 30755-017-0, (N,2N), Zhou Muyao 1987.0",
+      "energies_ev": [14600000],
+      "values": [2510.0],
+      "uncertainties": [110.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd110",
+      "product": "Pd109",
+      "all_states": true,
+      "source": "EXFOR 32552-009-0, (N,2N), Kong Xiangzhong 1999.0",
+      "energies_ev": [13500000, 14200000, 14700000],
+      "values": [1590.0, 1650.0, 1620.0],
+      "uncertainties": [100.0, 105.0, 105.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd110",
+      "product": "Pd109",
+      "all_states": true,
+      "source": "EXFOR 32776-003-3, (N,2N), Junhua Luo 2018.0",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [1663.0, 1682.0, 1676.0],
+      "uncertainties": [87.0, 90.0, 83.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd110",
+      "product": "Pd109",
+      "all_states": true,
+      "source": "EXFOR 33146-002-0, (N,2N), I.Pasha 2020.0",
+      "energies_ev": [14540000],
+      "values": [1905.4],
+      "uncertainties": [436.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd110",
+      "product": "Pd109",
+      "all_states": true,
+      "source": "EXFOR 41614-097-0, (N,2N), A.A.Filatenkov 2016.0",
+      "energies_ev": [14050000, 14490000, 14880000],
+      "values": [1314.0, 1392.0, 1566.0],
+      "uncertainties": [199.73, 199.06, 202.01],
+      "calculations": {}
+    }
+  ]
+}

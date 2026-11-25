@@ -1,0 +1,87 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "K39/Ar39",
+  "title": "K39 to Ar39, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "K39": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "K39",
+      "product": "Ar39",
+      "all_states": true,
+      "source": "EXFOR 13109-002-0, (N,P), K.A.Foland 1987",
+      "energies_ev": [14480000],
+      "values": [114.0],
+      "uncertainties": [3.876],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "K39",
+      "product": "Ar39",
+      "all_states": true,
+      "source": "EXFOR 13109-003-0, (N,P), K.A.Foland 1987",
+      "energies_ev": [14580000],
+      "values": [125.0],
+      "uncertainties": [4.25],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "K39",
+      "product": "Ar39",
+      "all_states": true,
+      "source": "EXFOR 13109-004-0, (N,P), K.A.Foland 1987",
+      "energies_ev": [14820000],
+      "values": [145.0],
+      "uncertainties": [8.265],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "K39",
+      "product": "Ar39",
+      "all_states": true,
+      "source": "EXFOR 21668-008-0, (N,P), M.Bormann 1960",
+      "energies_ev": [14100000],
+      "values": [354.0],
+      "uncertainties": [54.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "K39",
+      "product": "Ar39",
+      "all_states": true,
+      "source": "EXFOR 21846-025-0, (N,P), W.Schantl 1970",
+      "energies_ev": [14700000],
+      "values": [314.0],
+      "uncertainties": [13.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "K39",
+      "product": "Ar39",
+      "all_states": true,
+      "source": "EXFOR 40433-011-0, (N,P), D.V.Aleksandrov 1975",
+      "energies_ev": [14100000],
+      "values": [400.0],
+      "uncertainties": [100.0],
+      "calculations": {}
+    }
+  ]
+}

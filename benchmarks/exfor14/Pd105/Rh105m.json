@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Pd105/Rh105m",
+  "title": "Pd105 to Rh105m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Pd105": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd105",
+      "product": "Rh105m",
+      "all_states": false,
+      "source": "EXFOR 22415-009-0, (N,P), Y.Kasugai 1992",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [1.73, 2.11, 2.97, 4.16, 5.45],
+      "uncertainties": [0.13, 0.15, 0.21, 0.28, 0.35],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd105",
+      "product": "Rh105m",
+      "all_states": false,
+      "source": "EXFOR 22433-022-0, (N,P), Y.Kasugai 1998",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [12.7, 13.5, 14.3, 12.9, 15.7],
+      "uncertainties": [1.2446, 1.3095, 1.43, 1.2771, 1.4601],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd105",
+      "product": "Rh105m",
+      "all_states": false,
+      "source": "EXFOR 30336-029-0, (N,P), R.Prasad 1971",
+      "energies_ev": [14800000],
+      "values": [23.0],
+      "uncertainties": [8.0],
+      "calculations": {}
+    }
+  ]
+}

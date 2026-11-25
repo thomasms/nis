@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Zn70/Ni67",
+  "title": "Zn70 to Ni67, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Zn70": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn70",
+      "product": "Ni67",
+      "all_states": true,
+      "source": "EXFOR 11816-002-0, (N,A), J.L.Meason 1965",
+      "energies_ev": [14800000],
+      "values": [11.4],
+      "uncertainties": [3.2],
+      "calculations": {}
+    }
+  ]
+}

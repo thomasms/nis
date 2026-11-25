@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Te130/Sn127g",
+  "title": "Te130 to Sn127g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Te130": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te130",
+      "product": "Sn127",
+      "all_states": false,
+      "source": "EXFOR 21440-005-0, (N,A), R.F.Coleman 1959",
+      "energies_ev": [14500000],
+      "values": [0.37],
+      "uncertainties": [0.0555],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te130",
+      "product": "Sn127",
+      "all_states": false,
+      "source": "EXFOR 31117-006-0, (N,A), N.K.Majumdar 1963",
+      "energies_ev": [14800000],
+      "values": [0.94],
+      "uncertainties": [0.28],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te130",
+      "product": "Sn127",
+      "all_states": false,
+      "source": "EXFOR 40029-018-0, (N,A), V.N.Levkovskii 1971",
+      "energies_ev": [14800000],
+      "values": [0.39],
+      "uncertainties": [0.08],
+      "calculations": {}
+    }
+  ]
+}

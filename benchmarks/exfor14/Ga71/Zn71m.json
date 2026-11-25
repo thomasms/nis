@@ -1,0 +1,147 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ga71/Zn71m",
+  "title": "Ga71 to Zn71m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ga71": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ga71",
+      "product": "Zn71m",
+      "all_states": false,
+      "source": "EXFOR 14291-004-0, (N,P), R.Raut 2011",
+      "energies_ev": [14000000, 14500000, 15000000],
+      "values": [11.8, 11.8, 11.8],
+      "uncertainties": [0.4, 0.4, 0.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ga71",
+      "product": "Zn71m",
+      "all_states": false,
+      "source": "EXFOR 20721-061-0, (N,P), N.I.Molla 1977",
+      "energies_ev": [14700000],
+      "values": [12.5],
+      "uncertainties": [1.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ga71",
+      "product": "Zn71m",
+      "all_states": false,
+      "source": "EXFOR 20811-008-0, (N,P), O.Schwerer 1976",
+      "energies_ev": [14600000],
+      "values": [9.6],
+      "uncertainties": [1.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ga71",
+      "product": "Zn71m",
+      "all_states": false,
+      "source": "EXFOR 21291-006-0, (N,P), F.Demechelis 1968",
+      "energies_ev": [14500000],
+      "values": [12.0],
+      "uncertainties": [4.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ga71",
+      "product": "Zn71m",
+      "all_states": false,
+      "source": "EXFOR 21426-004-0, (N,P), I.Wagner 1971",
+      "energies_ev": [14700000],
+      "values": [10.1],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ga71",
+      "product": "Zn71m",
+      "all_states": false,
+      "source": "EXFOR 30155-002-0, (N,P), P.Decowski 1971",
+      "energies_ev": [13900000, 14470000],
+      "values": [9.5, 10.4],
+      "uncertainties": [0.1, 0.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ga71",
+      "product": "Zn71m",
+      "all_states": false,
+      "source": "EXFOR 30287-002-0, (N,P), W.Grochulski 1975",
+      "energies_ev": [13900000, 14500000],
+      "values": [9.1, 10.0],
+      "uncertainties": [1.4, 1.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ga71",
+      "product": "Zn71m",
+      "all_states": false,
+      "source": "EXFOR 31534-004-0, (N,P), Z.Pu 2003",
+      "energies_ev": [14100000],
+      "values": [12.4],
+      "uncertainties": [0.9],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ga71",
+      "product": "Zn71m",
+      "all_states": false,
+      "source": "EXFOR 32704-003-2, (N,P), J.Luo 2012",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [8.4, 10.1, 10.6],
+      "uncertainties": [1.2, 2.1, 1.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ga71",
+      "product": "Zn71m",
+      "all_states": false,
+      "source": "EXFOR 33132-004-0, (N,P), R.Pachuau 2019",
+      "energies_ev": [14900000],
+      "values": [9.68],
+      "uncertainties": [0.6747],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ga71",
+      "product": "Zn71m",
+      "all_states": false,
+      "source": "EXFOR 40009-010-1, (N,P), G.P.Vinitskaya 1968",
+      "energies_ev": [14800000],
+      "values": [11.0],
+      "uncertainties": [1.5],
+      "calculations": {}
+    }
+  ]
+}

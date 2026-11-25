@@ -1,0 +1,207 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Zn68/Ni65",
+  "title": "Zn68 to Ni65, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Zn68": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Ni65",
+      "all_states": true,
+      "source": "EXFOR 10224-006-0, (N,A), D.C.Santry 1972",
+      "energies_ev": [14500000],
+      "values": [10.5],
+      "uncertainties": [1.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Ni65",
+      "all_states": true,
+      "source": "EXFOR 11515-011-0, (N,A), N.Ranakumar 1968",
+      "energies_ev": [14400000],
+      "values": [9.0],
+      "uncertainties": [1.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Ni65",
+      "all_states": true,
+      "source": "EXFOR 11590-025-0, (N,A), E.T.Bramlitt 1963",
+      "energies_ev": [14700000],
+      "values": [18.0],
+      "uncertainties": [5.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Ni65",
+      "all_states": true,
+      "source": "EXFOR 11740-021-0, (N,A), I.L.Preiss 1960",
+      "energies_ev": [14800000],
+      "values": [51.0],
+      "uncertainties": [10.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Ni65",
+      "all_states": true,
+      "source": "EXFOR 11803-002-0, (N,A), H.G.Blosser 1955",
+      "energies_ev": [14000000],
+      "values": [7.6],
+      "uncertainties": [0.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Ni65",
+      "all_states": true,
+      "source": "EXFOR 13597-007-0, (N,A), S.K.Ghorai 1995",
+      "energies_ev": [14200000],
+      "values": [10.0],
+      "uncertainties": [0.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Ni65",
+      "all_states": true,
+      "source": "EXFOR 20322-002-0, (N,A), J.Sato 1971",
+      "energies_ev": [13600000, 14100000, 14800000],
+      "values": [6.8, 8.0, 8.0],
+      "uncertainties": [0.6, 1.0, 0.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Ni65",
+      "all_states": true,
+      "source": "EXFOR 20554-007-0, (N,A), S.M.Qaim 1971",
+      "energies_ev": [14700000],
+      "values": [15.0],
+      "uncertainties": [2.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Ni65",
+      "all_states": true,
+      "source": "EXFOR 20673-014-0, (N,A), M.Valkonen 1976",
+      "energies_ev": [14700000],
+      "values": [11.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Ni65",
+      "all_states": true,
+      "source": "EXFOR 21902-002-0, (N,A), J.L.Barreira Filho 1982",
+      "energies_ev": [14400000],
+      "values": [10.3],
+      "uncertainties": [0.515],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Ni65",
+      "all_states": true,
+      "source": "EXFOR 22338-022-0, (N,A), A.Ercan 1991",
+      "energies_ev": [14600000],
+      "values": [11.0],
+      "uncertainties": [0.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Ni65",
+      "all_states": true,
+      "source": "EXFOR 22637-011-0, (N,A), C.Konno 1993",
+      "energies_ev": [13570000, 13980000, 14220000, 14670000, 14930000],
+      "values": [8.65, 9.09, 9.04, 9.56, 9.45],
+      "uncertainties": [0.59, 0.64, 0.63, 0.65, 0.65],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Ni65",
+      "all_states": true,
+      "source": "EXFOR 30553-005-0, (N,A), U.Garuska 1980",
+      "energies_ev": [14600000],
+      "values": [10.0],
+      "uncertainties": [1.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Ni65",
+      "all_states": true,
+      "source": "EXFOR 31449-012-0, (N,A), N.I.Molla 1994",
+      "energies_ev": [13900000, 14510000, 14710000],
+      "values": [9.5, 10.0, 11.9],
+      "uncertainties": [1.0, 1.1, 1.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Ni65",
+      "all_states": true,
+      "source": "EXFOR 33196-004-0, (N,A), T.S.Ganesapandy 2023",
+      "energies_ev": [14770000],
+      "values": [9.76],
+      "uncertainties": [0.85986],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Ni65",
+      "all_states": true,
+      "source": "EXFOR 40009-006-1, (N,A), G.P.Vinitskaya 1968",
+      "energies_ev": [14800000],
+      "values": [10.0],
+      "uncertainties": [1.0],
+      "calculations": {}
+    }
+  ]
+}

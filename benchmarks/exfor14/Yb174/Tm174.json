@@ -1,0 +1,159 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Yb174/Tm174",
+  "title": "Yb174 to Tm174, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Yb174": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb174",
+      "product": "Tm174",
+      "all_states": true,
+      "source": "EXFOR 12872-010-0, (N,P), A.Bari 1982",
+      "energies_ev": [14800000],
+      "values": [3.9],
+      "uncertainties": [0.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb174",
+      "product": "Tm174",
+      "all_states": true,
+      "source": "EXFOR 21818-005-0, (N,P), B.Anders 1982",
+      "energies_ev": [14600000],
+      "values": [3.0],
+      "uncertainties": [0.22],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb174",
+      "product": "Tm174",
+      "all_states": true,
+      "source": "EXFOR 22348-009-0, (N,P), H.Sakane 1997",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [1.62, 2.14, 2.52, 2.94, 3.19],
+      "uncertainties": [0.14742, 0.1605, 0.22176, 0.2058, 0.21373],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb174",
+      "product": "Tm174",
+      "all_states": true,
+      "source": "EXFOR 22391-012-0, (N,P), H.Sakane 1997",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [1.62, 2.14, 2.52, 2.94, 3.19],
+      "uncertainties": [0.15, 0.16, 0.22, 0.21, 0.21],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb174",
+      "product": "Tm174",
+      "all_states": true,
+      "source": "EXFOR 23221-002-0, (N,P), B.Pandey 2014",
+      "energies_ev": [14600000],
+      "values": [3.11],
+      "uncertainties": [0.14],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb174",
+      "product": "Tm174",
+      "all_states": true,
+      "source": "EXFOR 30674-003-0, (N,P), A.Antov 1983",
+      "energies_ev": [14540000],
+      "values": [2.7],
+      "uncertainties": [0.16],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb174",
+      "product": "Tm174",
+      "all_states": true,
+      "source": "EXFOR 31069-002-0, (N,P), S.C.Gujrathi 1967",
+      "energies_ev": [14800000],
+      "values": [3.5],
+      "uncertainties": [1.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb174",
+      "product": "Tm174",
+      "all_states": true,
+      "source": "EXFOR 31497-018-0, (N,P), Xiangzhong Kong 1998",
+      "energies_ev": [14700000],
+      "values": [4.0],
+      "uncertainties": [0.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb174",
+      "product": "Tm174",
+      "all_states": true,
+      "source": "EXFOR 31615-006-0, (N,P), Chang-Lin Lan 2008",
+      "energies_ev": [14100000, 14800000],
+      "values": [1.73, 3.13],
+      "uncertainties": [0.13, 0.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb174",
+      "product": "Tm174",
+      "all_states": true,
+      "source": "EXFOR 32233-010-0, (N,P), N.Dzysiuk 2012",
+      "energies_ev": [14700000],
+      "values": [2.8],
+      "uncertainties": [0.27],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb174",
+      "product": "Tm174",
+      "all_states": true,
+      "source": "EXFOR 32727-007-0, (N,P), Junhua Luo 2013",
+      "energies_ev": [14800000],
+      "values": [2.6],
+      "uncertainties": [0.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb174",
+      "product": "Tm174",
+      "all_states": true,
+      "source": "EXFOR 33175-003-0, (N,P), G.T.Bholane 2022",
+      "energies_ev": [14770000],
+      "values": [2.78],
+      "uncertainties": [0.28412],
+      "calculations": {}
+    }
+  ]
+}

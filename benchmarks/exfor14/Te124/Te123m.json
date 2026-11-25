@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Te124/Te123m",
+  "title": "Te124 to Te123m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Te124": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te124",
+      "product": "Te123m",
+      "all_states": false,
+      "source": "EXFOR 21300-024-0, (N,2N), K.Kayashima 1979",
+      "energies_ev": [14600000],
+      "values": [863.0],
+      "uncertainties": [69.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te124",
+      "product": "Te123m",
+      "all_states": false,
+      "source": "EXFOR 32669-006-0, (N,2N), F.Zhou 2007",
+      "energies_ev": [13500000, 14600000],
+      "values": [595.0, 629.0],
+      "uncertainties": [28.0, 30.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te124",
+      "product": "Te123m",
+      "all_states": false,
+      "source": "EXFOR 41240-089-0, (N,2N), A.A.Filatenkov 1999",
+      "energies_ev": [13670000, 14060000, 14280000, 14460000, 14670000, 14830000],
+      "values": [807.0, 847.0, 820.0, 870.0, 868.0, 920.0],
+      "uncertainties": [66.0, 64.0, 68.0, 64.0, 64.0, 69.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te124",
+      "product": "Te123m",
+      "all_states": false,
+      "source": "EXFOR 41614-146-0, (N,2N), A.A.Filatenkov 2016",
+      "energies_ev": [13670000, 14060000, 14280000, 14460000, 14670000, 14830000],
+      "values": [811.0, 851.0, 821.0, 869.0, 868.0, 926.0],
+      "uncertainties": [65.61, 63.485, 67.404, 63.089, 63.104, 68.524],
+      "calculations": {}
+    }
+  ]
+}

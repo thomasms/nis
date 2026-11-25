@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ho165/Dy165",
+  "title": "Ho165 to Dy165, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ho165": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ho165",
+      "product": "Dy165",
+      "all_states": true,
+      "source": "EXFOR 22148-002-0, (N,P), T.B.Ryves 1990",
+      "energies_ev": [14300000],
+      "values": [4.07],
+      "uncertainties": [0.27269],
+      "calculations": {}
+    }
+  ]
+}

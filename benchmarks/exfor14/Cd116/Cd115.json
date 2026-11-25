@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cd116/Cd115",
+  "title": "Cd116 to Cd115, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cd116": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd116",
+      "product": "Cd115",
+      "all_states": true,
+      "source": "EXFOR 11645-019-0, (N,2N), R.J.Prestwood 1961",
+      "energies_ev": [13690000, 14010000, 14090000, 14310000, 14500000, 14680000, 14810000, 14930000],
+      "values": [1625.0, 1690.0, 1604.0, 1748.0, 1634.0, 1642.0, 1588.0, 1634.0],
+      "uncertainties": [115.0, 119.0, 114.0, 124.0, 116.0, 117.0, 112.0, 116.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd116",
+      "product": "Cd115",
+      "all_states": true,
+      "source": "EXFOR 41614-115-0, (N,2N), A.A.Filatenkov 2016",
+      "energies_ev": [13560000, 13740000, 13880000, 13960000, 14190000, 14440000, 14630000, 14880000],
+      "values": [1472.0, 1542.0, 1325.0, 1418.0, 1418.0, 1368.0, 1337.0, 1320.0],
+      "uncertainties": [267.9, 292.98, 184.18, 262.33, 258.08, 198.36, 199.21, 200.64],
+      "calculations": {}
+    }
+  ]
+}

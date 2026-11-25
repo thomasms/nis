@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sr88/Rb86g",
+  "title": "Sr88 to Rb86g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sr88": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sr88",
+      "product": "Rb86",
+      "all_states": false,
+      "source": "EXFOR 20669-007-0, (N,T), S.M.Qaim 1976",
+      "energies_ev": [14600000],
+      "values": [0.063],
+      "uncertainties": [0.022],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sn120/In120m",
+  "title": "Sn120 to In120m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sn120": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn120",
+      "product": "In120m",
+      "all_states": false,
+      "source": "EXFOR 22415-016-0, (N,P), Y.Kasugai 1992",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [2.57, 2.38, 3.08, 3.72, 4.39],
+      "uncertainties": [0.35, 0.35, 0.46, 0.5, 0.48],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn120",
+      "product": "In120m",
+      "all_states": false,
+      "source": "EXFOR 22433-028-0, (N,P), Y.Kasugai 1998",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [2.8, 2.6, 3.4, 4.0, 4.8],
+      "uncertainties": [0.532, 0.52, 0.68, 0.72, 0.768],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn120",
+      "product": "In120m",
+      "all_states": false,
+      "source": "EXFOR 40798-005-0, (N,P), G.P.Chursin 1963",
+      "energies_ev": [14500000],
+      "values": [4.6],
+      "uncertainties": [1.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn120",
+      "product": "In120m",
+      "all_states": false,
+      "source": "EXFOR 41032-029-0, (N,P), P.M.Gopych 1987",
+      "energies_ev": [14600000],
+      "values": [0.27],
+      "uncertainties": [0.08],
+      "calculations": {}
+    }
+  ]
+}

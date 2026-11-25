@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Er168/Dy165g",
+  "title": "Er168 to Dy165g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Er168": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er168",
+      "product": "Dy165",
+      "all_states": false,
+      "source": "EXFOR 12033-045-0, (N,A), R.G.Wille 1960",
+      "energies_ev": [14800000],
+      "values": [0.5],
+      "uncertainties": [0.2],
+      "calculations": {}
+    }
+  ]
+}

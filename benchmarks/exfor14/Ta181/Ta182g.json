@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ta181/Ta182g",
+  "title": "Ta181 to Ta182g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ta181": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Ta182",
+      "all_states": false,
+      "source": "EXFOR 20718-014-0, (N,G), M.Wagner 1980",
+      "energies_ev": [14600000],
+      "values": [1.45],
+      "uncertainties": [0.0145],
+      "calculations": {}
+    }
+  ]
+}

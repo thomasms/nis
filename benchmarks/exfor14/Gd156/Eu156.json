@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Gd156/Eu156",
+  "title": "Gd156 to Eu156, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Gd156": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Gd156",
+      "product": "Eu156",
+      "all_states": true,
+      "source": "EXFOR 32680-005-0, (N,P), Junhua Luo 2010",
+      "energies_ev": [13500000, 14800000],
+      "values": [4.5, 5.6],
+      "uncertainties": [0.9, 0.5],
+      "calculations": {}
+    }
+  ]
+}

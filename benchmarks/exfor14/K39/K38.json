@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "K39/K38",
+  "title": "K39 to K38, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "K39": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "K39",
+      "product": "K38",
+      "all_states": true,
+      "source": "EXFOR 21976-002-0, (N,2N), B.Anders 1985",
+      "energies_ev": [14700000],
+      "values": [3.6],
+      "uncertainties": [0.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "K39",
+      "product": "K38",
+      "all_states": true,
+      "source": "EXFOR 41240-006-0, (N,2N), A.A.Filatenkov 1999",
+      "energies_ev": [13650000, 13870000, 14070000, 14270000, 14460000, 14660000, 14850000],
+      "values": [0.24, 0.68, 1.39, 2.5, 3.08, 4.52, 5.37],
+      "uncertainties": [0.03, 0.04, 0.15, 0.13, 0.16, 0.25, 0.3],
+      "calculations": {}
+    }
+  ]
+}

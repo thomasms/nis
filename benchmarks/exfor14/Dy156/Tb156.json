@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Dy156/Tb156",
+  "title": "Dy156 to Tb156, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Dy156": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Dy156",
+      "product": "Tb156",
+      "all_states": true,
+      "source": "EXFOR 32233-006-0, (N,P), N.Dzysiuk 2012",
+      "energies_ev": [14700000],
+      "values": [17.3],
+      "uncertainties": [6.0],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Os188/Re188",
+  "title": "Os188 to Re188, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Os188": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Os188",
+      "product": "Re188",
+      "all_states": true,
+      "source": "EXFOR 20198-023-0, (N,P), W.Nagel 1966",
+      "energies_ev": [14600000],
+      "values": [8.0],
+      "uncertainties": [1.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Os188",
+      "product": "Re188",
+      "all_states": true,
+      "source": "EXFOR 20721-080-0, (N,P), N.I.Molla 1977",
+      "energies_ev": [14700000],
+      "values": [7.4],
+      "uncertainties": [1.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Os188",
+      "product": "Re188",
+      "all_states": true,
+      "source": "EXFOR 22637-084-0, (N,P), C.Konno 1993",
+      "energies_ev": [13580000, 13760000, 13990000, 14230000, 14450000, 14690000, 14960000],
+      "values": [2.4, 2.74, 4.05, 3.61, 4.01, 4.66, 5.4],
+      "uncertainties": [0.78, 0.77, 0.92, 0.84, 0.79, 0.91, 1.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Os188",
+      "product": "Re188",
+      "all_states": true,
+      "source": "EXFOR 30115-010-0, (N,P), J.Csikai 1967",
+      "energies_ev": [14700000],
+      "values": [7.1],
+      "uncertainties": [1.9],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Os188",
+      "product": "Re188",
+      "all_states": true,
+      "source": "EXFOR 30290-010-0, (N,P), P.Kovacs 1976",
+      "energies_ev": [14700000],
+      "values": [6.0],
+      "uncertainties": [1.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Os188",
+      "product": "Re188",
+      "all_states": true,
+      "source": "EXFOR 31661-004-0, (N,P), Junhua Luo 2009",
+      "energies_ev": [13500000, 14800000],
+      "values": [1.5, 2.6],
+      "uncertainties": [0.2, 0.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Os188",
+      "product": "Re188",
+      "all_states": true,
+      "source": "EXFOR 41428-017-0, (N,P), A.A.Filatenkov 2003",
+      "energies_ev": [13640000, 13880000, 14470000, 14680000, 14820000],
+      "values": [2.88, 3.36, 4.77, 5.12, 5.58],
+      "uncertainties": [0.33, 0.38, 0.54, 0.57, 0.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Os188",
+      "product": "Re188",
+      "all_states": true,
+      "source": "EXFOR 41614-203-0, (N,P), A.A.Filatenkov 2016",
+      "energies_ev": [13640000, 13880000, 14470000, 14680000, 14820000],
+      "values": [2.89, 3.38, 4.76, 5.12, 5.61],
+      "uncertainties": [0.32946, 0.37856, 0.53788, 0.56832, 0.60027],
+      "calculations": {}
+    }
+  ]
+}

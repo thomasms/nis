@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "K41/Cl39",
+  "title": "K41 to Cl39, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "K41": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "K41",
+      "product": "Cl39",
+      "all_states": true,
+      "source": "EXFOR 21010-002-0, (N,HE3), S.M.Qaim 1978",
+      "energies_ev": [14600000],
+      "values": [0.006],
+      "uncertainties": [0.003],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "K41",
+      "product": "Cl39",
+      "all_states": true,
+      "source": "EXFOR 30152-003-0, (N,HE3), M.Diksic 1974",
+      "energies_ev": [14600000],
+      "values": [0.848],
+      "uncertainties": [0.32],
+      "calculations": {}
+    }
+  ]
+}

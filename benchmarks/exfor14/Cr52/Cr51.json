@@ -1,0 +1,207 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cr52/Cr51",
+  "title": "Cr52 to Cr51, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cr52": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr52",
+      "product": "Cr51",
+      "all_states": true,
+      "source": "EXFOR 12958-004-0, (N,2N), S.K.Ghorai 1987",
+      "energies_ev": [14200000],
+      "values": [285.0],
+      "uncertainties": [26.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr52",
+      "product": "Cr51",
+      "all_states": true,
+      "source": "EXFOR 20091-002-0, (N,2N), R.Wenusch 1962",
+      "energies_ev": [14000000],
+      "values": [280.0],
+      "uncertainties": [60.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr52",
+      "product": "Cr51",
+      "all_states": true,
+      "source": "EXFOR 20536-003-0, (N,2N), S.M.Qaim 1972",
+      "energies_ev": [14700000],
+      "values": [304.0],
+      "uncertainties": [20.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr52",
+      "product": "Cr51",
+      "all_states": true,
+      "source": "EXFOR 20834-002-0, (N,2N), M.Bormann 1968",
+      "energies_ev": [13510000, 14100000, 14880000],
+      "values": [147.0, 276.0, 412.0],
+      "uncertainties": [12.0, 19.0, 29.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr52",
+      "product": "Cr51",
+      "all_states": true,
+      "source": "EXFOR 22089-037-0, (N,2N), Y.Ikeda 1988",
+      "energies_ev": [13600000, 13770000, 13990000, 14240000, 14450000, 14690000, 14960000],
+      "values": [152.0, 191.0, 225.0, 271.0, 310.0, 346.0, 376.0],
+      "uncertainties": [12.0, 15.0, 18.0, 22.0, 25.0, 28.0, 30.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr52",
+      "product": "Cr51",
+      "all_states": true,
+      "source": "EXFOR 22124-002-0, (N,2N), H.Liskien 1989",
+      "energies_ev": [13888000, 13902000, 14251000, 14329000, 14616000, 14622000],
+      "values": [240.6, 250.6, 322.0, 308.9, 377.8, 379.8],
+      "uncertainties": [9.7, 10.1, 12.5, 12.0, 14.4, 14.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr52",
+      "product": "Cr51",
+      "all_states": true,
+      "source": "EXFOR 22338-039-0, (N,2N), A.Ercan 1991",
+      "energies_ev": [14600000],
+      "values": [400.0],
+      "uncertainties": [34.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr52",
+      "product": "Cr51",
+      "all_states": true,
+      "source": "EXFOR 22406-002-0, (N,2N), A.Fessler 1998",
+      "energies_ev": [14250000],
+      "values": [330.3],
+      "uncertainties": [17.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr52",
+      "product": "Cr51",
+      "all_states": true,
+      "source": "EXFOR 22976-014-0, (N,2N), W.Mannhart 2007",
+      "energies_ev": [13872000, 14073000, 14466000],
+      "values": [244.8, 295.6, 351.0],
+      "uncertainties": [9.2779, 11.617, 14.496],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr52",
+      "product": "Cr51",
+      "all_states": true,
+      "source": "EXFOR 30577-003-0, (N,2N), N.I.Molla 1983",
+      "energies_ev": [14800000],
+      "values": [377.0],
+      "uncertainties": [45.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr52",
+      "product": "Cr51",
+      "all_states": true,
+      "source": "EXFOR 30812-003-0, (N,2N), I.Ribansky 1985",
+      "energies_ev": [14600000],
+      "values": [375.0],
+      "uncertainties": [23.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr52",
+      "product": "Cr51",
+      "all_states": true,
+      "source": "EXFOR 30972-005-0, (N,2N), M.Wagner 1989",
+      "energies_ev": [13528000, 14040000, 14397000, 14783000],
+      "values": [172.9, 270.5, 339.3, 400.6],
+      "uncertainties": [3.6, 4.8, 6.2, 6.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr52",
+      "product": "Cr51",
+      "all_states": true,
+      "source": "EXFOR 31491-003-0, (N,2N), N.I.Molla 1997",
+      "energies_ev": [13900000, 14100000, 14410000, 14570000, 14710000],
+      "values": [273.4, 299.7, 314.3, 361.3, 402.4],
+      "uncertainties": [15.0, 16.0, 15.0, 18.0, 23.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr52",
+      "product": "Cr51",
+      "all_states": true,
+      "source": "EXFOR 31623-003-0, (N,2N), Zhou Feng-Qun 2005",
+      "energies_ev": [13500000, 14100000, 14400000, 14600000],
+      "values": [185.0, 193.0, 258.0, 322.0],
+      "uncertainties": [10.0, 9.0, 13.0, 16.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr52",
+      "product": "Cr51",
+      "all_states": true,
+      "source": "EXFOR 33151-003-0, (N,2N), I.Pasha 2020",
+      "energies_ev": [14540000],
+      "values": [385.7],
+      "uncertainties": [49.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cr52",
+      "product": "Cr51",
+      "all_states": true,
+      "source": "EXFOR 41329-005-0, (N,2N), A.A.Lychagin 1988",
+      "energies_ev": [14100000],
+      "values": [327.0],
+      "uncertainties": [30.0],
+      "calculations": {}
+    }
+  ]
+}

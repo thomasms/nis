@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sm154/Sm155",
+  "title": "Sm154 to Sm155, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sm154": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sm154",
+      "product": "Sm155",
+      "all_states": true,
+      "source": "EXFOR 20673-030-0, (N,G), M.Valkonen 1976.0",
+      "energies_ev": [14700000],
+      "values": [0.9],
+      "uncertainties": [0.3],
+      "calculations": {}
+    }
+  ]
+}

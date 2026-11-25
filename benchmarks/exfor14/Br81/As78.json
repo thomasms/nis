@@ -1,0 +1,159 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Br81/As78",
+  "title": "Br81 to As78, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Br81": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Br81",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 10157-019-0, (N,A), P.Venugopala Rao 1971",
+      "energies_ev": [14400000],
+      "values": [19.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Br81",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 11274-058-0, (N,A), E.B.Paul 1953",
+      "energies_ev": [14500000],
+      "values": [103.0],
+      "uncertainties": [20.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Br81",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 11590-033-0, (N,A), E.T.Bramlitt 1963",
+      "energies_ev": [14700000],
+      "values": [6.6],
+      "uncertainties": [1.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Br81",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 20107-007-0, (N,A), A.Kjelberg 1966",
+      "energies_ev": [14800000],
+      "values": [3.8],
+      "uncertainties": [1.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Br81",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 20322-004-0, (N,A), J.Sato 1971",
+      "energies_ev": [13600000, 14100000, 14800000],
+      "values": [3.1, 3.3, 3.7],
+      "uncertainties": [0.4, 0.4, 0.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Br81",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 21104-008-0, (N,A), B.Minetti 1967",
+      "energies_ev": [14700000],
+      "values": [3.2],
+      "uncertainties": [1.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Br81",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 21319-003-0, (N,A), V.Koenig 1965",
+      "energies_ev": [14900000],
+      "values": [7.5],
+      "uncertainties": [1.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Br81",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 30008-030-0, (N,A), P.Strohal 1962",
+      "energies_ev": [14600000],
+      "values": [107.0],
+      "uncertainties": [20.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Br81",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 30553-007-0, (N,A), U.Garuska 1980",
+      "energies_ev": [14600000],
+      "values": [12.0],
+      "uncertainties": [5.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Br81",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 31676-007-0, (N,A), Liangyong Zhao 2009",
+      "energies_ev": [13500000, 14100000],
+      "values": [4.22, 4.02],
+      "uncertainties": [0.81, 1.04],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Br81",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 32900-004-0, (N,A), Long He 2023",
+      "energies_ev": [13500000, 14100000, 14400000, 14800000],
+      "values": [3.9, 4.3, 5.3, 5.7],
+      "uncertainties": [0.6, 0.7, 0.7, 0.9],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Br81",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 40009-031-1, (N,A), G.P.Vinitskaya 1968",
+      "energies_ev": [14800000],
+      "values": [6.5],
+      "uncertainties": [1.2],
+      "calculations": {}
+    }
+  ]
+}

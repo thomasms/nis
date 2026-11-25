@@ -1,0 +1,87 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ge74/Ga74",
+  "title": "Ge74 to Ga74, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ge74": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge74",
+      "product": "Ga74",
+      "all_states": true,
+      "source": "EXFOR 11825-008-0, (N,P), R.E.Wood 1967",
+      "energies_ev": [14400000],
+      "values": [13.2],
+      "uncertainties": [1.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge74",
+      "product": "Ga74",
+      "all_states": true,
+      "source": "EXFOR 20770-007-0, (N,P), R.Rieppo 1976",
+      "energies_ev": [14700000],
+      "values": [12.0],
+      "uncertainties": [1.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge74",
+      "product": "Ga74",
+      "all_states": true,
+      "source": "EXFOR 31434-005-0, (N,P), H.M.Hoang 1992",
+      "energies_ev": [13900000, 14500000, 15000000],
+      "values": [9.6, 10.6, 10.1],
+      "uncertainties": [0.8, 0.9, 0.9],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge74",
+      "product": "Ga74",
+      "all_states": true,
+      "source": "EXFOR 31615-003-0, (N,P), Chang-Lin Lan 2008",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [9.6, 10.95, 11.8],
+      "uncertainties": [0.8, 1.0, 1.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge74",
+      "product": "Ga74",
+      "all_states": true,
+      "source": "EXFOR 31654-007-0, (N,P), Changlin Lan 2008",
+      "energies_ev": [14100000],
+      "values": [10.95],
+      "uncertainties": [1.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge74",
+      "product": "Ga74",
+      "all_states": true,
+      "source": "EXFOR 41614-035-0, (N,P), A.A.Filatenkov 2016",
+      "energies_ev": [13680000, 13750000, 13950000, 14250000, 14500000, 14720000, 14880000],
+      "values": [8.27, 9.68, 9.15, 10.1, 10.8, 12.4, 11.8],
+      "uncertainties": [0.89316, 1.5101, 0.81892, 0.79487, 1.512, 1.1024, 0.5015],
+      "calculations": {}
+    }
+  ]
+}

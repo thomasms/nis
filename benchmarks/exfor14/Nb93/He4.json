@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Nb93/He4",
+  "title": "Nb93 to He4, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Nb93": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nb93",
+      "product": "He4",
+      "all_states": true,
+      "source": "EXFOR 10732-007-0, (N,X), S.M.Grimes 1978",
+      "energies_ev": [15000000],
+      "values": [14.0],
+      "uncertainties": [3.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nb93",
+      "product": "He4",
+      "all_states": true,
+      "source": "EXFOR 10933-033-0, (N,X), D.W.Kneff 1986",
+      "energies_ev": [14800000],
+      "values": [14.0],
+      "uncertainties": [1.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nb93",
+      "product": "He4",
+      "all_states": true,
+      "source": "EXFOR 22467-020-0, (N,X), Kokooo 1999",
+      "energies_ev": [14100000],
+      "values": [14.0],
+      "uncertainties": [1.0],
+      "calculations": {}
+    }
+  ]
+}

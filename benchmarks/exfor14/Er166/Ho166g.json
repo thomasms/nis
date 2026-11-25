@@ -1,0 +1,87 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Er166/Ho166g",
+  "title": "Er166 to Ho166g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Er166": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er166",
+      "product": "Ho166",
+      "all_states": false,
+      "source": "EXFOR 12872-009-0, (N,P), A.Bari 1982",
+      "energies_ev": [14800000],
+      "values": [2.3],
+      "uncertainties": [0.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er166",
+      "product": "Ho166",
+      "all_states": false,
+      "source": "EXFOR 20716-020-0, (N,P), S.M.Qaim 1976",
+      "energies_ev": [14700000],
+      "values": [4.5],
+      "uncertainties": [0.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er166",
+      "product": "Ho166",
+      "all_states": false,
+      "source": "EXFOR 20860-005-0, (N,P), H.Liljavirta 1978",
+      "energies_ev": [14800000],
+      "values": [6.7],
+      "uncertainties": [0.9],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er166",
+      "product": "Ho166",
+      "all_states": false,
+      "source": "EXFOR 20933-012-0, (N,P), S.M.Qaim 1974",
+      "energies_ev": [14700000],
+      "values": [5.6],
+      "uncertainties": [0.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er166",
+      "product": "Ho166",
+      "all_states": false,
+      "source": "EXFOR 31497-015-0, (N,P), Xiangzhong Kong 1998",
+      "energies_ev": [14700000],
+      "values": [4.3],
+      "uncertainties": [0.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er166",
+      "product": "Ho166",
+      "all_states": false,
+      "source": "EXFOR 32693-004-0, (N,P), Junhua Luo 2011",
+      "energies_ev": [13500000, 14800000],
+      "values": [3.0, 4.1],
+      "uncertainties": [1.0, 2.0],
+      "calculations": {}
+    }
+  ]
+}

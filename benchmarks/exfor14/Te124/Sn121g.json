@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Te124/Sn121g",
+  "title": "Te124 to Sn121g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Te124": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te124",
+      "product": "Sn121",
+      "all_states": false,
+      "source": "EXFOR 31117-002-0, (N,A), N.K.Majumdar 1963",
+      "energies_ev": [14800000],
+      "values": [3.65],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te124",
+      "product": "Sn121",
+      "all_states": false,
+      "source": "EXFOR 40029-010-0, (N,A), V.N.Levkovskii 1971",
+      "energies_ev": [14800000],
+      "values": [0.76],
+      "uncertainties": [0.15],
+      "calculations": {}
+    }
+  ]
+}

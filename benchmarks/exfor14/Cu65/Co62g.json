@@ -1,0 +1,75 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cu65/Co62g",
+  "title": "Cu65 to Co62g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cu65": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cu65",
+      "product": "Co62",
+      "all_states": false,
+      "source": "EXFOR 11491-020-0, (N,A), E.T.Bramlitt 1962",
+      "energies_ev": [14500000],
+      "values": [20.0],
+      "uncertainties": [10.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cu65",
+      "product": "Co62",
+      "all_states": false,
+      "source": "EXFOR 11590-022-0, (N,A), E.T.Bramlitt 1963",
+      "energies_ev": [14700000],
+      "values": [1.9],
+      "uncertainties": [0.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cu65",
+      "product": "Co62",
+      "all_states": false,
+      "source": "EXFOR 20899-006-0, (N,A), M.Bormann 1966",
+      "energies_ev": [14100000],
+      "values": [4.8],
+      "uncertainties": [1.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cu65",
+      "product": "Co62",
+      "all_states": false,
+      "source": "EXFOR 31432-005-0, (N,A), F.Cserpak 1994",
+      "energies_ev": [14120000, 14450000, 14710000],
+      "values": [5.88, 5.43, 4.26],
+      "uncertainties": [0.9, 0.9, 0.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cu65",
+      "product": "Co62",
+      "all_states": false,
+      "source": "EXFOR 41321-009-0, (N,A), O.I.Artem'Ev 1980",
+      "energies_ev": [14800000],
+      "values": [5.7],
+      "uncertainties": [0.6],
+      "calculations": {}
+    }
+  ]
+}

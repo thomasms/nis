@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sn122/In122n",
+  "title": "Sn122 to In122n, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sn122": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn122",
+      "product": "In122n",
+      "all_states": false,
+      "source": "EXFOR 41032-030-3, (N,P), P.M.Gopych 1987",
+      "energies_ev": [14600000],
+      "values": [0.18],
+      "uncertainties": [0.06],
+      "calculations": {}
+    }
+  ]
+}

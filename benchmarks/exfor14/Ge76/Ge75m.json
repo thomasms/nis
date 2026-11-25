@@ -1,0 +1,135 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ge76/Ge75m",
+  "title": "Ge76 to Ge75m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ge76": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge76",
+      "product": "Ge75m",
+      "all_states": false,
+      "source": "EXFOR 14472-002-0, (N,2N), Megha Bhike 2017",
+      "energies_ev": [13870000, 14360000, 14800000],
+      "values": [696.85, 740.11, 754.56],
+      "uncertainties": [42.09, 43.67, 46.86],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge76",
+      "product": "Ge75m",
+      "all_states": false,
+      "source": "EXFOR 21503-003-0, (N,2N), M.Bormann 1967",
+      "energies_ev": [13500000, 13750000, 14000000, 14250000, 14500000, 14750000, 15000000],
+      "values": [771.0, 908.0, 952.0, 956.0, 1008.0, 1056.0, 1064.0],
+      "uncertainties": [53.0, 71.0, 80.0, 77.0, 78.0, 83.0, 87.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge76",
+      "product": "Ge75m",
+      "all_states": false,
+      "source": "EXFOR 21892-004-1, (N,2N), R.Vanska 1981",
+      "energies_ev": [14700000, 14700000],
+      "values": [670.0, 660.0],
+      "uncertainties": [60.0, 60.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge76",
+      "product": "Ge75m",
+      "all_states": false,
+      "source": "EXFOR 21892-005-1, (N,2N), R.Vanska 1981",
+      "energies_ev": [14700000],
+      "values": [660.0],
+      "uncertainties": [80.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge76",
+      "product": "Ge75m",
+      "all_states": false,
+      "source": "EXFOR 22325-007-0, (N,2N), Y.Kasugai 1994",
+      "energies_ev": [13700000, 14030000, 14360000, 14660000, 14950000],
+      "values": [797.0, 794.0, 832.0, 914.0, 958.0],
+      "uncertainties": [39.0, 39.0, 41.0, 45.0, 47.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge76",
+      "product": "Ge75m",
+      "all_states": false,
+      "source": "EXFOR 30060-008-0, (N,2N), S.K.Mangal 1963",
+      "energies_ev": [14800000],
+      "values": [726.0],
+      "uncertainties": [15.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge76",
+      "product": "Ge75m",
+      "all_states": false,
+      "source": "EXFOR 30286-003-0, (N,2N), S.Hlavac 1976",
+      "energies_ev": [14700000],
+      "values": [1014.0],
+      "uncertainties": [121.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge76",
+      "product": "Ge75m",
+      "all_states": false,
+      "source": "EXFOR 32218-006-0, (N,2N), N.R.Dzysiuk 2007",
+      "energies_ev": [14530000],
+      "values": [700.0],
+      "uncertainties": [50.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge76",
+      "product": "Ge75m",
+      "all_states": false,
+      "source": "EXFOR 32777-002-1, (N,2N), Junhua Luo 2018",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [870.0, 899.0, 910.0],
+      "uncertainties": [39.0, 41.0, 44.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ge76",
+      "product": "Ge75m",
+      "all_states": false,
+      "source": "EXFOR 33027-002-0, (N,2N), F.M.D.Attar 2009",
+      "energies_ev": [13730000, 14420000, 14770000],
+      "values": [713.0, 778.0, 842.0],
+      "uncertainties": [70.0, 63.0, 63.0],
+      "calculations": {}
+    }
+  ]
+}

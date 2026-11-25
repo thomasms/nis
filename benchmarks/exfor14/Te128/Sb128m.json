@@ -1,0 +1,135 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Te128/Sb128m",
+  "title": "Te128 to Sb128m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Te128": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te128",
+      "product": "Sb128m",
+      "all_states": false,
+      "source": "EXFOR 11999-019-0, (N,P), L.Husain 1968",
+      "energies_ev": [14800000],
+      "values": [1.0],
+      "uncertainties": [0.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te128",
+      "product": "Sb128m",
+      "all_states": false,
+      "source": "EXFOR 20540-022-0, (N,P), W.Struwe 1974",
+      "energies_ev": [14600000],
+      "values": [1.08],
+      "uncertainties": [0.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te128",
+      "product": "Sb128m",
+      "all_states": false,
+      "source": "EXFOR 22340-003-0, (N,P), H.Sakane 1997",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [0.44, 0.58, 1.05, 1.06, 1.14],
+      "uncertainties": [0.1012, 0.0638, 0.08715, 0.08162, 0.08778],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te128",
+      "product": "Sb128m",
+      "all_states": false,
+      "source": "EXFOR 22391-003-0, (N,P), H.Sakane 1997",
+      "energies_ev": [13650000, 14280000, 14580000, 14870000],
+      "values": [0.61, 0.96, 1.11, 1.26],
+      "uncertainties": [0.09, 0.14, 0.14, 0.15],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te128",
+      "product": "Sb128m",
+      "all_states": false,
+      "source": "EXFOR 30041-013-0, (N,P), S.S.Hasan 1972",
+      "energies_ev": [14800000],
+      "values": [24.0],
+      "uncertainties": [4.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te128",
+      "product": "Sb128m",
+      "all_states": false,
+      "source": "EXFOR 30136-016-0, (N,P), J.Brzosko 1963",
+      "energies_ev": [14200000],
+      "values": [65.0],
+      "uncertainties": [19.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te128",
+      "product": "Sb128m",
+      "all_states": false,
+      "source": "EXFOR 30286-009-0, (N,P), S.Hlavac 1976",
+      "energies_ev": [14700000],
+      "values": [1.29],
+      "uncertainties": [0.16],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te128",
+      "product": "Sb128m",
+      "all_states": false,
+      "source": "EXFOR 30394-014-0, (N,P), V.K.Tikku 1973",
+      "energies_ev": [14700000],
+      "values": [18.7],
+      "uncertainties": [2.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te128",
+      "product": "Sb128m",
+      "all_states": false,
+      "source": "EXFOR 40029-013-1, (N,P), V.N.Levkovskii 1971",
+      "energies_ev": [14800000],
+      "values": [1.0],
+      "uncertainties": [0.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te128",
+      "product": "Sb128m",
+      "all_states": false,
+      "source": "EXFOR 41163-009-0, (N,P), P.M.Gopych 1994",
+      "energies_ev": [14600000],
+      "values": [1.7],
+      "uncertainties": [0.2],
+      "calculations": {}
+    }
+  ]
+}

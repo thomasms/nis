@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cd116/Ag115g",
+  "title": "Cd116 to Ag115g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cd116": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd116",
+      "product": "Ag115",
+      "all_states": false,
+      "source": "EXFOR 22827-008-0, (N,X), H.Sakane 2003",
+      "energies_ev": [14020000, 14350000, 14640000, 14870000],
+      "values": [0.27, 0.4, 0.45, 0.57],
+      "uncertainties": [0.1512, 0.216, 0.2115, 0.2679],
+      "calculations": {}
+    }
+  ]
+}

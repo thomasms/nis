@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ga69/Cu66",
+  "title": "Ga69 to Cu66, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ga69": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ga69",
+      "product": "Cu66",
+      "all_states": true,
+      "source": "EXFOR 11274-041-0, (N,A), E.B.Paul 1953",
+      "energies_ev": [14500000],
+      "values": [105.0],
+      "uncertainties": [56.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ga69",
+      "product": "Cu66",
+      "all_states": true,
+      "source": "EXFOR 22281-012-0, (N,A), K.Kawade 1992",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [24.0, 23.5, 19.6, 21.7, 20.7],
+      "uncertainties": [1.704, 1.551, 1.96, 1.5407, 1.4076],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ga69",
+      "product": "Cu66",
+      "all_states": true,
+      "source": "EXFOR 22434-008-0, (N,A), Y.Kasugai 1998",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [24.0, 23.5, 19.6, 21.7, 20.7],
+      "uncertainties": [1.704, 1.551, 1.96, 1.5407, 1.4076],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ga69",
+      "product": "Cu66",
+      "all_states": true,
+      "source": "EXFOR 40009-009-1, (N,A), G.P.Vinitskaya 1968",
+      "energies_ev": [14800000],
+      "values": [18.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    }
+  ]
+}

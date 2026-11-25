@@ -1,0 +1,111 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Mo92/Zr89g",
+  "title": "Mo92 to Zr89g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Mo92": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Zr89",
+      "all_states": false,
+      "source": "EXFOR 10145-027-0, (N,A), W.D.Lu 1970",
+      "energies_ev": [14400000],
+      "values": [18.7],
+      "uncertainties": [1.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Zr89",
+      "all_states": false,
+      "source": "EXFOR 11590-062-0, (N,A), E.T.Bramlitt 1963",
+      "energies_ev": [14700000],
+      "values": [20.0],
+      "uncertainties": [8.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Zr89",
+      "all_states": false,
+      "source": "EXFOR 20338-012-0, (N,A), Y.Kanda 1972",
+      "energies_ev": [13570000, 13830000, 13880000, 14010000, 14170000, 14310000, 14600000, 14740000, 14920000],
+      "values": [63.6, 66.6, 66.1, 79.6, 79.3, 78.7, 71.8, 67.5, 74.0],
+      "uncertainties": [8.1, 6.0, 6.5, 8.0, 4.8, 4.8, 6.0, 4.9, 5.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Zr89",
+      "all_states": false,
+      "source": "EXFOR 20850-014-0, (N,A), Y.Fujino 1977",
+      "energies_ev": [14600000],
+      "values": [20.1],
+      "uncertainties": [1.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Zr89",
+      "all_states": false,
+      "source": "EXFOR 21840-004-1, (N,A), S.Amemiya 1982",
+      "energies_ev": [14800000],
+      "values": [22.5],
+      "uncertainties": [2.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Zr89",
+      "all_states": false,
+      "source": "EXFOR 31459-005-0, (N,A), I.Garlea 1992",
+      "energies_ev": [14800000],
+      "values": [24.9],
+      "uncertainties": [2.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Zr89",
+      "all_states": false,
+      "source": "EXFOR 31464-033-0, (N,A), K.T.Osman 1996",
+      "energies_ev": [14700000],
+      "values": [16.0],
+      "uncertainties": [0.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Zr89",
+      "all_states": false,
+      "source": "EXFOR 32855-002-2, (N,A), Junhua Luo 2021",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [22.3, 23.2, 25.1],
+      "uncertainties": [1.5, 1.8, 2.2],
+      "calculations": {}
+    }
+  ]
+}

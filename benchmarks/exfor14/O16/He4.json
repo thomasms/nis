@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "O16/He4",
+  "title": "O16 to He4, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "O16": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "O16",
+      "product": "He4",
+      "all_states": true,
+      "source": "EXFOR 23005-006-0, (N,X), T.Sanami 2000",
+      "energies_ev": [13700000, 14100000, 15000000],
+      "values": [305.0, 242.0, 223.0],
+      "uncertainties": [30.5, 21.4, 22.3],
+      "calculations": {}
+    }
+  ]
+}

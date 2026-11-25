@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Mo92/Zr88",
+  "title": "Mo92 to Zr88, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Mo92": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Zr88",
+      "all_states": true,
+      "source": "EXFOR 22015-002-0, (N,N+A), K.Kawade 1985",
+      "energies_ev": [14100000, 14600000],
+      "values": [0.049, 0.18],
+      "uncertainties": [0.008, 0.05],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Zr88",
+      "all_states": true,
+      "source": "EXFOR 22022-003-0, (N,N+A), S.M.Qaim 1986",
+      "energies_ev": [14700000],
+      "values": [0.11],
+      "uncertainties": [0.02],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Zr88",
+      "all_states": true,
+      "source": "EXFOR 22156-018-0, (N,N+A), T.Katoh 1989",
+      "energies_ev": [14080000, 14380000, 14640000, 14870000],
+      "values": [0.056, 0.094, 0.111, 0.151],
+      "uncertainties": [0.014, 0.01598, 0.0222, 0.02114],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Zr88",
+      "all_states": true,
+      "source": "EXFOR 32515-007-0, (N,N+A), Xiangzhong Kong 1998",
+      "energies_ev": [14500000],
+      "values": [0.124],
+      "uncertainties": [0.038],
+      "calculations": {}
+    }
+  ]
+}

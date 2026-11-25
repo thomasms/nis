@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cd110/Cd109",
+  "title": "Cd110 to Cd109, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cd110": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd110",
+      "product": "Cd109",
+      "all_states": true,
+      "source": "EXFOR 10497-018-0, (N,2N), W.D.Lu 1970",
+      "energies_ev": [14400000],
+      "values": [1221.0],
+      "uncertainties": [150.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd110",
+      "product": "Cd109",
+      "all_states": true,
+      "source": "EXFOR 32760-004-0, (N,2N), Kong Xiangzhong 1995",
+      "energies_ev": [13700000, 14250000, 14500000, 14800000],
+      "values": [1245.0, 1235.0, 1226.0, 1221.0],
+      "uncertainties": [85.0, 81.0, 79.0, 79.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd110",
+      "product": "Cd109",
+      "all_states": true,
+      "source": "EXFOR 41424-042-0, (N,2N), A.A.Filatenkov 2001",
+      "energies_ev": [14440000, 14640000],
+      "values": [1570.0, 1640.0],
+      "uncertainties": [160.0, 140.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd110",
+      "product": "Cd109",
+      "all_states": true,
+      "source": "EXFOR 41614-106-0, (N,2N), A.A.Filatenkov 2016",
+      "energies_ev": [13880000, 14440000, 14640000],
+      "values": [1485.0, 1527.0, 1598.0],
+      "uncertainties": [274.72, 155.75, 137.27],
+      "calculations": {}
+    }
+  ]
+}

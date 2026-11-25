@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Rh103/Rh104m",
+  "title": "Rh103 to Rh104m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Rh103": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Rh104m",
+      "all_states": false,
+      "source": "EXFOR 20673-025-0, (N,G), M.Valkonen 1976",
+      "energies_ev": [14700000],
+      "values": [2.0],
+      "uncertainties": [0.5],
+      "calculations": {}
+    }
+  ]
+}

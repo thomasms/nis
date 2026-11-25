@@ -1,0 +1,99 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ca43/K43",
+  "title": "Ca43 to K43, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ca43": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca43",
+      "product": "K43",
+      "all_states": true,
+      "source": "EXFOR 20198-011-0, (N,P), W.Nagel 1966",
+      "energies_ev": [14600000],
+      "values": [137.0],
+      "uncertainties": [30.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca43",
+      "product": "K43",
+      "all_states": true,
+      "source": "EXFOR 21288-004-0, (N,P), B.Minetti 1966",
+      "energies_ev": [14700000],
+      "values": [501.0],
+      "uncertainties": [24.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca43",
+      "product": "K43",
+      "all_states": true,
+      "source": "EXFOR 21608-004-0, (N,P), P.Holmberg 1978",
+      "energies_ev": [14700000],
+      "values": [111.0],
+      "uncertainties": [9.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca43",
+      "product": "K43",
+      "all_states": true,
+      "source": "EXFOR 22089-017-0, (N,P), Y.Ikeda 1988",
+      "energies_ev": [13570000, 13750000, 13980000, 14220000, 14430000, 14660000, 14920000],
+      "values": [97.2, 93.0, 111.0, 91.8, 88.8, 101.0, 82.0],
+      "uncertainties": [9.1, 11.0, 16.0, 8.1, 7.7, 12.0, 15.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca43",
+      "product": "K43",
+      "all_states": true,
+      "source": "EXFOR 30011-004-0, (N,P), P.N.Tiwari 1968",
+      "energies_ev": [14200000],
+      "values": [93.0],
+      "uncertainties": [12.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca43",
+      "product": "K43",
+      "all_states": true,
+      "source": "EXFOR 30115-005-0, (N,P), J.Csikai 1967",
+      "energies_ev": [14700000],
+      "values": [101.0],
+      "uncertainties": [8.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca43",
+      "product": "K43",
+      "all_states": true,
+      "source": "EXFOR 31545-006-0, (N,P), E.Betak 1999",
+      "energies_ev": [14700000],
+      "values": [90.0],
+      "uncertainties": [9.0],
+      "calculations": {}
+    }
+  ]
+}

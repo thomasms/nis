@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sm150/Sm149",
+  "title": "Sm150 to Sm149, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sm150": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sm150",
+      "product": "Sm149",
+      "all_states": true,
+      "source": "EXFOR 13996-003-0, (N,2N), J.R.Cooper 2004",
+      "energies_ev": [14140000, 14890000],
+      "values": [1590.0, 1500.0],
+      "uncertainties": [110.0, 110.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sm150",
+      "product": "Sm149",
+      "all_states": true,
+      "source": "EXFOR 20416-038-0, (N,2N), J.Frehaut 1980",
+      "energies_ev": [13800000, 14760000],
+      "values": [1756.0, 1876.0],
+      "uncertainties": [134.0, 148.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sm150",
+      "product": "Sm149",
+      "all_states": true,
+      "source": "EXFOR 20416-099-0, (N,2N), J.Frehaut 1980",
+      "energies_ev": [13800000, 14760000],
+      "values": [1766.0, 1931.0],
+      "uncertainties": [135.0, 143.0],
+      "calculations": {}
+    }
+  ]
+}

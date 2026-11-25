@@ -1,0 +1,99 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sr86/Rb86",
+  "title": "Sr86 to Rb86, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sr86": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sr86",
+      "product": "Rb86",
+      "all_states": true,
+      "source": "EXFOR 11462-007-0, (N,P), B.P.Bayhurst 1961",
+      "energies_ev": [13690000, 14010000, 14310000, 14680000, 14930000],
+      "values": [37.0, 42.6, 43.6, 41.5, 45.3],
+      "uncertainties": [3.2, 3.7, 3.8, 3.6, 3.9],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sr86",
+      "product": "Rb86",
+      "all_states": true,
+      "source": "EXFOR 20721-075-0, (N,P), N.I.Molla 1977",
+      "energies_ev": [14700000],
+      "values": [44.0],
+      "uncertainties": [4.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sr86",
+      "product": "Rb86",
+      "all_states": true,
+      "source": "EXFOR 21300-004-0, (N,P), K.Kayashima 1979",
+      "energies_ev": [14600000],
+      "values": [34.9],
+      "uncertainties": [8.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sr86",
+      "product": "Rb86",
+      "all_states": true,
+      "source": "EXFOR 30008-020-0, (N,P), P.Strohal 1962",
+      "energies_ev": [14600000],
+      "values": [64.0],
+      "uncertainties": [7.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sr86",
+      "product": "Rb86",
+      "all_states": true,
+      "source": "EXFOR 32654-007-0, (N,P), Guozhu He 2006",
+      "energies_ev": [14100000],
+      "values": [44.6],
+      "uncertainties": [4.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sr86",
+      "product": "Rb86",
+      "all_states": true,
+      "source": "EXFOR 40016-023-0, (N,P), V.N.Levkovskii 1964",
+      "energies_ev": [14000000],
+      "values": [39.0],
+      "uncertainties": [7.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sr86",
+      "product": "Rb86",
+      "all_states": true,
+      "source": "EXFOR 40223-018-1, (N,P), V.N.Levkovskii 1969",
+      "energies_ev": [14800000],
+      "values": [48.0],
+      "uncertainties": [10.0],
+      "calculations": {}
+    }
+  ]
+}

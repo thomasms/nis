@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Mo95/H2",
+  "title": "Mo95 to H2, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Mo95": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo95",
+      "product": "H2",
+      "all_states": true,
+      "source": "EXFOR 10960-015-0, (N,X), R.C.Haight 1981",
+      "energies_ev": [14800000],
+      "values": [8.0],
+      "uncertainties": [3.0],
+      "calculations": {}
+    }
+  ]
+}

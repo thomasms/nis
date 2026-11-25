@@ -1,0 +1,75 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Os192/Os191m",
+  "title": "Os192 to Os191m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Os192": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Os192",
+      "product": "Os191m",
+      "all_states": false,
+      "source": "EXFOR 20071-004-0, (N,2N), P.Winiwarter 1970.0",
+      "energies_ev": [14700000],
+      "values": [831.0],
+      "uncertainties": [116.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Os192",
+      "product": "Os191m",
+      "all_states": false,
+      "source": "EXFOR 30290-007-0, (N,2N), P.Kovacs 1976.0",
+      "energies_ev": [14700000],
+      "values": [892.0],
+      "uncertainties": [186.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Os192",
+      "product": "Os191m",
+      "all_states": false,
+      "source": "EXFOR 30444-006-2, (N,2N), W.Augustyniak nan",
+      "energies_ev": [13900000, 14500000, 15000000],
+      "values": [731.0, 1083.0, 722.0],
+      "uncertainties": [176.0, 323.0, 74.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Os192",
+      "product": "Os191m",
+      "all_states": false,
+      "source": "EXFOR 30698-007-1, (N,2N), A.Reggoug 1982.0",
+      "energies_ev": [14700000],
+      "values": [1067.0],
+      "uncertainties": [318.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Os192",
+      "product": "Os191m",
+      "all_states": false,
+      "source": "EXFOR 31618-003-0, (N,2N), Liangyong Zhao 2008.0",
+      "energies_ev": [14700000],
+      "values": [1026.0],
+      "uncertainties": [186.0],
+      "calculations": {}
+    }
+  ]
+}

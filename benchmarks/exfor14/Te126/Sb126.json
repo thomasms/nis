@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Te126/Sb126",
+  "title": "Te126 to Sb126, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Te126": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te126",
+      "product": "Sb126",
+      "all_states": true,
+      "source": "EXFOR 20540-018-0, (N,P), W.Struwe 1974",
+      "energies_ev": [14600000],
+      "values": [3.31],
+      "uncertainties": [0.29],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te126",
+      "product": "Sb126",
+      "all_states": true,
+      "source": "EXFOR 22675-016-0, (N,P), C.Schnabel 2000",
+      "energies_ev": [14700000],
+      "values": [4.04],
+      "uncertainties": [0.36],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te126",
+      "product": "Sb126",
+      "all_states": true,
+      "source": "EXFOR 32669-012-0, (N,P), F.Zhou 2007",
+      "energies_ev": [13500000, 14600000],
+      "values": [2.09, 2.28],
+      "uncertainties": [0.15, 0.13],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te126",
+      "product": "Sb126",
+      "all_states": true,
+      "source": "EXFOR 40029-011-3, (N,P), V.N.Levkovskii 1971",
+      "energies_ev": [14800000],
+      "values": [6.1],
+      "uncertainties": [1.2],
+      "calculations": {}
+    }
+  ]
+}

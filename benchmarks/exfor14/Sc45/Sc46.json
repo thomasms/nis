@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sc45/Sc46",
+  "title": "Sc45 to Sc46, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sc45": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sc45",
+      "product": "Sc46",
+      "all_states": true,
+      "source": "EXFOR 20718-002-0, (N,G), M.Wagner 1980",
+      "energies_ev": [14600000],
+      "values": [0.534],
+      "uncertainties": [0.00534],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sc45",
+      "product": "Sc46",
+      "all_states": true,
+      "source": "EXFOR 22517-002-0, (N,G), J.L.Perkin 1963",
+      "energies_ev": [14650000],
+      "values": [1.25],
+      "uncertainties": [0.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sc45",
+      "product": "Sc46",
+      "all_states": true,
+      "source": "EXFOR 30067-006-0, (N,G), J.Csikai 1967",
+      "energies_ev": [14700000],
+      "values": [2.3],
+      "uncertainties": [0.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sc45",
+      "product": "Sc46",
+      "all_states": true,
+      "source": "EXFOR 30532-014-0, (N,G), M.Budnar 1979",
+      "energies_ev": [14100000],
+      "values": [0.8],
+      "uncertainties": [0.115],
+      "calculations": {}
+    }
+  ]
+}

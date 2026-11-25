@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Gd156/Sm153",
+  "title": "Gd156 to Sm153, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Gd156": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Gd156",
+      "product": "Sm153",
+      "all_states": true,
+      "source": "EXFOR 21440-019-0, (N,A), R.F.Coleman 1959",
+      "energies_ev": [14500000],
+      "values": [3.22],
+      "uncertainties": [0.483],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Gd156",
+      "product": "Sm153",
+      "all_states": true,
+      "source": "EXFOR 21997-007-0, (N,A), S.M.Qaim 1984",
+      "energies_ev": [14700000],
+      "values": [3.1],
+      "uncertainties": [1.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Gd156",
+      "product": "Sm153",
+      "all_states": true,
+      "source": "EXFOR 30051-015-0, (N,A), P.Rama Prasad 1969",
+      "energies_ev": [14200000],
+      "values": [8.5],
+      "uncertainties": [1.3],
+      "calculations": {}
+    }
+  ]
+}

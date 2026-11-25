@@ -1,0 +1,159 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sc45/K42",
+  "title": "Sc45 to K42, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sc45": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sc45",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 11462-003-0, (N,A), B.P.Bayhurst 1961",
+      "energies_ev": [13690000, 14090000, 14310000, 14500000, 14810000],
+      "values": [53.8, 55.1, 55.0, 56.3, 53.6],
+      "uncertainties": [2.7, 2.8, 2.8, 2.8, 2.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sc45",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 11590-006-0, (N,A), E.T.Bramlitt 1963",
+      "energies_ev": [14700000],
+      "values": [63.0],
+      "uncertainties": [12.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sc45",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 12977-004-0, (N,A), L.R.Greenwood 1987",
+      "energies_ev": [14500000, 14900000],
+      "values": [58.0, 54.0],
+      "uncertainties": [5.8, 5.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sc45",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 21976-010-0, (N,A), B.Anders 1985",
+      "energies_ev": [14700000],
+      "values": [56.0],
+      "uncertainties": [2.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sc45",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 22089-024-0, (N,A), Y.Ikeda 1988",
+      "energies_ev": [13560000, 13750000, 13980000, 14220000, 14430000, 14660000, 14930000],
+      "values": [52.7, 55.3, 53.3, 50.4, 55.3, 53.3, 56.4],
+      "uncertainties": [4.2, 4.4, 4.2, 4.1, 4.4, 4.3, 4.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sc45",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 22478-003-0, (N,A), M.Subasi 1998",
+      "energies_ev": [13600000, 13700000, 14100000, 14500000, 14700000, 14900000],
+      "values": [55.4, 56.4, 61.8, 58.2, 59.7, 56.2],
+      "uncertainties": [4.3, 4.3, 4.8, 4.5, 4.6, 4.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sc45",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 30553-003-0, (N,A), U.Garuska 1980",
+      "energies_ev": [14600000],
+      "values": [71.0],
+      "uncertainties": [9.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sc45",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 31161-005-0, (N,A), S.K.Mukherjee 1961",
+      "energies_ev": [14800000],
+      "values": [63.0],
+      "uncertainties": [9.45],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sc45",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 31494-002-0, (N,A), N.I.Molla 1998",
+      "energies_ev": [13900000, 14310000, 14570000, 14710000],
+      "values": [60.5, 60.2, 60.2, 63.3],
+      "uncertainties": [7.2, 7.2, 7.3, 7.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sc45",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 31496-002-0, (N,A), A.Grallert 1993",
+      "energies_ev": [14600000],
+      "values": [53.7],
+      "uncertainties": [2.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sc45",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 31524-012-0, (N,A), M.Belgaid 1992",
+      "energies_ev": [14730000],
+      "values": [58.0],
+      "uncertainties": [6.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sc45",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 40223-006-1, (N,A), V.N.Levkovskii 1969",
+      "energies_ev": [14800000],
+      "values": [49.0],
+      "uncertainties": [5.0],
+      "calculations": {}
+    }
+  ]
+}

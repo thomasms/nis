@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sn114/In114g",
+  "title": "Sn114 to In114g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sn114": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn114",
+      "product": "In114",
+      "all_states": false,
+      "source": "EXFOR 41032-026-1, (N,P), P.M.Gopych 1987",
+      "energies_ev": [14600000],
+      "values": [105.0],
+      "uncertainties": [30.0],
+      "calculations": {}
+    }
+  ]
+}

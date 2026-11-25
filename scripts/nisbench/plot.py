@@ -2,7 +2,8 @@
 Plots of a results file. Needs matplotlib.
 
     summary   one plot of the C/E of all the cases of a benchmark and quantity: NIS and each calculation
-    cases     one plot for each case: the values against cooling time, and C/E
+    cases     one plot for each case: the values against cooling time (or against the incident energy, for cross
+              sections at given energies), and C/E
 """
 
 import collections
@@ -25,7 +26,8 @@ X_MIN, X_MAX = 0.1, 10.0
 
 _QUANTITY_LABELS = {"decay_heat": "Decay heat", "beta_heat": "Beta decay heat", "gamma_heat": "Gamma decay heat",
                     "alpha_heat": "Alpha decay heat", "activity": "Activity", "cross_section": "Cross section"}
-# quantities that do not change with time: the summary shows them, a plot over the cooling time does not
+# quantities that do not change with time: the summary shows them, a plot over the cooling time does not (only a plot
+# over the energy, for the values at given energies)
 _NOT_IN_TIME = {"cross_section"}
 
 
@@ -133,67 +135,90 @@ def _unit_for(times: list) -> tuple:
     return 86400.0, "d"
 
 
+def _has_energy(row: dict) -> bool:
+    return not math.isnan(row.get("energy_ev", math.nan))
+
+
 def cases(rows: list, calculations: list, output_dir: Path, file_format: str = "png",
           nis_name: str = "NIS") -> list:
-    """One plot for each (benchmark, case, quantity) over the cooling time (not for a cross section, it has one
-    value). Returns the files."""
-    plt = _pyplot()
+    """One plot for each (benchmark, case, quantity): over the cooling time, or over the incident energy for cross
+    sections at given energies (a spectrum-averaged cross section has one value, so it has no plot). Returns the
+    files."""
     groups = collections.defaultdict(list)
     for r in rows:
-        if r["quantity"] not in _NOT_IN_TIME:
-            groups[(r["benchmark"], r["case"], r["quantity"])].append(r)
+        if _has_energy(r) or r["quantity"] not in _NOT_IN_TIME:
+            groups[(r["benchmark"], r["case"], r["quantity"], _has_energy(r))].append(r)
 
     files = []
     output_dir.mkdir(parents=True, exist_ok=True)
-    for (benchmark, case, quantity), group in sorted(groups.items()):
+    for (benchmark, case, quantity, by_energy), group in sorted(groups.items()):
+        suffix = "" if quantity == "decay_heat" else f"_{quantity}"
+        path = output_dir / f"{benchmark}_{case.replace('/', '_')}{suffix}.{file_format}"
+        _case_plot(group, calculations, f"{benchmark} {case}", quantity, by_energy, path, nis_name)
+        files.append(path)
+    return files
+
+
+def _case_plot(group: list, calculations: list, title: str, quantity: str, by_energy: bool, path: Path,
+               nis_name: str) -> None:
+    plt = _pyplot()
+    if by_energy:
+        group.sort(key=lambda r: r["energy_ev"])
+        x = [r["energy_ev"] / 1e6 for r in group]
+        x_label = "Incident neutron energy (MeV)"
+    else:
         group.sort(key=lambda r: r["time_s"])
         times = [r["time_s"] for r in group]
         scale, unit_label = _unit_for(times)
-        t = [x / scale for x in times]
-        codes = ["nis"] + [c for c in calculations if any(not math.isnan(r[c]) for r in group)]
+        x = [t / scale for t in times]
+        x_label = f"Cooling time ({unit_label})"
+    codes = ["nis"] + [c for c in calculations if any(not math.isnan(r[c]) for r in group)]
 
-        fig, (ax, ax_ce) = plt.subplots(2, 1, sharex=True, figsize=(7, 6),
-                                        gridspec_kw={"height_ratios": [3, 1.3], "hspace": 0.08})
-        exp = [r["experiment"] for r in group]
-        ax.errorbar(t, exp, yerr=[r["uncertainty"] for r in group], fmt="o", ms=4, color=INK, ecolor=INK,
-                    elinewidth=1, capsize=2, label="Experiment", zorder=3)
+    fig, (ax, ax_ce) = plt.subplots(2, 1, sharex=True, figsize=(7, 6),
+                                    gridspec_kw={"height_ratios": [3, 1.3], "hspace": 0.08})
+    exp = [r["experiment"] for r in group]
+    ax.errorbar(x, exp, yerr=[r["uncertainty"] for r in group], fmt="o", ms=4, color=INK, ecolor=INK,
+                elinewidth=1, capsize=2, label="Experiment", zorder=3)
+    if not by_energy:
         band = [r["uncertainty"] / r["experiment"] if r["experiment"] > 0 else 0 for r in group]
-        ax_ce.fill_between(t, [1 - b for b in band], [1 + b for b in band], color=BAND, lw=0, zorder=1)
-        ax_ce.axhline(1.0, color=MUTED, lw=1, zorder=1)
+        ax_ce.fill_between(x, [1 - b for b in band], [1 + b for b in band], color=BAND, lw=0, zorder=1)
+    ax_ce.axhline(1.0, color=MUTED, lw=1, zorder=1)
 
-        all_ce = []
-        for i, code in enumerate(codes):
-            colour, marker = CODE_COLOURS[i % len(CODE_COLOURS)], CODE_MARKERS[i % len(CODE_MARKERS)]
-            values = [r[code] for r in group]
-            ax.plot(t, values, color=colour, lw=2, ls="-" if i == 0 else "--", marker=marker, ms=3,
-                    label=_label(code, nis_name), zorder=2)
-            ce = [v / e if e > 0 else math.nan for v, e in zip(values, exp)]
-            ax_ce.plot(t, ce, marker, ms=4, color=colour, zorder=3)
-            all_ce += [v for v in ce if v > 0 and not math.isnan(v)]
+    all_ce = []
+    for i, code in enumerate(codes):
+        colour, marker = CODE_COLOURS[i % len(CODE_COLOURS)], CODE_MARKERS[i % len(CODE_MARKERS)]
+        values = [r[code] for r in group]
+        ax.plot(x, values, color=colour, lw=2, ls="-" if i == 0 else "--", marker=marker, ms=3,
+                label=_label(code, nis_name), zorder=2)
+        ce = [v / e if e > 0 else math.nan for v, e in zip(values, exp)]
+        if by_energy:
+            # the experiment uncertainty of each point, as an error bar of its C/E
+            ax_ce.errorbar(x, ce, yerr=[c * r["uncertainty"] / r["experiment"] if r["experiment"] > 0 else 0
+                                        for c, r in zip(ce, group)],
+                           fmt=marker, ms=4, color=colour, elinewidth=0.8, capsize=0, zorder=3)
+        else:
+            ax_ce.plot(x, ce, marker, ms=4, color=colour, zorder=3)
+        all_ce += [v for v in ce if v > 0 and not math.isnan(v)]
 
-        unit = group[0]["unit"].replace("uW", "µW")
+    unit = group[0]["unit"].replace("uW", "µW")
+    if not by_energy:
         ax.set_xscale("log")
-        ax.set_yscale("log")
-        ax.set_ylabel(f"{_QUANTITY_LABELS[quantity]} ({unit})", color=INK)
-        ax.set_title(f"{benchmark} {case}", color=INK, loc="left")
-        ax.legend(frameon=False, labelcolor=INK)
-        ax_ce.set_ylabel("C/E", color=INK)
-        ax_ce.set_xlabel(f"Cooling time ({unit_label})", color=INK)
-        if all_ce:
-            low, high = min(all_ce + [0.8]), max(all_ce + [1.2])
-            if high / low > 5:
-                ax_ce.set_yscale("log")
-            ax_ce.set_ylim(low * 0.9, high * 1.1)
-        for a in (ax, ax_ce):
-            a.grid(True, which="major", color=GRID, lw=0.8)
-            a.set_axisbelow(True)
-            a.tick_params(colors=MUTED)
-            for spine in a.spines.values():
-                spine.set_color(GRID)
-
-        suffix = "" if quantity == "decay_heat" else f"_{quantity}"
-        path = output_dir / f"{benchmark}_{case.replace('/', '_')}{suffix}.{file_format}"
-        fig.savefig(path, dpi=150, bbox_inches="tight")
-        plt.close(fig)
-        files.append(path)
-    return files
+    ax.set_yscale("log")
+    ax.set_ylabel(f"{_QUANTITY_LABELS[quantity]} ({unit})", color=INK)
+    ax.set_title(title, color=INK, loc="left")
+    ax.legend(frameon=False, labelcolor=INK)
+    ax_ce.set_ylabel("C/E", color=INK)
+    ax_ce.set_xlabel(x_label, color=INK)
+    if all_ce:
+        low, high = min(all_ce + [0.8]), max(all_ce + [1.2])
+        if high / low > 5:
+            ax_ce.set_yscale("log")
+        ax_ce.set_ylim(low * 0.9, high * 1.1)
+    for a in (ax, ax_ce):
+        a.grid(True, which="major", color=GRID, lw=0.8)
+        a.set_axisbelow(True)
+        a.tick_params(colors=MUTED)
+        for spine in a.spines.values():
+            spine.set_color(GRID)
+    fig.savefig(path, dpi=150, bbox_inches="tight")
+    plt.close(fig)

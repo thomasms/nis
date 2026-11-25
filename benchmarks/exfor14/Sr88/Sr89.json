@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sr88/Sr89",
+  "title": "Sr88 to Sr89, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sr88": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sr88",
+      "product": "Sr89",
+      "all_states": true,
+      "source": "EXFOR 20530-004-0, (N,G), F.Rigaud 1970",
+      "energies_ev": [14060000],
+      "values": [1.97],
+      "uncertainties": [0.58],
+      "calculations": {}
+    }
+  ]
+}

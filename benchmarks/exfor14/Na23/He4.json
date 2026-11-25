@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Na23/He4",
+  "title": "Na23 to He4, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Na23": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Na23",
+      "product": "He4",
+      "all_states": true,
+      "source": "EXFOR 31112-003-0, (N,X), O.N.Kaul 1962",
+      "energies_ev": [14000000],
+      "values": [185.0],
+      "uncertainties": [27.75],
+      "calculations": {}
+    }
+  ]
+}

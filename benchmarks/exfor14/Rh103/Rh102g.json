@@ -1,0 +1,99 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Rh103/Rh102g",
+  "title": "Rh103 to Rh102g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Rh103": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Rh102",
+      "all_states": false,
+      "source": "EXFOR 10497-013-0, (N,2N), W.D.Lu 1970",
+      "energies_ev": [14400000],
+      "values": [522.0],
+      "uncertainties": [45.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Rh102",
+      "all_states": false,
+      "source": "EXFOR 14461-015-0, (N,2N), N.Fotiades 2016",
+      "energies_ev": [14037000],
+      "values": [788.9],
+      "uncertainties": [4.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Rh102",
+      "all_states": false,
+      "source": "EXFOR 20393-005-0, (N,2N), A.Paulsen 1970",
+      "energies_ev": [13810000, 14200000, 14610000],
+      "values": [584.0, 563.0, 540.0],
+      "uncertainties": [42.048, 40.536, 38.34],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Rh102",
+      "all_states": false,
+      "source": "EXFOR 20830-005-0, (N,2N), M.Bormann 1970",
+      "energies_ev": [13610000, 14600000],
+      "values": [756.0, 692.0],
+      "uncertainties": [70.0, 67.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Rh102",
+      "all_states": false,
+      "source": "EXFOR 21709-004-0, (N,2N), J.Laurec 1981",
+      "energies_ev": [14100000, 14800000],
+      "values": [805.0, 830.0],
+      "uncertainties": [48.0, 50.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Rh102",
+      "all_states": false,
+      "source": "EXFOR 41424-036-0, (N,2N), A.A.Filatenkov 2001",
+      "energies_ev": [13680000, 13880000, 14050000, 14470000, 14860000],
+      "values": [650.0, 695.0, 690.0, 685.0, 730.0],
+      "uncertainties": [55.0, 60.0, 80.0, 55.0, 60.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rh103",
+      "product": "Rh102",
+      "all_states": false,
+      "source": "EXFOR 41614-087-0, (N,2N), A.A.Filatenkov 2016",
+      "energies_ev": [13680000, 13880000, 14050000, 14470000, 14860000],
+      "values": [648.0, 694.0, 687.0, 678.0, 731.0],
+      "uncertainties": [56.635, 61.766, 80.929, 58.172, 62.135],
+      "calculations": {}
+    }
+  ]
+}

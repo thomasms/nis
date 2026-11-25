@@ -1,0 +1,111 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "W186/Ta185",
+  "title": "W186 to Ta185, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "W186": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W186",
+      "product": "Ta185",
+      "all_states": true,
+      "source": "EXFOR 12181-005-0, (N,X), A.Poularikas 1960",
+      "energies_ev": [14800000],
+      "values": [1.5],
+      "uncertainties": [0.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W186",
+      "product": "Ta185",
+      "all_states": true,
+      "source": "EXFOR 20668-018-0, (N,X), S.M.Qaim 1975",
+      "energies_ev": [14700000],
+      "values": [0.25],
+      "uncertainties": [0.05],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W186",
+      "product": "Ta185",
+      "all_states": true,
+      "source": "EXFOR 21441-007-0, (N,X), J.F.Barry 1959",
+      "energies_ev": [14500000, 14850000],
+      "values": [0.11, 0.3],
+      "uncertainties": [0.05, 0.15],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W186",
+      "product": "Ta185",
+      "all_states": true,
+      "source": "EXFOR 22468-009-0, (N,X), H.Sakane 2000",
+      "energies_ev": [14020000, 14350000, 14640000, 14870000],
+      "values": [0.05, 0.18, 0.25, 0.4],
+      "uncertainties": [0.025, 0.036, 0.04, 0.06],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W186",
+      "product": "Ta185",
+      "all_states": true,
+      "source": "EXFOR 22827-019-0, (N,X), H.Sakane 2003",
+      "energies_ev": [14020000, 14350000, 14640000, 14870000],
+      "values": [0.05, 0.18, 0.25, 0.4],
+      "uncertainties": [0.02, 0.036, 0.04, 0.06],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W186",
+      "product": "Ta185",
+      "all_states": true,
+      "source": "EXFOR 23011-005-0, (N,X), Y.Kasugai 1994",
+      "energies_ev": [13880000, 14280000, 14580000, 14870000],
+      "values": [0.08, 0.15, 0.22, 0.34],
+      "uncertainties": [0.0464, 0.048, 0.0484, 0.0952],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W186",
+      "product": "Ta185",
+      "all_states": true,
+      "source": "EXFOR 32874-003-0, (N,X), Yong Li 2022",
+      "energies_ev": [13500000, 14400000, 14800000],
+      "values": [0.12, 0.17, 0.29],
+      "uncertainties": [0.01, 0.01, 0.02],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W186",
+      "product": "Ta185",
+      "all_states": true,
+      "source": "EXFOR 41614-192-0, (N,X), A.A.Filatenkov 2016",
+      "energies_ev": [14720000, 14810000, 14880000],
+      "values": [0.155, 0.25, 0.27],
+      "uncertainties": [0.015004, 0.019825, 0.019791],
+      "calculations": {}
+    }
+  ]
+}

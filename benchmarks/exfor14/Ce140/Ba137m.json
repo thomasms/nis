@@ -1,0 +1,135 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ce140/Ba137m",
+  "title": "Ce140 to Ba137m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ce140": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "Ba137m",
+      "all_states": false,
+      "source": "EXFOR 11274-088-0, (N,A), E.B.Paul 1953",
+      "energies_ev": [14500000],
+      "values": [12.1],
+      "uncertainties": [6.05],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "Ba137m",
+      "all_states": false,
+      "source": "EXFOR 12033-011-0, (N,A), R.G.Wille 1960",
+      "energies_ev": [14800000],
+      "values": [9.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "Ba137m",
+      "all_states": false,
+      "source": "EXFOR 20509-009-0, (N,A), E.Havlik 1971",
+      "energies_ev": [14700000],
+      "values": [3.6],
+      "uncertainties": [1.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "Ba137m",
+      "all_states": false,
+      "source": "EXFOR 20900-005-0, (N,A), M.Bormann 1966",
+      "energies_ev": [13580000, 14000000, 14100000, 14250000, 14530000, 14820000],
+      "values": [13.0, 12.1, 12.4, 11.4, 11.0, 11.8],
+      "uncertainties": [1.25, 1.16, 1.19, 1.09, 1.06, 1.13],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "Ba137m",
+      "all_states": false,
+      "source": "EXFOR 21997-003-0, (N,A), S.M.Qaim 1984",
+      "energies_ev": [14700000],
+      "values": [2.4],
+      "uncertainties": [0.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "Ba137m",
+      "all_states": false,
+      "source": "EXFOR 22311-007-0, (N,A), S.Murahira 1996",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [2.51, 2.83, 2.64, 3.01, 3.02],
+      "uncertainties": [0.80069, 0.75561, 0.99264, 0.88795, 0.7852],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "Ba137m",
+      "all_states": false,
+      "source": "EXFOR 22393-004-0, (N,A), Y.Kasugai 1997",
+      "energies_ev": [13700000, 14030000, 14360000, 14660000, 14950000],
+      "values": [1.3, 2.0, 1.2, 2.2, 2.2],
+      "uncertainties": [0.4, 0.5, 0.4, 0.5, 0.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "Ba137m",
+      "all_states": false,
+      "source": "EXFOR 23160-002-0, (N,A), I.A.Reyhancan 2012",
+      "energies_ev": [13570000, 13750000, 14520000, 14750000, 14830000],
+      "values": [1.42, 1.48, 1.48, 1.93, 2.05],
+      "uncertainties": [0.59, 0.47, 0.51, 0.55, 0.45],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "Ba137m",
+      "all_states": false,
+      "source": "EXFOR 32752-007-0, (N,A), Junhua Luo 2015",
+      "energies_ev": [13500000, 14800000],
+      "values": [1.5, 1.7],
+      "uncertainties": [0.6, 0.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ce140",
+      "product": "Ba137m",
+      "all_states": false,
+      "source": "EXFOR 32768-008-0, (N,A), Qiang Wang 2019",
+      "energies_ev": [14200000, 14900000],
+      "values": [2.08, 2.62],
+      "uncertainties": [0.33, 0.47],
+      "calculations": {}
+    }
+  ]
+}

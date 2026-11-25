@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "V50/V49",
+  "title": "V50 to V49, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "V50": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "V50",
+      "product": "V49",
+      "all_states": true,
+      "source": "EXFOR 13166-002-0, (N,2N), L.R.Greenwood 1990",
+      "energies_ev": [14300000],
+      "values": [258.0],
+      "uncertainties": [39.0],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "In113/Ag110",
+  "title": "In113 to Ag110, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "In113": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "In113",
+      "product": "Ag110",
+      "all_states": true,
+      "source": "EXFOR 31481-009-0, (N,A), A.D.Majdeddin 1997",
+      "energies_ev": [14700000],
+      "values": [4.7],
+      "uncertainties": [0.5],
+      "calculations": {}
+    }
+  ]
+}

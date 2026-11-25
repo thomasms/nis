@@ -1,0 +1,183 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sb121/Sb120g",
+  "title": "Sb121 to Sb120g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sb121": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb121",
+      "product": "Sb120",
+      "all_states": false,
+      "source": "EXFOR 10497-025-0, (N,2N), W.D.Lu 1970.0",
+      "energies_ev": [14400000],
+      "values": [1188.0],
+      "uncertainties": [60.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb121",
+      "product": "Sb120",
+      "all_states": false,
+      "source": "EXFOR 10844-002-2, (N,2N), S.K.Ghorai 1980.0",
+      "energies_ev": [14400000],
+      "values": [976.0],
+      "uncertainties": [88.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb121",
+      "product": "Sb120",
+      "all_states": false,
+      "source": "EXFOR 11274-079-0, (N,2N), E.B.Paul 1953.0",
+      "energies_ev": [14500000],
+      "values": [750.0],
+      "uncertainties": [187.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb121",
+      "product": "Sb120",
+      "all_states": false,
+      "source": "EXFOR 11328-027-0, (N,2N), L.A.Rayburn 1961.0",
+      "energies_ev": [14400000],
+      "values": [1056.0],
+      "uncertainties": [79.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb121",
+      "product": "Sb120",
+      "all_states": false,
+      "source": "EXFOR 11784-005-0, (N,2N), L.A.Rayburn 1963.0",
+      "energies_ev": [14050000],
+      "values": [979.0],
+      "uncertainties": [88.11],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb121",
+      "product": "Sb120",
+      "all_states": false,
+      "source": "EXFOR 11785-005-0, (N,2N), D.R.Koehler 1962",
+      "energies_ev": [14050000, 14300000],
+      "values": [1070.0, 1050.0],
+      "uncertainties": [100.0, 90.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb121",
+      "product": "Sb120",
+      "all_states": false,
+      "source": "EXFOR 20294-003-0, (N,2N), Y.Kanda 1968",
+      "energies_ev": [13600000, 13700000, 14050000, 14720000],
+      "values": [878.0, 951.0, 1062.0, 998.0],
+      "uncertainties": [78.0, 81.0, 82.0, 83.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb121",
+      "product": "Sb120",
+      "all_states": false,
+      "source": "EXFOR 20834-011-0, (N,2N), M.Bormann 1968.0",
+      "energies_ev": [14110000, 14870000],
+      "values": [935.0, 1014.0],
+      "uncertainties": [90.0, 96.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb121",
+      "product": "Sb120",
+      "all_states": false,
+      "source": "EXFOR 21106-015-0, (N,2N), B.Minetti 1968",
+      "energies_ev": [14700000],
+      "values": [1244.0],
+      "uncertainties": [80.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb121",
+      "product": "Sb120",
+      "all_states": false,
+      "source": "EXFOR 21400-006-0, (N,2N), C.Carles 1963.0",
+      "energies_ev": [14100000],
+      "values": [1455.0],
+      "uncertainties": [74.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb121",
+      "product": "Sb120",
+      "all_states": false,
+      "source": "EXFOR 21894-002-0, (N,2N), R.A.Jarjis 1981.0",
+      "energies_ev": [13500000, 13600000, 13830000, 14010000, 14230000, 14370000, 14490000, 14610000, 14710000, 14800000, 14860000, 14900000, 14910000],
+      "values": [922.5, 950.2, 980.0, 965.3, 1000.0, 975.0, 982.1, 924.8, 908.0, 940.1, 920.2, 931.1, 905.9],
+      "uncertainties": [77.0, 57.0, 50.0, 56.0, 50.0, 45.0, 93.0, 46.0, 78.0, 93.0, 103.0, 87.0, 108.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb121",
+      "product": "Sb120",
+      "all_states": false,
+      "source": "EXFOR 30517-003-A, (N,2N), N.Lakshmana Das nan",
+      "energies_ev": [14200000],
+      "values": [1169.0],
+      "uncertainties": [70.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb121",
+      "product": "Sb120",
+      "all_states": false,
+      "source": "EXFOR 30698-013-2, (N,2N), A.Reggoug 1982.0",
+      "energies_ev": [14700000],
+      "values": [1080.0],
+      "uncertainties": [80.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sb121",
+      "product": "Sb120",
+      "all_states": false,
+      "source": "EXFOR 31247-024-0, (N,2N), C.S.Khurana 1961",
+      "energies_ev": [14800000],
+      "values": [1180.0],
+      "uncertainties": [177.0],
+      "calculations": {}
+    }
+  ]
+}

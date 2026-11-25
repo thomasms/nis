@@ -1,0 +1,171 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Na23/F20",
+  "title": "Na23 to F20, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Na23": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Na23",
+      "product": "F20",
+      "all_states": true,
+      "source": "EXFOR 12918-004-0, (N,A), D.A.Leich 1985",
+      "energies_ev": [14500000],
+      "values": [151.0],
+      "uncertainties": [8.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Na23",
+      "product": "F20",
+      "all_states": true,
+      "source": "EXFOR 20085-004-0, (N,A), F.Flesch 1967",
+      "energies_ev": [14700000],
+      "values": [141.0],
+      "uncertainties": [21.15],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Na23",
+      "product": "F20",
+      "all_states": true,
+      "source": "EXFOR 20838-014-0, (N,A), G.Woelfer 1966",
+      "energies_ev": [14100000],
+      "values": [136.0],
+      "uncertainties": [14.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Na23",
+      "product": "F20",
+      "all_states": true,
+      "source": "EXFOR 20892-006-0, (N,A), J.Picard 1965",
+      "energies_ev": [14180000, 14890000],
+      "values": [172.0, 164.0],
+      "uncertainties": [20.0, 22.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Na23",
+      "product": "F20",
+      "all_states": true,
+      "source": "EXFOR 21125-002-0, (N,A), P.G.Bizzeti 1962",
+      "energies_ev": [14050000],
+      "values": [147.0],
+      "uncertainties": [18.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Na23",
+      "product": "F20",
+      "all_states": true,
+      "source": "EXFOR 21668-004-0, (N,A), M.Bormann 1960",
+      "energies_ev": [14100000],
+      "values": [29.0],
+      "uncertainties": [9.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Na23",
+      "product": "F20",
+      "all_states": true,
+      "source": "EXFOR 21999-003-0, (N,A), R.Pepelnik 1985",
+      "energies_ev": [14700000],
+      "values": [123.0],
+      "uncertainties": [4.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Na23",
+      "product": "F20",
+      "all_states": true,
+      "source": "EXFOR 22338-027-0, (N,A), A.Ercan 1991",
+      "energies_ev": [14600000],
+      "values": [100.0],
+      "uncertainties": [20.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Na23",
+      "product": "F20",
+      "all_states": true,
+      "source": "EXFOR 22661-003-0, (N,A), M.Bostan 2002",
+      "energies_ev": [13600000, 13680000, 14100000, 14460000, 14720000, 14860000],
+      "values": [77.9, 90.4, 85.1, 83.3, 86.3, 97.4],
+      "uncertainties": [4.0, 4.0, 4.0, 4.0, 4.0, 5.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Na23",
+      "product": "F20",
+      "all_states": true,
+      "source": "EXFOR 30322-002-0, (N,A), J.Janczyszyn 1973",
+      "energies_ev": [14000000],
+      "values": [78.0],
+      "uncertainties": [30.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Na23",
+      "product": "F20",
+      "all_states": true,
+      "source": "EXFOR 30562-010-0, (N,A), P.N.Ngoc 1980",
+      "energies_ev": [14600000],
+      "values": [111.0],
+      "uncertainties": [9.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Na23",
+      "product": "F20",
+      "all_states": true,
+      "source": "EXFOR 31161-015-0, (N,A), S.K.Mukherjee 1961",
+      "energies_ev": [14800000],
+      "values": [222.0],
+      "uncertainties": [22.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Na23",
+      "product": "F20",
+      "all_states": true,
+      "source": "EXFOR 33074-003-0, (N,A), O.N.Kaul 1962",
+      "energies_ev": [14000000],
+      "values": [185.0],
+      "uncertainties": [27.75],
+      "calculations": {}
+    }
+  ]
+}

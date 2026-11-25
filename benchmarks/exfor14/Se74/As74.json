@@ -1,0 +1,147 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Se74/As74",
+  "title": "Se74 to As74, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Se74": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se74",
+      "product": "As74",
+      "all_states": true,
+      "source": "EXFOR 11722-007-0, (N,P), P.Venugopala Rao 1967",
+      "energies_ev": [14400000],
+      "values": [107.0],
+      "uncertainties": [11.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se74",
+      "product": "As74",
+      "all_states": true,
+      "source": "EXFOR 20034-003-0, (N,P), P.Hille 1966",
+      "energies_ev": [14050000, 14750000],
+      "values": [165.0, 142.0],
+      "uncertainties": [33.0, 14.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se74",
+      "product": "As74",
+      "all_states": true,
+      "source": "EXFOR 20721-066-0, (N,P), N.I.Molla 1977",
+      "energies_ev": [14700000],
+      "values": [134.0],
+      "uncertainties": [13.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se74",
+      "product": "As74",
+      "all_states": true,
+      "source": "EXFOR 20898-007-0, (N,P), M.Bormann 1966",
+      "energies_ev": [13500000, 14100000, 14900000],
+      "values": [107.0, 105.0, 111.0],
+      "uncertainties": [32.0, 20.0, 33.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se74",
+      "product": "As74",
+      "all_states": true,
+      "source": "EXFOR 31496-034-0, (N,P), A.Grallert 1993",
+      "energies_ev": [14600000],
+      "values": [112.0],
+      "uncertainties": [7.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se74",
+      "product": "As74",
+      "all_states": true,
+      "source": "EXFOR 32108-002-0, (N,P), H.M.Hoang 1989",
+      "energies_ev": [13900000, 14500000, 15000000],
+      "values": [163.0, 136.0, 117.0],
+      "uncertainties": [26.0, 22.0, 19.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se74",
+      "product": "As74",
+      "all_states": true,
+      "source": "EXFOR 32656-007-0, (N,P), Guozhu He 2005",
+      "energies_ev": [14600000],
+      "values": [96.3],
+      "uncertainties": [6.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se74",
+      "product": "As74",
+      "all_states": true,
+      "source": "EXFOR 40009-023-1, (N,P), G.P.Vinitskaya 1968",
+      "energies_ev": [14800000],
+      "values": [200.0],
+      "uncertainties": [40.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se74",
+      "product": "As74",
+      "all_states": true,
+      "source": "EXFOR 40227-002-0, (N,P), V.V.Ivanenko 1969",
+      "energies_ev": [14700000],
+      "values": [148.0],
+      "uncertainties": [17.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se74",
+      "product": "As74",
+      "all_states": true,
+      "source": "EXFOR 41424-009-0, (N,P), A.A.Filatenkov 2001",
+      "energies_ev": [13890000, 14260000, 14440000, 14810000],
+      "values": [170.0, 167.0, 136.0, 134.0],
+      "uncertainties": [16.0, 14.0, 60.0, 20.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se74",
+      "product": "As74",
+      "all_states": true,
+      "source": "EXFOR 41614-036-0, (N,P), A.A.Filatenkov 2016",
+      "energies_ev": [13890000, 14260000, 14440000, 14810000],
+      "values": [171.0, 167.0, 137.0, 134.0],
+      "uncertainties": [15.578, 13.41, 60.417, 19.698],
+      "calculations": {}
+    }
+  ]
+}

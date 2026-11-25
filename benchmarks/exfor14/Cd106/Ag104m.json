@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cd106/Ag104m",
+  "title": "Cd106 to Ag104m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cd106": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd106",
+      "product": "Ag104m",
+      "all_states": false,
+      "source": "EXFOR 10806-009-2, (N,T), T.W.Woo 1979",
+      "energies_ev": [14600000],
+      "values": [0.057],
+      "uncertainties": [0.012],
+      "calculations": {}
+    }
+  ]
+}

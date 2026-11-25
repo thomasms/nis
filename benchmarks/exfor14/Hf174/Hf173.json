@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Hf174/Hf173",
+  "title": "Hf174 to Hf173, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Hf174": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hf174",
+      "product": "Hf173",
+      "all_states": true,
+      "source": "EXFOR 12092-002-0, (N,2N), M.Hillman 1969",
+      "energies_ev": [14500000],
+      "values": [860.0],
+      "uncertainties": [60.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hf174",
+      "product": "Hf173",
+      "all_states": true,
+      "source": "EXFOR 20541-058-0, (N,2N), S.M.Qaim 1974",
+      "energies_ev": [14700000],
+      "values": [1886.0],
+      "uncertainties": [145.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hf174",
+      "product": "Hf173",
+      "all_states": true,
+      "source": "EXFOR 30605-004-0, (N,2N), N.Lakshmana Das 1981",
+      "energies_ev": [14200000],
+      "values": [1968.0],
+      "uncertainties": [148.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hf174",
+      "product": "Hf173",
+      "all_states": true,
+      "source": "EXFOR 31497-005-0, (N,2N), Xiangzhong Kong 1998",
+      "energies_ev": [14700000],
+      "values": [1834.0],
+      "uncertainties": [100.0],
+      "calculations": {}
+    }
+  ]
+}

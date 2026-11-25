@@ -1,0 +1,159 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Tl203/Tl202",
+  "title": "Tl203 to Tl202, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Tl203": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tl203",
+      "product": "Tl202",
+      "all_states": true,
+      "source": "EXFOR 10244-017-0, (N,2N), A.K.Hankla 1972",
+      "energies_ev": [14400000],
+      "values": [1950.0],
+      "uncertainties": [200.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tl203",
+      "product": "Tl202",
+      "all_states": true,
+      "source": "EXFOR 10536-063-0, (N,2N), B.P.Bayhurst 1975",
+      "energies_ev": [14100000, 14890000],
+      "values": [2090.0, 2077.0],
+      "uncertainties": [89.0, 88.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tl203",
+      "product": "Tl202",
+      "all_states": true,
+      "source": "EXFOR 11504-018-0, (N,2N), H.A.Tewes 1960",
+      "energies_ev": [13850000, 14000000, 14500000],
+      "values": [1450.0, 1460.0, 1560.0],
+      "uncertainties": [290.0, 292.0, 312.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tl203",
+      "product": "Tl202",
+      "all_states": true,
+      "source": "EXFOR 11645-027-0, (N,2N), R.J.Prestwood 1961",
+      "energies_ev": [13520000, 13880000, 14090000, 14310000, 14500000, 14680000],
+      "values": [1268.0, 1302.0, 1302.0, 1329.0, 1321.0, 1305.0],
+      "uncertainties": [63.0, 65.0, 65.0, 66.0, 66.0, 65.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tl203",
+      "product": "Tl202",
+      "all_states": true,
+      "source": "EXFOR 20347-010-0, (N,2N), D.G.Vallis 1966",
+      "energies_ev": [14700000],
+      "values": [1967.0],
+      "uncertainties": [120.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tl203",
+      "product": "Tl202",
+      "all_states": true,
+      "source": "EXFOR 20416-054-0, (N,2N), J.Frehaut 1980",
+      "energies_ev": [13800000, 14760000],
+      "values": [1930.0, 1927.0],
+      "uncertainties": [151.0, 155.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tl203",
+      "product": "Tl202",
+      "all_states": true,
+      "source": "EXFOR 20416-111-0, (N,2N), J.Frehaut 1980",
+      "energies_ev": [13800000, 14760000],
+      "values": [2008.0, 1983.0],
+      "uncertainties": [152.0, 150.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tl203",
+      "product": "Tl202",
+      "all_states": true,
+      "source": "EXFOR 20802-021-0, (N,2N), W.Dilg 1968",
+      "energies_ev": [14700000],
+      "values": [2185.0],
+      "uncertainties": [120.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tl203",
+      "product": "Tl202",
+      "all_states": true,
+      "source": "EXFOR 22205-009-0, (N,2N), J.Csikai 1991",
+      "energies_ev": [14500000],
+      "values": [1895.0],
+      "uncertainties": [76.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tl203",
+      "product": "Tl202",
+      "all_states": true,
+      "source": "EXFOR 30069-007-0, (N,2N), G.Peto 1968",
+      "energies_ev": [15000000],
+      "values": [1680.0],
+      "uncertainties": [210.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tl203",
+      "product": "Tl202",
+      "all_states": true,
+      "source": "EXFOR 31519-006-0, (N,2N), B.Kiraly 2001",
+      "energies_ev": [14700000],
+      "values": [1970.0],
+      "uncertainties": [110.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tl203",
+      "product": "Tl202",
+      "all_states": true,
+      "source": "EXFOR 40171-004-0, (N,2N), A.A.Druzhinin 1972",
+      "energies_ev": [14800000],
+      "values": [1700.0],
+      "uncertainties": [170.0],
+      "calculations": {}
+    }
+  ]
+}

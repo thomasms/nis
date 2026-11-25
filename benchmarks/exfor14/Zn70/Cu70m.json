@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Zn70/Cu70m",
+  "title": "Zn70 to Cu70m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Zn70": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn70",
+      "product": "Cu70m",
+      "all_states": false,
+      "source": "EXFOR 22338-024-0, (N,P), A.Ercan 1991",
+      "energies_ev": [14600000],
+      "values": [5.7],
+      "uncertainties": [1.9],
+      "calculations": {}
+    }
+  ]
+}

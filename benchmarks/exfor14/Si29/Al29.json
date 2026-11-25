@@ -1,0 +1,231 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Si29/Al29",
+  "title": "Si29 to Al29, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Si29": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Si29",
+      "product": "Al29",
+      "all_states": true,
+      "source": "EXFOR 10217-003-0, (N,P), J.J.Singh 1970",
+      "energies_ev": [14500000],
+      "values": [112.5],
+      "uncertainties": [16.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Si29",
+      "product": "Al29",
+      "all_states": true,
+      "source": "EXFOR 11274-012-0, (N,P), E.B.Paul 1953",
+      "energies_ev": [14500000],
+      "values": [101.0],
+      "uncertainties": [30.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Si29",
+      "product": "Al29",
+      "all_states": true,
+      "source": "EXFOR 11515-004-0, (N,P), N.Ranakumar 1968",
+      "energies_ev": [14400000],
+      "values": [130.0],
+      "uncertainties": [16.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Si29",
+      "product": "Al29",
+      "all_states": true,
+      "source": "EXFOR 20799-007-0, (N,P), J.C.Robertson 1973",
+      "energies_ev": [14780000],
+      "values": [131.0],
+      "uncertainties": [4.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Si29",
+      "product": "Al29",
+      "all_states": true,
+      "source": "EXFOR 20889-010-0, (N,P), A.Pasquarelli 1967",
+      "energies_ev": [14700000],
+      "values": [22.7],
+      "uncertainties": [1.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Si29",
+      "product": "Al29",
+      "all_states": true,
+      "source": "EXFOR 21999-007-1, (N,P), R.Pepelnik 1985",
+      "energies_ev": [14700000],
+      "values": [138.0],
+      "uncertainties": [6.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Si29",
+      "product": "Al29",
+      "all_states": true,
+      "source": "EXFOR 22089-009-0, (N,P), Y.Ikeda 1988",
+      "energies_ev": [14110000, 14660000, 14900000],
+      "values": [126.1, 146.2, 134.7],
+      "uncertainties": [7.2, 8.2, 7.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Si29",
+      "product": "Al29",
+      "all_states": true,
+      "source": "EXFOR 22281-005-0, (N,P), K.Kawade 1992",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [130.6, 132.7, 131.7, 131.6, 130.8],
+      "uncertainties": [4.7016, 4.7772, 4.8729, 4.7376, 4.7088],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Si29",
+      "product": "Al29",
+      "all_states": true,
+      "source": "EXFOR 22338-033-0, (N,P), A.Ercan 1991",
+      "energies_ev": [14600000],
+      "values": [135.0],
+      "uncertainties": [14.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Si29",
+      "product": "Al29",
+      "all_states": true,
+      "source": "EXFOR 22433-004-0, (N,P), Y.Kasugai 1998",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [130.6, 132.7, 131.7, 131.6, 130.8],
+      "uncertainties": [4.7016, 4.7772, 4.8729, 4.7376, 4.7088],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Si29",
+      "product": "Al29",
+      "all_states": true,
+      "source": "EXFOR 22674-003-0, (N,P), W.Mannhart 2002",
+      "energies_ev": [13967000],
+      "values": [126.8],
+      "uncertainties": [5.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Si29",
+      "product": "Al29",
+      "all_states": true,
+      "source": "EXFOR 22976-006-0, (N,P), W.Mannhart 2007",
+      "energies_ev": [13967000],
+      "values": [125.0],
+      "uncertainties": [4.7625],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Si29",
+      "product": "Al29",
+      "all_states": true,
+      "source": "EXFOR 30336-007-0, (N,P), R.Prasad 1971",
+      "energies_ev": [14800000],
+      "values": [147.0],
+      "uncertainties": [18.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Si29",
+      "product": "Al29",
+      "all_states": true,
+      "source": "EXFOR 30562-005-0, (N,P), P.N.Ngoc 1980",
+      "energies_ev": [14600000],
+      "values": [104.0],
+      "uncertainties": [8.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Si29",
+      "product": "Al29",
+      "all_states": true,
+      "source": "EXFOR 31412-004-0, (N,P), P.M.Dighe 1991",
+      "energies_ev": [14000000],
+      "values": [103.0],
+      "uncertainties": [5.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Si29",
+      "product": "Al29",
+      "all_states": true,
+      "source": "EXFOR 31524-005-0, (N,P), M.Belgaid 1992",
+      "energies_ev": [14730000],
+      "values": [145.0],
+      "uncertainties": [10.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Si29",
+      "product": "Al29",
+      "all_states": true,
+      "source": "EXFOR 40539-003-0, (N,P), V.T.Shchebolev 1977",
+      "energies_ev": [14800000],
+      "values": [98.5],
+      "uncertainties": [23.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Si29",
+      "product": "Al29",
+      "all_states": true,
+      "source": "EXFOR 41032-023-0, (N,P), P.M.Gopych 1987",
+      "energies_ev": [14600000],
+      "values": [136.0],
+      "uncertainties": [15.0],
+      "calculations": {}
+    }
+  ]
+}

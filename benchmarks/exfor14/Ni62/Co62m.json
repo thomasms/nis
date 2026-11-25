@@ -1,0 +1,171 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ni62/Co62m",
+  "title": "Ni62 to Co62m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ni62": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni62",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 11696-020-0, (N,P), W.G.Cross 1963",
+      "energies_ev": [14500000],
+      "values": [15.0],
+      "uncertainties": [3.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni62",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 11740-012-0, (N,P), I.L.Preiss 1960",
+      "energies_ev": [14800000],
+      "values": [3.3],
+      "uncertainties": [0.02],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni62",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 20721-054-0, (N,P), N.I.Molla 1977",
+      "energies_ev": [14700000],
+      "values": [21.0],
+      "uncertainties": [2.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni62",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 21936-024-0, (N,P), B.M.Bahal 1984",
+      "energies_ev": [14700000],
+      "values": [14.6],
+      "uncertainties": [0.9],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni62",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 22156-008-0, (N,P), T.Katoh 1989",
+      "energies_ev": [13700000, 14010000, 14350000, 14640000, 14870000],
+      "values": [11.9, 17.5, 16.7, 18.3, 19.5],
+      "uncertainties": [1.428, 1.12, 1.2358, 1.464, 1.521],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni62",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 22338-010-0, (N,P), A.Ercan 1991",
+      "energies_ev": [14600000],
+      "values": [18.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni62",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 22433-011-0, (N,P), Y.Kasugai 1998",
+      "energies_ev": [13700000, 14010000, 14350000, 14640000, 14870000],
+      "values": [11.9, 17.5, 16.7, 18.3, 19.5],
+      "uncertainties": [1.428, 1.12, 1.2358, 1.464, 1.521],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni62",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 30811-005-M, (N,P), I.Ribansky 1985",
+      "energies_ev": [14800000],
+      "values": [11.7],
+      "uncertainties": [0.7956],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni62",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 30978-009-0, (N,P), M.Viennot 1991",
+      "energies_ev": [13770000, 14110000, 14470000, 14730000, 14830000],
+      "values": [14.0, 14.0, 17.0, 18.0, 19.0],
+      "uncertainties": [2.0, 2.0, 2.0, 2.0, 2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni62",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 30985-015-0, (N,P), N.I.Molla 1991",
+      "energies_ev": [13640000, 13880000, 14100000, 14300000, 14830000],
+      "values": [28.5, 24.2, 24.0, 36.4, 24.7],
+      "uncertainties": [2.3, 2.2, 2.3, 3.3, 2.9],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni62",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 32695-005-0, (N,P), Fengqun Zhou 2011",
+      "energies_ev": [13500000, 14600000],
+      "values": [15.1, 21.5],
+      "uncertainties": [1.5, 1.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni62",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 40008-003-0, (N,P), A.K.Val'Ter 1963",
+      "energies_ev": [14100000],
+      "values": [22.0],
+      "uncertainties": [1.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni62",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 40226-015-0, (N,P), V.N.Levkovskii 1970",
+      "energies_ev": [14800000],
+      "values": [21.0],
+      "uncertainties": [3.0],
+      "calculations": {}
+    }
+  ]
+}

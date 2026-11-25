@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sn122/Cd119g",
+  "title": "Sn122 to Cd119g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sn122": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn122",
+      "product": "Cd119",
+      "all_states": false,
+      "source": "EXFOR 41032-032-1, (N,A), P.M.Gopych 1987",
+      "energies_ev": [14600000],
+      "values": [0.15],
+      "uncertainties": [0.04],
+      "calculations": {}
+    }
+  ]
+}

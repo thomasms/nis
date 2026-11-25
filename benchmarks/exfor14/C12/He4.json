@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "C12/He4",
+  "title": "C12 to He4, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "C12": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "C12",
+      "product": "He4",
+      "all_states": true,
+      "source": "EXFOR 12899-005-0, (N,X), R.C.Haight 1984",
+      "energies_ev": [14100000],
+      "values": [402.0],
+      "uncertainties": [46.0],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,243 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Mo92/Mo91m",
+  "title": "Mo92 to Mo91m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Mo92": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Mo91m",
+      "all_states": false,
+      "source": "EXFOR 10477-010-0, (N,2N), R.A.Sigg 1975",
+      "energies_ev": [14800000],
+      "values": [22.1],
+      "uncertainties": [1.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Mo91m",
+      "all_states": false,
+      "source": "EXFOR 10497-006-0, (N,2N), W.D.Lu 1970",
+      "energies_ev": [14400000],
+      "values": [16.2],
+      "uncertainties": [1.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Mo91m",
+      "all_states": false,
+      "source": "EXFOR 20338-008-0, (N,2N), Y.Kanda 1972",
+      "energies_ev": [13570000, 13670000, 13800000, 13830000, 13880000, 13960000, 14010000, 14100000, 14170000, 14230000, 14310000, 14390000, 14440000, 14520000, 14600000, 14680000, 14740000, 14840000, 14920000],
+      "values": [1.08, 0.01, 2.46, 1.95, 2.63, 3.21, 4.92, 6.38, 6.31, 5.62, 5.61, 8.03, 8.69, 9.46, 8.2, 9.79, 11.1, 12.0, 13.4],
+      "uncertainties": [0.58, 0.6, 0.73, 0.83, 1.39, 0.86, 0.96, 1.1, 0.99, 0.79, 0.61, 0.82, 0.96, 1.16, 0.82, 0.89, 1.0, 1.6, 1.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Mo91m",
+      "all_states": false,
+      "source": "EXFOR 20536-018-0, (N,2N), S.M.Qaim 1972",
+      "energies_ev": [14700000],
+      "values": [17.4],
+      "uncertainties": [3.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Mo91m",
+      "all_states": false,
+      "source": "EXFOR 20850-017-0, (N,2N), Y.Fujino 1977",
+      "energies_ev": [14600000],
+      "values": [11.8],
+      "uncertainties": [1.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Mo91m",
+      "all_states": false,
+      "source": "EXFOR 20891-015-0, (N,2N), B.Minetti 1968",
+      "energies_ev": [14700000],
+      "values": [7.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Mo91m",
+      "all_states": false,
+      "source": "EXFOR 21840-002-2, (N,2N), S.Amemiya 1982",
+      "energies_ev": [14800000],
+      "values": [20.4],
+      "uncertainties": [2.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Mo91m",
+      "all_states": false,
+      "source": "EXFOR 22089-067-0, (N,2N), Y.Ikeda 1988",
+      "energies_ev": [14140000, 14470000, 14730000],
+      "values": [4.38, 14.2, 22.1],
+      "uncertainties": [0.79, 1.9, 3.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Mo91m",
+      "all_states": false,
+      "source": "EXFOR 22392-005-0, (N,2N), E.Gueltekin 2001",
+      "energies_ev": [13600000, 13680000, 14100000, 14460000, 14720000, 14860000],
+      "values": [1.25, 1.85, 8.84, 19.86, 32.52, 36.24],
+      "uncertainties": [0.56, 0.65, 0.96, 1.24, 2.05, 2.13],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Mo91m",
+      "all_states": false,
+      "source": "EXFOR 30014-007-0, (N,2N), R.Prasad 1967",
+      "energies_ev": [14800000],
+      "values": [51.0],
+      "uncertainties": [10.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Mo91m",
+      "all_states": false,
+      "source": "EXFOR 30041-005-0, (N,2N), S.S.Hasan 1972",
+      "energies_ev": [14800000],
+      "values": [120.0],
+      "uncertainties": [12.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Mo91m",
+      "all_states": false,
+      "source": "EXFOR 30095-003-0, (N,2N), J.Bacso 1965",
+      "energies_ev": [14800000],
+      "values": [15.0],
+      "uncertainties": [1.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Mo91m",
+      "all_states": false,
+      "source": "EXFOR 30576-003-0, (N,2N), C.V.Srinivasa Rao 1981",
+      "energies_ev": [14200000],
+      "values": [19.0],
+      "uncertainties": [3.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Mo91m",
+      "all_states": false,
+      "source": "EXFOR 30809-012-0, (N,2N), A.Marcinkowski 1986",
+      "energies_ev": [13900000, 14500000, 15000000],
+      "values": [7.2, 18.6, 35.9],
+      "uncertainties": [1.0, 1.6, 1.9],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Mo91m",
+      "all_states": false,
+      "source": "EXFOR 31459-002-0, (N,2N), I.Garlea 1992",
+      "energies_ev": [14800000],
+      "values": [164.5],
+      "uncertainties": [13.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Mo91m",
+      "all_states": false,
+      "source": "EXFOR 31524-017-0, (N,2N), M.Belgaid 1992",
+      "energies_ev": [14730000],
+      "values": [11.0],
+      "uncertainties": [3.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Mo91m",
+      "all_states": false,
+      "source": "EXFOR 41240-044-0, (N,2N), A.A.Filatenkov 1999",
+      "energies_ev": [13660000, 13880000, 14040000, 14260000, 14440000, 14640000, 14810000],
+      "values": [1.44, 3.68, 6.43, 11.0, 16.2, 22.4, 26.9],
+      "uncertainties": [0.6, 0.6, 0.8, 1.3, 2.2, 2.8, 3.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Mo91m",
+      "all_states": false,
+      "source": "EXFOR 41456-002-0, (N,2N), P.Reimer 2005",
+      "energies_ev": [13640000, 13870000, 14050000, 14280000, 14450000, 14640000, 14820000],
+      "values": [1.44, 3.67, 6.44, 11.1, 16.3, 22.6, 27.1],
+      "uncertainties": [0.6, 0.6, 0.8, 1.3, 2.2, 2.8, 3.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Mo91m",
+      "all_states": false,
+      "source": "EXFOR 41614-068-0, (N,2N), A.A.Filatenkov 2016",
+      "energies_ev": [13660000, 13880000, 14040000, 14260000, 14440000, 14640000, 14810000],
+      "values": [1.44, 3.7, 6.41, 11.0, 16.3, 22.6, 26.8],
+      "uncertainties": [0.60192, 0.6216, 0.8333, 1.364, 2.2983, 2.9606, 3.35],
+      "calculations": {}
+    }
+  ]
+}

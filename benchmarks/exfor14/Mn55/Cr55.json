@@ -1,0 +1,75 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Mn55/Cr55",
+  "title": "Mn55 to Cr55, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Mn55": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mn55",
+      "product": "Cr55",
+      "all_states": true,
+      "source": "EXFOR 20903-004-0, (N,P), Langmann 1962",
+      "energies_ev": [14100000],
+      "values": [107.5],
+      "uncertainties": [62.35],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mn55",
+      "product": "Cr55",
+      "all_states": true,
+      "source": "EXFOR 21345-005-0, (N,P), B.Minetti 1967",
+      "energies_ev": [14700000],
+      "values": [30.0],
+      "uncertainties": [3.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mn55",
+      "product": "Cr55",
+      "all_states": true,
+      "source": "EXFOR 22338-042-0, (N,P), A.Ercan 1991",
+      "energies_ev": [14600000],
+      "values": [63.0],
+      "uncertainties": [9.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mn55",
+      "product": "Cr55",
+      "all_states": true,
+      "source": "EXFOR 30013-009-0, (N,P), B.Mitra 1966",
+      "energies_ev": [14800000],
+      "values": [59.5],
+      "uncertainties": [5.9],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mn55",
+      "product": "Cr55",
+      "all_states": true,
+      "source": "EXFOR 30336-017-0, (N,P), R.Prasad 1971",
+      "energies_ev": [14800000],
+      "values": [45.0],
+      "uncertainties": [7.0],
+      "calculations": {}
+    }
+  ]
+}

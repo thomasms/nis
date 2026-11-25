@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Zn68/Cu68",
+  "title": "Zn68 to Cu68, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Zn68": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn68",
+      "product": "Cu68",
+      "all_states": true,
+      "source": "EXFOR 31460-006-0, (N,P), D.Kielan 1995",
+      "energies_ev": [13900000, 14500000, 15000000],
+      "values": [28.7, 29.3, 27.2],
+      "uncertainties": [12.3, 10.4, 10.0],
+      "calculations": {}
+    }
+  ]
+}

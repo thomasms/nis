@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Te130/Sb128g",
+  "title": "Te130 to Sb128g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Te130": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te130",
+      "product": "Sb128",
+      "all_states": false,
+      "source": "EXFOR 10806-011-0, (N,T), T.W.Woo 1979",
+      "energies_ev": [14600000],
+      "values": [0.024],
+      "uncertainties": [0.008],
+      "calculations": {}
+    }
+  ]
+}

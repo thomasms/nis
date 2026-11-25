@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Te122/Sb122m",
+  "title": "Te122 to Sb122m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Te122": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te122",
+      "product": "Sb122m",
+      "all_states": false,
+      "source": "EXFOR 22428-005-0, (N,P), H.Sakane 1998",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [1.27, 1.32, 1.5, 1.55, 1.84],
+      "uncertainties": [0.26, 0.25, 0.29, 0.33, 0.33],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te122",
+      "product": "Sb122m",
+      "all_states": false,
+      "source": "EXFOR 41163-002-0, (N,P), P.M.Gopych 1994",
+      "energies_ev": [14600000],
+      "values": [1.7],
+      "uncertainties": [0.4],
+      "calculations": {}
+    }
+  ]
+}

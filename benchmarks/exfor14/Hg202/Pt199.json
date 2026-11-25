@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Hg202/Pt199",
+  "title": "Hg202 to Pt199, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Hg202": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hg202",
+      "product": "Pt199",
+      "all_states": true,
+      "source": "EXFOR 21440-040-0, (N,A), R.F.Coleman 1959",
+      "energies_ev": [14500000],
+      "values": [1.01],
+      "uncertainties": [0.101],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Yb176/Yb177",
+  "title": "Yb176 to Yb177, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Yb176": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb176",
+      "product": "Yb177",
+      "all_states": true,
+      "source": "EXFOR 20673-034-0, (N,G), M.Valkonen 1976.0",
+      "energies_ev": [14700000],
+      "values": [1.0],
+      "uncertainties": [0.3],
+      "calculations": {}
+    }
+  ]
+}

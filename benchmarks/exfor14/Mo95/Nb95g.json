@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Mo95/Nb95g",
+  "title": "Mo95 to Nb95g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Mo95": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo95",
+      "product": "Nb95",
+      "all_states": false,
+      "source": "EXFOR 20841-007-0, (N,P), K.Fukuda 1978",
+      "energies_ev": [14600000],
+      "values": [44.8],
+      "uncertainties": [3.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo95",
+      "product": "Nb95",
+      "all_states": false,
+      "source": "EXFOR 22125-005-0, (N,P), H.Liskien 1990",
+      "energies_ev": [14360000, 14390000],
+      "values": [31.2, 28.7],
+      "uncertainties": [2.5, 2.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo95",
+      "product": "Nb95",
+      "all_states": false,
+      "source": "EXFOR 32601-004-0, (N,P), Kong Xiangzhong 1992",
+      "energies_ev": [13500000, 13660000, 14290000, 14370000, 14700000, 14800000],
+      "values": [34.5, 34.6, 35.2, 35.0, 35.5, 36.5],
+      "uncertainties": [1.7, 1.7, 1.8, 1.8, 1.8, 1.9],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo95",
+      "product": "Nb95",
+      "all_states": false,
+      "source": "EXFOR 32855-003-2, (N,P), Junhua Luo 2021",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [31.3, 33.6, 34.9],
+      "uncertainties": [2.1, 2.3, 2.5],
+      "calculations": {}
+    }
+  ]
+}

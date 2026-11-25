@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Y89/Y90g",
+  "title": "Y89 to Y90g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Y89": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Y89",
+      "product": "Y90",
+      "all_states": false,
+      "source": "EXFOR 11590-036-0, (N,G), E.T.Bramlitt 1963",
+      "energies_ev": [14700000],
+      "values": [1.8],
+      "uncertainties": [0.6],
+      "calculations": {}
+    }
+  ]
+}

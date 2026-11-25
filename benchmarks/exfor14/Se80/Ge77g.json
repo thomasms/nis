@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Se80/Ge77g",
+  "title": "Se80 to Ge77g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Se80": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se80",
+      "product": "Ge77",
+      "all_states": false,
+      "source": "EXFOR 21107-028-0, (N,A), B.Minetti 1967",
+      "energies_ev": [14700000],
+      "values": [0.6],
+      "uncertainties": [0.3],
+      "calculations": {}
+    }
+  ]
+}

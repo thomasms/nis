@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ba135/Cs135m",
+  "title": "Ba135 to Cs135m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ba135": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba135",
+      "product": "Cs135m",
+      "all_states": false,
+      "source": "EXFOR 22089-099-0, (N,P), Y.Ikeda 1988",
+      "energies_ev": [13570000, 13760000, 13990000, 14230000, 14440000, 14680000, 14950000],
+      "values": [0.216, 0.253, 0.297, 0.262, 0.293, 0.307, 0.36],
+      "uncertainties": [0.028, 0.041, 0.032, 0.04, 0.033, 0.032, 0.034],
+      "calculations": {}
+    }
+  ]
+}

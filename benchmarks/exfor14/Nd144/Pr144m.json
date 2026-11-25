@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Nd144/Pr144m",
+  "title": "Nd144 to Pr144m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Nd144": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nd144",
+      "product": "Pr144m",
+      "all_states": false,
+      "source": "EXFOR 30649-006-M, (N,P), S.Gmuca 1983",
+      "energies_ev": [14800000],
+      "values": [1.7],
+      "uncertainties": [0.6],
+      "calculations": {}
+    }
+  ]
+}

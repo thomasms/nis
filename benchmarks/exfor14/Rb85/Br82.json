@@ -1,0 +1,111 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Rb85/Br82",
+  "title": "Rb85 to Br82, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Rb85": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rb85",
+      "product": "Br82",
+      "all_states": true,
+      "source": "EXFOR 20797-003-0, (N,A), M.Bormann 1972",
+      "energies_ev": [14560000],
+      "values": [8.45],
+      "uncertainties": [0.74],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rb85",
+      "product": "Br82",
+      "all_states": true,
+      "source": "EXFOR 20898-013-0, (N,A), M.Bormann 1966",
+      "energies_ev": [13510000, 14100000, 14880000],
+      "values": [6.5, 7.0, 8.1],
+      "uncertainties": [0.7, 0.5, 0.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rb85",
+      "product": "Br82",
+      "all_states": true,
+      "source": "EXFOR 21659-005-0, (N,A), B.Erlandsson 1979",
+      "energies_ev": [14800000],
+      "values": [6.63],
+      "uncertainties": [0.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rb85",
+      "product": "Br82",
+      "all_states": true,
+      "source": "EXFOR 21999-017-0, (N,A), R.Pepelnik 1985",
+      "energies_ev": [14700000],
+      "values": [6.9],
+      "uncertainties": [0.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rb85",
+      "product": "Br82",
+      "all_states": true,
+      "source": "EXFOR 22637-025-0, (N,A), C.Konno 1993",
+      "energies_ev": [13570000, 13760000, 13990000, 14230000, 14440000, 14680000, 14950000],
+      "values": [4.62, 4.72, 5.01, 5.11, 5.33, 6.43, 6.53],
+      "uncertainties": [0.35, 0.36, 0.42, 0.44, 0.44, 0.46, 0.39],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rb85",
+      "product": "Br82",
+      "all_states": true,
+      "source": "EXFOR 30008-031-0, (N,A), P.Strohal 1962",
+      "energies_ev": [14600000],
+      "values": [142.0],
+      "uncertainties": [9.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rb85",
+      "product": "Br82",
+      "all_states": true,
+      "source": "EXFOR 30350-006-0, (N,A), W.Augustyniak 1976",
+      "energies_ev": [13800000, 14500000],
+      "values": [5.1, 5.3],
+      "uncertainties": [0.5, 0.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Rb85",
+      "product": "Br82",
+      "all_states": true,
+      "source": "EXFOR 31409-005-0, (N,A), Yuan Xialin 1990",
+      "energies_ev": [13830000, 14430000, 14700000, 14800000],
+      "values": [4.75, 5.73, 5.93, 6.15],
+      "uncertainties": [0.17, 0.2, 0.21, 0.22],
+      "calculations": {}
+    }
+  ]
+}

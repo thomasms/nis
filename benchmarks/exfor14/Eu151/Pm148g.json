@@ -1,0 +1,75 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Eu151/Pm148g",
+  "title": "Eu151 to Pm148g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Eu151": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Eu151",
+      "product": "Pm148",
+      "all_states": false,
+      "source": "EXFOR 21997-006-2, (N,A), S.M.Qaim 1984",
+      "energies_ev": [14700000],
+      "values": [2.0],
+      "uncertainties": [0.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Eu151",
+      "product": "Pm148",
+      "all_states": false,
+      "source": "EXFOR 31481-012-0, (N,A), A.D.Majdeddin 1997",
+      "energies_ev": [14700000],
+      "values": [1.3],
+      "uncertainties": [0.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Eu151",
+      "product": "Pm148",
+      "all_states": false,
+      "source": "EXFOR 32753-002-2, (N,A), Junhua Luo 2017",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [1.2, 1.4, 1.5],
+      "uncertainties": [0.2, 0.2, 0.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Eu151",
+      "product": "Pm148",
+      "all_states": false,
+      "source": "EXFOR 41240-100-0, (N,A), A.A.Filatenkov 1999",
+      "energies_ev": [13640000, 13880000, 14050000, 14280000, 14470000, 14680000, 14860000],
+      "values": [1.78, 1.78, 1.83, 1.92, 1.72, 1.92, 1.82],
+      "uncertainties": [0.18, 0.19, 0.19, 0.2, 0.18, 0.19, 0.18],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Eu151",
+      "product": "Pm148",
+      "all_states": false,
+      "source": "EXFOR 41614-164-0, (N,A), A.A.Filatenkov 2016",
+      "energies_ev": [13640000, 13880000, 14050000, 14280000, 14470000, 14680000, 14860000],
+      "values": [1.79, 1.79, 1.84, 1.92, 1.72, 1.92, 1.83],
+      "uncertainties": [0.179, 0.18974, 0.18952, 0.19776, 0.17888, 0.18854, 0.17952],
+      "calculations": {}
+    }
+  ]
+}

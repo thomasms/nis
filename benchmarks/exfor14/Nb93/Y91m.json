@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Nb93/Y91m",
+  "title": "Nb93 to Y91m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Nb93": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nb93",
+      "product": "Y91m",
+      "all_states": false,
+      "source": "EXFOR 30152-010-0, (N,HE3), M.Diksic 1974",
+      "energies_ev": [14600000],
+      "values": [0.0179],
+      "uncertainties": [0.009],
+      "calculations": {}
+    }
+  ]
+}

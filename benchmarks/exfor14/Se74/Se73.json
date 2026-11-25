@@ -1,0 +1,75 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Se74/Se73",
+  "title": "Se74 to Se73, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Se74": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se74",
+      "product": "Se73",
+      "all_states": true,
+      "source": "EXFOR 20614-004-0, (N,2N), M.Bormann 1976",
+      "energies_ev": [13560000, 14310000, 14820000],
+      "values": [155.0, 281.0, 368.0],
+      "uncertainties": [23.0, 36.0, 50.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se74",
+      "product": "Se73",
+      "all_states": true,
+      "source": "EXFOR 20836-024-0, (N,2N), M.Bormann 1966",
+      "energies_ev": [14100000, 14900000],
+      "values": [300.0, 472.0],
+      "uncertainties": [22.0, 47.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se74",
+      "product": "Se73",
+      "all_states": true,
+      "source": "EXFOR 21107-004-0, (N,2N), B.Minetti 1967",
+      "energies_ev": [14700000],
+      "values": [874.0],
+      "uncertainties": [80.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se74",
+      "product": "Se73",
+      "all_states": true,
+      "source": "EXFOR 32805-002-3, (N,2N), Junhua Luo 2020",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [230.0, 363.0, 516.0],
+      "uncertainties": [17.0, 30.0, 43.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se74",
+      "product": "Se73",
+      "all_states": true,
+      "source": "EXFOR 41614-039-0, (N,2N), A.A.Filatenkov 2016",
+      "energies_ev": [13890000, 14050000, 14260000, 14440000, 14810000],
+      "values": [272.0, 270.0, 370.0, 365.0, 442.0],
+      "uncertainties": [25.432, 39.69, 30.118, 36.865, 44.2],
+      "calculations": {}
+    }
+  ]
+}

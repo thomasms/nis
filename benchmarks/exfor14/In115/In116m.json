@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "In115/In116m",
+  "title": "In115 to In116m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "In115": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "In115",
+      "product": "In116m",
+      "all_states": false,
+      "source": "EXFOR 10214-002-0, (N,G), J.K.Temperley 1970",
+      "energies_ev": [14100000],
+      "values": [11.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    }
+  ]
+}

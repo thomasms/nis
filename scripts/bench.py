@@ -71,7 +71,10 @@ def cmd_convert(args) -> int:
         raise SystemExit(f"no converter for {args.benchmark!r}, known: {', '.join(available)}")
     converter = available[args.benchmark]
     folder = args.root / converter.NAME
-    cases = converter.convert(args.source, args.only)
+    if getattr(converter, "NEEDS_DECAY_DATA", False):
+        cases = converter.convert(args.source, args.only, decay_data=args.decay_data)
+    else:
+        cases = converter.convert(args.source, args.only)
     if not cases:
         raise SystemExit(f"no cases in {args.source}, it must be {converter.SOURCE_HELP}")
     write_benchmark(converter.METADATA, folder)
@@ -211,6 +214,8 @@ def main() -> int:
     p.add_argument("--source", type=Path, required=True, help="the folder of the original files")
     p.add_argument("--only", nargs="*", default=[], help="only some cases (the converter says how to name them)")
     p.add_argument("--root", type=Path, default=BENCHMARKS_DIR, help="the benchmarks folder")
+    p.add_argument("--decay-data", type=Path, default=None,
+                   help="the decay data, for a converter that needs it (exfor14), default data/jeff311.dec")
     p.set_defaults(func=cmd_convert)
 
     p = commands.add_parser("decks", help="make the NIS decks from the case files again")

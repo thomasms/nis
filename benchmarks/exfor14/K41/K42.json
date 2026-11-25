@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "K41/K42",
+  "title": "K41 to K42, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "K41": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "K41",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 30145-005-0, (N,G), E.Holub 1972",
+      "energies_ev": [14400000],
+      "values": [2.0],
+      "uncertainties": [0.3],
+      "calculations": {}
+    }
+  ]
+}

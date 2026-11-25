@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Zr94/Sr92",
+  "title": "Zr94 to Sr92, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Zr94": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr94",
+      "product": "Sr92",
+      "all_states": true,
+      "source": "EXFOR 11491-017-0, (N,HE3), E.T.Bramlitt 1962",
+      "energies_ev": [14800000],
+      "values": [0.95],
+      "uncertainties": [0.05],
+      "calculations": {}
+    }
+  ]
+}

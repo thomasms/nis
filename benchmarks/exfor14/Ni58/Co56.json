@@ -1,0 +1,75 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ni58/Co56",
+  "title": "Ni58 to Co56, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ni58": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "Co56",
+      "all_states": true,
+      "source": "EXFOR 10764-005-0, (N,T), T.W.Woo 1978",
+      "energies_ev": [14600000],
+      "values": [0.111],
+      "uncertainties": [0.033],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "Co56",
+      "all_states": true,
+      "source": "EXFOR 20669-005-0, (N,T), S.M.Qaim 1976",
+      "energies_ev": [14600000],
+      "values": [0.092],
+      "uncertainties": [0.027],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "Co56",
+      "all_states": true,
+      "source": "EXFOR 22156-017-0, (N,T), T.Katoh 1989",
+      "energies_ev": [14160000, 14430000, 14630000, 14870000],
+      "values": [0.0116, 0.0178, 0.0248, 0.0307],
+      "uncertainties": [0.003016, 0.004628, 0.00496, 0.005833],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "Co56",
+      "all_states": true,
+      "source": "EXFOR 30473-007-0, (N,T), S.Sudar 1979",
+      "energies_ev": [14400000],
+      "values": [0.022],
+      "uncertainties": [0.011],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "Co56",
+      "all_states": true,
+      "source": "EXFOR 32515-005-0, (N,T), Xiangzhong Kong 1998",
+      "energies_ev": [14500000],
+      "values": [0.092],
+      "uncertainties": [0.026],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Dy164/Dy165g",
+  "title": "Dy164 to Dy165g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Dy164": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Dy164",
+      "product": "Dy165",
+      "all_states": false,
+      "source": "EXFOR 12033-041-0, (N,G), R.G.Wille 1960",
+      "energies_ev": [14800000],
+      "values": [8.0],
+      "uncertainties": [3.0],
+      "calculations": {}
+    }
+  ]
+}

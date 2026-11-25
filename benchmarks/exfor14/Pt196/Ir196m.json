@@ -1,0 +1,75 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Pt196/Ir196m",
+  "title": "Pt196 to Ir196m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Pt196": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pt196",
+      "product": "Ir196m",
+      "all_states": false,
+      "source": "EXFOR 10244-022-0, (N,P), A.K.Hankla 1972",
+      "energies_ev": [14400000],
+      "values": [1.1],
+      "uncertainties": [0.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pt196",
+      "product": "Ir196m",
+      "all_states": false,
+      "source": "EXFOR 20721-086-0, (N,P), N.I.Molla 1977",
+      "energies_ev": [14700000],
+      "values": [1.0],
+      "uncertainties": [0.15],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pt196",
+      "product": "Ir196m",
+      "all_states": false,
+      "source": "EXFOR 31622-007-0, (N,P), Junhua Luo 2005",
+      "energies_ev": [13500000, 14400000],
+      "values": [1.13, 1.18],
+      "uncertainties": [0.07, 0.06],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pt196",
+      "product": "Ir196m",
+      "all_states": false,
+      "source": "EXFOR 41428-034-0, (N,P), A.A.Filatenkov 2003",
+      "energies_ev": [13880000, 14280000, 14470000, 14680000, 14820000],
+      "values": [0.0173, 0.0255, 0.0305, 0.037, 0.0445],
+      "uncertainties": [0.0039, 0.0076, 0.0047, 0.004, 0.0048],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pt196",
+      "product": "Ir196m",
+      "all_states": false,
+      "source": "EXFOR 41614-222-0, (N,P), A.A.Filatenkov 2016",
+      "energies_ev": [13880000, 14280000, 14470000, 14680000, 14820000],
+      "values": [0.017, 0.026, 0.031, 0.037, 0.045],
+      "uncertainties": [0.003825, 0.007748, 0.004774, 0.003959, 0.004815],
+      "calculations": {}
+    }
+  ]
+}

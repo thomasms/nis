@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Hg204/Au204",
+  "title": "Hg204 to Au204, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Hg204": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hg204",
+      "product": "Au204",
+      "all_states": true,
+      "source": "EXFOR 23018-015-0, (N,P), Y.Kasugai 2001",
+      "energies_ev": [14600000],
+      "values": [0.67],
+      "uncertainties": [0.17],
+      "calculations": {}
+    }
+  ]
+}

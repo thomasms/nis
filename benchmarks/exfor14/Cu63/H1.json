@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cu63/H1",
+  "title": "Cu63 to H1, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cu63": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cu63",
+      "product": "H1",
+      "all_states": true,
+      "source": "EXFOR 10827-057-0, (N,X), S.M.Grimes 1979",
+      "energies_ev": [14800000],
+      "values": [320.0],
+      "uncertainties": [22.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cu63",
+      "product": "H1",
+      "all_states": true,
+      "source": "EXFOR 21487-018-0, (N,X), D.L.Allan 1957",
+      "energies_ev": [14100000],
+      "values": [250.0],
+      "uncertainties": [50.0],
+      "calculations": {}
+    }
+  ]
+}

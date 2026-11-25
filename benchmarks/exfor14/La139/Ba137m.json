@@ -1,0 +1,111 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "La139/Ba137m",
+  "title": "La139 to Ba137m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "La139": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "La139",
+      "product": "Ba137m",
+      "all_states": false,
+      "source": "EXFOR 10806-012-0, (N,T), T.W.Woo 1979",
+      "energies_ev": [14600000],
+      "values": [0.018],
+      "uncertainties": [0.005],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "La139",
+      "product": "Ba137m",
+      "all_states": false,
+      "source": "EXFOR 20522-012-0, (N,T), S.M.Qaim 1973",
+      "energies_ev": [14700000],
+      "values": [0.021],
+      "uncertainties": [0.005],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "La139",
+      "product": "Ba137m",
+      "all_states": false,
+      "source": "EXFOR 22393-003-0, (N,T), Y.Kasugai 1997",
+      "energies_ev": [14660000, 14950000],
+      "values": [0.016, 0.062],
+      "uncertainties": [0.011, 0.023],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "La139",
+      "product": "Ba137m",
+      "all_states": false,
+      "source": "EXFOR 31410-004-0, (N,T), M.Achour 1986",
+      "energies_ev": [13700000, 14030000, 14440000, 14630000, 14750000],
+      "values": [0.004, 0.008, 0.012, 0.023, 0.03],
+      "uncertainties": [0.004, 0.004, 0.005, 0.005, 0.004],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "La139",
+      "product": "Ba137m",
+      "all_states": false,
+      "source": "EXFOR 32204-007-0, (N,T), S.V.Begun 2000",
+      "energies_ev": [14600000],
+      "values": [0.0261],
+      "uncertainties": [0.002],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "La139",
+      "product": "Ba137m",
+      "all_states": false,
+      "source": "EXFOR 32205-018-0, (N,T), S.V.Begun 2002",
+      "energies_ev": [14500000],
+      "values": [0.0207],
+      "uncertainties": [0.0016],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "La139",
+      "product": "Ba137m",
+      "all_states": false,
+      "source": "EXFOR 32675-005-0, (N,T), Junhua Luo 2010",
+      "energies_ev": [14800000],
+      "values": [0.02],
+      "uncertainties": [0.004],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "La139",
+      "product": "Ba137m",
+      "all_states": false,
+      "source": "EXFOR 41293-003-0, (N,T), V.K.Maidanyuk 1997",
+      "energies_ev": [14600000],
+      "values": [0.0221],
+      "uncertainties": [0.003],
+      "calculations": {}
+    }
+  ]
+}

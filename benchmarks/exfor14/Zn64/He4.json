@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Zn64/He4",
+  "title": "Zn64 to He4, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Zn64": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zn64",
+      "product": "He4",
+      "all_states": true,
+      "source": "EXFOR 20836-018-0, (N,X), M.Bormann 1966",
+      "energies_ev": [14100000],
+      "values": [168.0],
+      "uncertainties": [16.0],
+      "calculations": {}
+    }
+  ]
+}

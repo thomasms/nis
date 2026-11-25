@@ -1,0 +1,171 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cl35/Cl34m",
+  "title": "Cl35 to Cl34m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cl35": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "Cl34m",
+      "all_states": false,
+      "source": "EXFOR 11274-020-0, (N,2N), E.B.Paul 1953",
+      "energies_ev": [14500000],
+      "values": [3.47],
+      "uncertainties": [1.5615],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "Cl34m",
+      "all_states": false,
+      "source": "EXFOR 11328-005-0, (N,2N), L.A.Rayburn 1961",
+      "energies_ev": [14400000],
+      "values": [5.42],
+      "uncertainties": [0.4065],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "Cl34m",
+      "all_states": false,
+      "source": "EXFOR 11550-002-0, (N,2N), R.S.Scalan 1958",
+      "energies_ev": [14800000],
+      "values": [5.6],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "Cl34m",
+      "all_states": false,
+      "source": "EXFOR 20889-018-0, (N,2N), A.Pasquarelli 1967",
+      "energies_ev": [14700000],
+      "values": [7.0],
+      "uncertainties": [0.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "Cl34m",
+      "all_states": false,
+      "source": "EXFOR 21886-006-0, (N,2N), M.Hyvoenen-Dabek 1978",
+      "energies_ev": [14700000],
+      "values": [9.3],
+      "uncertainties": [1.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "Cl34m",
+      "all_states": false,
+      "source": "EXFOR 21999-009-0, (N,2N), R.Pepelnik 1985",
+      "energies_ev": [14700000],
+      "values": [7.2],
+      "uncertainties": [0.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "Cl34m",
+      "all_states": false,
+      "source": "EXFOR 22089-012-0, (N,2N), Y.Ikeda 1988",
+      "energies_ev": [13550000, 13750000, 13980000, 14220000, 14430000, 14660000, 14930000],
+      "values": [0.705, 1.284, 2.67, 5.16, 7.9, 9.51, 13.5],
+      "uncertainties": [0.065, 0.052, 0.1, 0.2, 0.28, 0.34, 0.44],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "Cl34m",
+      "all_states": false,
+      "source": "EXFOR 30014-002-0, (N,2N), R.Prasad 1967",
+      "energies_ev": [14800000],
+      "values": [12.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "Cl34m",
+      "all_states": false,
+      "source": "EXFOR 30100-002-0, (N,2N), G.Peto 1968",
+      "energies_ev": [15000000],
+      "values": [7.6],
+      "uncertainties": [0.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "Cl34m",
+      "all_states": false,
+      "source": "EXFOR 30574-002-0, (N,2N), C.V.Srinivasa Rao 1978",
+      "energies_ev": [14200000],
+      "values": [7.31],
+      "uncertainties": [0.48],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "Cl34m",
+      "all_states": false,
+      "source": "EXFOR 31247-002-0, (N,2N), C.S.Khurana 1961",
+      "energies_ev": [14800000],
+      "values": [12.0],
+      "uncertainties": [1.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "Cl34m",
+      "all_states": false,
+      "source": "EXFOR 31491-002-0, (N,2N), N.I.Molla 1997",
+      "energies_ev": [13900000, 14100000, 14310000, 14570000, 14710000],
+      "values": [3.15, 3.95, 8.77, 10.28, 10.49],
+      "uncertainties": [0.3, 0.37, 0.71, 0.8, 0.82],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cl35",
+      "product": "Cl34m",
+      "all_states": false,
+      "source": "EXFOR 31524-014-0, (N,2N), M.Belgaid 1992",
+      "energies_ev": [14730000],
+      "values": [7.36],
+      "uncertainties": [0.23],
+      "calculations": {}
+    }
+  ]
+}

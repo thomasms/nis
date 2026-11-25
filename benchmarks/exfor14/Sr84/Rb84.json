@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sr84/Rb84",
+  "title": "Sr84 to Rb84, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sr84": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sr84",
+      "product": "Rb84",
+      "all_states": true,
+      "source": "EXFOR 20721-074-0, (N,P), N.I.Molla 1977",
+      "energies_ev": [14700000],
+      "values": [96.0],
+      "uncertainties": [8.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sr84",
+      "product": "Rb84",
+      "all_states": true,
+      "source": "EXFOR 22192-002-0, (N,P), C.Konno 1990",
+      "energies_ev": [13980000, 14930000],
+      "values": [98.8, 89.8],
+      "uncertainties": [8.6, 8.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sr84",
+      "product": "Rb84",
+      "all_states": true,
+      "source": "EXFOR 22637-029-0, (N,P), C.Konno 1993",
+      "energies_ev": [13980000, 14920000],
+      "values": [96.8, 88.0],
+      "uncertainties": [8.4, 8.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sr84",
+      "product": "Rb84",
+      "all_states": true,
+      "source": "EXFOR 32654-006-0, (N,P), Guozhu He 2006",
+      "energies_ev": [14600000],
+      "values": [94.9],
+      "uncertainties": [9.5],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Y89/Rb88",
+  "title": "Y89 to Rb88, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Y89": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Y89",
+      "product": "Rb88",
+      "all_states": true,
+      "source": "EXFOR 30106-009-0, (N,2P), S.Lulic 1970",
+      "energies_ev": [14600000],
+      "values": [0.05],
+      "uncertainties": [0.04],
+      "calculations": {}
+    }
+  ]
+}

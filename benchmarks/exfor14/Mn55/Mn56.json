@@ -1,0 +1,135 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Mn55/Mn56",
+  "title": "Mn55 to Mn56, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Mn55": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mn55",
+      "product": "Mn56",
+      "all_states": true,
+      "source": "EXFOR 11420-003-0, (N,G), H.O.Menlove 1967",
+      "energies_ev": [14960000],
+      "values": [0.889],
+      "uncertainties": [0.081],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mn55",
+      "product": "Mn56",
+      "all_states": true,
+      "source": "EXFOR 20670-006-0, (N,G), O.Schwerer 1976",
+      "energies_ev": [14600000],
+      "values": [0.68],
+      "uncertainties": [0.07],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mn55",
+      "product": "Mn56",
+      "all_states": true,
+      "source": "EXFOR 21004-002-0, (N,G), G.Magnusson 1980",
+      "energies_ev": [14700000],
+      "values": [0.58],
+      "uncertainties": [0.08],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mn55",
+      "product": "Mn56",
+      "all_states": true,
+      "source": "EXFOR 21936-009-0, (N,G), B.M.Bahal 1984",
+      "energies_ev": [14700000],
+      "values": [40.6],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mn55",
+      "product": "Mn56",
+      "all_states": true,
+      "source": "EXFOR 30067-010-0, (N,G), J.Csikai 1967",
+      "energies_ev": [14700000],
+      "values": [1.2],
+      "uncertainties": [0.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mn55",
+      "product": "Mn56",
+      "all_states": true,
+      "source": "EXFOR 30067-020-0, (N,G), J.Csikai 1967",
+      "energies_ev": [13600000, 13900000, 14100000, 14300000, 14500000, 15000000],
+      "values": [1.3, 1.27, 1.32, 1.25, 1.25, 1.2],
+      "uncertainties": [0.07, 0.06, 0.07, 0.06, 0.06, 0.06],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mn55",
+      "product": "Mn56",
+      "all_states": true,
+      "source": "EXFOR 30296-008-0, (N,G), Manjushree Majumder 1977",
+      "energies_ev": [14800000],
+      "values": [3.06],
+      "uncertainties": [0.306],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mn55",
+      "product": "Mn56",
+      "all_states": true,
+      "source": "EXFOR 30314-005-0, (N,G), J.Vuletin 1974",
+      "energies_ev": [14400000],
+      "values": [0.8],
+      "uncertainties": [0.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mn55",
+      "product": "Mn56",
+      "all_states": true,
+      "source": "EXFOR 30532-020-0, (N,G), M.Budnar 1979",
+      "energies_ev": [14100000],
+      "values": [0.655],
+      "uncertainties": [0.095],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mn55",
+      "product": "Mn56",
+      "all_states": true,
+      "source": "EXFOR 33151-006-0, (N,G), I.Pasha 2020",
+      "energies_ev": [14540000],
+      "values": [0.69],
+      "uncertainties": [0.14],
+      "calculations": {}
+    }
+  ]
+}

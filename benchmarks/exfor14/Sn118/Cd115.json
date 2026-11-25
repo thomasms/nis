@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sn118/Cd115",
+  "title": "Sn118 to Cd115, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sn118": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn118",
+      "product": "Cd115",
+      "all_states": true,
+      "source": "EXFOR 32692-002-0, (N,A), Zhongsheng Pu 2011",
+      "energies_ev": [13500000, 14400000, 14600000],
+      "values": [0.63, 0.98, 1.65],
+      "uncertainties": [0.05, 0.06, 0.08],
+      "calculations": {}
+    }
+  ]
+}

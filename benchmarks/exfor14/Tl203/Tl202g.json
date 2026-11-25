@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Tl203/Tl202g",
+  "title": "Tl203 to Tl202g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Tl203": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tl203",
+      "product": "Tl202",
+      "all_states": false,
+      "source": "EXFOR 10493-018-G, (N,2N), P.K.Eapen 1975",
+      "energies_ev": [14800000],
+      "values": [2482.0],
+      "uncertainties": [198.0],
+      "calculations": {}
+    }
+  ]
+}

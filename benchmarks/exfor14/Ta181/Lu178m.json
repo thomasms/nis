@@ -1,0 +1,135 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ta181/Lu178m",
+  "title": "Ta181 to Lu178m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ta181": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Lu178m",
+      "all_states": false,
+      "source": "EXFOR 13039-002-1, (N,A), J.L.Meason 1966",
+      "energies_ev": [14800000],
+      "values": [0.14],
+      "uncertainties": [0.04],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Lu178m",
+      "all_states": false,
+      "source": "EXFOR 14235-005-0, (N,A), Junhua Luo 2009",
+      "energies_ev": [13500000, 14100000, 14700000],
+      "values": [0.197, 0.214, 0.256],
+      "uncertainties": [0.01, 0.013, 0.018],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Lu178m",
+      "all_states": false,
+      "source": "EXFOR 22351-003-0, (N,A), Y.Kasugai 1993",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [0.213, 0.233, 0.24, 0.301, 0.341],
+      "uncertainties": [0.018, 0.02, 0.036, 0.026, 0.029],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Lu178m",
+      "all_states": false,
+      "source": "EXFOR 22877-006-0, (N,X), V.Semkova 2007",
+      "energies_ev": [14000000, 14800000],
+      "values": [0.18, 0.278],
+      "uncertainties": [0.02, 0.02],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Lu178m",
+      "all_states": false,
+      "source": "EXFOR 30605-005-0, (N,A), N.Lakshmana Das 1981",
+      "energies_ev": [14200000],
+      "values": [1.8],
+      "uncertainties": [0.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Lu178m",
+      "all_states": false,
+      "source": "EXFOR 32204-010-0, (N,A), S.V.Begun 2000",
+      "energies_ev": [14600000],
+      "values": [0.207],
+      "uncertainties": [0.013],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Lu178m",
+      "all_states": false,
+      "source": "EXFOR 32205-008-0, (N,A), S.V.Begun 2002",
+      "energies_ev": [14500000],
+      "values": [0.235],
+      "uncertainties": [0.007],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Lu178m",
+      "all_states": false,
+      "source": "EXFOR 32205-022-0, (N,A), S.V.Begun 2002",
+      "energies_ev": [13560000, 13690000, 13950000, 14210000, 14470000, 14530000],
+      "values": [0.156, 0.165, 0.179, 0.221, 0.249, 0.25],
+      "uncertainties": [0.005, 0.006, 0.006, 0.007, 0.008, 0.008],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Lu178m",
+      "all_states": false,
+      "source": "EXFOR 41424-052-0, (N,A), A.A.Filatenkov 2001",
+      "energies_ev": [13680000, 13880000, 14260000, 14440000, 14640000, 14710000],
+      "values": [0.151, 0.17, 0.204, 0.215, 0.24, 0.208],
+      "uncertainties": [0.014, 0.015, 0.015, 0.015, 0.03, 0.02],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Lu178m",
+      "all_states": false,
+      "source": "EXFOR 41614-174-0, (N,A), A.A.Filatenkov 2016",
+      "energies_ev": [13680000, 13880000, 14260000, 14440000, 14640000, 14710000],
+      "values": [0.151, 0.171, 0.203, 0.216, 0.242, 0.209],
+      "uncertainties": [0.013937, 0.015014, 0.014799, 0.014926, 0.03025, 0.01998],
+      "calculations": {}
+    }
+  ]
+}

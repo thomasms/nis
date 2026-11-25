@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sn112/In110m",
+  "title": "Sn112 to In110m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sn112": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn112",
+      "product": "In110m",
+      "all_states": false,
+      "source": "EXFOR 10806-004-2, (N,T), T.W.Woo 1979",
+      "energies_ev": [14600000],
+      "values": [0.028],
+      "uncertainties": [0.007],
+      "calculations": {}
+    }
+  ]
+}

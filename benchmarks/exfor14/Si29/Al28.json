@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Si29/Al28",
+  "title": "Si29 to Al28, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Si29": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Si29",
+      "product": "Al28",
+      "all_states": true,
+      "source": "EXFOR 22089-010-0, (N,X), Y.Ikeda 1988",
+      "energies_ev": [14040000, 14660000, 14930000],
+      "values": [4.8, 23.7, 30.4],
+      "uncertainties": [1.4, 2.4, 2.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Si29",
+      "product": "Al28",
+      "all_states": true,
+      "source": "EXFOR 22281-006-0, (N,X), K.Kawade 1992",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [8.6, 10.3, 13.2, 17.9, 24.7],
+      "uncertainties": [0.4128, 0.4738, 0.6336, 0.7876, 1.0374],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Si29",
+      "product": "Al28",
+      "all_states": true,
+      "source": "EXFOR 22800-003-0, (N,X), H.Sakane 2002",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [8.6, 10.3, 13.2, 17.9, 24.7],
+      "uncertainties": [0.4128, 0.4738, 0.6336, 0.7876, 1.0374],
+      "calculations": {}
+    }
+  ]
+}

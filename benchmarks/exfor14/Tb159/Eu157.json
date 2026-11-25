@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Tb159/Eu157",
+  "title": "Tb159 to Eu157, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Tb159": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Tb159",
+      "product": "Eu157",
+      "all_states": true,
+      "source": "EXFOR 21010-007-0, (N,HE3), S.M.Qaim 1978",
+      "energies_ev": [14600000],
+      "values": [0.0046],
+      "uncertainties": [0.0018],
+      "calculations": {}
+    }
+  ]
+}

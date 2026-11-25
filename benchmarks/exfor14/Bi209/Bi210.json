@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Bi209/Bi210",
+  "title": "Bi209 to Bi210, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Bi209": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Bi209",
+      "product": "Bi210",
+      "all_states": true,
+      "source": "EXFOR 30532-056-0, (N,G), M.Budnar 1979",
+      "energies_ev": [14100000],
+      "values": [0.88],
+      "uncertainties": [0.165],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ti49/Sc48",
+  "title": "Ti49 to Sc48, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ti49": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti49",
+      "product": "Sc48",
+      "all_states": true,
+      "source": "EXFOR 11630-009-0, (N,X), H.L.Pai 1966",
+      "energies_ev": [13600000, 14800000],
+      "values": [7.0, 9.0],
+      "uncertainties": [2.0, 2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti49",
+      "product": "Sc48",
+      "all_states": true,
+      "source": "EXFOR 11631-009-0, (N,X), W.G.Cross 1963",
+      "energies_ev": [14500000],
+      "values": [9.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti49",
+      "product": "Sc48",
+      "all_states": true,
+      "source": "EXFOR 21784-003-0, (N,X), S.M.Qaim 1982",
+      "energies_ev": [14700000],
+      "values": [7.8],
+      "uncertainties": [3.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti49",
+      "product": "Sc48",
+      "all_states": true,
+      "source": "EXFOR 22089-031-0, (N,X), Y.Ikeda 1988",
+      "energies_ev": [13610000, 13990000, 14700000, 14980000],
+      "values": [2.43, 3.08, 6.9, 8.97],
+      "uncertainties": [0.24, 0.3, 0.59, 0.63],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti49",
+      "product": "Sc48",
+      "all_states": true,
+      "source": "EXFOR 30660-007-0, (N,X), I.Ribansky 1983",
+      "energies_ev": [14800000],
+      "values": [6.9],
+      "uncertainties": [0.6969],
+      "calculations": {}
+    }
+  ]
+}

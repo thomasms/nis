@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ir193/Re190m",
+  "title": "Ir193 to Re190m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ir193": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ir193",
+      "product": "Re190m",
+      "all_states": false,
+      "source": "EXFOR 41428-026-0, (N,A), A.A.Filatenkov 2003",
+      "energies_ev": [13640000, 13880000, 14100000, 14280000, 14470000, 14680000, 14820000],
+      "values": [0.05, 0.13, 0.1, 0.13, 0.09, 0.16, 0.18],
+      "uncertainties": [0.03, 0.06, 0.05, 0.05, 0.05, 0.06, 0.06],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ir193",
+      "product": "Re190m",
+      "all_states": false,
+      "source": "EXFOR 41614-212-0, (N,A), A.A.Filatenkov 2016",
+      "energies_ev": [13640000, 13880000, 14100000, 14280000, 14470000, 14680000, 14820000],
+      "values": [0.05, 0.131, 0.101, 0.13, 0.09, 0.16, 0.181],
+      "uncertainties": [0.03, 0.060391, 0.0505, 0.04992, 0.04995, 0.06, 0.060273],
+      "calculations": {}
+    }
+  ]
+}

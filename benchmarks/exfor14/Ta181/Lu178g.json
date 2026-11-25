@@ -1,0 +1,87 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ta181/Lu178g",
+  "title": "Ta181 to Lu178g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ta181": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Lu178",
+      "all_states": false,
+      "source": "EXFOR 13039-002-2, (N,A), J.L.Meason 1966",
+      "energies_ev": [14800000],
+      "values": [0.3],
+      "uncertainties": [0.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Lu178",
+      "all_states": false,
+      "source": "EXFOR 32204-011-0, (N,A), S.V.Begun 2000",
+      "energies_ev": [14600000],
+      "values": [0.41],
+      "uncertainties": [0.03],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Lu178",
+      "all_states": false,
+      "source": "EXFOR 32205-009-0, (N,A), S.V.Begun 2002",
+      "energies_ev": [14500000],
+      "values": [0.41],
+      "uncertainties": [0.03],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Lu178",
+      "all_states": false,
+      "source": "EXFOR 32205-023-0, (N,A), S.V.Begun 2002",
+      "energies_ev": [13560000, 13690000, 13950000, 14210000, 14470000, 14530000],
+      "values": [0.33, 0.35, 0.4, 0.46, 0.41, 0.38],
+      "uncertainties": [0.04, 0.05, 0.04, 0.04, 0.04, 0.03],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Lu178",
+      "all_states": false,
+      "source": "EXFOR 41424-053-0, (N,A), A.A.Filatenkov 2001",
+      "energies_ev": [13680000, 13880000, 14260000, 14440000, 14710000],
+      "values": [0.302, 0.4, 0.424, 0.421, 0.52],
+      "uncertainties": [0.07, 0.1, 0.04, 0.07, 0.09],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ta181",
+      "product": "Lu178",
+      "all_states": false,
+      "source": "EXFOR 41614-175-0, (N,A), A.A.Filatenkov 2016",
+      "energies_ev": [13680000, 13880000, 14260000, 14440000, 14710000],
+      "values": [0.303, 0.403, 0.422, 0.423, 0.524],
+      "uncertainties": [0.16695, 0.22528, 0.2148, 0.22292, 0.2772],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Nb93/Y90",
+  "title": "Nb93 to Y90, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Nb93": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nb93",
+      "product": "Y90",
+      "all_states": true,
+      "source": "EXFOR 11462-013-0, (N,A), B.P.Bayhurst 1961",
+      "energies_ev": [13690000, 14010000, 14310000, 14500000, 14680000],
+      "values": [8.9, 9.3, 9.4, 9.5, 9.4],
+      "uncertainties": [0.4, 0.5, 0.5, 0.5, 0.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nb93",
+      "product": "Y90",
+      "all_states": true,
+      "source": "EXFOR 11504-009-0, (N,A), H.A.Tewes 1960",
+      "energies_ev": [13850000, 14000000, 14500000],
+      "values": [9.8, 9.4, 11.0],
+      "uncertainties": [1.96, 1.88, 2.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nb93",
+      "product": "Y90",
+      "all_states": true,
+      "source": "EXFOR 12069-017-0, (N,A), G.T.Western 1966",
+      "energies_ev": [14700000],
+      "values": [5.2],
+      "uncertainties": [0.3],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nb93",
+      "product": "Y90",
+      "all_states": true,
+      "source": "EXFOR 20471-008-0, (N,A), M.Bormann 1972",
+      "energies_ev": [14200000],
+      "values": [9.5],
+      "uncertainties": [1.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nb93",
+      "product": "Y90",
+      "all_states": true,
+      "source": "EXFOR 21865-002-0, (N,A), R.Fischer 1982",
+      "energies_ev": [14100000],
+      "values": [9.92],
+      "uncertainties": [0.77],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nb93",
+      "product": "Y90",
+      "all_states": true,
+      "source": "EXFOR 22108-004-0, (N,A), R.Woelfle 1988",
+      "energies_ev": [14340000, 14410000],
+      "values": [7.36, 7.2],
+      "uncertainties": [0.64, 0.62],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nb93",
+      "product": "Y90",
+      "all_states": true,
+      "source": "EXFOR 30130-006-0, (N,A), P.Kulisic 1964",
+      "energies_ev": [14700000],
+      "values": [9.3],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nb93",
+      "product": "Y90",
+      "all_states": true,
+      "source": "EXFOR 40226-025-0, (N,A), V.N.Levkovskii 1970",
+      "energies_ev": [14800000],
+      "values": [3.3],
+      "uncertainties": [0.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nb93",
+      "product": "Y90",
+      "all_states": true,
+      "source": "EXFOR 41614-065-0, (N,A), A.A.Filatenkov 2016",
+      "energies_ev": [13560000, 13660000, 13740000, 13880000, 13960000, 14050000, 14190000, 14270000, 14420000, 14470000, 14610000, 14680000, 14780000, 14860000],
+      "values": [11.6, 12.4, 12.3, 12.6, 12.7, 13.5, 13.4, 13.2, 13.1, 13.7, 13.5, 13.3, 13.5, 13.5],
+      "uncertainties": [1.0602, 0.86304, 0.95202, 0.9009, 1.016, 0.93015, 0.99562, 0.825, 0.88294, 0.9864, 1.0989, 1.1239, 1.2271, 1.0516],
+      "calculations": {}
+    }
+  ]
+}

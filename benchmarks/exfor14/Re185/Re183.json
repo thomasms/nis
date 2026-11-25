@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Re185/Re183",
+  "title": "Re185 to Re183, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Re185": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Re185",
+      "product": "Re183",
+      "all_states": true,
+      "source": "EXFOR 23723-002-2, (N,3N), S.Ilic 2020",
+      "energies_ev": [14800000],
+      "values": [66.0],
+      "uncertainties": [3.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Re185",
+      "product": "Re183",
+      "all_states": true,
+      "source": "EXFOR 31527-005-0, (N,3N), Gongping Li 2002",
+      "energies_ev": [14800000],
+      "values": [66.0],
+      "uncertainties": [5.6],
+      "calculations": {}
+    }
+  ]
+}

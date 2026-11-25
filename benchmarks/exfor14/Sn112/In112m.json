@@ -1,0 +1,75 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sn112/In112m",
+  "title": "Sn112 to In112m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sn112": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn112",
+      "product": "In112m",
+      "all_states": false,
+      "source": "EXFOR 10484-007-0, (N,P), R.W.Fink 1970",
+      "energies_ev": [14400000],
+      "values": [49.0],
+      "uncertainties": [15.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn112",
+      "product": "In112m",
+      "all_states": false,
+      "source": "EXFOR 22428-003-0, (N,P), H.Sakane 1998",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [30.1, 29.6, 29.0, 30.5, 28.0],
+      "uncertainties": [3.0, 2.8, 2.8, 3.3, 2.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn112",
+      "product": "In112m",
+      "all_states": false,
+      "source": "EXFOR 30202-008-0, (N,P), S.Lulic 1968",
+      "energies_ev": [14400000],
+      "values": [8.7],
+      "uncertainties": [0.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn112",
+      "product": "In112m",
+      "all_states": false,
+      "source": "EXFOR 31551-003-0, (N,P), E.Betak 2005",
+      "energies_ev": [14400000],
+      "values": [33.6],
+      "uncertainties": [2.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn112",
+      "product": "In112m",
+      "all_states": false,
+      "source": "EXFOR 41032-008-0, (N,P), P.M.Gopych 1987",
+      "energies_ev": [14600000],
+      "values": [33.0],
+      "uncertainties": [6.0],
+      "calculations": {}
+    }
+  ]
+}

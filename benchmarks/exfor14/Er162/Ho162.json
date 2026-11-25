@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Er162/Ho162",
+  "title": "Er162 to Ho162, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Er162": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er162",
+      "product": "Ho162",
+      "all_states": true,
+      "source": "EXFOR 32233-007-0, (N,P), N.Dzysiuk 2012",
+      "energies_ev": [14700000],
+      "values": [10.5],
+      "uncertainties": [3.2],
+      "calculations": {}
+    }
+  ]
+}

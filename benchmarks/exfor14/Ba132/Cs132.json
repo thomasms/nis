@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ba132/Cs132",
+  "title": "Ba132 to Cs132, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ba132": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba132",
+      "product": "Cs132",
+      "all_states": true,
+      "source": "EXFOR 22637-061-0, (N,P), C.Konno 1993",
+      "energies_ev": [13990000, 14680000, 14950000],
+      "values": [14.9, 17.8, 20.1],
+      "uncertainties": [3.5, 4.1, 4.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba132",
+      "product": "Cs132",
+      "all_states": true,
+      "source": "EXFOR 32845-004-0, (N,P), Yuan Junqian 1994",
+      "energies_ev": [14200000],
+      "values": [35.0],
+      "uncertainties": [1.5],
+      "calculations": {}
+    }
+  ]
+}

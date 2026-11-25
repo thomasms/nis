@@ -1,0 +1,147 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Hf176/Hf175",
+  "title": "Hf176 to Hf175, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Hf176": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hf176",
+      "product": "Hf175",
+      "all_states": true,
+      "source": "EXFOR 12092-003-0, (N,2N), M.Hillman 1969",
+      "energies_ev": [14500000],
+      "values": [2000.0],
+      "uncertainties": [100.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hf176",
+      "product": "Hf175",
+      "all_states": true,
+      "source": "EXFOR 13586-019-0, (N,2N), J.W.Meadows 1996",
+      "energies_ev": [14700000],
+      "values": [1915.0],
+      "uncertainties": [151.29],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hf176",
+      "product": "Hf175",
+      "all_states": true,
+      "source": "EXFOR 20541-059-0, (N,2N), S.M.Qaim 1974",
+      "energies_ev": [14700000],
+      "values": [2076.0],
+      "uncertainties": [150.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hf176",
+      "product": "Hf175",
+      "all_states": true,
+      "source": "EXFOR 20802-014-0, (N,2N), W.Dilg 1968",
+      "energies_ev": [14700000],
+      "values": [2220.0],
+      "uncertainties": [115.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hf176",
+      "product": "Hf175",
+      "all_states": true,
+      "source": "EXFOR 22657-009-0, (N,2N), J.W.Meadows 1996",
+      "energies_ev": [14700000],
+      "values": [2057.0],
+      "uncertainties": [148.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hf176",
+      "product": "Hf175",
+      "all_states": true,
+      "source": "EXFOR 30491-010-0, (N,2N), N.Lakshmana Das 1974",
+      "energies_ev": [14200000],
+      "values": [2124.0],
+      "uncertainties": [128.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hf176",
+      "product": "Hf175",
+      "all_states": true,
+      "source": "EXFOR 31497-006-0, (N,2N), Xiangzhong Kong 1998",
+      "energies_ev": [14700000],
+      "values": [2090.0],
+      "uncertainties": [100.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hf176",
+      "product": "Hf175",
+      "all_states": true,
+      "source": "EXFOR 31519-005-0, (N,2N), B.Kiraly 2001",
+      "energies_ev": [14300000, 14700000],
+      "values": [1990.0, 2050.0],
+      "uncertainties": [100.0, 100.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hf176",
+      "product": "Hf175",
+      "all_states": true,
+      "source": "EXFOR 31630-002-0, (N,2N), Lu Hanlin 1999",
+      "energies_ev": [14200000, 14700000],
+      "values": [2081.0, 2166.0],
+      "uncertainties": [108.0, 112.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hf176",
+      "product": "Hf175",
+      "all_states": true,
+      "source": "EXFOR 31763-016-0, (N,2N), Xiangzhong Kong 1997",
+      "energies_ev": [14700000],
+      "values": [2083.0],
+      "uncertainties": [180.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Hf176",
+      "product": "Hf175",
+      "all_states": true,
+      "source": "EXFOR 32686-002-0, (N,2N), Zhu Chuan-Xin 2010",
+      "energies_ev": [13670000, 14060000, 14450000, 14690000, 14800000],
+      "values": [2089.0, 2093.0, 2122.0, 2137.0, 2130.0],
+      "uncertainties": [84.0, 84.0, 85.0, 85.0, 85.0],
+      "calculations": {}
+    }
+  ]
+}

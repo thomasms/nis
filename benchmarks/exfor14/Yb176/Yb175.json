@@ -1,0 +1,147 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Yb176/Yb175",
+  "title": "Yb176 to Yb175, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Yb176": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb176",
+      "product": "Yb175",
+      "all_states": true,
+      "source": "EXFOR 12033-050-0, (N,2N), R.G.Wille 1960",
+      "energies_ev": [14800000],
+      "values": [430.0],
+      "uncertainties": [100.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb176",
+      "product": "Yb175",
+      "all_states": true,
+      "source": "EXFOR 20058-004-0, (N,2N), H.Spenke 1964",
+      "energies_ev": [14800000],
+      "values": [1810.0],
+      "uncertainties": [253.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb176",
+      "product": "Yb175",
+      "all_states": true,
+      "source": "EXFOR 20541-053-0, (N,2N), S.M.Qaim 1974",
+      "energies_ev": [14700000],
+      "values": [2166.0],
+      "uncertainties": [230.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb176",
+      "product": "Yb175",
+      "all_states": true,
+      "source": "EXFOR 20852-007-0, (N,2N), I.Kumabe 1977",
+      "energies_ev": [14600000],
+      "values": [2226.0],
+      "uncertainties": [152.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb176",
+      "product": "Yb175",
+      "all_states": true,
+      "source": "EXFOR 21609-025-0, (N,2N), H.Weigel 1975",
+      "energies_ev": [14300000],
+      "values": [3354.0],
+      "uncertainties": [270.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb176",
+      "product": "Yb175",
+      "all_states": true,
+      "source": "EXFOR 30605-003-0, (N,2N), N.Lakshmana Das 1981",
+      "energies_ev": [14200000],
+      "values": [2000.0],
+      "uncertainties": [145.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb176",
+      "product": "Yb175",
+      "all_states": true,
+      "source": "EXFOR 31247-020-0, (N,2N), C.S.Khurana 1961",
+      "energies_ev": [14800000],
+      "values": [786.0],
+      "uncertainties": [78.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb176",
+      "product": "Yb175",
+      "all_states": true,
+      "source": "EXFOR 31763-015-0, (N,2N), Xiangzhong Kong 1997",
+      "energies_ev": [14700000],
+      "values": [2225.0],
+      "uncertainties": [220.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb176",
+      "product": "Yb175",
+      "all_states": true,
+      "source": "EXFOR 32233-028-0, (N,2N), N.Dzysiuk 2012",
+      "energies_ev": [14700000],
+      "values": [2327.0],
+      "uncertainties": [163.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb176",
+      "product": "Yb175",
+      "all_states": true,
+      "source": "EXFOR 32727-004-0, (N,2N), Junhua Luo 2013",
+      "energies_ev": [13500000, 14800000],
+      "values": [2132.0, 2071.0],
+      "uncertainties": [94.0, 92.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Yb176",
+      "product": "Yb175",
+      "all_states": true,
+      "source": "EXFOR 33175-007-0, (N,2N), G.T.Bholane 2022",
+      "energies_ev": [14770000],
+      "values": [2243.0],
+      "uncertainties": [109.68],
+      "calculations": {}
+    }
+  ]
+}

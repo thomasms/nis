@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cd108/Ag108m",
+  "title": "Cd108 to Ag108m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cd108": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd108",
+      "product": "Ag108m",
+      "all_states": false,
+      "source": "EXFOR 31433-002-0, (N,P), Yuan Junqian 1994",
+      "energies_ev": [14600000],
+      "values": [18.1],
+      "uncertainties": [3.3],
+      "calculations": {}
+    }
+  ]
+}

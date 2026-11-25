@@ -1,0 +1,147 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "W186/Hf183",
+  "title": "W186 to Hf183, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "W186": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W186",
+      "product": "Hf183",
+      "all_states": true,
+      "source": "EXFOR 12181-003-0, (N,A), A.Poularikas 1960",
+      "energies_ev": [14800000],
+      "values": [2.5],
+      "uncertainties": [1.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W186",
+      "product": "Hf183",
+      "all_states": true,
+      "source": "EXFOR 20668-019-0, (N,A), S.M.Qaim 1975",
+      "energies_ev": [14700000],
+      "values": [0.55],
+      "uncertainties": [0.07],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W186",
+      "product": "Hf183",
+      "all_states": true,
+      "source": "EXFOR 22089-108-0, (N,A), Y.Ikeda 1988",
+      "energies_ev": [13560000, 14660000, 14930000],
+      "values": [0.311, 0.6, 0.64],
+      "uncertainties": [0.57, 0.11, 0.13],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W186",
+      "product": "Hf183",
+      "all_states": true,
+      "source": "EXFOR 22351-010-0, (N,A), Y.Kasugai 1993",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [0.38, 0.41, 0.51, 0.56, 0.71],
+      "uncertainties": [0.05, 0.06, 0.07, 0.08, 0.09],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W186",
+      "product": "Hf183",
+      "all_states": true,
+      "source": "EXFOR 22877-020-0, (N,X), V.Semkova 2007",
+      "energies_ev": [14800000],
+      "values": [0.62],
+      "uncertainties": [0.09],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W186",
+      "product": "Hf183",
+      "all_states": true,
+      "source": "EXFOR 23011-006-0, (N,A), Y.Kasugai 1994",
+      "energies_ev": [13650000, 13880000, 14280000, 14580000, 14870000],
+      "values": [0.4, 0.48, 0.57, 0.65, 0.83],
+      "uncertainties": [0.048, 0.04224, 0.05016, 0.0481, 0.05893],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W186",
+      "product": "Hf183",
+      "all_states": true,
+      "source": "EXFOR 31484-004-0, (N,A), Kong Xiangzhong 1997",
+      "energies_ev": [13500000, 13700000, 14200000, 14500000, 14700000],
+      "values": [0.3, 0.34, 0.45, 0.57, 0.62],
+      "uncertainties": [0.06, 0.08, 0.09, 0.1, 0.11],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W186",
+      "product": "Hf183",
+      "all_states": true,
+      "source": "EXFOR 31496-029-0, (N,A), A.Grallert 1993",
+      "energies_ev": [14600000],
+      "values": [0.54],
+      "uncertainties": [0.05],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W186",
+      "product": "Hf183",
+      "all_states": true,
+      "source": "EXFOR 32874-008-0, (N,A), Yong Li 2022",
+      "energies_ev": [13500000, 14100000, 14400000, 14800000],
+      "values": [0.26, 0.35, 0.42, 0.56],
+      "uncertainties": [0.01, 0.02, 0.02, 0.03],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W186",
+      "product": "Hf183",
+      "all_states": true,
+      "source": "EXFOR 41469-011-0, (N,A), V.Avrigeanu 2006",
+      "energies_ev": [13640000, 13880000, 14280000, 14470000, 14680000, 14820000],
+      "values": [0.276, 0.384, 0.463, 0.518, 0.577, 0.6],
+      "uncertainties": [0.051, 0.06, 0.08, 0.07, 0.11, 0.08],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "W186",
+      "product": "Hf183",
+      "all_states": true,
+      "source": "EXFOR 41614-190-0, (N,A), A.A.Filatenkov 2016",
+      "energies_ev": [13640000, 13880000, 14280000, 14470000, 14680000, 14820000],
+      "values": [0.277, 0.387, 0.461, 0.52, 0.582, 0.601],
+      "uncertainties": [0.051245, 0.060372, 0.079753, 0.07488, 0.11058, 0.084741],
+      "calculations": {}
+    }
+  ]
+}

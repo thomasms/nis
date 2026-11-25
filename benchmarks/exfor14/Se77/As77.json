@@ -1,0 +1,75 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Se77/As77",
+  "title": "Se77 to As77, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Se77": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se77",
+      "product": "As77",
+      "all_states": true,
+      "source": "EXFOR 11274-053-0, (N,P), E.B.Paul 1953",
+      "energies_ev": [14500000],
+      "values": [45.2],
+      "uncertainties": [22.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se77",
+      "product": "As77",
+      "all_states": true,
+      "source": "EXFOR 20721-068-0, (N,P), N.I.Molla 1977",
+      "energies_ev": [14700000],
+      "values": [35.0],
+      "uncertainties": [5.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se77",
+      "product": "As77",
+      "all_states": true,
+      "source": "EXFOR 32108-004-0, (N,P), H.M.Hoang 1989",
+      "energies_ev": [13900000, 14500000, 15000000],
+      "values": [40.0, 37.0, 40.0],
+      "uncertainties": [7.0, 6.0, 7.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se77",
+      "product": "As77",
+      "all_states": true,
+      "source": "EXFOR 40009-024-1, (N,P), G.P.Vinitskaya 1968",
+      "energies_ev": [14800000],
+      "values": [36.0],
+      "uncertainties": [10.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se77",
+      "product": "As77",
+      "all_states": true,
+      "source": "EXFOR 41614-042-0, (N,P), A.A.Filatenkov 2016",
+      "energies_ev": [13890000, 14050000, 14260000, 14440000, 14810000],
+      "values": [65.3, 54.8, 67.8, 65.4, 76.9],
+      "uncertainties": [18.088, 15.947, 17.018, 15.107, 19.994],
+      "calculations": {}
+    }
+  ]
+}

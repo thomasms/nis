@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Au197/Pt197m",
+  "title": "Au197 to Pt197m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Au197": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Au197",
+      "product": "Pt197m",
+      "all_states": false,
+      "source": "EXFOR 32203-002-0, (N,P), V.K.Maidanyuk 1994",
+      "energies_ev": [14000000],
+      "values": [1.48],
+      "uncertainties": [0.013],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Au197",
+      "product": "Pt197m",
+      "all_states": false,
+      "source": "EXFOR 41428-040-0, (N,P), A.A.Filatenkov 2003",
+      "energies_ev": [13880000, 14280000, 14470000, 14820000],
+      "values": [1.04, 1.23, 1.26, 1.63],
+      "uncertainties": [0.07, 0.09, 0.08, 0.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Au197",
+      "product": "Pt197m",
+      "all_states": false,
+      "source": "EXFOR 41614-228-0, (N,P), A.A.Filatenkov 2016",
+      "energies_ev": [13880000, 14280000, 14470000, 14820000],
+      "values": [1.04, 1.23, 1.26, 1.63],
+      "uncertainties": [0.068952, 0.088806, 0.078498, 0.097963],
+      "calculations": {}
+    }
+  ]
+}

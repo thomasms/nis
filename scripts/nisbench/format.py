@@ -24,8 +24,8 @@ QUANTITIES = {
     "gamma_heat": "decay heat of the electromagnetic radiation (gamma and X rays)",
     "alpha_heat": "decay heat of the heavy particles (alpha)",
     "activity": "total activity",
-    "cross_section": "spectrum-averaged production cross section of one product from one target (from the reaction "
-                     "matrix of the spectrum of the step)",
+    "cross_section": "production cross section of one product from one target: averaged over the spectrum of the "
+                     "step (from its reaction matrix), or at an incident neutron energy",
 }
 
 _MEV_TO_J = 1.602176634e-13
@@ -94,6 +94,11 @@ class Measurement:
     target: str = None
     product: str = None
     all_states: bool = False
+    # only for a cross_section, in place of steps: the incident neutron energy (eV) of each value. Then each value
+    # is the cross section at its energy, not in the spectrum of a step
+    energies_ev: list = None
+    # optional: where the values come from, e.g. an EXFOR subentry
+    source: str = None
 
 
 @dataclass
@@ -226,24 +231,38 @@ def _measurement(data, where: str, nsteps: int) -> Measurement:
     units = units_for(quantity)
     _require(unit in units, where, f"unknown unit {unit!r} for {quantity}, known: {', '.join(units)}")
 
-    steps = data.get("steps")
-    _require(isinstance(steps, list) and steps, where, '"steps" must be a list that is not empty')
-    _require(all(isinstance(s, int) and 0 <= s < nsteps for s in steps), where,
-             f'each of "steps" must be a step index from 0 to {nsteps - 1}')
-    _require(all(a < b for a, b in zip(steps, steps[1:])), where, '"steps" must go up')
+    energies = data.get("energies_ev")
+    if energies is not None:
+        _require(quantity == "cross_section", where, '"energies_ev" is only for a cross_section')
+        _require("steps" not in data, where, 'give "steps" or "energies_ev", not both')
+        _require(isinstance(energies, list) and energies, where, '"energies_ev" must be a list that is not empty')
+        energies = [_number(e, where, "an energy", positive=True) for e in energies]
+        _require(all(a <= b for a, b in zip(energies, energies[1:])), where, '"energies_ev" must not go down')
+        steps, points, what = [], len(energies), "energy"
+    else:
+        steps = data.get("steps")
+        _require(isinstance(steps, list) and steps, where, '"steps" must be a list that is not empty')
+        _require(all(isinstance(s, int) and 0 <= s < nsteps for s in steps), where,
+                 f'each of "steps" must be a step index from 0 to {nsteps - 1}' if nsteps else
+                 'the case has no steps, so give "energies_ev" in place of "steps"')
+        _require(all(a < b for a, b in zip(steps, steps[1:])), where, '"steps" must go up')
+        points, what = len(steps), "step"
 
     values = [_number(v, where, "a value") for v in data.get("values", [])]
     uncertainties = [_number(v, where, "an uncertainty", minimum=0.0) for v in data.get("uncertainties", [])]
-    _require(len(values) == len(steps), where, f'"values" has {len(values)} items, "steps" has {len(steps)}')
-    _require(len(uncertainties) == len(steps), where,
-             f'"uncertainties" has {len(uncertainties)} items, "steps" has {len(steps)}')
+    what_list = '"steps"' if what == "step" else '"energies_ev"'
+    _require(len(values) == points, where, f'"values" has {len(values)} items, {what_list} has {points}')
+    _require(len(uncertainties) == points, where,
+             f'"uncertainties" has {len(uncertainties)} items, {what_list} has {points}')
+    source = data.get("source")
+    _require(source is None or (isinstance(source, str) and source), where, '"source" must be a text')
 
     calculations = data.get("calculations", {})
     _require(isinstance(calculations, dict), where, '"calculations" must be an object')
     checked = {}
     for name, calc in calculations.items():
-        _require(isinstance(calc, list) and len(calc) == len(steps), where,
-                 f'calculation {name!r} must be a list with one value (or null) for each step')
+        _require(isinstance(calc, list) and len(calc) == points, where,
+                 f'calculation {name!r} must be a list with one value (or null) for each {what}')
         checked[name] = [None if v is None else _number(v, where, f"a value of {name!r}") for v in calc]
 
     reaction = {key: data.get(key) for key in ("target", "product", "all_states")}
@@ -259,7 +278,8 @@ def _measurement(data, where: str, nsteps: int) -> Measurement:
         _require(all(v is None for v in reaction.values()), where,
                  '"target", "product" and "all_states" are only for a cross_section')
         reaction = {}
-    return Measurement(quantity, unit, list(steps), values, uncertainties, checked, **reaction)
+    return Measurement(quantity, unit, list(steps), values, uncertainties, checked, energies_ev=energies,
+                       source=source, **reaction)
 
 
 def parse_case(data: dict, where: str = "case") -> Case:
@@ -280,11 +300,13 @@ def parse_case(data: dict, where: str = "case") -> Case:
         _require(bool(_NUCLIDE.match(nuclide)), where, f"{nuclide!r} is not a nuclide name, such as Co59 or Ag110m")
         _number(n, where, f"the atoms of {nuclide}", minimum=0.0)
 
-    raw_steps = data.get("steps")
+    # a case with only cross sections at given energies needs no steps
+    raw_steps = data.get("steps", {"dt_s": [], "flux_n_m2_s": []})
     _require(isinstance(raw_steps, dict), where, '"steps" must be an object with "dt_s" and "flux_n_m2_s"')
     dts = raw_steps.get("dt_s")
     fluxes = raw_steps.get("flux_n_m2_s")
-    _require(isinstance(dts, list) and dts, where, '"steps.dt_s" must be a list that is not empty')
+    _require(isinstance(dts, list) and (dts or "steps" not in data), where,
+             '"steps.dt_s" must be a list that is not empty')
     _require(isinstance(fluxes, list) and len(fluxes) == len(dts), where,
              '"steps.flux_n_m2_s" must be a list with one flux for each step')
     steps = [(_number(dt, where, "dt_s", positive=True), _number(flux, where, "flux_n_m2_s", minimum=0.0))
@@ -410,9 +432,10 @@ def case_to_json(case: Case) -> dict:
         "name": case.name,
         "title": case.title,
         "sample": {"atoms": {k: _compact(v) for k, v in sorted(case.atoms.items())}},
-        "steps": {"dt_s": [_compact(dt) for dt, _ in case.steps],
-                  "flux_n_m2_s": [_compact(flux) for _, flux in case.steps]},
     }
+    if case.steps:
+        data["steps"] = {"dt_s": [_compact(dt) for dt, _ in case.steps],
+                         "flux_n_m2_s": [_compact(flux) for _, flux in case.steps]}
     if case.fission_rates is not None:
         data["steps"]["fission_rate_per_s"] = [_compact(r) for r in case.fission_rates]
     if case.mass_kg is not None:
@@ -433,8 +456,13 @@ def case_to_json(case: Case) -> dict:
         measurement = {"quantity": m.quantity, "unit": m.unit}
         if m.quantity == "cross_section":
             measurement.update(target=m.target, product=m.product, all_states=m.all_states)
+        if m.source is not None:
+            measurement["source"] = m.source
+        if m.energies_ev is not None:
+            measurement["energies_ev"] = [_compact(e) for e in m.energies_ev]
+        else:
+            measurement["steps"] = m.steps
         measurement.update({
-            "steps": m.steps,
             "values": [_compact(v) for v in m.values],
             "uncertainties": [_compact(v) for v in m.uncertainties],
             "calculations": {k: [None if v is None else _compact(v) for v in vs] for k, vs in m.calculations.items()},

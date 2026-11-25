@@ -1,0 +1,111 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cd116/Cd115m",
+  "title": "Cd116 to Cd115m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cd116": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd116",
+      "product": "Cd115m",
+      "all_states": false,
+      "source": "EXFOR 11583-019-0, (N,2N), Yu-Wen Yu 1967",
+      "energies_ev": [14100000],
+      "values": [730.0],
+      "uncertainties": [58.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd116",
+      "product": "Cd115m",
+      "all_states": false,
+      "source": "EXFOR 11645-017-0, (N,2N), R.J.Prestwood 1961",
+      "energies_ev": [13690000, 14010000, 14090000, 14310000, 14500000, 14680000, 14810000, 14930000],
+      "values": [795.0, 840.0, 769.0, 885.0, 808.0, 825.0, 807.0, 836.0],
+      "uncertainties": [80.0, 84.0, 77.0, 89.0, 81.0, 83.0, 81.0, 84.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd116",
+      "product": "Cd115m",
+      "all_states": false,
+      "source": "EXFOR 21300-017-0, (N,2N), K.Kayashima 1979",
+      "energies_ev": [14600000],
+      "values": [799.0],
+      "uncertainties": [82.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd116",
+      "product": "Cd115m",
+      "all_states": false,
+      "source": "EXFOR 21609-012-0, (N,2N), H.Weigel 1975",
+      "energies_ev": [14200000],
+      "values": [720.0],
+      "uncertainties": [100.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd116",
+      "product": "Cd115m",
+      "all_states": false,
+      "source": "EXFOR 31247-013-0, (N,2N), C.S.Khurana 1961",
+      "energies_ev": [14800000],
+      "values": [490.0],
+      "uncertainties": [73.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd116",
+      "product": "Cd115m",
+      "all_states": false,
+      "source": "EXFOR 32760-005-1, (N,2N), Kong Xiangzhong 1995",
+      "energies_ev": [13700000, 14250000, 14500000, 14800000],
+      "values": [654.0, 658.0, 632.0, 626.0],
+      "uncertainties": [27.0, 28.0, 26.0, 26.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd116",
+      "product": "Cd115m",
+      "all_states": false,
+      "source": "EXFOR 41424-050-0, (N,2N), A.A.Filatenkov 2001",
+      "energies_ev": [14440000, 14640000],
+      "values": [560.0, 530.0],
+      "uncertainties": [160.0, 160.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cd116",
+      "product": "Cd115m",
+      "all_states": false,
+      "source": "EXFOR 41614-114-0, (N,2N), A.A.Filatenkov 2016",
+      "energies_ev": [13560000, 13740000, 13880000, 13960000, 14190000, 14440000, 14640000, 14880000],
+      "values": [621.0, 705.0, 511.0, 591.0, 590.0, 559.0, 530.0, 526.0],
+      "uncertainties": [265.17, 289.75, 181.4, 257.08, 255.47, 194.53, 195.04, 197.25],
+      "calculations": {}
+    }
+  ]
+}

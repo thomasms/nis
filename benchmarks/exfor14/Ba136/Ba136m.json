@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ba136/Ba136m",
+  "title": "Ba136 to Ba136m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ba136": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ba136",
+      "product": "Ba136m",
+      "all_states": false,
+      "source": "EXFOR 21976-041-0, (N,INL), B.Anders 1985",
+      "energies_ev": [14700000],
+      "values": [46.0],
+      "uncertainties": [2.3],
+      "calculations": {}
+    }
+  ]
+}

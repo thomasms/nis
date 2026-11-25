@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ti50/Sc50m",
+  "title": "Ti50 to Sc50m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ti50": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti50",
+      "product": "Sc50m",
+      "all_states": false,
+      "source": "EXFOR 11484-011-0, (N,P), A.Poularikas 1959",
+      "energies_ev": [14800000],
+      "values": [48.0],
+      "uncertainties": [15.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti50",
+      "product": "Sc50m",
+      "all_states": false,
+      "source": "EXFOR 21976-013-0, (N,P), B.Anders 1985",
+      "energies_ev": [14700000],
+      "values": [8.7],
+      "uncertainties": [0.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti50",
+      "product": "Sc50m",
+      "all_states": false,
+      "source": "EXFOR 30322-009-0, (N,P), J.Janczyszyn 1973",
+      "energies_ev": [14000000],
+      "values": [15.0],
+      "uncertainties": [7.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ti50",
+      "product": "Sc50m",
+      "all_states": false,
+      "source": "EXFOR 30648-002-0, (N,P), V.K.Chindhade 1982",
+      "energies_ev": [14400000],
+      "values": [7.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    }
+  ]
+}

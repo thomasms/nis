@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Pt198/Pt199",
+  "title": "Pt198 to Pt199, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Pt198": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pt198",
+      "product": "Pt199",
+      "all_states": true,
+      "source": "EXFOR 30282-003-0, (N,G), I.Uray 1973",
+      "energies_ev": [15000000],
+      "values": [12.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    }
+  ]
+}

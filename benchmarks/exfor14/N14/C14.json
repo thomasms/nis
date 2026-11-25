@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "N14/C14",
+  "title": "N14 to C14, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "N14": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "N14",
+      "product": "C14",
+      "all_states": true,
+      "source": "EXFOR 20675-002-0, (N,P), H.Felber 1976",
+      "energies_ev": [14700000],
+      "values": [38.0],
+      "uncertainties": [3.0],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,147 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Eu153/Eu152m",
+  "title": "Eu153 to Eu152m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Eu153": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Eu153",
+      "product": "Eu152m",
+      "all_states": false,
+      "source": "EXFOR 10431-004-0, (N,2N), A.Bari 1972",
+      "energies_ev": [14800000],
+      "values": [263.0],
+      "uncertainties": [25.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Eu153",
+      "product": "Eu152m",
+      "all_states": false,
+      "source": "EXFOR 12033-034-0, (N,2N), R.G.Wille 1960",
+      "energies_ev": [14800000],
+      "values": [750.0],
+      "uncertainties": [200.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Eu153",
+      "product": "Eu152m",
+      "all_states": false,
+      "source": "EXFOR 13042-003-1, (N,2N), G.N.Salaita 1974",
+      "energies_ev": [14800000],
+      "values": [96.0],
+      "uncertainties": [8.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Eu153",
+      "product": "Eu152m",
+      "all_states": false,
+      "source": "EXFOR 20541-029-0, (N,2N), S.M.Qaim 1974",
+      "energies_ev": [14700000],
+      "values": [433.0],
+      "uncertainties": [39.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Eu153",
+      "product": "Eu152m",
+      "all_states": false,
+      "source": "EXFOR 22637-067-0, (N,2N), C.Konno 1993",
+      "energies_ev": [13560000, 13980000, 14220000, 14660000, 14920000],
+      "values": [310.0, 309.0, 312.0, 301.0, 300.0],
+      "uncertainties": [24.0, 24.0, 24.0, 23.0, 23.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Eu153",
+      "product": "Eu152m",
+      "all_states": false,
+      "source": "EXFOR 30051-009-0, (N,2N), P.Rama Prasad 1969",
+      "energies_ev": [14200000],
+      "values": [652.0],
+      "uncertainties": [90.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Eu153",
+      "product": "Eu152m",
+      "all_states": false,
+      "source": "EXFOR 30698-005-2, (N,2N), A.Reggoug 1982",
+      "energies_ev": [14700000],
+      "values": [433.0],
+      "uncertainties": [39.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Eu153",
+      "product": "Eu152m",
+      "all_states": false,
+      "source": "EXFOR 31247-017-0, (N,2N), C.S.Khurana 1961",
+      "energies_ev": [14800000],
+      "values": [164.0],
+      "uncertainties": [24.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Eu153",
+      "product": "Eu152m",
+      "all_states": false,
+      "source": "EXFOR 32772-002-2, (N,2N), Junhua Luo 2017",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [309.0, 288.0, 269.0],
+      "uncertainties": [40.0, 36.0, 34.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Eu153",
+      "product": "Eu152m",
+      "all_states": false,
+      "source": "EXFOR 41240-067-0, (N,2N), A.A.Filatenkov 1999",
+      "energies_ev": [13560000, 13740000, 13960000, 14190000, 14420000, 14610000, 14780000],
+      "values": [292.0, 286.0, 282.0, 285.0, 281.0, 275.0, 266.0],
+      "uncertainties": [42.0, 39.0, 39.0, 40.0, 39.0, 40.0, 39.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Eu153",
+      "product": "Eu152m",
+      "all_states": false,
+      "source": "EXFOR 41614-171-0, (N,2N), A.A.Filatenkov 2016",
+      "energies_ev": [13560000, 13740000, 13960000, 14190000, 14420000, 14610000, 14780000],
+      "values": [293.0, 288.0, 284.0, 286.0, 281.0, 275.0, 267.0],
+      "uncertainties": [41.899, 39.168, 39.192, 40.04, 38.778, 39.875, 38.982],
+      "calculations": {}
+    }
+  ]
+}

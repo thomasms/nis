@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Mg26/Na25",
+  "title": "Mg26 to Na25, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Mg26": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg26",
+      "product": "Na25",
+      "all_states": true,
+      "source": "EXFOR 22187-003-0, (N,X), K.Kawade 1990",
+      "energies_ev": [14870000],
+      "values": [3.9],
+      "uncertainties": [1.053],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg26",
+      "product": "Na25",
+      "all_states": true,
+      "source": "EXFOR 22363-002-0, (N,X), K.Yamauchi 1994",
+      "energies_ev": [13650000, 13880000, 14580000, 14870000],
+      "values": [0.21, 1.05, 2.83, 3.64],
+      "uncertainties": [0.1617, 0.252, 0.3113, 0.34944],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mg26",
+      "product": "Na25",
+      "all_states": true,
+      "source": "EXFOR 22800-002-0, (N,X), H.Sakane 2002",
+      "energies_ev": [13650000, 13880000, 14580000, 14870000],
+      "values": [0.21, 1.05, 2.83, 3.64],
+      "uncertainties": [0.1512, 0.525, 1.132, 0.9828],
+      "calculations": {}
+    }
+  ]
+}

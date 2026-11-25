@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Dy158/Tb158",
+  "title": "Dy158 to Tb158, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Dy158": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Dy158",
+      "product": "Tb158",
+      "all_states": true,
+      "source": "EXFOR 32670-002-0, (N,P), Junhua Luo 2009",
+      "energies_ev": [14700000],
+      "values": [7.6],
+      "uncertainties": [0.4],
+      "calculations": {}
+    }
+  ]
+}

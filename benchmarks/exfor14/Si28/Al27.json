@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Si28/Al27",
+  "title": "Si28 to Al27, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Si28": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Si28",
+      "product": "Al27",
+      "all_states": true,
+      "source": "EXFOR 32688-009-0, (N,X), Hong-Yu Zhou 2011",
+      "energies_ev": [14900000],
+      "values": [13.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    }
+  ]
+}

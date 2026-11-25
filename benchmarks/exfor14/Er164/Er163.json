@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Er164/Er163",
+  "title": "Er164 to Er163, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Er164": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er164",
+      "product": "Er163",
+      "all_states": true,
+      "source": "EXFOR 20541-048-0, (N,2N), S.M.Qaim 1974",
+      "energies_ev": [14700000],
+      "values": [1824.0],
+      "uncertainties": [270.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er164",
+      "product": "Er163",
+      "all_states": true,
+      "source": "EXFOR 20860-003-0, (N,2N), H.Liljavirta 1978",
+      "energies_ev": [14800000],
+      "values": [1570.0],
+      "uncertainties": [170.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er164",
+      "product": "Er163",
+      "all_states": true,
+      "source": "EXFOR 32233-021-0, (N,2N), N.Dzysiuk 2012",
+      "energies_ev": [14700000],
+      "values": [2040.0],
+      "uncertainties": [430.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Er164",
+      "product": "Er163",
+      "all_states": true,
+      "source": "EXFOR 32693-003-0, (N,2N), Junhua Luo 2011",
+      "energies_ev": [13500000, 14800000],
+      "values": [1330.0, 1528.0],
+      "uncertainties": [253.0, 301.0],
+      "calculations": {}
+    }
+  ]
+}

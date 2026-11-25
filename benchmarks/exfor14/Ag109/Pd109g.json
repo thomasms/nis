@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ag109/Pd109g",
+  "title": "Ag109 to Pd109g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ag109": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ag109",
+      "product": "Pd109",
+      "all_states": false,
+      "source": "EXFOR 21426-012-0, (N,P), I.Wagner 1971",
+      "energies_ev": [14700000],
+      "values": [12.1],
+      "uncertainties": [2.2],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ni64/Ni63",
+  "title": "Ni64 to Ni63, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ni64": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni64",
+      "product": "Ni63",
+      "all_states": true,
+      "source": "EXFOR 13132-004-0, (N,2N), D.L.Bowers 1989",
+      "energies_ev": [14800000],
+      "values": [958.0],
+      "uncertainties": [64.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni64",
+      "product": "Ni63",
+      "all_states": true,
+      "source": "EXFOR 13166-009-0, (N,2N), L.R.Greenwood 1990",
+      "energies_ev": [14800000],
+      "values": [958.0],
+      "uncertainties": [64.0],
+      "calculations": {}
+    }
+  ]
+}

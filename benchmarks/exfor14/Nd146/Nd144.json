@@ -1,0 +1,39 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Nd146/Nd144",
+  "title": "Nd146 to Nd144, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Nd146": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nd146",
+      "product": "Nd144",
+      "all_states": true,
+      "source": "EXFOR 20416-032-0, (N,3N), J.Frehaut 1980",
+      "energies_ev": [14760000],
+      "values": [29.0],
+      "uncertainties": [5.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nd146",
+      "product": "Nd144",
+      "all_states": true,
+      "source": "EXFOR 20416-116-0, (N,3N), J.Frehaut 1980",
+      "energies_ev": [14760000],
+      "values": [27.0],
+      "uncertainties": [5.0],
+      "calculations": {}
+    }
+  ]
+}

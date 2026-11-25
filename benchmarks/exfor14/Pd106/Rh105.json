@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Pd106/Rh105",
+  "title": "Pd106 to Rh105, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Pd106": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd106",
+      "product": "Rh105",
+      "all_states": true,
+      "source": "EXFOR 22827-006-0, (N,X), H.Sakane 2003",
+      "energies_ev": [14020000, 14350000, 14640000, 14870000],
+      "values": [0.49, 0.79, 1.42, 1.78],
+      "uncertainties": [0.098, 0.1185, 0.1704, 0.1958],
+      "calculations": {}
+    }
+  ]
+}

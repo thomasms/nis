@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ir191/Ir189",
+  "title": "Ir191 to Ir189, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ir191": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ir191",
+      "product": "Ir189",
+      "all_states": true,
+      "source": "EXFOR 31527-003-0, (N,3N), Gongping Li 2002",
+      "energies_ev": [14800000],
+      "values": [64.6],
+      "uncertainties": [6.5],
+      "calculations": {}
+    }
+  ]
+}

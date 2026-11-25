@@ -1,0 +1,219 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ag109/Ag108m",
+  "title": "Ag109 to Ag108m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ag109": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ag109",
+      "product": "Ag108m",
+      "all_states": false,
+      "source": "EXFOR 13586-016-0, (N,2N), J.W.Meadows 1996",
+      "energies_ev": [14700000],
+      "values": [628.0],
+      "uncertainties": [42.076],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ag109",
+      "product": "Ag108m",
+      "all_states": false,
+      "source": "EXFOR 14461-012-0, (N,2N), N.Fotiades 2016",
+      "energies_ev": [14037000],
+      "values": [330.5],
+      "uncertainties": [3.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ag109",
+      "product": "Ag108m",
+      "all_states": false,
+      "source": "EXFOR 22205-004-1, (N,2N), J.Csikai 1991",
+      "energies_ev": [14500000],
+      "values": [220.0],
+      "uncertainties": [12.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ag109",
+      "product": "Ag108m",
+      "all_states": false,
+      "source": "EXFOR 22205-004-2, (N,2N), J.Csikai 1991",
+      "energies_ev": [14500000],
+      "values": [263.0],
+      "uncertainties": [20.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ag109",
+      "product": "Ag108m",
+      "all_states": false,
+      "source": "EXFOR 22208-003-0, (N,2N), Y.Ikeda 1991",
+      "energies_ev": [14800000],
+      "values": [191.0],
+      "uncertainties": [7.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ag109",
+      "product": "Ag108m",
+      "all_states": false,
+      "source": "EXFOR 22247-006-0, (N,2N), S.M.Qaim 1996",
+      "energies_ev": [14500000],
+      "values": [697.0],
+      "uncertainties": [60.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ag109",
+      "product": "Ag108m",
+      "all_states": false,
+      "source": "EXFOR 22657-006-0, (N,2N), J.W.Meadows 1996",
+      "energies_ev": [14700000],
+      "values": [682.0],
+      "uncertainties": [49.104],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ag109",
+      "product": "Ag108m",
+      "all_states": false,
+      "source": "EXFOR 22658-008-0, (N,2N), Y.Ikeda 1996",
+      "energies_ev": [14100000, 14500000, 14800000],
+      "values": [558.0, 621.0, 648.0],
+      "uncertainties": [26.0, 29.0, 31.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ag109",
+      "product": "Ag108m",
+      "all_states": false,
+      "source": "EXFOR 30996-002-0, (N,2N), Yongchang Wang 1992",
+      "energies_ev": [13600000, 13800000, 14100000, 14300000, 14600000, 14800000],
+      "values": [733.0, 733.0, 747.0, 737.0, 763.0, 777.0],
+      "uncertainties": [88.0, 59.0, 66.0, 26.0, 26.0, 23.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ag109",
+      "product": "Ag108m",
+      "all_states": false,
+      "source": "EXFOR 30996-003-0, (N,2N), Yongchang Wang 1992",
+      "energies_ev": [13640000, 13790000, 14030000, 14330000, 14600000, 14800000],
+      "values": [223.0, 233.0, 227.0, 224.0, 232.0, 236.0],
+      "uncertainties": [7.0, 18.0, 20.0, 18.0, 8.0, 7.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ag109",
+      "product": "Ag108m",
+      "all_states": false,
+      "source": "EXFOR 31406-002-0, (N,2N), Lu Hanlin 1991",
+      "energies_ev": [14190000, 14280000, 14440000, 14770000, 14830000],
+      "values": [737.0, 707.0, 734.0, 757.0, 767.0],
+      "uncertainties": [20.0, 38.0, 34.0, 24.0, 24.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ag109",
+      "product": "Ag108m",
+      "all_states": false,
+      "source": "EXFOR 31513-002-0, (N,2N), J.Csikai 1996",
+      "energies_ev": [14800000],
+      "values": [721.0],
+      "uncertainties": [60.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ag109",
+      "product": "Ag108m",
+      "all_states": false,
+      "source": "EXFOR 31672-002-0, (N,2N), Junhua Luo 2009",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [749.0, 761.0, 800.0],
+      "uncertainties": [49.0, 69.0, 55.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ag109",
+      "product": "Ag108m",
+      "all_states": false,
+      "source": "EXFOR 32931-002-0, (N,2N), Yueli Song 2024",
+      "energies_ev": [13500000, 13500000, 13500000, 14100000, 14100000, 14100000, 14400000, 14400000, 14400000, 14800000, 14800000, 14800000],
+      "values": [569.0, 569.0, 521.0, 648.0, 648.0, 604.0, 679.0, 679.0, 609.0, 650.0, 650.0, 601.0],
+      "uncertainties": [41.0, 41.0, 32.0, 48.0, 48.0, 40.0, 47.0, 47.0, 39.0, 43.0, 43.0, 37.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ag109",
+      "product": "Ag108m",
+      "all_states": false,
+      "source": "EXFOR 41240-047-0, (N,2N), A.A.Filatenkov 1999",
+      "energies_ev": [13700000, 14100000, 14500000, 14800000],
+      "values": [634.0, 682.0, 695.0, 709.0],
+      "uncertainties": [40.0, 40.0, 40.0, 40.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ag109",
+      "product": "Ag108m",
+      "all_states": false,
+      "source": "EXFOR 41406-003-0, (N,2N), M.V.Blinov 1996",
+      "energies_ev": [13700000, 14100000, 14500000, 14900000],
+      "values": [634.0, 682.0, 695.0, 709.0],
+      "uncertainties": [39.0, 40.0, 40.0, 41.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ag109",
+      "product": "Ag108m",
+      "all_states": false,
+      "source": "EXFOR 41614-099-0, (N,2N), A.A.Filatenkov 2016",
+      "energies_ev": [13700000, 14100000, 14500000, 14800000],
+      "values": [667.0, 718.0, 727.0, 747.0],
+      "uncertainties": [41.354, 41.213, 40.93, 41.16],
+      "calculations": {}
+    }
+  ]
+}

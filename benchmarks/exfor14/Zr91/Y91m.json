@@ -1,0 +1,195 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Zr91/Y91m",
+  "title": "Zr91 to Y91m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Zr91": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr91",
+      "product": "Y91m",
+      "all_states": false,
+      "source": "EXFOR 10145-003-0, (N,P), W.D.Lu 1970",
+      "energies_ev": [14400000],
+      "values": [18.6],
+      "uncertainties": [1.9],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr91",
+      "product": "Y91m",
+      "all_states": false,
+      "source": "EXFOR 11896-007-0, (N,P), C.H.Reed 1960",
+      "energies_ev": [14100000],
+      "values": [17.5],
+      "uncertainties": [0.8],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr91",
+      "product": "Y91m",
+      "all_states": false,
+      "source": "EXFOR 20513-013-0, (N,P), S.M.Qaim 1974",
+      "energies_ev": [14700000],
+      "values": [14.2],
+      "uncertainties": [1.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr91",
+      "product": "Y91m",
+      "all_states": false,
+      "source": "EXFOR 20850-003-0, (N,P), Y.Fujino 1977",
+      "energies_ev": [14600000],
+      "values": [21.4],
+      "uncertainties": [2.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr91",
+      "product": "Y91m",
+      "all_states": false,
+      "source": "EXFOR 21976-027-0, (N,P), B.Anders 1985",
+      "energies_ev": [14700000],
+      "values": [18.5],
+      "uncertainties": [0.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr91",
+      "product": "Y91m",
+      "all_states": false,
+      "source": "EXFOR 22089-056-0, (N,P), Y.Ikeda 1988",
+      "energies_ev": [13570000, 14430000, 14670000, 14940000],
+      "values": [16.3, 17.7, 18.3, 18.6],
+      "uncertainties": [0.92, 1.0, 1.0, 1.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr91",
+      "product": "Y91m",
+      "all_states": false,
+      "source": "EXFOR 22822-004-0, (N,P), V.Semkova 2010",
+      "energies_ev": [14800000],
+      "values": [19.5],
+      "uncertainties": [1.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr91",
+      "product": "Y91m",
+      "all_states": false,
+      "source": "EXFOR 30574-011-0, (N,P), C.V.Srinivasa Rao 1978",
+      "energies_ev": [14200000],
+      "values": [12.3],
+      "uncertainties": [1.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr91",
+      "product": "Y91m",
+      "all_states": false,
+      "source": "EXFOR 30740-006-0, (N,X), I.F.Goncalves 1987",
+      "energies_ev": [14800000],
+      "values": [19.9],
+      "uncertainties": [0.9],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr91",
+      "product": "Y91m",
+      "all_states": false,
+      "source": "EXFOR 30940-003-0, (N,P), A.Marcinkowski 1990",
+      "energies_ev": [13600000, 14200000, 14800000],
+      "values": [14.8, 16.2, 17.1],
+      "uncertainties": [1.6, 1.7, 1.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr91",
+      "product": "Y91m",
+      "all_states": false,
+      "source": "EXFOR 31488-003-0, (N,P), Ranjita Sarkar 1998",
+      "energies_ev": [14800000],
+      "values": [22.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr91",
+      "product": "Y91m",
+      "all_states": false,
+      "source": "EXFOR 31496-038-0, (N,P), A.Grallert 1993",
+      "energies_ev": [14600000],
+      "values": [24.0],
+      "uncertainties": [1.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr91",
+      "product": "Y91m",
+      "all_states": false,
+      "source": "EXFOR 32850-002-0, (N,P), Yueli Song 2021",
+      "energies_ev": [13500000, 14100000, 14400000, 14800000],
+      "values": [15.6, 17.4, 17.1, 18.5],
+      "uncertainties": [0.7, 0.8, 0.8, 0.9],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr91",
+      "product": "Y91m",
+      "all_states": false,
+      "source": "EXFOR 32850-003-0, (N,P), Yueli Song 2021",
+      "energies_ev": [13500000, 14100000, 14400000, 14800000],
+      "values": [15.5, 17.5, 16.6, 18.6],
+      "uncertainties": [0.7, 0.8, 0.8, 0.9],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Zr91",
+      "product": "Y91m",
+      "all_states": false,
+      "source": "EXFOR 40923-004-0, (N,P), V.V.Ovechkin 1986",
+      "energies_ev": [14800000],
+      "values": [21.7],
+      "uncertainties": [1.8],
+      "calculations": {}
+    }
+  ]
+}

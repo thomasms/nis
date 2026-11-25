@@ -1,0 +1,75 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Mo92/Nb91",
+  "title": "Mo92 to Nb91, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Mo92": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Nb91",
+      "all_states": true,
+      "source": "EXFOR 10960-009-0, (N,D), R.C.Haight 1981",
+      "energies_ev": [14800000],
+      "values": [22.0],
+      "uncertainties": [7.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Nb91",
+      "all_states": true,
+      "source": "EXFOR 13166-013-0, (N,X), L.R.Greenwood 1990",
+      "energies_ev": [14800000],
+      "values": [603.0],
+      "uncertainties": [119.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Nb91",
+      "all_states": true,
+      "source": "EXFOR 21264-010-0, (N,N+P), L.Colli 1959",
+      "energies_ev": [14100000],
+      "values": [744.0],
+      "uncertainties": [74.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Nb91",
+      "all_states": true,
+      "source": "EXFOR 41240-080-0, (N,X), A.A.Filatenkov 1999",
+      "energies_ev": [13670000, 13880000, 14060000, 14280000, 14460000, 14670000, 14830000],
+      "values": [1275.0, 1047.0, 976.0, 1244.0, 1141.0, 826.0, 1001.0],
+      "uncertainties": [400.0, 400.0, 400.0, 400.0, 400.0, 400.0, 400.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo92",
+      "product": "Nb91",
+      "all_states": true,
+      "source": "EXFOR 41456-004-0, (N,X), P.Reimer 2005",
+      "energies_ev": [13640000, 13870000, 14050000, 14280000, 14450000, 14640000, 14820000],
+      "values": [1279.0, 1044.0, 978.0, 1259.0, 1147.0, 832.0, 1008.0],
+      "uncertainties": [400.0, 400.0, 400.0, 400.0, 400.0, 400.0, 400.0],
+      "calculations": {}
+    }
+  ]
+}

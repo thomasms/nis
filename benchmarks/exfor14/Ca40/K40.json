@@ -1,0 +1,51 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ca40/K40",
+  "title": "Ca40 to K40, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ca40": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca40",
+      "product": "K40",
+      "all_states": true,
+      "source": "EXFOR 21165-007-0, (N,P), A.Katase 1968",
+      "energies_ev": [14100000],
+      "values": [471.0],
+      "uncertainties": [21.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca40",
+      "product": "K40",
+      "all_states": true,
+      "source": "EXFOR 21846-027-0, (N,P), W.Schantl 1970",
+      "energies_ev": [14700000],
+      "values": [492.0],
+      "uncertainties": [40.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca40",
+      "product": "K40",
+      "all_states": true,
+      "source": "EXFOR 21846-055-0, (N,P), W.Schantl 1970",
+      "energies_ev": [14700000],
+      "values": [489.0],
+      "uncertainties": [54.0],
+      "calculations": {}
+    }
+  ]
+}

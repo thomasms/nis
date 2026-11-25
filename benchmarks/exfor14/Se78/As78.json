@@ -1,0 +1,159 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Se78/As78",
+  "title": "Se78 to As78, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Se78": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se78",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 11722-011-0, (N,P), P.Venugopala Rao 1967",
+      "energies_ev": [14400000],
+      "values": [24.0],
+      "uncertainties": [2.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se78",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 20721-069-0, (N,P), N.I.Molla 1977",
+      "energies_ev": [14700000],
+      "values": [17.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se78",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 21107-018-0, (N,P), B.Minetti 1967",
+      "energies_ev": [14700000],
+      "values": [22.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se78",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 31496-036-0, (N,P), A.Grallert 1993",
+      "energies_ev": [14600000],
+      "values": [19.0],
+      "uncertainties": [1.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se78",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 32108-005-0, (N,P), H.M.Hoang 1989",
+      "energies_ev": [13900000, 14500000, 15000000],
+      "values": [19.0, 20.0, 19.0],
+      "uncertainties": [3.0, 3.0, 3.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se78",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 32656-005-0, (N,P), Guozhu He 2005",
+      "energies_ev": [13500000, 14600000],
+      "values": [16.1, 18.3],
+      "uncertainties": [1.0, 1.1],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se78",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 33080-002-0, (N,P), F.M.D.Attar 2014",
+      "energies_ev": [13730000, 14070000, 14420000, 14680000, 14770000],
+      "values": [15.6, 17.0, 18.6, 20.4, 22.0],
+      "uncertainties": [1.5, 1.6, 1.6, 1.7, 1.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se78",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 33192-004-0, (N,P), T.S.Ganesapandy 2023",
+      "energies_ev": [14770000],
+      "values": [19.13],
+      "uncertainties": [2.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se78",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 40009-025-1, (N,P), G.P.Vinitskaya 1968",
+      "energies_ev": [14800000],
+      "values": [14.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se78",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 40227-004-0, (N,P), V.V.Ivanenko 1969",
+      "energies_ev": [14700000],
+      "values": [21.0],
+      "uncertainties": [6.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se78",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 41424-015-0, (N,P), A.A.Filatenkov 2001",
+      "energies_ev": [13890000, 14050000, 14260000, 14440000, 14640000, 14810000, 14840000],
+      "values": [17.7, 17.7, 20.3, 19.0, 22.7, 21.2, 20.4],
+      "uncertainties": [1.8, 2.0, 2.0, 2.2, 2.2, 2.2, 2.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Se78",
+      "product": "As78",
+      "all_states": true,
+      "source": "EXFOR 41614-044-0, (N,P), A.A.Filatenkov 2016",
+      "energies_ev": [13890000, 14050000, 14260000, 14440000, 14640000, 14810000, 14840000],
+      "values": [17.8, 17.7, 20.3, 19.1, 22.9, 21.2, 20.4],
+      "uncertainties": [2.0114, 2.0001, 2.2939, 2.2156, 2.5877, 2.3956, 2.3052],
+      "calculations": {}
+    }
+  ]
+}

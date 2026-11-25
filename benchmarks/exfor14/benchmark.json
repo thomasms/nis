@@ -1,0 +1,13 @@
+{
+  "format": "nis-benchmark",
+  "version": 1,
+  "name": "exfor14",
+  "title": "EXFOR 14 MeV cross sections",
+  "category": "fusion",
+  "description": "Measured cross sections of the reactions of the nuclides of the FNS foils with 14 MeV (D-T) neutrons, from 13.5 to 15 MeV, from EXFOR. Each case is one reaction (a product from a target), with all its EXFOR data sets. It tests the reaction data (and its isomer data) of the reactions that make the FNS decay heat, one reaction at a time.",
+  "references": [
+    "N. Otuka et al., Towards a More Complete and Accurate Experimental Nuclear Reaction Data Library (EXFOR): International Collaboration Between Nuclear Reaction Data Centres (NRDC), Nuclear Data Sheets 120 (2014) 272-276",
+    "The reference of each data set is in its EXFOR entry (nds.iaea.org/EXFOR/<entry>), see the source of each measurement"
+  ],
+  "source": "The EXFOR tables of the IAEA (github.com/IAEA-NDS/exfortables_py, commit f9c2d73 (2026-09-11)), converted with scripts/bench.py convert exfor14 (the rules to select the data are in scripts/nisbench/convert/exfor14.py). The products are checked with the JEFF-3.1.1 decay data (data/jeff311.dec)."
+}

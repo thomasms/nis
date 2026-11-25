@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Te130/Sn128",
+  "title": "Te130 to Sn128, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Te130": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Te130",
+      "product": "Sn128",
+      "all_states": true,
+      "source": "EXFOR 30152-014-0, (N,HE3), M.Diksic 1974",
+      "energies_ev": [14600000],
+      "values": [0.015],
+      "uncertainties": [0.008],
+      "calculations": {}
+    }
+  ]
+}

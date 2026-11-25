@@ -1,0 +1,147 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Pd106/Rh106m",
+  "title": "Pd106 to Rh106m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Pd106": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd106",
+      "product": "Rh106m",
+      "all_states": false,
+      "source": "EXFOR 10145-013-0, (N,P), W.D.Lu 1970",
+      "energies_ev": [14400000],
+      "values": [6.0],
+      "uncertainties": [0.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd106",
+      "product": "Rh106m",
+      "all_states": false,
+      "source": "EXFOR 22637-044-0, (N,P), C.Konno 1993",
+      "energies_ev": [13570000, 13760000, 13990000, 14230000, 14440000, 14680000, 14940000],
+      "values": [7.84, 7.32, 8.32, 9.32, 8.94, 9.61, 9.97],
+      "uncertainties": [0.81, 0.76, 0.85, 0.93, 0.83, 0.79, 0.81],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd106",
+      "product": "Rh106m",
+      "all_states": false,
+      "source": "EXFOR 30336-031-0, (N,P), R.Prasad 1971",
+      "energies_ev": [14800000],
+      "values": [14.0],
+      "uncertainties": [5.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd106",
+      "product": "Rh106m",
+      "all_states": false,
+      "source": "EXFOR 30556-005-0, (N,P), L.Chaturverdi 1977",
+      "energies_ev": [14000000],
+      "values": [6.0],
+      "uncertainties": [0.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd106",
+      "product": "Rh106m",
+      "all_states": false,
+      "source": "EXFOR 30740-009-0, (N,P), I.F.Goncalves 1987",
+      "energies_ev": [14800000],
+      "values": [8.5],
+      "uncertainties": [0.7],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd106",
+      "product": "Rh106m",
+      "all_states": false,
+      "source": "EXFOR 32552-005-0, (N,P), Kong Xiangzhong 1999",
+      "energies_ev": [14700000],
+      "values": [12.2],
+      "uncertainties": [2.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd106",
+      "product": "Rh106m",
+      "all_states": false,
+      "source": "EXFOR 33146-005-0, (N,P), I.Pasha 2020",
+      "energies_ev": [14540000],
+      "values": [7.9],
+      "uncertainties": [0.96],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd106",
+      "product": "Rh106m",
+      "all_states": false,
+      "source": "EXFOR 33224-003-0, (N,P), R.Kumar 2024",
+      "energies_ev": [14770000],
+      "values": [9.2],
+      "uncertainties": [0.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd106",
+      "product": "Rh106m",
+      "all_states": false,
+      "source": "EXFOR 40029-004-2, (N,P), V.N.Levkovskii 1971",
+      "energies_ev": [14800000],
+      "values": [9.0],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd106",
+      "product": "Rh106m",
+      "all_states": false,
+      "source": "EXFOR 41240-039-0, (N,P), A.A.Filatenkov 1999",
+      "energies_ev": [13640000, 13880000, 14050000, 14280000, 14420000, 14610000, 14780000],
+      "values": [6.91, 7.98, 7.97, 8.08, 9.07, 9.42, 9.67],
+      "uncertainties": [0.48, 0.54, 0.54, 0.55, 0.61, 0.65, 0.68],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Pd106",
+      "product": "Rh106m",
+      "all_states": false,
+      "source": "EXFOR 41614-095-0, (N,P), A.A.Filatenkov 2016",
+      "energies_ev": [13640000, 13880000, 14050000, 14280000, 14480000, 14680000, 14860000],
+      "values": [6.95, 8.04, 7.8, 8.1, 8.85, 9.45, 9.77],
+      "uncertainties": [0.47538, 0.53466, 0.46098, 0.54027, 0.5372, 0.63976, 0.67608],
+      "calculations": {}
+    }
+  ]
+}

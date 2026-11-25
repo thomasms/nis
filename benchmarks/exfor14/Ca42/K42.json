@@ -1,0 +1,147 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ca42/K42",
+  "title": "Ca42 to K42, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ca42": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca42",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 20090-002-0, (N,P), P.Hille 1961",
+      "energies_ev": [14900000],
+      "values": [140.0],
+      "uncertainties": [45.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca42",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 20198-010-0, (N,P), W.Nagel 1966",
+      "energies_ev": [14600000],
+      "values": [194.0],
+      "uncertainties": [23.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca42",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 21288-003-0, (N,P), B.Minetti 1966",
+      "energies_ev": [14700000],
+      "values": [181.0],
+      "uncertainties": [9.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca42",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 21608-003-0, (N,P), P.Holmberg 1978",
+      "energies_ev": [14700000],
+      "values": [173.0],
+      "uncertainties": [19.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca42",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 21976-005-0, (N,P), B.Anders 1985",
+      "energies_ev": [14700000],
+      "values": [187.0],
+      "uncertainties": [8.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca42",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 22089-016-0, (N,P), Y.Ikeda 1988",
+      "energies_ev": [13560000, 13740000, 13980000, 14210000, 14420000, 14650000, 14910000],
+      "values": [189.0, 187.0, 183.0, 179.0, 175.0, 168.0, 163.4],
+      "uncertainties": [11.0, 11.0, 10.0, 10.0, 10.0, 9.8, 9.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca42",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 30011-003-0, (N,P), P.N.Tiwari 1968",
+      "energies_ev": [14200000],
+      "values": [190.0],
+      "uncertainties": [24.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca42",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 30115-004-0, (N,P), J.Csikai 1967",
+      "energies_ev": [14700000],
+      "values": [173.0],
+      "uncertainties": [12.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca42",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 31545-005-0, (N,P), E.Betak 1999",
+      "energies_ev": [14700000],
+      "values": [138.0],
+      "uncertainties": [12.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca42",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 40016-024-0, (N,P), V.N.Levkovskii 1964",
+      "energies_ev": [14000000],
+      "values": [160.0],
+      "uncertainties": [30.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ca42",
+      "product": "K42",
+      "all_states": true,
+      "source": "EXFOR 40223-004-1, (N,P), V.N.Levkovskii 1969",
+      "energies_ev": [14800000],
+      "values": [180.0],
+      "uncertainties": [20.0],
+      "calculations": {}
+    }
+  ]
+}

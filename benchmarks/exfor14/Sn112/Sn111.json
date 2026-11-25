@@ -1,0 +1,171 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Sn112/Sn111",
+  "title": "Sn112 to Sn111, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Sn112": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn112",
+      "product": "Sn111",
+      "all_states": true,
+      "source": "EXFOR 10214-013-0, (N,2N), J.K.Temperley 1970",
+      "energies_ev": [14100000],
+      "values": [900.0],
+      "uncertainties": [100.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn112",
+      "product": "Sn111",
+      "all_states": true,
+      "source": "EXFOR 10484-003-0, (N,2N), R.W.Fink 1970",
+      "energies_ev": [14400000],
+      "values": [1100.0],
+      "uncertainties": [100.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn112",
+      "product": "Sn111",
+      "all_states": true,
+      "source": "EXFOR 11328-026-0, (N,2N), L.A.Rayburn 1961",
+      "energies_ev": [14400000],
+      "values": [1508.0],
+      "uncertainties": [116.12],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn112",
+      "product": "Sn111",
+      "all_states": true,
+      "source": "EXFOR 11504-013-0, (N,2N), H.A.Tewes 1960",
+      "energies_ev": [13850000],
+      "values": [726.0],
+      "uncertainties": [145.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn112",
+      "product": "Sn111",
+      "all_states": true,
+      "source": "EXFOR 11955-002-0, (N,2N), L.A.Rayburn 1963",
+      "energies_ev": [13800000, 14100000, 14400000, 14900000],
+      "values": [1166.0, 1446.0, 1515.0, 1676.0],
+      "uncertainties": [116.6, 144.6, 151.5, 167.6],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn112",
+      "product": "Sn111",
+      "all_states": true,
+      "source": "EXFOR 20834-010-0, (N,2N), M.Bormann 1968",
+      "energies_ev": [14110000, 14870000],
+      "values": [1110.0, 1217.0],
+      "uncertainties": [127.0, 138.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn112",
+      "product": "Sn111",
+      "all_states": true,
+      "source": "EXFOR 22089-087-0, (N,2N), Y.Ikeda 1988",
+      "energies_ev": [13570000, 13990000, 14440000, 14680000, 14950000],
+      "values": [1310.0, 1310.0, 1480.0, 1580.0, 1650.0],
+      "uncertainties": [220.0, 220.0, 250.0, 280.0, 280.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn112",
+      "product": "Sn111",
+      "all_states": true,
+      "source": "EXFOR 30033-020-0, (N,2N), J.Csikai 1967",
+      "energies_ev": [14190000],
+      "values": [1530.0],
+      "uncertainties": [229.5],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn112",
+      "product": "Sn111",
+      "all_states": true,
+      "source": "EXFOR 30202-002-0, (N,2N), S.Lulic 1968",
+      "energies_ev": [14400000],
+      "values": [1300.0],
+      "uncertainties": [150.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn112",
+      "product": "Sn111",
+      "all_states": true,
+      "source": "EXFOR 31551-002-0, (N,2N), E.Betak 2005",
+      "energies_ev": [14400000],
+      "values": [1104.0],
+      "uncertainties": [43.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn112",
+      "product": "Sn111",
+      "all_states": true,
+      "source": "EXFOR 31639-002-0, (N,2N), Pu Zhong-Sheng 2008",
+      "energies_ev": [14100000, 14400000],
+      "values": [1047.0, 1249.0],
+      "uncertainties": [250.0, 200.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn112",
+      "product": "Sn111",
+      "all_states": true,
+      "source": "EXFOR 33161-010-0, (N,2N), R.Pachuau 2021",
+      "energies_ev": [14500000],
+      "values": [913.91],
+      "uncertainties": [223.49],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Sn112",
+      "product": "Sn111",
+      "all_states": true,
+      "source": "EXFOR 41614-123-0, (N,2N), A.A.Filatenkov 2016",
+      "energies_ev": [14050000, 14280000, 14680000, 14810000, 14880000],
+      "values": [764.0, 691.0, 772.0, 865.0, 804.0],
+      "uncertainties": [118.42, 131.29, 125.84, 145.32, 136.68],
+      "calculations": {}
+    }
+  ]
+}

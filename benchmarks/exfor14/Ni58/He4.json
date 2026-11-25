@@ -1,0 +1,75 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ni58/He4",
+  "title": "Ni58 to He4, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ni58": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "He4",
+      "all_states": true,
+      "source": "EXFOR 10827-041-0, (N,X), S.M.Grimes 1979",
+      "energies_ev": [14800000],
+      "values": [106.0],
+      "uncertainties": [7.42],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "He4",
+      "all_states": true,
+      "source": "EXFOR 10933-007-0, (N,X), D.W.Kneff 1986",
+      "energies_ev": [14800000],
+      "values": [121.0],
+      "uncertainties": [8.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "He4",
+      "all_states": true,
+      "source": "EXFOR 20837-012-0, (N,X), U.Seebeck 1965",
+      "energies_ev": [14100000],
+      "values": [155.0],
+      "uncertainties": [14.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "He4",
+      "all_states": true,
+      "source": "EXFOR 30306-005-0, (N,X), N.A.Khan 1973",
+      "energies_ev": [14700000],
+      "values": [180.0],
+      "uncertainties": [20.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni58",
+      "product": "He4",
+      "all_states": true,
+      "source": "EXFOR 40514-011-0, (N,X), G.P.Dolya 1975",
+      "energies_ev": [14700000],
+      "values": [156.2],
+      "uncertainties": [14.8],
+      "calculations": {}
+    }
+  ]
+}

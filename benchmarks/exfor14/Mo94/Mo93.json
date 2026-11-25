@@ -1,0 +1,27 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Mo94/Mo93",
+  "title": "Mo94 to Mo93, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Mo94": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Mo94",
+      "product": "Mo93",
+      "all_states": true,
+      "source": "EXFOR 13166-003-0, (N,2N), L.R.Greenwood 1990",
+      "energies_ev": [14700000],
+      "values": [550.0],
+      "uncertainties": [136.0],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,159 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Cu65/Co62m",
+  "title": "Cu65 to Co62m, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Cu65": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cu65",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 11196-012-2, (N,A), J.Kantele 1962",
+      "energies_ev": [14700000],
+      "values": [7.5],
+      "uncertainties": [2.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cu65",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 11536-005-0, (N,A), I.G.Clator 1969",
+      "energies_ev": [14400000],
+      "values": [19.7],
+      "uncertainties": [3.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cu65",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 11590-021-0, (N,A), E.T.Bramlitt 1963",
+      "energies_ev": [14700000],
+      "values": [14.0],
+      "uncertainties": [10.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cu65",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 11789-002-0, (N,A), I.L.Preiss 1960",
+      "energies_ev": [14800000],
+      "values": [21.0],
+      "uncertainties": [7.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cu65",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 22338-016-0, (N,A), A.Ercan 1991",
+      "energies_ev": [14600000],
+      "values": [4.9],
+      "uncertainties": [0.4],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cu65",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 23270-002-0, (N,A), A.Durusoy 2015",
+      "energies_ev": [13600000, 13680000, 14100000, 14460000, 14720000, 14860000],
+      "values": [7.6, 6.56, 7.76, 8.75, 7.97, 8.11],
+      "uncertainties": [0.61, 0.53, 0.62, 0.7, 0.64, 0.65],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cu65",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 31432-003-0, (N,A), F.Cserpak 1994",
+      "energies_ev": [14120000, 14450000, 14710000, 14800000],
+      "values": [4.56, 6.44, 5.31, 7.57],
+      "uncertainties": [0.63, 0.63, 0.56, 1.06],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cu65",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 31449-010-0, (N,A), N.I.Molla 1994",
+      "energies_ev": [13900000, 14510000, 14710000],
+      "values": [9.5, 10.0, 11.9],
+      "uncertainties": [1.0, 1.1, 1.2],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cu65",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 31600-004-0, (N,A), A.K.M.Harun-Ar-Rashid 2006",
+      "energies_ev": [14800000],
+      "values": [8.89],
+      "uncertainties": [1.27],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cu65",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 32872-002-0, (N,A), Xianlin Yang 2022",
+      "energies_ev": [14500000, 14700000],
+      "values": [6.07, 5.4],
+      "uncertainties": [0.44, 0.49],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cu65",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 33163-002-0, (N,A), A.Gandhi 2022",
+      "energies_ev": [14920000],
+      "values": [4.04],
+      "uncertainties": [0.58863],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Cu65",
+      "product": "Co62m",
+      "all_states": false,
+      "source": "EXFOR 41321-010-0, (N,A), O.I.Artem'Ev 1980",
+      "energies_ev": [14800000],
+      "values": [8.0],
+      "uncertainties": [1.6],
+      "calculations": {}
+    }
+  ]
+}

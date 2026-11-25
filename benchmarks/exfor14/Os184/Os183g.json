@@ -1,0 +1,63 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Os184/Os183g",
+  "title": "Os184 to Os183g, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Os184": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Os184",
+      "product": "Os183",
+      "all_states": false,
+      "source": "EXFOR 30290-003-0, (N,2N), P.Kovacs 1976",
+      "energies_ev": [14700000],
+      "values": [760.0],
+      "uncertainties": [155.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Os184",
+      "product": "Os183",
+      "all_states": false,
+      "source": "EXFOR 30545-002-0, (N,2N), P.Bornemisza-Pauspertl 1980",
+      "energies_ev": [14700000],
+      "values": [1449.0],
+      "uncertainties": [99.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Os184",
+      "product": "Os183",
+      "all_states": false,
+      "source": "EXFOR 31618-005-0, (N,2N), Liangyong Zhao 2008",
+      "energies_ev": [13500000, 14700000],
+      "values": [734.0, 639.0],
+      "uncertainties": [135.0, 110.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Os184",
+      "product": "Os183",
+      "all_states": false,
+      "source": "EXFOR 31664-003-0, (N,2N), Junhua Luo 2009",
+      "energies_ev": [13500000, 14800000],
+      "values": [1226.0, 1362.0],
+      "uncertainties": [123.0, 141.0],
+      "calculations": {}
+    }
+  ]
+}

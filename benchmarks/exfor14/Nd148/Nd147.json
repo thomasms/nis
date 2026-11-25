@@ -1,0 +1,159 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Nd148/Nd147",
+  "title": "Nd148 to Nd147, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Nd148": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nd148",
+      "product": "Nd147",
+      "all_states": true,
+      "source": "EXFOR 10431-049-0, (N,2N), A.Bari 1972",
+      "energies_ev": [14800000],
+      "values": [1385.0],
+      "uncertainties": [128.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nd148",
+      "product": "Nd147",
+      "all_states": true,
+      "source": "EXFOR 12033-025-0, (N,2N), R.G.Wille 1960",
+      "energies_ev": [14800000],
+      "values": [2160.0],
+      "uncertainties": [200.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nd148",
+      "product": "Nd147",
+      "all_states": true,
+      "source": "EXFOR 20416-033-0, (N,2N), J.Frehaut 1980",
+      "energies_ev": [13800000, 14280000, 14760000],
+      "values": [1755.0, 1668.0, 1700.0],
+      "uncertainties": [134.0, 133.0, 142.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nd148",
+      "product": "Nd147",
+      "all_states": true,
+      "source": "EXFOR 20416-096-0, (N,2N), J.Frehaut 1980",
+      "energies_ev": [13800000, 14280000, 14760000],
+      "values": [1832.0, 1732.0, 1773.0],
+      "uncertainties": [135.0, 130.0, 137.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nd148",
+      "product": "Nd147",
+      "all_states": true,
+      "source": "EXFOR 20541-016-0, (N,2N), S.M.Qaim 1974",
+      "energies_ev": [14700000],
+      "values": [1950.0],
+      "uncertainties": [150.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nd148",
+      "product": "Nd147",
+      "all_states": true,
+      "source": "EXFOR 20852-003-0, (N,2N), I.Kumabe 1977",
+      "energies_ev": [14600000],
+      "values": [1789.0],
+      "uncertainties": [147.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nd148",
+      "product": "Nd147",
+      "all_states": true,
+      "source": "EXFOR 30051-007-0, (N,2N), P.Rama Prasad 1969",
+      "energies_ev": [14200000],
+      "values": [1626.0],
+      "uncertainties": [200.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nd148",
+      "product": "Nd147",
+      "all_states": true,
+      "source": "EXFOR 30649-003-0, (N,2N), S.Gmuca 1983",
+      "energies_ev": [14800000],
+      "values": [1780.0],
+      "uncertainties": [50.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nd148",
+      "product": "Nd147",
+      "all_states": true,
+      "source": "EXFOR 31627-003-0, (N,2N), Pu Zhong-Sheng 2004",
+      "energies_ev": [13500000, 14100000, 14600000],
+      "values": [1394.0, 1416.0, 1956.0],
+      "uncertainties": [58.0, 54.0, 76.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nd148",
+      "product": "Nd147",
+      "all_states": true,
+      "source": "EXFOR 32743-003-0, (N,2N), Junhua Luo 2015",
+      "energies_ev": [13500000, 14100000, 14800000],
+      "values": [1705.0, 1636.0, 1595.0],
+      "uncertainties": [95.0, 87.0, 112.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nd148",
+      "product": "Nd147",
+      "all_states": true,
+      "source": "EXFOR 33153-004-0, (N,2N), A.M.Sunitha 2020",
+      "energies_ev": [14540000],
+      "values": [1813.6],
+      "uncertainties": [290.9],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Nd148",
+      "product": "Nd147",
+      "all_states": true,
+      "source": "EXFOR 33170-003-0, (N,2N), G.T.Bholane 2022",
+      "energies_ev": [14770000],
+      "values": [1801.3],
+      "uncertainties": [120.42],
+      "calculations": {}
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "format": "nis-benchmark-case",
+  "version": 1,
+  "benchmark": "exfor14",
+  "name": "Ni60/Ni59",
+  "title": "Ni60 to Ni59, 13.5 to 15 MeV (EXFOR)",
+  "sample": {
+    "atoms": {
+      "Ni60": 1.0
+    }
+  },
+  "spectrum": null,
+  "measurements": [
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni60",
+      "product": "Ni59",
+      "all_states": true,
+      "source": "EXFOR 13132-005-0, (N,2N), D.L.Bowers 1989",
+      "energies_ev": [14800000],
+      "values": [104.0],
+      "uncertainties": [25.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni60",
+      "product": "Ni59",
+      "all_states": true,
+      "source": "EXFOR 13166-010-0, (N,2N), L.R.Greenwood 1990",
+      "energies_ev": [14800000],
+      "values": [104.0],
+      "uncertainties": [25.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni60",
+      "product": "Ni59",
+      "all_states": true,
+      "source": "EXFOR 22561-004-0, (N,2N), D.Weselka 1991",
+      "energies_ev": [14800000],
+      "values": [410.0],
+      "uncertainties": [120.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni60",
+      "product": "Ni59",
+      "all_states": true,
+      "source": "EXFOR 22583-002-0, (N,2N), W.Ruehm 1994",
+      "energies_ev": [14800000],
+      "values": [410.0],
+      "uncertainties": [100.0],
+      "calculations": {}
+    },
+    {
+      "quantity": "cross_section",
+      "unit": "mb",
+      "target": "Ni60",
+      "product": "Ni59",
+      "all_states": true,
+      "source": "EXFOR 32736-002-0, (N,2N), Ming He 2015",
+      "energies_ev": [14600000],
+      "values": [426.0],
+      "uncertainties": [53.0],
+      "calculations": {}
+    }
+  ]
+}
