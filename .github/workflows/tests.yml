@@ -85,14 +85,14 @@ jobs:
       - name: Get gfortran
         run: sudo apt-get update -q && sudo apt-get install -y -q gfortran
 
-      - name: Cache NJOY and PREPRO
+      - name: Cache rustjoy and PREPRO
         id: tools
         uses: actions/cache@v4
         with:
           path: processing/tools
           key: tools-${{ runner.os }}-${{ hashFiles('processing/nisdata/tools.py') }}
 
-      - name: Build NJOY and PREPRO
+      - name: Build rustjoy and PREPRO
         if: steps.tools.outputs.cache-hit != 'true'
         run: python3 processing/process.py tools -j 4
 

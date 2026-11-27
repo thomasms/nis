@@ -42,7 +42,7 @@ UV ?= uv
 PROCESS := $(PYTHON) processing/process.py
 ALLOW_OLD_FLAG := $(if $(ALLOW_OLD),--allow-old,)
 BENCH := $(UV) run python scripts/bench.py
-NJOY := processing/tools/bin/njoy
+NJOY := processing/tools/bin/rustjoy
 
 # the benchmarks of BENCHMARK=all, and the quantities of each (one summary plot for each quantity)
 ALL_BENCHMARKS := fns irdff2 exfor14 fission_decay_heat

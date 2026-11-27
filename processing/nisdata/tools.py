@@ -1,4 +1,9 @@
-"""Get and build NJOY2016 and PREPRO (needs git, cmake, make and gfortran)."""
+"""
+Get and build rustjoy and PREPRO (needs git, cargo and gfortran).
+
+rustjoy (a Rust port of NJOY2016) does the NJOY step: it gives the same tapes as NJOY2016, byte for byte, and is
+faster. The NJOY2016 repository is cloned too (it is not built), because the processing tests use its test files.
+"""
 
 import os
 import shutil
@@ -9,6 +14,7 @@ from pathlib import Path
 
 from .pipeline import PREPRO_CODES, Tools
 
+RUSTJOY_REPO = "https://github.com/thomasms/rustjoy"
 NJOY_REPO = "https://github.com/njoy/NJOY2016"
 PREPRO_REPO = "https://github.com/IAEA-NDS/PREPRO"
 # the PREPRO files that each code needs with its own source
@@ -16,7 +22,7 @@ PREPRO_COMMON = ("endfio.f", "scratchb.f")
 
 
 def default_tools(prefix: Path) -> Tools:
-    return Tools(njoy=Path(prefix) / "bin" / "njoy", prepro_dir=Path(prefix) / "prepro")
+    return Tools(njoy=Path(prefix) / "bin" / "rustjoy", prepro_dir=Path(prefix) / "prepro")
 
 
 def _run(command: list, cwd: Path = None) -> None:
@@ -32,16 +38,13 @@ def _clone(repo: str, folder: Path, ref: str = None) -> None:
     _run(command)
 
 
-def build_njoy(source: Path, prefix: Path, jobs: int) -> Path:
-    build = source / "build"
-    _run(["cmake", "-S", source, "-B", build, "-DCMAKE_BUILD_TYPE=Release"])
-    _run(["cmake", "--build", build, "-j", jobs])
-    target = Path(prefix) / "bin" / "njoy"
+def build_rustjoy(source: Path, prefix: Path, jobs: int) -> Path:
+    _run(["cargo", "build", "--release", "--locked", "-j", jobs], cwd=source)
+    target = Path(prefix) / "bin" / "rustjoy"
     target.parent.mkdir(parents=True, exist_ok=True)
-    # NJOY links to its own shared library (libnjoy), keep the build and link the program
     if target.exists() or target.is_symlink():
         target.unlink()
-    target.symlink_to((build / "njoy").resolve())
+    target.symlink_to((source / "target" / "release" / "rustjoy").resolve())
     return target
 
 
@@ -61,19 +64,20 @@ def build_prepro(source: Path, prefix: Path, jobs: int, fortran: str = "gfortran
     return target
 
 
-def build(prefix: Path, jobs: int = None, njoy_ref: str = None, prepro_ref: str = None,
+def build(prefix: Path, jobs: int = None, rustjoy_ref: str = None, prepro_ref: str = None,
           fortran: str = "gfortran", flags: str = "-O2") -> Tools:
     """Clone into <prefix>/src and build. Run it again to build again (the clones are kept)."""
-    for program in ("git", "cmake", fortran):
+    for program in ("git", "cargo", fortran):
         if shutil.which(program) is None:
-            raise SystemExit(f"{program} is needed to build NJOY and PREPRO")
+            raise SystemExit(f"{program} is needed to build rustjoy and PREPRO")
     jobs = jobs or os.cpu_count() or 1
     prefix = Path(prefix)
     sources = prefix / "src"
     sources.mkdir(parents=True, exist_ok=True)
-    _clone(NJOY_REPO, sources / "NJOY2016", njoy_ref)
+    _clone(RUSTJOY_REPO, sources / "rustjoy", rustjoy_ref)
+    _clone(NJOY_REPO, sources / "NJOY2016")  # only for the test files
     _clone(PREPRO_REPO, sources / "PREPRO", prepro_ref)
-    build_njoy(sources / "NJOY2016", prefix, jobs)
+    build_rustjoy(sources / "rustjoy", prefix, jobs)
     build_prepro(sources / "PREPRO", prefix, jobs, fortran, flags)
     tools = default_tools(prefix)
     tools.check()
