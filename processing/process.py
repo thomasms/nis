@@ -9,7 +9,7 @@ Commands:
     decay      download decay data: data/<library>.dec
     yields     download fission yields: data/<library>.nfy and data/<library>.sfy
     reactions  download the neutron files of a library and make data/<library>.reac (fetch, run, combine)
-    tools      get and build NJOY2016 and PREPRO
+    tools      get and build rustjoy (NJOY) and PREPRO
     fetch      download the raw ENDF files of a library (TENDL)
     run        process ENDF files to 1102 group cross sections, one file for each nuclide (in parallel)
     combine    join the processed files into one reaction data file (and make the NIS cache)
@@ -85,8 +85,8 @@ def _combine(folder: Path, output: Path, title: str, nis_cache: Path) -> None:
 
 
 def cmd_tools(args) -> int:
-    t = build_tools.build(args.tools, args.jobs, args.njoy_ref, args.prepro_ref, args.fortran, args.flags)
-    print(f"NJOY: {t.njoy}\nPREPRO: {t.prepro_dir}", file=sys.stderr)
+    t = build_tools.build(args.tools, args.jobs, args.rustjoy_ref, args.prepro_ref, args.fortran, args.flags)
+    print(f"NJOY (rustjoy): {t.njoy}\nPREPRO: {t.prepro_dir}", file=sys.stderr)
     return 0
 
 
@@ -299,7 +299,7 @@ def cmd_bootstrap(args) -> int:
     if not (args.njoy or args.prepro_dir or os.environ.get("NJOY_EXE")):
         tools = build_tools.default_tools(args.tools)
         if not Path(tools.njoy).is_file():
-            print("no NJOY and PREPRO, so build them first", file=sys.stderr)
+            print("no rustjoy and PREPRO, so build them first", file=sys.stderr)
             build_tools.build(args.tools, args.jobs, None, None, "gfortran", "-O2")
     return _reactions("jeff4", args)
 
@@ -329,7 +329,7 @@ def _add_run_options(p) -> None:
     p.add_argument("--only", nargs="*", default=[], help="only these nuclides, e.g. Fe56 Co59 Ag110m")
     p.add_argument("--temperature", type=float, default=293.6, help="K")
     p.add_argument("--tools", type=Path, default=DEFAULT_TOOLS, help="the folder of 'tools'")
-    p.add_argument("--njoy", type=Path, default=None, help="the NJOY program (or NJOY_EXE)")
+    p.add_argument("--njoy", type=Path, default=None, help="the NJOY program (or NJOY_EXE), default rustjoy from 'tools'")
     p.add_argument("--prepro-dir", type=Path, default=None, help="the folder of the PREPRO programs (or PREPRO_EXE_DIR)")
     p.add_argument("--work-dir", type=Path, default=None,
                    help="for the temporary files, default /dev/shm (memory) if there is one")
@@ -367,10 +367,10 @@ def main() -> int:
     _add_run_options(p)
     p.set_defaults(func=cmd_bootstrap)
 
-    p = commands.add_parser("tools", help="get and build NJOY2016 and PREPRO")
+    p = commands.add_parser("tools", help="get and build rustjoy (NJOY) and PREPRO")
     p.add_argument("--tools", type=Path, default=DEFAULT_TOOLS, help="where to put them")
     p.add_argument("-j", "--jobs", type=int, default=os.cpu_count() or 1)
-    p.add_argument("--njoy-ref", default=None, help="a tag or branch of NJOY2016, default the latest")
+    p.add_argument("--rustjoy-ref", default=None, help="a tag or branch of rustjoy, default the latest")
     p.add_argument("--prepro-ref", default=None, help="a tag or branch of PREPRO, default the latest")
     p.add_argument("--fortran", default="gfortran")
     p.add_argument("--flags", default="-O2", help="flags for the PREPRO codes")

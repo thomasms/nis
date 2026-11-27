@@ -165,7 +165,7 @@ python3 processing/process.py bootstrap                  # and data/jeff4.reac t
 | `data/jeff311.nfy`, `data/jeff311.sfy` | JEFF-3.1.1 neutron induced and spontaneous fission yields | NEA |
 | `data/jeff4.reac` | JEFF-4.0 neutron cross sections in 1102 groups, made from the raw ENDF files with NJOY and PREPRO | NEA |
 
-`bootstrap` builds NJOY and PREPRO first if they are not there (it needs git, cmake, make and gfortran, see
+`bootstrap` builds rustjoy (NJOY) and PREPRO first if they are not there (it needs git, cargo and gfortran, see
 [processing/README.md](processing/README.md)). A file that is already in `data/` is not made again (`--force` makes it again).
 
 You can get other libraries too:
@@ -229,7 +229,7 @@ To make it from the raw ENDF files of a library (for example the latest TENDL), 
 cores, see [processing/README.md](processing/README.md):
 
 ```bash
-python3 processing/process.py tools                   # build NJOY and PREPRO
+python3 processing/process.py tools                   # build rustjoy (NJOY) and PREPRO
 python3 processing/process.py tendl --year 2025       # data/tendl2025.reac and data/tendl2025.nisreac
 ```
 

@@ -5,7 +5,8 @@ Get the nuclear data for NIS. The data is not in git: `process.py` downloads it 
 - **Decay data and fission yields:** downloaded from the NEA data bank and the NNDC, and joined into one ENDF tape
   for each library (`data/<library>.dec`, `.nfy`, `.sfy`).
 - **Reaction data:** made from the raw ENDF neutron files of a library (JEFF-4.0, TENDL), with
-  [NJOY2016](https://github.com/njoy/NJOY2016) and [PREPRO](https://github.com/IAEA-NDS/PREPRO).
+  [rustjoy](https://github.com/thomasms/rustjoy) (a Rust port of [NJOY2016](https://github.com/njoy/NJOY2016))
+  and [PREPRO](https://github.com/IAEA-NDS/PREPRO).
   The result is one file of 1102 group cross sections (INT=1), `data/<library>.reac`, and the NIS cache of it (`.nisreac`).
 
 ```bash
@@ -28,21 +29,21 @@ processing/
         decks.py        the NJOY and PREPRO inputs
         runner.py       many nuclides at the same time
         endf.py         read ENDF headers, join the processed files into one
-        tools.py        get and build NJOY and PREPRO
+        tools.py        get and build rustjoy (NJOY) and PREPRO
         fetch.py        download (with a progress bar, a stopped download continues), unpack
         libraries.py    the libraries that can be downloaded, and how to make the NIS data files from them
         ukaea1102.txt   the 1102 group bounds (eV)
-    tools/              NJOY and PREPRO, made by 'tools' (not in git)
+    tools/              rustjoy and PREPRO, made by 'tools' (not in git)
     raw/                the raw ENDF files, from 'fetch' (not in git)
     out/                the processed files, one for each nuclide (not in git)
 ```
 
 ## Quick start
 
-You need git, cmake, make and gfortran. Python 3.9 or newer, no other packages.
+You need git, cargo (Rust) and gfortran. Python 3.9 or newer, no other packages.
 
 ```bash
-python3 processing/process.py tools                       # get and build NJOY and PREPRO (about 1 minute)
+python3 processing/process.py tools                       # get and build rustjoy and PREPRO (about 1 minute)
 python3 processing/process.py tendl --year 2025           # download, process all, join: data/tendl2025.reac
 ./build/bin/nis -d data/jeff311.dec -r data/tendl2025.nisreac -i examples/activate.inp
 ```
@@ -75,7 +76,7 @@ These are the steps of the UKAEA processing for FISPACT-II (the `dpp` prototype)
 
 | Step | Program | What it does |
 |---|---|---|
-| 1 | NJOY: RECONR, BROADR, UNRESR, HEATR, GASPR | PENDF at 293.6 K, with the kerma and damage (MT 301-447) and the gas production (MT 203-207) |
+| 1 | NJOY (rustjoy): RECONR, BROADR, UNRESR, HEATR, GASPR | PENDF at 293.6 K, with the kerma and damage (MT 301-447) and the gas production (MT 203-207) |
 | 2 | LINEAR, RECENT, SIGMA1 | linear cross sections, resonances, Doppler broadening at 293.6 K |
 | 3 | SIXPAK, LINEAR | isomer production (MF9) from the MF6 data, if the file has it |
 | 4 | MERGER, ACTIVATE | MF9 into MF10 (activation cross sections for each isomer) |
@@ -94,6 +95,10 @@ The program checks that the output has the material and the 1102 group total cro
   they do not need each other. NJOY is the longest step.
 - **Files in memory.** The work folders are in `/dev/shm` (a memory file system) if there is one, because
   PREPRO reads and writes many scratch files. Give another place with `--work-dir`.
+- **rustjoy for NJOY.** rustjoy gives the same tapes as NJOY2016, byte for byte, and it is faster. For the
+  41 neutron files of the NJOY2016 tests, the NJOY deck of step 1 gives the same PENDF tape with both programs,
+  and takes 130 s with rustjoy and 273 s with NJOY2016 (one file at a time, 4 cores). Set `NJOY_THREADS` to
+  choose the number of threads of rustjoy (default: the number of cores; the output does not change).
 - **PREPRO with -O2.** `tools` compiles PREPRO with `-O2` (the PREPRO makefile uses `-O0`). This is about 2 times
   faster, and the output is the same (checked byte for byte for the test nuclides).
 - **Done is not done again.** A nuclide with an output file is skipped, so a stopped run continues where it
@@ -112,7 +117,9 @@ step for each nuclide. `--keep` keeps the work folders, so you can run a step ag
 
 - `fetch` downloads `https://tendl.imperial.ac.uk/tendl_<year>/tar_files/TENDL-n.tgz` (TENDL moved there from
   tendl.web.psi.ch). If the site moves again, give the address with `--url`, or download and unpack the files yourself and use `run`.
-- `tools` takes the latest NJOY2016 and PREPRO. Give a tag with `--njoy-ref` and `--prepro-ref` to fix the
-  versions. `--njoy` and `--prepro-dir` (or `NJOY_EXE` and `PREPRO_EXE_DIR`) use programs that you already have.
+- `tools` takes the latest rustjoy and PREPRO. Give a tag with `--rustjoy-ref` and `--prepro-ref` to fix the
+  versions. `--njoy` and `--prepro-dir` (or `NJOY_EXE` and `PREPRO_EXE_DIR`) use programs that you already have,
+  for example the Fortran NJOY2016.
+- `tools` also clones NJOY2016, but does not build it: the processing tests use its test files.
 - The tests are in [processingtests.py](../src/tests/python/processingtests.py). The tests that run NJOY and PREPRO
   need `tools` first (they use two files from the NJOY2016 tests).

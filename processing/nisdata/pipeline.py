@@ -2,6 +2,7 @@
 Process one ENDF neutron file to 1102 group cross sections (INT=1), the form that NIS reads.
 
     NJOY:    RECONR, BROADR, UNRESR, HEATR (kerma, damage), GASPR  ->  NJOY.OUT (PENDF)
+             (rustjoy by default, the Rust port of NJOY2016: the same tapes, faster)
     PREPRO:  LINEAR, RECENT, SIGMA1, SIXPAK (+ LINEAR of MF9), MERGER, ACTIVATE  ->  ACTIVATE.OUT
     then:    MERGER (the NJOY heating, damage and gas data with the PREPRO data), MERGER, MERGER,
              FIXUP, DICTIN, GROUPIE (1102 groups)  ->  the output
