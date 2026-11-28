@@ -43,6 +43,8 @@ PROCESS := $(PYTHON) processing/process.py
 ALLOW_OLD_FLAG := $(if $(ALLOW_OLD),--allow-old,)
 BENCH := $(UV) run python scripts/bench.py
 NJOY := processing/tools/bin/rustjoy
+NIS := build/bin/nis
+NIS_CACHE := build/bin/nis_cache
 
 # the benchmarks of BENCHMARK=all, and the quantities of each (one summary plot for each quantity)
 ALL_BENCHMARKS := fns irdff2 exfor14 fission_decay_heat
@@ -66,13 +68,13 @@ all: compare
 
 # ---- 1. setup ----
 
-setup: dependencies/ENDFtk build/bin/nis
+setup: dependencies/ENDFtk $(NIS)
 	$(UV) sync
 
 dependencies/ENDFtk:
 	bash docker/setup_local_deps.sh
 
-build/bin/nis: FORCE dependencies/ENDFtk
+$(NIS): FORCE dependencies/ENDFtk
 	cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 	cmake --build build -j $(JOBS)
 
@@ -101,12 +103,15 @@ data/%.reac: FORCE | $(NJOY)
 
 bench: $(RUNS)
 
+# The reaction cache (data/<reactions>.nisreac) is made again, with nis_cache, if it is older than the .reac file
+# or of another cache version. NIS is built first (if it is up to date, this is fast), so that nis_cache writes
+# the cache version that the current code reads.
 # the label is the data, so the runs can not be mixed up in the comparison. $(1): benchmark, $(2): reactions
 define RUN_RULE
-$(call run_file,$(1),$(2)): data/$(2).reac $(DECAY_FILE) $(call fission_yields,$(1))
+$(call run_file,$(1),$(2)): data/$(2).reac $(DECAY_FILE) $(call fission_yields,$(1)) | $(NIS)
 	@mkdir -p $(RESULTS)
 	$(BENCH) run $(1) --label $(2)+$(DECAY) --decay-data $(DECAY_FILE) --reaction-data data/$(2).reac \
-	    $(if $(call fission_yields,$(1)),--fission-yields $(call fission_yields,$(1)),) --jobs $(JOBS) --output $$@
+	    --nis-cache $(NIS_CACHE) $(if $(call fission_yields,$(1)),--fission-yields $(call fission_yields,$(1)),) --jobs $(JOBS) --output $$@
 endef
 $(foreach b,$(BENCHMARKS),$(foreach r,$(REACTIONS),$(eval $(call RUN_RULE,$(b),$(r)))))
 
